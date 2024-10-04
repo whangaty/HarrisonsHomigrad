@@ -115,7 +115,7 @@ function hideandseek.PlayerSpawn(ply,teamID)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon,teamID == 1 and 8 or 2)
 
 	if math.random(1,4) == 4 then ply:Give("weapon_per4ik") end
-	if math.random(1,8) == 8 then ply:Give("adrinaline") end
+	if math.random(1,8) == 8 then ply:Give("adrenaline") end
 	if math.random(1,7) == 7 then ply:Give("painkiller") end
 	if math.random(1,6) == 6 then ply:Give("medkit") end
 	if math.random(1,5) == 5 then ply:Give("med_band_big") end

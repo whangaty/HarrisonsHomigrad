@@ -158,7 +158,7 @@ function basedefence.PlayerSpawn(ply,teamID)
 
     if math.random(3) == 3 then ply:Give("weapon_molotok") end
 
-	if math.random(1,4) == 4 then ply:Give("adrinaline") end
+	if math.random(1,4) == 4 then ply:Give("adrenaline") end
 	if math.random(1,4) == 4 then ply:Give("painkiller") end
 	if math.random(1,4) == 4 then ply:Give("medkit") end
 	if math.random(1,4) == 4 then ply:Give("med_band_big") end

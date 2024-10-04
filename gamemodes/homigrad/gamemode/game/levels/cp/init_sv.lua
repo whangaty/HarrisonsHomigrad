@@ -134,7 +134,7 @@ function cp.PlayerSpawn(ply,teamID)
     tdm.GiveSwep(ply,teamTbl.main_weapon)
     tdm.GiveSwep(ply,teamTbl.secondary_weapon)
 
-	if math.random(1,4) == 4 then ply:Give("adrinaline") end
+	if math.random(1,4) == 4 then ply:Give("adrenaline") end
 	if math.random(1,4) == 4 then ply:Give("morphine") end
     if math.random(1,2) == 2 then ply:Give("megamedkit") end
 
