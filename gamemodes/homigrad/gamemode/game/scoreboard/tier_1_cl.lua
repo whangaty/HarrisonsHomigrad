@@ -128,22 +128,22 @@ local function ToggleScoreboard(toggle)
 			surface.SetDrawColor(15,15,15,200)
 			surface.DrawRect(0,0,w,h)
 
-			draw.SimpleText("Статус","HomigradFont",100,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-			draw.SimpleText("Имя","HomigradFont",w / 2,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Status","HomigradFont",100,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Name","HomigradFont",w / 2,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 
-			draw.SimpleText("HOMIGRADED","HomigradFontLarge",w / 2,h / 2,Color(155,155,165,5),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Build 09.10.24","HomigradFontLarge",w / 2,h / 2,Color(155,155,165,5),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			--draw.SimpleText("HOMIGRADED","HomigradFontLarge",w / 2,h / 2,Color(155,155,165,5),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			
-			draw.SimpleText("Frags | Deaths","HomigradFont",w - 300,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Kills | Deaths","HomigradFont",w - 300,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			--draw.SimpleText("Дни Часы Минуты","HomigradFont",w - 300,20,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			--draw.SimpleText("M","HomigradFont",w - 300 + 15,15,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 			
 
-			draw.SimpleText("Пинг","HomigradFont",w - 200,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-			draw.SimpleText("Команда","HomigradFont",w - 100,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-			draw.SimpleText("Игроков: " .. table.Count(player.GetAll()),"HomigradFont",15,h - 25,green,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Ping","HomigradFont",w - 200,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Team","HomigradFont",w - 100,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Players: " .. table.Count(player.GetAll()),"HomigradFont",15,h - 25,green,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 			local tick = math.Round(1 / engine.ServerFrameTime())
-			draw.SimpleText("TickRate Сервера: " .. tick,"HomigradFont",w - 15,h - 25,tick <= 35 and red or green,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Server Tickrate: " .. tick,"HomigradFont",w - 15,h - 25,tick <= 35 and red or green,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 
 			local players = self.players
 			for i,ply in pairs(player.GetAll()) do
@@ -223,11 +223,15 @@ local function ToggleScoreboard(toggle)
 			playerPanel.DoClick = function()
 				local playerMenu = vgui.Create("DMenu")
 				playerMenu:SetPos(input.GetCursorPos())
-				playerMenu:AddOption("Скопировать SteamID", function()
+				playerMenu:AddOption("Copy SteamID", function()
 					SetClipboardText(ply:SteamID())
-					LocalPlayer():ChatPrint("SteamID " .. ply:Name() .. " скопирован! (" .. ply:SteamID() .. ")")
+					LocalPlayer():ChatPrint("SteamID " .. ply:Name() .. " copied! (" .. ply:SteamID() .. ")")
 				end)
-				playerMenu:AddOption("Открыть профиль", function()
+				playerMenu:AddOption("Copy SteamID64", function()
+					SetClipboardText(ply:SteamID64())
+					LocalPlayer():ChatPrint("SteamID " .. ply:Name() .. " copied! (" .. ply:SteamID() .. ")")
+				end)
+				playerMenu:AddOption("Open Steam Profile", function()
 					ply:ShowProfile()
 				end)
 				playerMenu:AddOption("GoTo", function()
@@ -250,21 +254,21 @@ local function ToggleScoreboard(toggle)
 			if not func or (func and alive == true) then
 				if LocalPlayer():Team() == 1002 or not LocalPlayer():Alive() then
 					if ply:Alive() then
-						alive = "Живой"
+						alive = "Alive"
 						alivecol = colorGreen
 					elseif ply:Team() == 1002 then
-						alive = "Наблюдает"
+						alive = "Spectating"
 						alivecol = colorSpec
 					else
-						alive = "Мёртв"
+						alive = "Dead"
 						alivecol = colorRed
 						colorAdd = colorRed
 					end
 				elseif ply:Team() == 1002 then
-					alive = "Наблюдает"
+					alive = "Spectating"
 					alivecol = colorSpec
 				else
-					alive = "Неизвестно"
+					alive = "Unknown"
 					alivecol = colorSpec
 					colorAdd = colorSpec
 				end
@@ -283,7 +287,7 @@ local function ToggleScoreboard(toggle)
 					draw.RoundedBox(0,0,0,w,h,whiteAdd)
 				end
 
-				if alive ~= "Неизвестно" and ply.last then
+				if alive ~= "Unknown" and ply.last then
 					draw.SimpleText(ply.last,"HomigradFont",25,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 				end
 
@@ -309,7 +313,7 @@ local function ToggleScoreboard(toggle)
 
 				if not name then
 					name,color = TableRound().GetTeamName(ply)
-					name = name or "Наблюдатель"
+					name = name or "Spectator"
 					color = color or ScoreboardSpec
 				end
 
@@ -339,7 +343,7 @@ local function ToggleScoreboard(toggle)
 		local button = SB_CreateButton(HomigradScoreboard)
 		button:SetSize(30,30)
 		button:SetPos(HomigradScoreboard:GetWide() / 2 - button:GetWide() / 2,HomigradScoreboard:GetTall() - 15 - button:GetTall())
-		button.text = "M"
+		button.text = "Sky"
 		function button:DoClick()
 			OpenHomigradMenu()
             HomigradScoreboard:Remove()
@@ -348,7 +352,7 @@ local function ToggleScoreboard(toggle)
 		local muteAll = SB_CreateButton(HomigradScoreboard)
 		muteAll:SetSize(175,30)
 		muteAll:SetPos(-muteAll:GetWide() - 35 + HomigradScoreboard:GetWide() / 2,HomigradScoreboard:GetTall() - 45)
-		muteAll.text = "Замутить всех"
+		muteAll.text = "Mute Everyone"
 
 		function muteAll:Paint(w,h)
 			self.textColor = not muteall and green or red
@@ -360,7 +364,7 @@ local function ToggleScoreboard(toggle)
 		local muteAllDead = SB_CreateButton(HomigradScoreboard)
 		muteAllDead:SetSize(175,30)
 		muteAllDead:SetPos(35 + HomigradScoreboard:GetWide() / 2,HomigradScoreboard:GetTall() - 45)
-		muteAllDead.text = "Замутить мертвых"
+		muteAllDead.text = "Mute All Dead"
 
 		function muteAllDead:Paint(w,h)
 			self.textColor = not muteAlldead and green or red
