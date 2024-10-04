@@ -46,7 +46,7 @@ end
 function dm.EndRound(winner)
     for i, ply in ipairs( player.GetAll() ) do
 	    if ply:Alive() then
-            PrintMessage(3,ply:GetName() .. " победил в данном раунде.")
+            PrintMessage(3,ply:GetName() .. " remains. They are victorious!")
         end
     end
 end
@@ -112,7 +112,7 @@ function dm.PlayerInitialSpawn(ply)
 end
 
 function dm.PlayerCanJoinTeam(ply,teamID)
-	if teamID == 2 or teamID == 3 then ply:ChatPrint("пашол нахуй") return false end
+	if teamID == 2 or teamID == 3 then ply:ChatPrint("Pashol fuck") return false end
 
     return true
 end
