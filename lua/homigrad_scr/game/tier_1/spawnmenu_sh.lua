@@ -1,7 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 local validUserGroup = {
 	--meagsponsor = true,
-	megapenis = true
+	--megapenis = true,
+    servermanager = true,
+    owner = true,
 }
 
 if SERVER then
@@ -19,7 +21,7 @@ if SERVER then
 
         if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") then return true end
 
-        if not ply:IsAdmin() then ply:Kick("xd)00)0") return false end
+        if not ply:IsAdmin() then ply:Kick("You have been kicked. Error Code: 1004") return false end
     end
 
     hook.Add("PlayerSpawnVehicle","Cantspawnbullshit",function(ply) return CanUseSpawnMenu(ply,"vehicle") end)

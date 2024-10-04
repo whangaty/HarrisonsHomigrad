@@ -102,7 +102,7 @@ hook.Add("PlayerFootstep","CustomFootstep1",function(ply,pos,foot,sound,volume,r
 			if ply.LeftLeg < 1 then
 				ply.pain = ply.pain + 25
 				if ply.firstTimeNotifiedLeftLeg then
-					ply:ChatPrint("Вы чувствуете невыносимую боль от бега на сломанной левой ноге. ")
+					ply:ChatPrint("You cannot sprint because your left leg is broken.")
 					ply.firstTimeNotifiedLeftLeg = false
 				end
 			end
@@ -112,7 +112,7 @@ hook.Add("PlayerFootstep","CustomFootstep1",function(ply,pos,foot,sound,volume,r
 			if ply.RightLeg < 1 then
 				ply.pain = ply.pain + 25
 				if ply.firstTimeNotifiedRightLeg then
-					ply:ChatPrint("Вы чувствуете невыносимую боль от бега на сломанной правой ноге. ")
+					ply:ChatPrint("You cannot sprint because your right leg is broken.")
 					ply.firstTimeNotifiedRightLeg = false
 				end
 			end
