@@ -5,7 +5,7 @@ AddCSLuaFile()
 SWEP.PrintName = "Чипсы"
 SWEP.Author = "Homigrad"
 SWEP.Purpose = "Чипсы"
-SWEP.Category = "Вкусности"
+SWEP.Category = "Food"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 3

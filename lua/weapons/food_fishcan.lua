@@ -2,10 +2,10 @@ if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'weapon_base'
 AddCSLuaFile()
 
-SWEP.PrintName = "Банка Рыбы"
+SWEP.PrintName = "Can of Fish"
 SWEP.Author = "Homigrad"
-SWEP.Purpose = "Консервированная рыба"
-SWEP.Category = "Вкусности"
+SWEP.Purpose = "Now 3% Less Microplastics"
+SWEP.Category = "Food"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 3
