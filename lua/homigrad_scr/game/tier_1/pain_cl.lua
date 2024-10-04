@@ -17,6 +17,8 @@ local k = 0
 local k4 = 0
 local time = 0
 
+-- TODO: Check if we can place pain levels here?
+
 hook.Add("HUDPaint","PainEffect",function()
     if not LocalPlayer():Alive() then return end
     
