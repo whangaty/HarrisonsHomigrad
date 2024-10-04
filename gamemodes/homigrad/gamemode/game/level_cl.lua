@@ -56,12 +56,12 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 		else
 			local time = math.Round(roundTimeStart + roundTime - CurTime())
 			local acurcetime = string.FormattedTime(time,"%02i:%02i")
-			if time < 0 then acurcetime = "акедумадекосай;3" end
+			if time < 0 then acurcetime = "Accadumadekosay;3" end
 
 			draw.SimpleText(acurcetime,"HomigradFont",ScrW()/2,ScrH()-25,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 		end
 	else
-		draw.WordBox(5, ScrW() / 2, ScrH() - 50, (#PlayersInGame() <= 1 and "Нужно минимум 2 игрока") or " Раунд закончен ", 'HomigradFont', Color(35, 35, 35, 200), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.WordBox(5, ScrW() / 2, ScrH() - 50, (#PlayersInGame() <= 1 and "At least two players are required to play.") or "Round Over!", 'HomigradFont', Color(35, 35, 35, 200), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	local k = showRoundInfo - CurTime()
@@ -73,25 +73,25 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 		yellow.a = showRoundInfoColor.a
 
 		local name,nextName = TableRound().Name,TableRound(roundActiveNameNext).Name
-		if name == "Conter-Strike: Source Govno" then
+		if name == "Counter Strike: Source" then
 			RunConsoleCommand("hg_bodycam", "0")
 		else
 			RunConsoleCommand("hg_bodycam", "0")
 		end
 
 		draw.RoundedBox(5, ScrW() - 270 - math.max(#nextName, #name) * 4, ScrH() - 65, 800, 70, Color(0, 0, 0, showRoundInfoColor.a - 30))
-		draw.SimpleText("Текущий режим: " .. name,"HomigradFont",ScrW() - 15, ScrH() - 40, showRoundInfoColor, TEXT_ALIGN_RIGHT)
+		draw.SimpleText("Active Gamemode: " .. name,"HomigradFont",ScrW() - 15, ScrH() - 40, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 		if math.Round(roundTimeStart + roundTime - CurTime()) > 0 then
 			if roundActiveName == "homicide" or roundActiveName == "schoolshoot" then
-				draw.SimpleText("До прибытия копов: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
+				draw.SimpleText("Police Arrive In: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 			--elseif roundActiveName == "scp" then
 				--draw.SimpleText("До прибытия МОГ: " .. math.Round(scp.spawnMOG),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 			else
-				draw.SimpleText("До конца раунда: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT) 
+				draw.SimpleText("Round Ends in: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT) 
 			end
-			else draw.SimpleText("Время вышло","HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
+			else draw.SimpleText("Time Passed: ","HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 		end
-		draw.SimpleText("Следующий режим: " .. nextName,"HomigradFont",ScrW() - 15, ScrH() - 20,name ~= nextName and yellow or showRoundInfoColor, TEXT_ALIGN_RIGHT)
+		draw.SimpleText("Next Gamemode: " .. nextName,"HomigradFont",ScrW() - 15, ScrH() - 20,name ~= nextName and yellow or showRoundInfoColor, TEXT_ALIGN_RIGHT)
 	end
 end)
 
