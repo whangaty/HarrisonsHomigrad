@@ -14,6 +14,6 @@ hook.Add("CreateMove","afk",function(moveData)
 
 		net.Start("afk")
 		net.SendToServer()
-		RunConsoleCommand("say","афк 9999999")
+		--RunConsoleCommand("say","")
 	end
 end)
