@@ -77,7 +77,7 @@ function StartRound()
 
 	local textGmod = ""
 	local text = ""
-	text = text .. "Игровой режим	: " .. tostring(tbl.Name) .. "\n"
+	text = text .. "Active Gamemode: " .. tostring(tbl.Name) .. "\n"
 
 	RoundData = tbl.StartRound
 	RoundData = RoundData and RoundData() or {}
@@ -95,7 +95,7 @@ function StartRound()
 			local name = LevelRandom()
 
 			SetActiveNextRound(name)
-			text = text .. "Следующий режим	: " .. tostring(TableRound(roundActiveNameNext).Name).. "\n"
+			text = text .. "Next Gamemode: " .. tostring(TableRound(roundActiveNameNext).Name).. "\n"
 	
 			CountRoundRandom = 0
 		end
@@ -119,7 +119,7 @@ function StartRound()
 
 				return
 			else
-				local content = "До принудительного голосования: " .. diff .. " раундов." .. "\n"
+				local content = "To forced voting:" .. diff .. " раундов." .. "\n"
 				textGmod = textGmod .. content
 				text = text .. content
 			end
