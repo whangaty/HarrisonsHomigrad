@@ -11,7 +11,7 @@ hook.Add("Player Think","ControlPlayersAdmins",function(ply,time)
 		if enta:IsPlayer() and !enta.fake and !IsValid(ply.CarryEnt) then
 
 			Faking(enta)
-			local text = tostring(ply:Name()).." поднял игрока "..enta:Name()
+			local text = tostring(ply:Name()).." grabbed the player "..enta:Name()
 			--DiscordSendMessage("💙" .. text)
 			print(text)
 		end
@@ -23,7 +23,7 @@ hook.Add("Player Think","ControlPlayersAdmins",function(ply,time)
 		timer.Simple(5, function() ply.AdminAttackerWithPhys = false end)
 		if IsValid(ply.CarryEnt) then
 			if ply:KeyPressed(IN_ATTACK) then
-				local text = tostring(ply:Name()).." поднял ентити "..tostring(RagdollOwner(ply.CarryEnt) and RagdollOwner(ply.CarryEnt):Name() or ply.CarryEnt:GetClass())
+				local text = tostring(ply:Name()).."Raised the yentiti"..tostring(RagdollOwner(ply.CarryEnt) and RagdollOwner(ply.CarryEnt):Name() or ply.CarryEnt:GetClass())
 				--DiscordSendMessage("💙" .. text)
 				print(text)
 			end
