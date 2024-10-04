@@ -54,7 +54,7 @@ COMMANDS.noguilt = {function(ply,args)
 
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 		ply.noguilt = value
-		ply:ChatPrint("Guilt Protect: " .. tostring(value))
+		ply:ChatPrint("Your Guilt is currently: " .. tostring(value) .. "% out of 100%")
 	end
 end,1}
 
@@ -71,12 +71,14 @@ function GuiltCheck(att,ply)
 		att.Guilt = 0
 		
 		if not att.noguilt and not att:HasGodMode() then
-			att:Kill()
+			--att:Kill()
+			
+			return
 
 			if not validUserGroup[att:GetUserGroup()] then
-				RunConsoleCommand("ulx","fakeban",att:Name(),"10","Kicked and Banned for RDM")
+				--RunConsoleCommand("ulx","fakeban",att:Name(),"10","Kicked and Banned for RDM")
 			else
-				RunConsoleCommand("ulx","fakeban",att:Name(),"10","Kicked and Banned for RDM")
+				--RunConsoleCommand("ulx","fakeban",att:Name(),"10","Kicked and Banned for RDM")
 			end
 		end
 	end
@@ -105,7 +107,7 @@ end)
 
 hook.Add("PlayerInitialSpawn","guiltasdd",function(ply)
 	ply.Guilt = ply:GetPData("Guilt") or 0
-	ply:ChatPrint("Ваш гилт составляет " .. tostring(ply.Guilt) .. "%")
+	ply:ChatPrint("Your guilt is currently at " .. tostring(ply.Guilt) .. "% out of 100%")
 	ply.RoundGuilt = 0
 end)
 
@@ -127,7 +129,7 @@ hook.Add("PlayerSpawn","guilt",function(ply)
 	ply.DontGuiltProtect = nil
 	ply.Seizure = false
 	ply.Guilt = ply.Guilt or 0
-	ply:ChatPrint("Ваш гилт составляет " .. tostring(math.floor(ply.Guilt)) .. "%")
+	ply:ChatPrint("Your guilt is currently at " .. tostring(ply.Guilt) .. "% out of 100%")
 	--[[if ply.Guilt > 30 then
 		timer.Create("seizure"..ply:EntIndex(),math.random(30,50),1, function()
 			Seizure(ply)
