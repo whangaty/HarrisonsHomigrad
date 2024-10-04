@@ -36,9 +36,9 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
         --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply:Team() == 1 then
-            draw.DrawText( "Ваша задача убить всех до прибытия Спецназа", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Find everyone who's hiding, and kill them before Special Forces arrive.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "В здании активный ИСКАТЕЛЬ, вам нужно выжить и сбежать по приезду Спецназа", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,155,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Hide until Special Forces arrive, and dash for the exit!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,155,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 		end
         return
     end
@@ -56,7 +56,7 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
 		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH() - 50,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 	end
 	*/
-	green.a = white2.a
+	green.a = 255
 
 
 	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and hideandseek.police then
@@ -69,9 +69,9 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
 				draw.SimpleText("EXIT","ChatFont",pos.x,pos.y,green,TEXT_ALIGN_CENTER)
 			end
 
-			draw.SimpleText("Нажми TAB чтобы снова увидеть это.","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
+			--draw.SimpleText("Click Tab to see it again.","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
 		else
-			draw.SimpleText("Попроси админа поставить эвакуационные точки для прячущихся...","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
+			draw.SimpleText("If you're seeing this, please ask the admins to spawn escape points!","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
 		end
 	end
 end

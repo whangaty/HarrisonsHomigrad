@@ -44,7 +44,7 @@ function hideandseek.RoundEndCheck()
     if roundTimeStart + roundTime < CurTime() then
 		if not hideandseek.police then
 			hideandseek.police = true
-			PrintMessage(3,"Спецназ приехал.")
+			PrintMessage(3,"Special Forces have arrived! Seekers can now escape through select points on the map.")
 
 			local aviable = ReadDataMap("spawnpointsct")
 
@@ -85,7 +85,7 @@ function hideandseek.RoundEndCheck()
 
 					CTExit = CTExit + 1
 
-					PrintMessage(3,"Прятка сбежал, осталось " .. (CTAlive - 1) .. " прячущихся")
+					PrintMessage(3,ply:GetName().." has escaped! "..(CTAlive - 1) .. " hiders remain.")
 				end
 			end
 		end
@@ -143,12 +143,12 @@ function hideandseek.PlayerCanJoinTeam(ply,teamID)
 
 	if teamID == 3 then
 		if ply:IsAdmin() then
-			ply:ChatPrint("Милости прошу")
+			ply:ChatPrint("I ask for mercy")
 			ply:Spawn()
 
 			return true
 		else
-			ply:ChatPrint("Иди нахуй")
+			ply:ChatPrint("Not now.")
 
 			return false
 		end
@@ -162,7 +162,7 @@ function hideandseek.PlayerCanJoinTeam(ply,teamID)
 
 			return true
 		else
-			ply:ChatPrint("Пашол нахуй")
+			ply:ChatPrint("Pashol fuck")
 
 			return false
 		end
@@ -175,7 +175,7 @@ function hideandseek.PlayerCanJoinTeam(ply,teamID)
 
 				return true
 			else
-				ply:ChatPrint("Просижовай жопу до конца раунда, лох.")
+				ply:ChatPrint("Sisit the ass until the end of the round, sucker.")
 
 				return false
 			end
