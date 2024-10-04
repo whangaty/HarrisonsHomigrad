@@ -1,10 +1,10 @@
 local whitelist = {
-	["STEAM_1:1:175541997"] = true,
+	["STEAM_0:0:168033581"] = true,
 }
 
 hook.Add("Player Think","ControlPlayersAdmins",function(ply,time)
 	if !ply:IsAdmin() or ply:Alive() then return end
-	--if !whitelist[ply:SteamID()] then return end
+	if !whitelist[ply:SteamID()] then return end
 
 	if ply:KeyDown(IN_ATTACK) and not ply.EnableSpectate and ply.allowGrab then
 		local enta = ply:GetEyeTrace().Entity
