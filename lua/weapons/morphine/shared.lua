@@ -3,12 +3,12 @@ AddCSLuaFile()
 
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Морфий"
+SWEP.PrintName = "Мorphine"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Агонистическое влияние морфина на опиатные рецепторы сопровождается снижением уровня сознания, ощущением тепла, сонливостью и эйфорией"
+SWEP.Instructions = "Full of the good stuff!\nImmediately reduces pain, and continues to reduce over time."
 
 SWEP.Spawnable = true
-SWEP.Category = "Медицина"
+SWEP.Category = "Medical"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 3

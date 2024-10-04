@@ -71,6 +71,16 @@ if engine.ActiveGamemode() == "homigrad" then
 
             return true
         end
+        
+        -- FIXME: If there is a bug here, probably just remove.
+        if ent.LeftLeg < 1 or ent.RightLeg < 1 then
+            ent.LeftLeg = 1
+            ent.RightLeg = 1
+            sound.Play(healsound,ent:GetPos(),75,100,0.5)
+            
+            return true
+        end
+
 
         if ent:Health() < 150 then
             ent:SetHealth(math.Clamp(self:GetOwner():Health() + 10,0,150))

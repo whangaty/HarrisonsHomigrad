@@ -3,12 +3,12 @@ AddCSLuaFile()
 
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Обезболивающее"
+SWEP.PrintName = "Painkillers"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Повышает скорость понижения боли"
+SWEP.Instructions = "Pills here!\nReduces pain overtime."
 
 SWEP.Spawnable = true
-SWEP.Category = "Медицина"
+SWEP.Category = "Medical"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 3

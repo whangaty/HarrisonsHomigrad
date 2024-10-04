@@ -3,12 +3,12 @@ AddCSLuaFile()
 
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Адреналин"
+SWEP.PrintName = "Adrenaline?"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Гормон сужает сосуды, особенно брюшной полости. Объём крови в организме перераспределяется, из печени и селезёнки она оттекает в сосуды тела, пополняя объём циркулирующей в них крови, вследствие чего сосуды, ведущие к сердцу и мозгу, расширяются, кровоснабжение органов улучшается"
+SWEP.Instructions = "Wrrbhpt!\nMakes you go stupid fast, but at the cost of needing more to survive."
 
 SWEP.Spawnable = true
-SWEP.Category = "Медицина"
+SWEP.Category = "Medical"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 3

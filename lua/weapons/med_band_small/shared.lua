@@ -3,12 +3,12 @@ AddCSLuaFile()
 
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Маленький бинт"
+SWEP.PrintName = "Large Bandage"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Лечит мелкую кровопотерю"
+SWEP.Instructions = "Don't forget to apply pressure!\nHeals large wounds that are heavily bleeding."
 
 SWEP.Spawnable = true
-SWEP.Category = "Медицина"
+SWEP.Category = "Medical"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 3

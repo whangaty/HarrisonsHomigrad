@@ -3,12 +3,12 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_base"
 
-SWEP.PrintName = "Аптечка"
+SWEP.PrintName = "Medkit"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Имеет в себе бинты и обезболивающие"
+SWEP.Instructions = "The Holy Grail of Medical Supplies.\nReduces Blood Loss, Pain, and fixes broken legs."
 
 SWEP.Spawnable = true
-SWEP.Category = "Медицина"
+SWEP.Category = "Medical"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 3
