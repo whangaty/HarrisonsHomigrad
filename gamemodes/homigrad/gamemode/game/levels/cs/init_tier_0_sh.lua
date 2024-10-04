@@ -1,6 +1,6 @@
 table.insert(LevelList,"css")
 css = {}
-css.Name = "Conter-Strike: Source Govno"
+css.Name = "Counter Strike: Source"
 css.points = {}
 
 css.WinPoints = css.WinPoints or {}
