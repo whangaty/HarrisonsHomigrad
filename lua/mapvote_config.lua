@@ -1,6 +1,6 @@
 -- Time in seconds until the mapvote is over from
 -- when it starts.
-SolidMapVote[ 'Config' ][ 'Length' ] = 25
+SolidMapVote[ 'Config' ][ 'Length' ] = 15
 
 -- The time in seconds that the vote will stay on the screen
 -- after the winning map has been chosen.
@@ -95,8 +95,29 @@ SolidMapVote[ 'Config' ][ 'Show Map Play Count' ] = true
 -- Setting the option below to true will allow you to manually set the
 -- map pool using the table below. Only the maps inside the table will
 -- be able to be chosen for the vote.
-SolidMapVote[ 'Config' ][ 'Manual Map Pool' ] = false
+SolidMapVote[ 'Config' ][ 'Manual Map Pool' ] = true
 SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
+    "de_school",
+    "ttt_freeway_rain",
+    "ttt_fastfood_a6",
+    "ttt_clue_xmas",
+    "ttt_winterplant_v4",
+    "hmcd_aircraft",
+    --"hmcd_metropolis",
+    "mu_smallotown_v2_snow",
+    "mu_powerhermit",
+    "gm_church",
+    "gm_apartments_hl2",
+    "gm_terminal_v1a",
+    --"gm_deep_sea_3", -- Too small
+    "gm_wick",
+    "gm_freeway_spacetunnel",
+    "ttt_minecraft_b5",
+    "ttt_minecraftcity_v4",
+    --"gm_ww1_jlps"
+    --"gm_spacetrain"
+    --"gm_brutalist_kfc",
+    --"gm_brutalist_mcdonalds",
 
 }
 
