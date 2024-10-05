@@ -1,8 +1,8 @@
 if engine.ActiveGamemode() == "homigrad" then
 
-SWEP.PrintName = "База ближнего боя"
+SWEP.PrintName = "Bayonet"
 
-SWEP.Category = "Ближний Бой"
+SWEP.Category = "Melee"
 
 SWEP.Spawnable= false
 SWEP.AdminSpawnable= false

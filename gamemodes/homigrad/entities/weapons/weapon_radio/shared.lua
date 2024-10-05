@@ -5,7 +5,7 @@ SWEP.Base                   = "weapon_base"
 SWEP.PrintName 				= "Рация"
 SWEP.Author 				= "DarkRP"
 SWEP.Instructions			= "Общение со своей командой"
-SWEP.Category 				= "Разное"
+SWEP.Category 				= "Miscellaneous"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

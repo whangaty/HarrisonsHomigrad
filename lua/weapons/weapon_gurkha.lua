@@ -6,7 +6,7 @@ end
 
 SWEP.PrintName = "Кукри"
 SWEP.Instructions = "Режущий инструмент, используемый для рубки деревьев, листвы и других вещей, которые попадутся под руку. Обладает удобной рукоятью и длинным лезвием, благодаря чему становится отличным оружием ближнего боя."
-SWEP.Category = "Ближний Бой"
+SWEP.Category = "Melee"
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true

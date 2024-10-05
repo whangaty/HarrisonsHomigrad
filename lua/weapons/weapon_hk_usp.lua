@@ -3,8 +3,8 @@ SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "HK USP"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Пистолет под калибр 9х19"
-SWEP.Category 				= "Оружие"
+SWEP.Instructions			= "Firearm often used by hobbyists and police alike."
+SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon			= "pwb2/vgui/weapons/usptactical"
 
 SWEP.Spawnable 				= true

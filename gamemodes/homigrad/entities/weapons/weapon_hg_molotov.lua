@@ -1,9 +1,9 @@
 SWEP.Base = "weapon_hg_granade_base"
 
-SWEP.PrintName = "Коктейль Молотова"
+SWEP.PrintName = "Molotov"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Стеклянная бутылка, содержащая горючую жидкость и запал"
-SWEP.Category = "Гранаты"
+SWEP.Instructions = "Came included with your anarchist kit."
+SWEP.Category = "Grenades"
 
 SWEP.Slot = 4
 SWEP.SlotPos = 2

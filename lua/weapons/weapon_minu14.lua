@@ -2,8 +2,8 @@ if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base 
 
 SWEP.PrintName 				= "M590"
-SWEP.Instructions			= ""
-SWEP.Category 				= "Оружие"
+SWEP.Instructions			= "Police Certified Shotgun"
+SWEP.Category 				= "Weapon"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

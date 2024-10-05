@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "TAR21"
-SWEP.Instructions			= "Пендоское оружие?"
-SWEP.Category 				= "Оружие"
+SWEP.PrintName 				= "TAR-21"
+SWEP.Instructions			= "A military grade assault rifle."
+SWEP.Category 				= "Weapon"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

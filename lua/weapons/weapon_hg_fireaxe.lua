@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = "weapon_hg_melee_base"
 
-SWEP.PrintName = "Пожарный топор"
-SWEP.Category = "Ближний Бой"
-SWEP.Instructions = "Массивный топор для вскрытия и разборки конструкций при тушении пожара."
+SWEP.PrintName = "Fire Axe"
+SWEP.Category = "Melee"
+SWEP.Instructions = "It's hip to be square!"
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true

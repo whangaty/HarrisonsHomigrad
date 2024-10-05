@@ -1,9 +1,9 @@
 SWEP.Base = "weapon_hg_granade_base"
 
-SWEP.PrintName = "Осколочная граната 'MK3A3'"
+SWEP.PrintName = "Frag Grenade"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Основная граната Солдата Альянса. Имеет очень убойную силу и разлёт осколков. Без светового сигнала."
-SWEP.Category = "Гранаты"
+SWEP.Instructions = "Combine Manufactured Frag Grenade."
+SWEP.Category = "Grenades"
 
 SWEP.Slot = 4
 SWEP.SlotPos = 2

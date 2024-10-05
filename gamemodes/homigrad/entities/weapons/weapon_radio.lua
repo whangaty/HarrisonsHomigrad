@@ -1,9 +1,9 @@
 SWEP.Base                   = "weapon_base"
 
-SWEP.PrintName 				= "Рация"
+SWEP.PrintName 				= "Two-Way Radio"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Используется для того чтобы координироваться со своей командой"
-SWEP.Category 				= "Разное"
+SWEP.Instructions			= "Used to communicate with your team!"
+SWEP.Category 				= "Miscellaneous"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

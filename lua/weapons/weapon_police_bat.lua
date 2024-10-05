@@ -1,8 +1,8 @@
 if engine.ActiveGamemode() == "homigrad" then
 
-SWEP.PrintName = "Полицейская Дубинка"
-SWEP.Instructions = "Дубинка, используемая полицейскими подразделениями"
-SWEP.Category = "Ближний Бой"
+SWEP.PrintName = "Police Baton"
+SWEP.Instructions = "There's no such thing as excessive force."
+SWEP.Category = "Melee"
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true

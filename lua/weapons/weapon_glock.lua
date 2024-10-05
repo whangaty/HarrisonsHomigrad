@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "Glock 17"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пистолет под калибр 9х19"
-SWEP.Category 				= "Оружие"
+SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon			= "pwb/sprites/glock17"
 
 SWEP.Spawnable 				= true

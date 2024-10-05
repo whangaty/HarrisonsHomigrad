@@ -1,11 +1,11 @@
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Ампула VX"
+SWEP.PrintName = "Poisonious Powder"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Используй это на предмете, чтобы отравить подбирающего"
+SWEP.Instructions = "Sprinkle over a ragdolled player to poison them."
 
 SWEP.Spawnable = true
-SWEP.Category = "Примочки убийцы"
+SWEP.Category = "Traitor Tools"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 0

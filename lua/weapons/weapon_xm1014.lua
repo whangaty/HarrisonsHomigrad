@@ -3,8 +3,8 @@ SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "XM1014"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Полуавтоматический дробовик под калибр 12/70"
-SWEP.Category 				= "Оружие"
+SWEP.Instructions			= "A powerful auto-shotgun."
+SWEP.Category 				= "Weapon"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

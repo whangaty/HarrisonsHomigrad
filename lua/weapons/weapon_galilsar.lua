@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "АС «Вал»"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Автоматическая винтовка со встроенным глушителем под калибр 9х39"
-SWEP.Category 				= "Оружие"
+SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon			= "pwb2/vgui/weapons/asval"
 
 SWEP.Spawnable 				= true

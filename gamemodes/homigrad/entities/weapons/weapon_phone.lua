@@ -1,9 +1,9 @@
 SWEP.Base                   = "medkit"
 
-SWEP.PrintName 				= "Заказчик"
+SWEP.PrintName 				= "Mobile Phone"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Закажи все вещи из JMOD!"
-SWEP.Category 				= "Разное"
+SWEP.Instructions			= "Hello? Yes, this is dog."
+SWEP.Category 				= "Miscellaneous"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

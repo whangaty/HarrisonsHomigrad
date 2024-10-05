@@ -1,10 +1,10 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "Automatic Rifle 2"
+SWEP.PrintName 				= "SAR-2 Assault Rifle"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Основное штурмовое оружие Альянса"
-SWEP.Category 				= "Оружие"
+SWEP.Instructions			= "Combine Manufcatured Assault Rifle."
+SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon          = "pwb/sprites/akm"
 
 SWEP.Spawnable 				= true

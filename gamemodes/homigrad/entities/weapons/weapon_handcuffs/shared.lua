@@ -5,7 +5,7 @@ SWEP.Base = "medkit"
 SWEP.PrintName = "Стяжки"
 SWEP.Author = "z"
 SWEP.Instructions = "Связать человека"
-SWEP.Category = "Разное"
+SWEP.Category = "Miscellaneous"
 
 SWEP.Slot = 5
 SWEP.SlotPos = 3

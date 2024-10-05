@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = "weapon_hg_melee_base"
 
-SWEP.PrintName = "Лопата"
-SWEP.Category = "Ближний Бой"
-SWEP.Instructions = "Ручной шанцевый инструмент, используемый преимущественно для работы (копание, расчистка, перенос и так далее) с грунтом."
+SWEP.PrintName = "Shovel"
+SWEP.Category = "Near battle"
+SWEP.Instructions = "Useful for caving both Earth and Bone."
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true

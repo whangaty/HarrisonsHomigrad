@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "Scorpion vz. 68"
-SWEP.Instructions			= ""
-SWEP.Category 				= "Оружие"
+SWEP.PrintName 				= "Scorpian Automatic Pistol"
+SWEP.Instructions			= "A rapid firing pistol that can kill an enemy before the magazine is empty."
+SWEP.Category 				= "Weapon"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

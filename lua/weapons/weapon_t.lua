@@ -4,9 +4,9 @@ SWEP.DrawWeaponInfoBox	= false
 SWEP.BounceWeaponIcon = false
 end
 
-SWEP.PrintName = "Томагавк"
-SWEP.Instructions = "Находится на вооружении кораблей и подводных лодок ВМС США, использовалась во всех значительных военных конфликтах с участием США с момента её принятия на вооружение в 1983 году."
-SWEP.Category = "Ближний Бой"
+SWEP.PrintName = "Tomahawk"
+SWEP.Instructions = "How many fools can you kill today?"
+SWEP.Category = "Melee"
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true

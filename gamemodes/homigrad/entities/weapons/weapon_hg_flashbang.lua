@@ -1,9 +1,9 @@
 SWEP.Base = "weapon_hg_granade_base"
 
-SWEP.PrintName = "Светошумовая Граната"
+SWEP.PrintName = "Flashbang"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Специальное средство несмертельного действия, оказывающие на человека светозвуковое и осколочное воздействие."
-SWEP.Category = "Гранаты"
+SWEP.Instructions = "Creates a lasting blinding effect on any player who stares into the device while it detonates."
+SWEP.Category = "Grenades"
 
 SWEP.Slot = 4
 SWEP.SlotPos = 2

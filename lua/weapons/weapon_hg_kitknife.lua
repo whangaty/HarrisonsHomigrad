@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = "weapon_hg_melee_base"
 
-SWEP.PrintName = "Кухонный ножик"
-SWEP.Category = "Ближний Бой"
-SWEP.Instructions = "Колющий, а также рубящий, режущий инструмент, рабочей частью которого является клинок — полоса, выполненная из твёрдого материала."
+SWEP.PrintName = "Kitchen Knife"
+SWEP.Category = "Melee"
+SWEP.Instructions = "Sharpened to perfection."
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true

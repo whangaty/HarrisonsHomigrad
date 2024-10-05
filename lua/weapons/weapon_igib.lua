@@ -3,8 +3,8 @@ SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "InstaGib Grenade Launcher"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Выпускает 40мм заряды. Может и вас убить на раз-два."
-SWEP.Category 				= "Оружие 2"
+SWEP.Instructions			= "Loaded with tons of grenades, ribbed for YOUR pleasure!"
+SWEP.Category 				= "Weapons"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

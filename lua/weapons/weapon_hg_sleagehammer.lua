@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = "weapon_hg_melee_base"
 
-SWEP.PrintName = "Кувалда"
-SWEP.Category = "Ближний Бой"
-SWEP.Instructions = "Ручной ударный инструмент, предназначенный для боя камня, нанесения исключительно сильных ударов при обработке металла, на демонтаже и монтаже конструкций."
+SWEP.PrintName = "Sledgehammer"
+SWEP.Category = "Melee"
+SWEP.Instructions = "The perfect tool to cave heads in."
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true
 SWEP.AdminOnly = false

@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = "weapon_hg_melee_base"
 
-SWEP.PrintName = "Монтировка"
-SWEP.Category = "Ближний Бой"
-SWEP.Instructions = "Ручной ударный и рычажный инструмент, один из наиболее древних видов инструмента, известных человечеству, наряду с молотком, зубилом, топором, лопатой."
+SWEP.PrintName = "Crowbar"
+SWEP.Category = "Melee"
+SWEP.Instructions = "Manufactured by Freeman Inc."
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true

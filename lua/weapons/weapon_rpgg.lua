@@ -1,10 +1,10 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "AT-4"
+SWEP.PrintName 				= "AT-4 RPG"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Имеет траекторию полёта. Обращаться максимально неосторожно."
-SWEP.Category 				= "Оружие 2"
+SWEP.Instructions			= "WARNING: DO NOT ATTEMPT TO ROCKET JUMP."
+SWEP.Category 				= "Weapons"
 --SWEP.WepSelectIcon			= "pwb/sprites/m134"
 
 SWEP.Spawnable 				= true

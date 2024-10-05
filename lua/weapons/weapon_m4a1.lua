@@ -3,8 +3,8 @@ SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "M4A1"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Автоматическая винтовка под калибр 5,56х45"
-SWEP.Category 				= "Оружие"
+SWEP.Instructions			= "Do you really need an introduction to this weapon?"
+SWEP.Category 				= "Weapon"
 
 
 SWEP.Spawnable 				= true

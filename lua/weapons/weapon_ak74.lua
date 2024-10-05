@@ -1,10 +1,10 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "MINIGUN"
-SWEP.Author 				= "ADMINI"
-SWEP.Instructions			= "MINIGUN АДМИНХУЙ! БАМ БАМ БАМ!"
-SWEP.Category 				= "Оружие"
+SWEP.PrintName 				= "Minigun"
+SWEP.Author 				= "Admin"
+SWEP.Instructions			= "If you're reading this, an admin was very stupid or very kind to give this to you."
+SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon			= "pwb/sprites/m134"
 
 SWEP.Spawnable 				= true

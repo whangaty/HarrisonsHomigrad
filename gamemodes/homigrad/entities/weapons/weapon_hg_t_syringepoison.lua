@@ -1,11 +1,11 @@
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Тетродотоксин"
+SWEP.PrintName = "Biotoxin Syringe"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Вколоть в позвоночник и ждать..."
+SWEP.Instructions = "Inject into a targets spine for a stealthy attack."
 
 SWEP.Spawnable = true
-SWEP.Category = "Примочки убийцы"
+SWEP.Category = "Traitor Tools"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 0

@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "ИЖ-43"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Неебически длинное ружье с калибром 12/70. С таким и на FurryCon пойти не стыдно."
-SWEP.Category 				= "Оружие 2"
+SWEP.Category 				= "Weapons"
 SWEP.WepSelectIcon			= "pwb2/vgui/weapons/m4super90"
 
 SWEP.Spawnable 				= true

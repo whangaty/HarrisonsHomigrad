@@ -2,8 +2,8 @@ if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "IMI Micro Uzi"
-SWEP.Instructions			= "Настоящий гэнгста носит только УЗИ!"
-SWEP.Category 				= "Оружие"
+SWEP.Instructions			= "This a lil' something for you, you lil bi-atch!"
+SWEP.Category 				= "Weapon"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

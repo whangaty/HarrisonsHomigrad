@@ -1,8 +1,8 @@
 if engine.ActiveGamemode() == "homigrad" then
 
-SWEP.PrintName = "Складной Ножик"
-SWEP.Instructions = "Маленький ножик складного типа, который удобно носить в кармане. Хорошее средство для самообороны, которое никто не сможет увидеть, пока вы не достанете его из кармана."
-SWEP.Category = "Ближний Бой"
+SWEP.PrintName = "Knife"
+SWEP.Instructions = "A pretty nifty looking knife, although you probably dont want to be seen with it."
+SWEP.Category = "Melee"
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true

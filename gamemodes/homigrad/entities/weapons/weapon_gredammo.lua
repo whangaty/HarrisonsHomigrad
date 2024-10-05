@@ -1,9 +1,9 @@
 SWEP.Base                   = "weapon_base"
 
-SWEP.PrintName 				= "Установка боеприпасов"
+SWEP.PrintName 				= "Mortar Ammunition"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Установить боеприпасы (для миномета) (шайгу)"
-SWEP.Category 				= "Разное"
+SWEP.Instructions			= "Mortar Ammo"
+SWEP.Category 				= "Miscellaneous"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

@@ -1,8 +1,8 @@
 if engine.ActiveGamemode() == "homigrad" then
 
-SWEP.PrintName = "Труба"
-SWEP.Instructions = "Вырванная из чьей-то канализационной системы труба"
-SWEP.Category = "Ближний Бой"
+SWEP.PrintName = "Lead Pipe"
+SWEP.Instructions = "Taken off from a nearby wall."
+SWEP.Category = "Melee"
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true

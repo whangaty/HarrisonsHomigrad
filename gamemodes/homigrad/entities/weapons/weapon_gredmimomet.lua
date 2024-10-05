@@ -1,9 +1,9 @@
 SWEP.Base                   = "weapon_base"
 
-SWEP.PrintName 				= "Установка миномёта"
+SWEP.PrintName 				= "Mortar Installer"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Установить миномёт"
-SWEP.Category 				= "Разное"
+SWEP.Instructions			= "Allows you to place down a mortar"
+SWEP.Category 				= "Miscellaneous"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

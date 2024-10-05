@@ -1,9 +1,9 @@
 SWEP.Base                   = "weapon_base"
 
-SWEP.PrintName 				= "Молоток"
+SWEP.PrintName 				= "Hammer"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Ударный ручной инструмент, применяемый для забивания гвоздей, разбивания предметов и других работ\n\nЛКМ - бить, ПКМ+Е - изменить режим (забивание/отдирание гвоздей), ПКМ - забить/отдереть гвоздь (в зависимости от режима)"
-SWEP.Category 				= "Разное"
+SWEP.Instructions			= "Used to quickly weld & barricade."
+SWEP.Category 				= "Miscellaneous"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

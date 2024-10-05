@@ -1,10 +1,10 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "Арбалет"
+SWEP.PrintName 				= "Crossbow"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Арбик с болтами"
-SWEP.Category 				= "Оружие 2"
+SWEP.Instructions			= "A silent but deadly weapon"
+SWEP.Category 				= "Weapons"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

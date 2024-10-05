@@ -1,9 +1,9 @@
 SWEP.Base                   = "weapon_base"
 
-SWEP.PrintName 				= "Шакидка"
+SWEP.PrintName 				= "Suicide Vest"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Пояс смертника, исход всегда один"
-SWEP.Category 				= "Примочки убийцы"
+SWEP.Instructions			= "Developer Tip: Give this to someone else instead."
+SWEP.Category 				= "Traitor Tools"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

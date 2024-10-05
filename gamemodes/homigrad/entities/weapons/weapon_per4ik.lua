@@ -1,9 +1,9 @@
 SWEP.Base                   = "weapon_base"
 
-SWEP.PrintName 				= "Перцовка"
+SWEP.PrintName 				= "Pepperspray"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Гражданское газовое оружие самообороны, снаряженное слезоточивыми и раздражающими веществами (ирритантами)"
-SWEP.Category 				= "Разное"
+SWEP.Instructions			= "Blinds an enemy when constantly applied."
+SWEP.Category 				= "Miscellaneous"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
