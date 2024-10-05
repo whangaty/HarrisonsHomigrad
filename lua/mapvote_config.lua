@@ -45,7 +45,7 @@ SolidMapVote[ 'Config' ][ 'Map Prefix' ] = {
 
 local namecolor = {
    default = COLOR_WHITE,
-   superadmin = Color(212,175,55),
+   servermanager = Color(212,175,55),
    admin = Color(0,191,255),
    veteran = Color(255,20,147),
    moderator = Color(124,252,0),
@@ -59,7 +59,7 @@ local namecolor = {
 -- avatar borders on the map vote.
 SolidMapVote[ 'Config' ][ 'Avatar Border Color' ] = function( ply )
 
-  if ply:IsUserGroup("superadmin") then
+  if ply:IsUserGroup("servermanager") then
 	return HSVToColor( math.sin( 0.3*RealTime() )*128 + 127, 1, 1 )
   end
 
@@ -78,9 +78,16 @@ SolidMapVote[ 'Config' ][ 'Vote Power' ] = function( ply )
         return 1
     end
 
+    -- Give our supporters the big benefits!
+    if ply:IsUserGroup("supporter") or ply:IsUserGroup("supporterplus") then
+        return 2
+    else
+        return 1
+    end
+
     -- Default vote power
     -- Would keep this at 1, unless you know what your doing (you're*)
-    return 1
+    --return 1
 end
 
 -- Enabling this option will give greater a chance to maps
@@ -103,7 +110,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_clue_xmas",
     "ttt_winterplant_v4",
     "hmcd_aircraft",
-    --"hmcd_metropolis",
+    --"hmcd_metropolis", -- Toooo buggy
     "mu_smallotown_v2_snow",
     "mu_powerhermit",
     "gm_church",
@@ -114,6 +121,9 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "gm_freeway_spacetunnel",
     "ttt_minecraft_b5",
     "ttt_minecraftcity_v4",
+    "gm_deschool",
+    "cs_office",
+    "de_dust2"
     --"gm_ww1_jlps"
     --"gm_spacetrain"
     --"gm_brutalist_kfc",
@@ -196,4 +206,18 @@ SolidMapVote[ 'Config' ][ 'Missing Image Size' ] = { width = 1920, height = 1080
 -- appealing on the mapvote.
 SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = 'ttt_minecraft_b5', displayname = 'Minecraft B5', image = 'http://i2.imgbus.com/doimg/3co1mmfoncb63a7.jpg', width = 1920, height = 1080 },
+    { filename = 'gm_wick', displayname = "Wick's House" },
+    { filename = 'gm_church', displayname = 'Country Church' },
+    { filename = 'mu_smallotown_v2_snow', displayname = 'Small Town (Snow)' },
+    { filename = 'gm_terminal_v1a', displayname = 'Terminal' },
+    { filename = 'gm_deschool', displayname = 'School' },
+    { filename = 'ttt_freeway_rain', displayname = 'Freeway' },
+    { filename = 'gm_freeway_spacetunnel', displayname = 'Freeway (Space Tunnel)' },
+    { filename = 'hmcd_aircraft', displayname = 'Floating Ship' },
+    { filename = 'ttt_fastfood_a6', displayname = 'Fastfood' },
+    { filename = 'ttt_clue_xmas', displayname = 'Clue (Christmas)' },
+    { filename = 'ttt_minecraftcity_v4', displayname = 'Minecraft City' },
+    { filename = 'ttt_winterplant_v4', displayname = 'Winter Power Plant' },
+    { filename = 'cs_office', displayname = 'Office' },
+    { filename = 'de_dust2', displayname = 'Dust II' },
 }
