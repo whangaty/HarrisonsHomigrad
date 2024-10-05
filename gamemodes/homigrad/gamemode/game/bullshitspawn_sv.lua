@@ -100,6 +100,8 @@ weaponslegendary = {
 	"weapon_civil_famas"
 }
 
+
+-- TODO: Do these sounds actually exist?
 local sndsDrop = {
 	common = "homigrad/vgui/item_drop1_common.wav",
 	uncommon = "homigrad/vgui/item_drop2_uncommon.wav",
@@ -139,29 +141,24 @@ hook.Add("PropBreak","homigrad",function(att,ent)
 		elseif gunchance < 5 then
 			entName = table.Random(weaponsveryrare)
 			type1 = "veryrare"
-		elseif gunchance < 15 then
+		elseif gunchance < 20 then
 			entName = table.Random(weaponsrare)
 			type1 = "rare"
-		elseif gunchance < 35 then
+		elseif gunchance < 45 then
 			entName = table.Random(weaponsuncommon)
 			type1 = "uncommon"
-		elseif gunchance < 55 then
+		elseif gunchance < 85 then
 			entName = table.Random(weaponscommon)
 			type1 = "common"
 		end
 
 		if entName then
 			if math.random(1,1000) == 1000 then
-				for i = 1,math.random(3,4) do
-					local huy = ents.Create("ent_jack_gmod_ezcheese")
-					huy:SetPos(posSpawn)
-					huy:Spawn()
-					hut:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
-				end
 
-				local huy = ents.Create("weapon_physgun")
-				huy:SetPos(posSpawn)
-				huy:Spawn()
+				-- TODO: Make it drop a minigun
+				--local huy = ents.Create("weapon_physgun")
+				--huy:SetPos(posSpawn)
+				--huy:Spawn()
 
 				return
 			end
@@ -238,16 +235,22 @@ local function randomLoot()
 	local gunchance = math.random(1,100)
 	
 	local entName = false
+	
 	if gunchance < 2 then
 		entName = table.Random(weaponslegendary)
+		type1 = "legend"
 	elseif gunchance < 5 then
 		entName = table.Random(weaponsveryrare)
-	elseif gunchance < 15 then
+		type1 = "veryrare"
+	elseif gunchance < 20 then
 		entName = table.Random(weaponsrare)
-	elseif gunchance < 35 then
+		type1 = "rare"
+	elseif gunchance < 45 then
 		entName = table.Random(weaponsuncommon)
-	elseif gunchance < 55 then
+		type1 = "uncommon"
+	elseif gunchance < 85 then
 		entName = table.Random(weaponscommon)
+		type1 = "common"
 	end
 
 	local func = TableRound().ShouldSpawnLoot
