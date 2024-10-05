@@ -1,0 +1,30 @@
+if not engine.ActiveGamemode() == "homigrad" then return end
+
+hook.Add("Think", "player_mouth_movement", function()
+    for _, ply in ipairs(player.GetAll()) do
+        -- Only animate the mouths of players who are valid and alive
+        if ply:Alive() and IsValid(ply) then
+            -- Work with the player's own entity (no ragdoll handling in this script)
+            local ent = ply
+
+            -- Define the relevant flexes for mouth movement
+            local flexes = {
+                ent:GetFlexIDByName("jaw_drop"),
+                ent:GetFlexIDByName("left_part"),
+                ent:GetFlexIDByName("right_part"),
+                ent:GetFlexIDByName("left_mouth_drop"),
+                ent:GetFlexIDByName("right_mouth_drop")
+            }
+
+            -- Calculate flex weight based on whether the player is speaking
+            local weight = ply:IsSpeaking() and math.Clamp(ply:VoiceVolume() * 6, 0, 6) or 0
+
+            -- Apply the flex weight to control the mouth movement
+            for _, flexID in ipairs(flexes) do
+                if flexID >= 0 then -- Ensure the flexID is valid
+                    ent:SetFlexWeight(flexID, weight * 4)
+                end
+            end
+        end
+    end
+end)
