@@ -256,32 +256,35 @@ local angZero = Angle(0,0,0)
 local g_station = nil
 local playing = false
 local deathtexts = {
-	"ТЫ МЁРТВ",
-	"ПОХОЖЕ, ТЫ СДОХ",
-	"ПОТРАЧЕНО",
-	"ВАУ, ТЫ УМЕР",
-	"ЖИЗНЬ ЗАКОНЧЕНА",
-	"GAME OVER",
+	"GONE, GONE...",
+	"ALL CLYDE, NO BONNIE",
+	"BURNED OUT",
 	"WASTED",
-	"МЁРТВ",
-	"ПОМЕР",
-	"ТРУПАК",
-	"МЕРТВЕЦ",
-	"СДОХ",
-	"ТВОЯ ОСТОНОВКА",
-	"ВРЕМЯ ВЫШЛО",
-	"МИССИЯ ПРОВАЛЕНА",
-	"ВОТ И ВСЕ!",
-	"КОНЕЦ",
-	"FILINA?",
+	"BYE BYE!",
+	"GAME OVER",
+	"AND OVER AGAIN",
+	"FUCKED UP",
+	"HAHAHAHA",
+	"SO BAD, SO SAD!",
+	"CRY MORE, IN HELL",
+	"NO MORE CHANCES",
+	"CHOKER",
+	"IF YOU CANT SEE",
+	"HERE'S A LIL SOMETHING",
+	"I AM READY",
+	"LET ME TRY THIS SHIT",
+	"EVIL",
 	"DEAD",
-	"TRY AGAIN"
+	"TRY AGAIN",
+	"CУКА"
 }
 net.Receive("pophead",function(len)
 	local rag = net.ReadEntity()
 	if GetConVar("hg_deathscreen"):GetBool() then
 	deathrag = rag
 	deathtext = table.Random(deathtexts)
+
+	-- TODO: Fix issue where, upon dying and immediately respawning, screen still fades to black 
 	LocalPlayer():ScreenFade( SCREENFADE.IN, Color( 0, 0, 0, 255 ), 0.5, 1 )
 	if !playing and GetConVar("hg_deathsound"):GetBool() then
 		playing = true
@@ -302,6 +305,7 @@ net.Receive("pophead",function(len)
 			playing = false
 		end)
 	end
+	
 	timer.Simple(4,function()
 		if GetConVar("hg_deathscreen"):GetBool() then
 			LocalPlayer():ScreenFade( SCREENFADE.OUT, Color( 0, 0, 0, 255 ), 0.2, 1 )
