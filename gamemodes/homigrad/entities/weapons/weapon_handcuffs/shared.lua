@@ -2,9 +2,9 @@ AddCSLuaFile()
 
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Стяжки"
+SWEP.PrintName = "Zip-ties"
 SWEP.Author = "z"
-SWEP.Instructions = "Связать человека"
+SWEP.Instructions = "Use on a ragdolled character to tie them up."
 SWEP.Category = "Miscellaneous"
 
 SWEP.Slot = 5
