@@ -188,63 +188,63 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 end)
 
 local bonenames = {
-    ['ValveBiped.Bip01_Head1']="голову",
-    ['ValveBiped.Bip01_Spine']="спину",
-    ['ValveBiped.Bip01_R_Hand']="правую руку",
-    ['ValveBiped.Bip01_R_Forearm']="правое предплечье",
-    ['ValveBiped.Bip01_R_Foot']="правую ногу",
-    ['ValveBiped.Bip01_R_Thigh']='правое бедро',
-    ['ValveBiped.Bip01_R_Calf']='правую голень',
-    ['ValveBiped.Bip01_R_Shoulder']='правое плечо',
-    ['ValveBiped.Bip01_R_Elbow']='правый локоть',
-	['ValveBiped.Bip01_L_Hand']='левую руку',
-    ['ValveBiped.Bip01_L_Forearm']='левое предплечье',
-    ['ValveBiped.Bip01_L_Foot']='левую ногу',
-    ['ValveBiped.Bip01_L_Thigh']='левое бедро',
-    ['ValveBiped.Bip01_L_Calf']='левую голень',
-    ['ValveBiped.Bip01_L_Shoulder']='левое плечо',
-    ['ValveBiped.Bip01_L_Elbow']='левый локоть'
+    ['ValveBiped.Bip01_Head1']="Head",
+    ['ValveBiped.Bip01_Spine']="Spine",
+    ['ValveBiped.Bip01_R_Hand']="Right Hand",
+    ['ValveBiped.Bip01_R_Forearm']="Right Forearm",
+    ['ValveBiped.Bip01_R_Foot']="Right Foot",
+    ['ValveBiped.Bip01_R_Thigh']='Right Thigh',
+    ['ValveBiped.Bip01_R_Calf']='Right Calf',
+    ['ValveBiped.Bip01_R_Shoulder']='Right Shoulder',
+    ['ValveBiped.Bip01_R_Elbow']='Right Elbow',
+	['ValveBiped.Bip01_L_Hand']='Left Hand',
+    ['ValveBiped.Bip01_L_Forearm']='Left Forearm',
+    ['ValveBiped.Bip01_L_Foot']='Left Foot',
+    ['ValveBiped.Bip01_L_Thigh']='Left Thigh',
+    ['ValveBiped.Bip01_L_Calf']='Left Calf',
+    ['ValveBiped.Bip01_L_Shoulder']='Left Shoulder',
+    ['ValveBiped.Bip01_L_Elbow']='Left Elbow'
 }
 
 local reasons = {
-	["blood"] = "Вы умерли от кровопотери.",
-	["pain"] = "Вы умерли от болевого шока.",
-	["painlosing"] = "Вы умерли от передоза обезболивающим.",
-	["adrenaline"] = "Вы умерли от передоза адреналином.",
-	["killyourself"] = "Вы совершили суицид.",
-	["hungry"] = "Вы умерли от голода.",
-	["virus"] = "Вы умерли от заражения.",
-	["poison"] = "Вы были отравлены."
+	["blood"] = "You died from server blood loss.",
+	["pain"] = "You died from extreme & severe pain.",
+	["painlosing"] = "You died from an overdose.",
+	["adrenaline"] = "You died from an overdose.",
+	["killyourself"] = "You killed yourself.",
+	["hungry"] = "You died of hunger.",
+	["virus"] = "You died from the Zombie Virus.",
+	["poison"] = "You died from poison entering your system."
 }
 
 hook.Add("PlayerDeath","plymessage",function(ply,hitgroup,dmginfo)
 	local att = ply.LastAttacker
 	--if not IsValid(att) then return end
 	local boneName = bonenames[ply.LastHitBoneName]
-	local add = (boneName and " в " .. boneName or "")
+	local add = (boneName and " a " .. boneName or "")
 
 	local reason = ply.KillReason
 	local dmgInfo = dmgInfo or ply.LastDMGInfo
 
 	if ply == att then
-		ply:ChatPrint("Вы совершили суицид" .. add)
+		ply:ChatPrint("You killed yourself.") -- FIXME: ply:ChatPrint("You killed yourself." .. add)
 	elseif reason then
-		ply:ChatPrint(reasons[reason] or "Вы умерли при загадочных обстоятельствах.")
+		ply:ChatPrint(reasons[reason] or "You died under mysterious circumstances.")
 	elseif att then
-		local dmgtype = "от ранения"
+		local dmgtype = "wounded"
 	
 		dmgtype = dmgInfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT) and (dmgInfo:IsDamageType(DMG_BUCKSHOT) and "от ранения осколками/дробью" or "от огнестрельного ранения") or 
-			dmgInfo:IsExplosionDamage() and "от минно-взрывной травмы" or 
-			dmgInfo:IsDamageType(DMG_SLASH) and "от ножевого ранения" or 
-			dmgInfo:IsDamageType(DMG_CLUB+DMG_GENERIC) and "от ранения тупым оружием" or 
+			dmgInfo:IsExplosionDamage() and "from an explosive" or 
+			dmgInfo:IsDamageType(DMG_SLASH) and "from a knife wound" or 
+			dmgInfo:IsDamageType(DMG_CLUB+DMG_GENERIC) and "from blunt-force trauma" or 
 			dmgtype
 		
-		ply:ChatPrint("Вы умерли " .. dmgtype .. add)
-		ply:ChatPrint("Вас убил игрок " .. att:Name())
+		ply:ChatPrint("You died " .. dmgtype) -- FIXME: Add ' .. add' at the end of string.
+		ply:ChatPrint("You were killed by: " .. att:Name())
 	
 		player.EventPoint(att:GetPos(),"hitgroup killed",512,att,ply)
 	else
-		ply:ChatPrint("Вы умерли при загадочных обстоятельствах")
+		ply:ChatPrint("You died under mysterious circumstances.")
 	end
 end)
 end
