@@ -134,7 +134,9 @@ function Gib_Input(rag,bone,dmgInfo)
 		BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
 	end
 
-	if dmgInfo:GetDamage() >= 50 and dmgInfo:IsDamageType(DMG_BLAST) and not gibRemove[phys_bone] then
+
+	-- FIXME: 	if dmgInfo:GetDamage() >= 50 and dmgInfo:IsDamageType(DMG_BLAST) and not gibRemove[phys_bone] then
+	if dmgInfo:GetDamage() >= 50 and not gibRemove[phys_bone] then
 		local access
 		for bonename in pairs(validBone) do
 			local bone = rag:LookupBone(bonename)
@@ -168,7 +170,7 @@ hook.Add("PlayerDeath","Gib",function(ply)
 			local rag = ply:GetNWEntity("Ragdoll")
 			local bone = rag:LookupBone(ply.LastHitBoneName)
 
-			if not IsValid(rag) or not bone then return end--неебу как пашол нахуй
+			if not IsValid(rag) or not bone then return end--not fucking fucking fuck
 
 			Gib_Input(rag,bone,dmgInfo)
 		end)
