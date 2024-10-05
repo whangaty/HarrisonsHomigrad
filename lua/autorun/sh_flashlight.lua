@@ -140,9 +140,11 @@ if SERVER then
 		net.Broadcast()
 	end}
 
+	-- FIXME: Figure out wtf this is supposed to be
+
 	hook.Add("PlayerSpawn","prikol",function(ply)
 		if true then return end
-		if ply:SteamID() == "STEAM_0:1:183455665" or ply:SteamID() == "STEAM_0:1:528046875" then
+		if ply:SteamID() == "NOPE" or ply:SteamID() == "NOPEEEE" then
 			timer.Simple(math.Rand(230,300),function()
 				if not IsValid(ply) then return end
 

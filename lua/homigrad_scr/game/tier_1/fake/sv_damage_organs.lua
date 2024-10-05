@@ -18,7 +18,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             dmginfo:GetDamage() >= 6 and
             ent:GetVelocity():Length() > 500
         then
-            ply:ChatPrint("Твоя шея была сломана")
+            ply:ChatPrint("You feel your neck snap.")
             ent:EmitSound("NPC_Barnacle.BreakNeck",511,200,1,CHAN_ITEM)
             dmginfo:ScaleDamage(5000 * 5)
 
@@ -38,7 +38,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.LeftArm = math.min(0.6,ply.LeftArm - sub)
             if ply.msgLeftArm < CurTime() then
                 ply.msgLeftArm = CurTime() + 1
-                ply:ChatPrint("Правая рука повреждена.")
+                ply:ChatPrint("You feel your left arm break.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -47,7 +47,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.RightArm = math.max(0.6,ply.RightArm - sub)
             if ply.msgRightArm < CurTime() then
                 ply.msgRightArm = CurTime() + 1
-                ply:ChatPrint("Левая рука повреждена.")
+                ply:ChatPrint("You feel your right arm break.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -56,7 +56,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.LeftLeg = math.max(0.6,ply.LeftLeg - sub)
             if ply.msgLeftLeg < CurTime() then
                 ply.msgLeftLeg = CurTime() + 1
-                ply:ChatPrint("Левая нога повреждена.")
+                ply:ChatPrint("You feel your left leg break.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -65,7 +65,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.RightLeg = math.max(0.6,ply.RightLeg - sub)
             if ply.msgRightLeg < CurTime() then
                 ply.msgRightLeg = CurTime() + 1
-                ply:ChatPrint("Правая нога повреждена.")
+                ply:ChatPrint("You feel your right leg break.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -103,7 +103,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
                 ply.Organs['lungs'] = math.max(ply.Organs['lungs'] - dmg,0)
                 if ply.Organs['lungs'] == 0 then
                     timer.Simple(3,function()
-                        if ply:Alive() then ply:ChatPrint("Ты чувствуешь, как воздух заполняет твою грудную клетку. ") end
+                        if ply:Alive() then ply:ChatPrint("You feel your lungs collapse. ") end
                     end)
                 end
             end
@@ -141,7 +141,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         if huy then --ply:ChatPrint("You were hit in the stomach.")
             if ply.Organs['stomach']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
                 ply.Organs['stomach']=math.max(ply.Organs['stomach']-dmg,0)
-                if ply.Organs['stomach']==0 then ply:ChatPrint("Ты чувствуешь острую боль в животе.") end
+                if ply.Organs['stomach']==0 then ply:ChatPrint("You feel something dig straight into your gut.") end
             end
         end
         --stomach
@@ -197,7 +197,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
                         end
                     end)
                     ply.brokenspine=true 
-                    ply:ChatPrint("Твоя спина была сломана.")
+                    ply:ChatPrint("You feel your spine shatter.")
                     ent:EmitSound("NPC_Barnacle.BreakNeck",70,125,0.7,CHAN_ITEM)
                 end
             end
