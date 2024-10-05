@@ -977,10 +977,10 @@ hook.Add("Think","mouthanim",function()
 			ent:GetFlexIDByName( "right_mouth_drop" )
 		}
 
-		local weight = ply:IsSpeaking() && math.Clamp( ply:VoiceVolume() * 6, 0, 6 ) || 0
+		local weight = ply:IsSpeaking() and math.Clamp( ply:VoiceVolume() * 6, 0, 6 ) or 0
 
 		for k, v in pairs( flexes ) do
-			ent:SetFlexWeight( v, weight )
+			ent:SetFlexWeight( v, weight * 4 )
 		end
 	end
 end)
