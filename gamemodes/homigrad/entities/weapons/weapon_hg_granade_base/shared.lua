@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_base"
 
-SWEP.PrintName = "База Гаранаты"
+SWEP.PrintName = "Base Garanata"
 SWEP.Author = "sadsalat"
 SWEP.Purpose = "Бах Бам Бум, Бадабум!"
 
