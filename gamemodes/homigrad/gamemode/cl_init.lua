@@ -205,7 +205,8 @@ local laserweps = {
 	["weapon_galil"] = true,
 	["weapon_deagle"] = true,
 	["weapon_beanbag"] = true,
-	["weapon_glock"] = true
+	["weapon_glock"] = true,
+	["weapon_hk_arbalet"] = true
 }
 laserplayers = laserplayers or {}
 local mat = Material("sprites/bluelaser1")
@@ -275,7 +276,7 @@ local function ToggleMenu(toggle)
         wepMenu:MakePopup()
         wepMenu:SetKeyboardInputEnabled(false)
 		if wep:GetClass()!="weapon_hands" then
-			wepMenu:AddOption("Выкинуть",function()
+			wepMenu:AddOption("Drop Weapon",function()
 				LocalPlayer():ConCommand("say *drop")
 			end)
 		end
@@ -287,7 +288,7 @@ local function ToggleMenu(toggle)
             end)
         end
 		if laserweps[wep:GetClass()] then
-        wepMenu:AddOption("Вкл/Выкл Лазер",function()
+        wepMenu:AddOption("Laser On/Off",function()
             if LocalPlayer().Laser then
 				LocalPlayer().Laser = false
 				net.Start("lasertgg")
@@ -310,15 +311,15 @@ local function ToggleMenu(toggle)
         plyMenu:MakePopup()
         plyMenu:SetKeyboardInputEnabled(false)
 
-		plyMenu:AddOption("Меню Брони",function()
+		plyMenu:AddOption("Armor Menu",function()
             LocalPlayer():ConCommand("jmod_ez_inv")
         end)
-		plyMenu:AddOption("Меню Патрон",function()
+		plyMenu:AddOption("Ammo Menu",function()
 			LocalPlayer():ConCommand("hg_ammomenu")
 		end)
 		local EZarmor = LocalPlayer().EZarmor
 		if JMod.GetItemInSlot(EZarmor, "eyes") then
-			plyMenu:AddOption("Активировать Маску/Забрало",function()
+			plyMenu:AddOption("Toggle Mask/Helmet Visor",function()
 				LocalPlayer():ConCommand("jmod_ez_toggleeyes")
 			end)
 		end
