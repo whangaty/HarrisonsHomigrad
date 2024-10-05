@@ -1,9 +1,9 @@
 SWEP.Base                   = "weapon_base"
 
-SWEP.PrintName 				= "Бомба в пропе"
+SWEP.PrintName 				= "Improvised Explosive Device"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "ЛКМ, чтобы заложить в проп/поставить; ПКМ, чтобы взорвать"
-SWEP.Category 				= "Примочки убийцы"
+SWEP.Instructions			= "Small Package, Big Boom!\nLeft click to place/hide, right click to explode."
+SWEP.Category 				= "Traitor Tools"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -55,9 +55,9 @@ if SERVER then
     local function Bomb(ent)
         local SelfPos,PowerMult,Model = ent:LocalToWorld(ent:OBBCenter()),6,ent:GetModel()
 
-        ent:EmitSound("snds_jack_gmod/plunger.wav")
+        ent:EmitSound("bomb_raw.wav")
 
-		timer.Simple(math.Rand(0.3,0.4),function()
+		timer.Simple(math.Rand(1.02,1.04),function()
             ParticleEffect("pcf_jack_groundsplode_large",SelfPos,vector_up:Angle())
             util.ScreenShake(SelfPos,99999,99999,1,3000)
             sound.Play("BaseExplosionEffect.Sound", SelfPos,120,math.random(90,110))
@@ -225,7 +225,7 @@ else
             surface.SetDrawColor(Color(255, 255, 255, 255))
             draw.NoTexture()
             Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-            draw.DrawText( "Заложить бомбу "..tostring((util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 3 or util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 66) and "в металлический проп" or ""), "TargetID", traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y - 40, color_white, TEXT_ALIGN_CENTER )
+            draw.DrawText( "Hide in prop "..tostring((util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 3 or util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 66) and "в металлический проп" or ""), "TargetID", traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y - 40, color_white, TEXT_ALIGN_CENTER )
         end
     end
 end
