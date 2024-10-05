@@ -114,6 +114,6 @@ else
         surface.SetDrawColor(Color(255, 255, 255, 255))
         draw.NoTexture()
         Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-        draw.DrawText("Отравить предмет","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_white,TEXT_ALIGN_CENTER)
+        draw.DrawText("Sprinkle onto ","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_white,TEXT_ALIGN_CENTER)
     end
 end

@@ -2,7 +2,7 @@ SWEP.Base = "medkit"
 
 SWEP.PrintName = "Biotoxin Syringe"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Inject into a targets spine for a stealthy attack."
+SWEP.Instructions = "A powerful & lethal sedative.\nInjecting into a spine is quiet, injecting elsewhere is loud."
 
 SWEP.Spawnable = true
 SWEP.Category = "Traitor Tools"
@@ -179,6 +179,6 @@ else
         surface.SetDrawColor(Color(255, 255 * hitEnt, 255 * hitEnt, 255))
         draw.NoTexture()
         Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-        draw.DrawText(not tobool(hitEnt) and "Вколоть шприц" or "","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_white,TEXT_ALIGN_CENTER)
+        draw.DrawText(not tobool(hitEnt) and "Inject into " or "","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_white,TEXT_ALIGN_CENTER)
     end
 end
