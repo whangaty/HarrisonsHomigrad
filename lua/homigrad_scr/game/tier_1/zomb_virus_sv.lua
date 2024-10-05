@@ -126,9 +126,13 @@ end,1}
 	end
 end,1}]]--
 
-concommand.Add( "hg_blevota", function( ply, cmd, args )
+
+-- FIXME: hg_blevota 
+concommand.Add( "vomit", function( ply, cmd, args )
     if !ply:Alive() or ply.Otrub then return end
     local r = math.random(1,30)
+
+    r = 26
     if r > 25 then
         local snd = table.Random(blevotasfx)
         ply:EmitSound(snd)
@@ -139,7 +143,7 @@ concommand.Add( "hg_blevota", function( ply, cmd, args )
             BloodParticle(att.Pos - att.Ang:Up() * 2,ply:EyeAngles():Forward()*150+VectorRand(-15,15)+ply:GetVelocity())
         end)
     else
-        ply:ChatPrint("Ты не смог выблеваться")
+        ply:ChatPrint("You attempt to vomit, but cannot do so.")
     end
 end )
 
