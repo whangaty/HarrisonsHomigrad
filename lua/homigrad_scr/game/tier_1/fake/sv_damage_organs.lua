@@ -197,7 +197,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
                         end
                     end)
                     ply.brokenspine=true 
-                    ply:ChatPrint("You feel your spine shatter.")
+                    ply:ChatPrint("You feel your spine shatter.\nYou can no longer walk.")
                     ent:EmitSound("NPC_Barnacle.BreakNeck",70,125,0.7,CHAN_ITEM)
                 end
             end
