@@ -3,9 +3,9 @@ AddCSLuaFile()
 
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Пустой пакет крови"
+SWEP.PrintName = "Blood Transfusion Kit"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Пакет ёмкостью 500мл для забора крови, наборы для определения группы крови в комплекте\nКАК ИСПОЛЬЗОВАТЬ: зажать на 2 секунды ЛКМ/ПКМ, чтобы влить в пакет кровь/вылить из пакета кровь (ЛКМ - действие с собой, ПКМ - действие с игроком)"
+SWEP.Instructions = "500mL of blood. Left Click to extract blood from a target, and right click to deposit blood into a target."
 
 SWEP.Spawnable = true
 SWEP.Category = "Medical"
