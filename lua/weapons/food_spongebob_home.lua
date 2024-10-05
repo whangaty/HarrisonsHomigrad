@@ -2,9 +2,9 @@ if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'weapon_base'
 AddCSLuaFile()
 
-SWEP.PrintName = "Банка ананасов"
+SWEP.PrintName = "Can of Pineapples"
 SWEP.Author = "Homigrad"
-SWEP.Purpose = "Консервированные ананасы"
+SWEP.Purpose = "Developer Note: This is called food_spongebob_home in the code"
 SWEP.Category = "Food"
 
 SWEP.Slot = 3

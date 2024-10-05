@@ -5,7 +5,7 @@ if SERVER then
 	SWEP.AutoSwitchTo = false
 	SWEP.AutoSwitchFrom = false
 else
-	SWEP.PrintName = "Руки"
+	SWEP.PrintName = "Hands"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
@@ -163,7 +163,7 @@ SWEP.InstantPickup = true -- FF compat
 SWEP.Author = ""
 SWEP.Contact = ""
 SWEP.Purpose = ""
-SWEP.Instructions = " Ваши руки, ЛКМ/Перезарядка: поднять/опустить кулаки;\n В поднятом состоянии: ЛКМ - удар, ПКМ - блок;\n В опущенном состоянии: ПКМ - поднять предмет, R - проверить пульс;\n При удержании предмета: Перезарядка - зафиксировать предмет в воздухе, E - крутить предмет в воздухе."
+SWEP.Instructions = "Left Click to Ready Fists/Attack.\nRight click to block/drag.\nR when engaged to disengage."
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
 SWEP.HoldType = "normal"
@@ -311,12 +311,15 @@ function SWEP:ApplyForce()
 			local ply = RagdollOwner(self.CarryEnt)
 			if self:GetOwner():KeyPressed( IN_RELOAD ) then
 				if not ply then
-					self:GetOwner():ChatPrint("У него нет пульса.")
+					self:GetOwner():ChatPrint("This is no pulse pulse. This person is dead.")
 				else
 					if ply.heartstop then
-						self:GetOwner():ChatPrint("У него нет пульса, но он всё ещё жив.")
+						self:GetOwner():ChatPrint("There is no pulse, but CPR can be performed to attempt to save them.")
 					else
-						self:GetOwner():ChatPrint(ply.nextPulse < 0.9 and "У него сильный пульс" or (ply.nextPulse <= 1.5 and "У него нормальный пульс") or (ply.nextPulse < 2 and "У него слабый пульс") or (ply.nextPulse >= 2 and "У него еле ощущаемый пульс."))
+						self:GetOwner():ChatPrint(ply.nextPulse < 0.9 and "This person is in great condition." or 
+						(ply.nextPulse <= 1.5 and "This person seems to be a little roughed up.") or 
+						(ply.nextPulse < 2 and "This person seems to be in a bad physical state.") or 
+						(ply.nextPulse >= 2 and "This person is barely holding onto their life."))
 					end
 				end
 			end
@@ -328,7 +331,7 @@ function SWEP:ApplyForce()
 			--self:GetOwner():ChatPrint(tostring(ply.CPR).." "..tostring(ply.Blood).." "..tostring(ply.Organs["brain"]).." "..tostring(ply.heartstop))
 			if self:GetOwner():KeyDown(IN_ATTACK) then
 				if ply and ply.heartstop then
-					if self.firstTimePrint then self:GetOwner():ChatPrint("Вы начинаете проводить СЛР... (держите ЛКМ зажатым до появления пульса)") end
+					if self.firstTimePrint then self:GetOwner():ChatPrint("You start to perform CPR (Hold Left Mouse down to keep performing CPR until the target is alive)") end
 					self.firstTimePrint = false
 
 					if (self.CPRThink or 0) < CurTime() then
@@ -340,7 +343,7 @@ function SWEP:ApplyForce()
 					end
 				else
 					if not ply and self.CarryEnt:GetClass() == "prop_ragdoll" then
-						if self.firstTimePrint then self:GetOwner():ChatPrint("Вы начинаете проводить СЛР... (держите ЛКМ зажатым до появления пульса)") end
+						if self.firstTimePrint then self:GetOwner():ChatPrint("You start to perform CPR (Hold Left Mouse down to keep performing CPR until the target is alive)") end
 						self.firstTimePrint = false
 						if (self.CPRThink or 0) < CurTime() then
 							self.CPRThink = CurTime() + 1

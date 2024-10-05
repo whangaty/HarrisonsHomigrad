@@ -4,8 +4,8 @@ SWEP.DrawWeaponInfoBox	= false
 SWEP.BounceWeaponIcon = false
 end
 
-SWEP.PrintName = "Кукри"
-SWEP.Instructions = "Режущий инструмент, используемый для рубки деревьев, листвы и других вещей, которые попадутся под руку. Обладает удобной рукоятью и длинным лезвием, благодаря чему становится отличным оружием ближнего боя."
+SWEP.PrintName = "Gurkha"
+SWEP.Instructions = "Harrison doesn't know what this is."
 SWEP.Category = "Melee"
 
 SWEP.Spawnable= true

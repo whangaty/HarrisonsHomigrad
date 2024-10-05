@@ -3,7 +3,7 @@ SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "Five-Seven"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Бронебойный пистолет. Пробьёт даже дыру в твоей жопе."
+SWEP.Instructions			= "Why was five afraid of seven? Because seven killed Five's parents."
 SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon			= "entities/weapon_insurgencymakarov.png"
 

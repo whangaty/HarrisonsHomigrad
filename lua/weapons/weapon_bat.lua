@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 
-SWEP.PrintName = "Деревянная бита"
+SWEP.PrintName = "Baseball Bat"
 
 SWEP.Category = "Melee"
-SWEP.Instructions = "Часть спортивного инвентаря, предназначенная для нанесения ударов по мячу. Также популярно как холодное оружие благодаря своему удобству. Особенности конструкции биты позволяют наносить ею тяжёлые и мощные удары."
+SWEP.Instructions = "Such an Iconic Weapon"
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true

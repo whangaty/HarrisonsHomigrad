@@ -3,7 +3,7 @@ SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "P99"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Пистолет под калибр 9х19"
+SWEP.Instructions			= "A small pistol with a smaller punch."
 SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon			= "pwb/sprites/p99"
 

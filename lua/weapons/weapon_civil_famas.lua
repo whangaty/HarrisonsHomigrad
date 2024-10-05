@@ -3,7 +3,7 @@ SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "FAMAS-Civil"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Полуавтоматическа винтовка под калибр 5.56×45"
+SWEP.Instructions			= "Made by the French. Use Cautiously."
 SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon			= "pwb/sprites/aks74u"
 

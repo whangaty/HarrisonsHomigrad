@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "Mateba Autorevolver HP"
+SWEP.PrintName 				= "Mateba Revolver"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Револьвер под калибр .44 Remington Magnum"
+SWEP.Instructions			= "A powerful revolver."
 SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon			= "pwb2/vgui/weapons/matebahomeprotection"
 

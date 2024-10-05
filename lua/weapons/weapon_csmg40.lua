@@ -3,7 +3,7 @@ SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "MP40"
 SWEP.Author 				= "Ce1azz"
-SWEP.Instructions			= "Пистолет-пулемёт под калибр 9х19"
+SWEP.Instructions			= "Not to be confused with the digital media format."
 SWEP.Category 				= "Weapons"
 
 SWEP.Spawnable 				= true

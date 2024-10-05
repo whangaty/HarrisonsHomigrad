@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base 
 
-SWEP.PrintName 				= "ППШ-41"
+SWEP.PrintName 				= "PPSh-41"
 SWEP.Author 				= "Ce1azz"
-SWEP.Instructions			= "Пистолет-пулемёт под калибр 9х19"
+SWEP.Instructions			= "German built goodness."
 SWEP.Category 				= "Weapons"
 
 SWEP.Spawnable 				= true
