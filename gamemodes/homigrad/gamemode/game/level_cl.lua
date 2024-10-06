@@ -33,14 +33,14 @@ net.Receive("round",function()
 
 	system.FlashWindow()
 
-	chat.AddText("Игровой режим сменился на : " .. TableRound().Name)
+	chat.AddText("Current Gamemode: " .. TableRound().Name)
 end)
 
 net.Receive("round_next",function()
 	roundActiveNameNext = net.ReadString()
 	showRoundInfo = CurTime() + 10
 
-	chat.AddText("Следующий режим : " .. TableRound(roundActiveNameNext).Name)
+	chat.AddText("Next Gamemde: " .. TableRound(roundActiveNameNext).Name)
 end)
 
 local white = Color(255,255,255)

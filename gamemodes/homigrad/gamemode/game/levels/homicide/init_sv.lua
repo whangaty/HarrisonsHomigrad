@@ -70,20 +70,20 @@ local function makeCT(ply)
     if homicide.roundType == 1 then
         local wep = ply:Give("weapon_remington870")
         wep:SetClip1(wep:GetMaxClip1())
-        AddNotificate( ply,"Вы невиновный с крупногабаритным огнестрельным оружием.")
+        AddNotificate( ply,"You have been given a shotgun. Be careful, the traitor will be likely to target you.")
     elseif homicide.roundType == 2 then
         local wep = ply:Give("weapon_beretta")
         wep:SetClip1(wep:GetMaxClip1())
-        AddNotificate( ply,"Вы невиновный со скрытым огнестрельным оружием.")
+        AddNotificate( ply,"You have been given a M9 Beretta with one magazine.")
     elseif homicide.roundType == 3 then
         local wep = ply:Give("weapon_taser")
         ply:Give("weapon_police_bat")
         wep:SetClip1(wep:GetMaxClip1())
-        AddNotificate( ply,"Вы полицейский под прикрытием. Вам выдан шокер и дубинка\nВаша задача: связать преступника.")
+        AddNotificate( ply,"You have been given a Taser & Baton to take care of the traitor.")
     elseif homicide.roundType == 4 then
         local wep = ply:Give("weapon_deagle")
         wep:SetClip1(wep:GetMaxClip1())
-        AddNotificate( ply,"Вы невиновный ковбой с револьвером в кобуре.")
+        AddNotificate( ply,"You & the traitor have been given identical revolvers. Find them and kill them.")
     else
     end
 
@@ -264,9 +264,9 @@ function homicide.RoundEndCheck()
 end
 
 function homicide.EndRound(winner)
-    PrintMessage(3,(winner == 1 and "Победа предателей." or winner == 2 and "Победа невиновых." or "Ничья"))
+    PrintMessage(3,(winner == 1 and "Traitors Win." or winner == 2 and "Innocents Win!" or "Nobody Wins!"))
     if homicide.t and #homicide.t > 0 then
-        PrintMessage(3,#homicide.t > 1 and ("Трейторами были: " .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("Трейтором был: " .. homicide.t[1]:Name()))
+        PrintMessage(3,#homicide.t > 1 and ("The traitors were: " .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("The traitor was: " .. homicide.t[1]:Name()))
     end
 end
 

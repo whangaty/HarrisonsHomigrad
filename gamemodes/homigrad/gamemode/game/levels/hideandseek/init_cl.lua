@@ -44,7 +44,7 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
     end
 
 	if time > 0 then
-		draw.SimpleText("До прибытия полиции : ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+		draw.SimpleText("Time Left before Special Forces arrive: ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 	end
 	/*
