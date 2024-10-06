@@ -104,7 +104,6 @@ SolidMapVote[ 'Config' ][ 'Show Map Play Count' ] = true
 -- be able to be chosen for the vote.
 SolidMapVote[ 'Config' ][ 'Manual Map Pool' ] = true
 SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
-    "de_school",
     "ttt_freeway_rain",
     "ttt_fastfood_a6",
     "ttt_clue_xmas",
@@ -219,5 +218,5 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = 'ttt_minecraftcity_v4', displayname = 'Minecraft City' },
     { filename = 'ttt_winterplant_v4', displayname = 'Winter Power Plant' },
     { filename = 'cs_office', displayname = 'Office' },
-    { filename = 'de_dust2', displayname = 'Dust II' },
+    { filename = 'de_dust2', displayname = 'Dust II' }
 }
