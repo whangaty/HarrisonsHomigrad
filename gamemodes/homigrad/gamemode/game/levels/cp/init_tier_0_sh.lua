@@ -1,6 +1,6 @@
 --CP от слова чайлд порн, очевидно
 
-table.insert(LevelList,"cp")
+--table.insert(LevelList,"cp")
 cp = {}
 cp.Name = "Захват точек"
 cp.points = {}

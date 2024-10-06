@@ -162,7 +162,7 @@ end
 
 function tdm.EndRoundMessage(winner,textNobody)
 	local tbl = TableRound()
-	PrintMessage(3,"Выиграли - " .. ((winner == 1 and tbl.red[1]) or (winner == 2 and tbl.blue[1]) or (textNobody or "Дружба")) .. ".")
+	PrintMessage(3,"Winning Team: " .. ((winner == 1 and tbl.red[1]) or (winner == 2 and tbl.blue[1]) or (textNobody or "Дружба")) .. ".")
 end
 
 function tdm.EndRound(winner) tdm.EndRoundMessage(winner) end

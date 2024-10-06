@@ -111,7 +111,7 @@ function wick.RoundEndCheck()
 end
 
 function wick.EndRound(winner)
-    PrintMessage(3,(winner == 1 and "Победа Джона Уика." or winner == 2 and "Победа наемников." or "Ничья"))
+    PrintMessage(3,(winner == 1 and "John Wick remains Victorious." or winner == 2 and "Wick has fallen." or "Nobody Wins."))
 end
 
 local empty = {}

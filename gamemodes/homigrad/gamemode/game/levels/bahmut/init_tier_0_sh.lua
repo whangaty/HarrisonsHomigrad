@@ -1,4 +1,4 @@
-table.insert(LevelList,"bahmut")
+--table.insert(LevelList,"bahmut")
 bahmut = {}
 bahmut.Name = "Конфликт Хомиграда"
 

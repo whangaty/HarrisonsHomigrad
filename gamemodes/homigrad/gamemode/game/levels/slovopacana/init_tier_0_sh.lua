@@ -1,4 +1,4 @@
-table.insert(LevelList, "slovopacana")
+--table.insert(LevelList, "slovopacana")
 
 slovopacana = {}
 slovopacana.Name = "Пацанские тёрки"

@@ -1,4 +1,4 @@
-table.insert(LevelList,"css")
+--table.insert(LevelList,"css")
 css = {}
 css.Name = "Counter Strike: Source"
 css.points = {}

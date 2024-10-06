@@ -1,4 +1,4 @@
-function dm.StartRoundSV()
+function gravdm.StartRoundSV()
     tdm.RemoveItems()
 
 	roundTimeStart = CurTime()
@@ -24,14 +24,14 @@ function dm.StartRoundSV()
     return {roundTimeStart,roundTime}
 end
 
-function dm.RoundEndCheck()
+function gravdm.RoundEndCheck()
     local Alive = 0
 
     for i,ply in pairs(team.GetPlayers(1)) do
         if ply:Alive() then Alive = Alive + 1 end
     end
 
-    if freezing and roundTimeStart + dm.LoadScreenTime < CurTime() then
+    if freezing and roundTimeStart + gravdm.LoadScreenTime < CurTime() then
         freezing = nil
 
         for i,ply in pairs(team.GetPlayers(1)) do
@@ -43,7 +43,7 @@ function dm.RoundEndCheck()
 
 end
 
-function dm.EndRound(winner)
+function gravdm.EndRound(winner)
     for i, ply in ipairs( player.GetAll() ) do
 	    if ply:Alive() then
             PrintMessage(3,ply:GetName() .. " remains. They are victorious!")
@@ -53,7 +53,7 @@ end
 
 local red = Color(255,0,0)
 
-function dm.PlayerSpawn(ply,teamID)
+function gravdm.PlayerSpawn(ply,teamID)
 	ply:SetModel(tdm.models[math.random(#tdm.models)])
     ply:SetPlayerColor(Vector(0,0,0.6))
 
@@ -69,20 +69,20 @@ function dm.PlayerSpawn(ply,teamID)
 
 end
 
-function dm.PlayerInitialSpawn(ply)
+function gravdm.PlayerInitialSpawn(ply)
     ply:SetTeam(1)
 end
 
-function dm.PlayerCanJoinTeam(ply,teamID)
+function gravdm.PlayerCanJoinTeam(ply,teamID)
 	if teamID == 2 or teamID == 3 then ply:ChatPrint("Pashol fuck") return false end
 
     return true
 end
 
-function dm.GuiltLogic() return false end
+function gravdm.GuiltLogic() return false end
 
-util.AddNetworkString("dm die")
-function dm.PlayerDeath()
-    net.Start("dm die")
+util.AddNetworkString("gravdm die")
+function gravdm.PlayerDeath()
+    net.Start("gravdm die")
     net.Broadcast()
 end

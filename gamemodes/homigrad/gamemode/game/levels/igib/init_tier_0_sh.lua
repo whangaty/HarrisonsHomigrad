@@ -1,4 +1,4 @@
-table.insert(LevelList,"igib")
+--table.insert(LevelList,"igib")
 igib = {}
 igib.Name = "InstaGib"
 igib.LoadScreenTime = 2.5
