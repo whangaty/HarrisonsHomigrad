@@ -4,7 +4,7 @@ SolidMapVote[ 'Config' ][ 'Length' ] = 15
 
 -- The time in seconds that the vote will stay on the screen
 -- after the winning map has been chosen.
-SolidMapVote[ 'Config' ][ 'Post Vote Length' ] = 5
+SolidMapVote[ 'Config' ][ 'Post Vote Length' ] = 2
 
 -- This option controls the size of the map vote buttons.
 -- This will effect how the images look. If your switching from tall to
@@ -106,23 +106,27 @@ SolidMapVote[ 'Config' ][ 'Manual Map Pool' ] = true
 SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_freeway_rain",
     "ttt_fastfood_a6",
-    "ttt_clue_xmas",
-    "ttt_winterplant_v4",
+    --"ttt_clue_xmas",
+    --"ttt_winterplant_v4",
     "hmcd_aircraft",
     --"hmcd_metropolis", -- Toooo buggy
     "mu_smallotown_v2_snow",
-    "mu_powerhermit",
+    --"mu_powerhermit",
     "gm_church",
-    "gm_apartments_hl2",
+    --"gm_apartments_hl2",
     "gm_terminal_v1a",
     --"gm_deep_sea_3", -- Too small
     "gm_wick",
-    "gm_freeway_spacetunnel",
+    --"gm_freeway_spacetunnel",
     "ttt_minecraft_b5",
     "ttt_minecraftcity_v4",
     "gm_deschool",
     "cs_office",
-    "de_dust2"
+    "dm_lockdown",
+    "dm_overwatch",
+    "dm_resistance",
+    "dm_steamlab",
+    "dm_underpass",
     --"gm_ww1_jlps"
     --"gm_spacetrain"
     --"gm_brutalist_kfc",
@@ -204,19 +208,24 @@ SolidMapVote[ 'Config' ][ 'Missing Image Size' ] = { width = 1920, height = 1080
 -- In this table you can add information for the map to make it more
 -- appealing on the mapvote.
 SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
-    { filename = 'ttt_minecraft_b5', displayname = 'Minecraft B5', image = 'http://i2.imgbus.com/doimg/3co1mmfoncb63a7.jpg', width = 1920, height = 1080 },
-    { filename = 'gm_wick', displayname = "Wick's House" },
-    { filename = 'gm_church', displayname = 'Country Church' },
-    { filename = 'mu_smallotown_v2_snow', displayname = 'Small Town (Snow)' },
-    { filename = 'gm_terminal_v1a', displayname = 'Terminal' },
-    { filename = 'gm_deschool', displayname = 'School' },
-    { filename = 'ttt_freeway_rain', displayname = 'Freeway' },
-    { filename = 'gm_freeway_spacetunnel', displayname = 'Freeway (Space Tunnel)' },
-    { filename = 'hmcd_aircraft', displayname = 'Floating Ship' },
-    { filename = 'ttt_fastfood_a6', displayname = 'Fastfood' },
-    { filename = 'ttt_clue_xmas', displayname = 'Clue (Christmas)' },
-    { filename = 'ttt_minecraftcity_v4', displayname = 'Minecraft City' },
-    { filename = 'ttt_winterplant_v4', displayname = 'Winter Power Plant' },
-    { filename = 'cs_office', displayname = 'Office' },
-    { filename = 'de_dust2', displayname = 'Dust II' }
+    { filename = 'ttt_minecraft_b5', displayname = 'Minecraft B5', image="https://i.imgur.com/u2pFlcs.jpeg", width = 1920, height = 1080 },
+    { filename = 'gm_wick', displayname = "Wick's House", image="https://i.imgur.com/qPwmEke.jpeg", width = 1920, height = 1080 },
+    { filename = 'gm_church', displayname = 'Country Church',image="https://i.imgur.com/AjtJ3NW.jpeg", width = 1920, height = 1080 },
+    { filename = 'mu_smallotown_v2_snow', displayname = 'Small Town (Snow)',image="https://i.imgur.com/xquWM5T.jpeg", width = 1920, height = 1080 },
+    { filename = 'gm_terminal_v1a', displayname = 'Terminal',image="https://i.imgur.com/3DZBDGS.jpeg", width = 1920, height = 1080 },
+    { filename = 'gm_deschool', displayname = 'School',image="https://i.imgur.com/JoPG7Wm.jpeg", width = 1920, height = 1080 },
+    { filename = 'ttt_freeway_rain', displayname = 'Freeway',image="https://i.imgur.com/3CFCdky.jpeg", width = 1920, height = 1080 },
+    { filename = 'gm_freeway_spacetunnel', displayname = 'Freeway (Space Tunnel)',image="materials/levels/minecraftb5.jpg", width = 1920, height = 1080 },
+    { filename = 'hmcd_aircraft', displayname = 'Floating Ship',image="https://i.imgur.com/j9Ahytp.jpeg", width = 1920, height = 1080 },
+    { filename = 'ttt_fastfood_a6', displayname = 'Fastfood',image="https://i.imgur.com/AZmGWhd.jpeg", width = 1920, height = 1080 },
+    --{ filename = 'ttt_clue_xmas', displayname = 'Clue (Christmas)',image="materials/levels/minecraftb5.jpg", width = 1920, height = 1080 },
+    { filename = 'ttt_minecraftcity_v4', displayname = 'Minecraft City',image="https://i.imgur.com/LGlZOMT.jpeg", width = 1920, height = 1080 },
+    { filename = 'ttt_winterplant_v4', displayname = 'Winter Power Plant',image="materials/levels/minecraftb5.jpg", width = 1920, height = 1080 },
+    { filename = 'dm_lockdown', displayname = 'Nova Prospekt Lockdown',image="https://i.imgur.com/iykF5Ji.jpeg", width = 1920, height = 1080 },
+    { filename = 'dm_overwatch', displayname = "City 17's Streets",image="https://i.imgur.com/PzfgnHc.jpeg", width = 1920, height = 1080 },
+    { filename = 'dm_resistance', displayname = 'Resistance HQ',image="https://i.imgur.com/ZPXmjle.jpeg", width = 1920, height = 1080 },
+    { filename = 'dm_underpass', displayname = 'City 17 Underpass',image="https://i.imgur.com/oFzdbq3.jpeg", width = 1920, height = 1080 },
+    { filename = "dm_steamlab", displayname = 'Steam HQ',image="https://i.imgur.com/2nuVKJr.jpeg", width = 1920, height = 1080 },
+    { filename = 'cs_office', displayname = 'Office',image="https://i.imgur.com/8kVbpdc.jpeg", width = 1920, height = 1080 },
+    { filename = 'de_dust2', displayname = 'Dust II',image="materials/levels/minecraftb5.jpg", width = 1920, height = 1080 }
 }
