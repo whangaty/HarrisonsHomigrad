@@ -1,17 +1,16 @@
 if engine.ActiveGamemode() == "homigrad" then
 local validUserGroup = {
 	--meagsponsor = true,
-	--megapenis = true,
-    servermanager = true,
+	--megapenis = true
     owner = true,
+    servermanager = true,
 }
 
 if SERVER then
-
     COMMANDS.accessspawn = {function(ply,args)
         SetGlobalBool("AccessSpawn",tonumber(args[1]) > 0)
 
-        PrintMessage(3,"Разрешение на взаимодействие Q меню : " .. tostring(GetGlobalBool("AccessSpawn")))
+        PrintMessage(3,"Spawn Menu Boolean: " .. tostring(GetGlobalBool("AccessSpawn")))
     end}
 
     local function CanUseSpawnMenu(ply,class)
@@ -21,7 +20,10 @@ if SERVER then
 
         if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") then return true end
 
-        if not ply:IsAdmin() then ply:Kick("You have been kicked. Error Code: 1004") return false end
+        if not validUserGroup[ply:GetUserGroup()] then 
+            ply:Kick("You do not have access to these tools.")  
+            return false 
+        end
     end
 
     hook.Add("PlayerSpawnVehicle","Cantspawnbullshit",function(ply) return CanUseSpawnMenu(ply,"vehicle") end)
@@ -48,7 +50,7 @@ if SERVER then
 
     --hook.Add("PlayerSpawnObject","dontspawn!!!",cant)--salat eblan
 else
-    local admin_menu = CreateClientConVar("hg_admin_menu","1",true,false,"enable admin menu",0,1)
+    --local admin_menu = CreateClientConVar("hg_admin_menu","1",true,false,"enable admin menu",0,1)
     local function CanUseSpawnMenu()
         local ply = LocalPlayer()
         if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") then return true end
@@ -58,7 +60,7 @@ else
         if func ~= nil then return func end
 
         if not ply:IsAdmin() then return false end
-        if not admin_menu:GetBool() then return false end
+        --if not admin_menu:GetBool() then return false end
     end
 
     hook.Add("ContextMenuOpen", "hide_spawnmenu",CanUseSpawnMenu)
