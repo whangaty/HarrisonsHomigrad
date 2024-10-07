@@ -2,9 +2,9 @@ AddCSLuaFile()
 
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Мега Аптечка"
+SWEP.PrintName = "Mega Medkit"
 SWEP.Author = "First AID"
-SWEP.Instructions = "на себя не юзается"
+SWEP.Instructions = "This is broken. Don't use."
 
 SWEP.Category = "Medical"
 SWEP.Spawnable = true
