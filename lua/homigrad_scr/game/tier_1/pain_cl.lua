@@ -17,13 +17,36 @@ local k = 0
 local k4 = 0
 local time = 0
 
+hook.Add("HUDPaintBackground","painlevel",function()
+    if pain > 250 then
+        draw.DrawText("You are currently unconcious.", "HomigradFontNotify", ScrW() / 2, ScrH() /2.1 ,
+            Color(255, 255, 255,255), TEXT_ALIGN_CENTER)
+            
+        draw.DrawText("Assuming you're still in great shape, you'll be back up in "..math.floor(((pain - 250) / 10) + 1).." second(s)!", 
+            "HomigradFontSmall", 
+            ScrW() / 2, ScrH() / 1.8 ,
+            Color(255, 255, 255,255), TEXT_ALIGN_CENTER)
+    end
+end)
+
+surface.CreateFont("HomigradFontBig",{
+	font = "Roboto",
+	size = 25,
+	weight = 1100,
+	outline = false,
+	shadow = true
+})
+
 -- TODO: Check if we can place pain levels here?
 
 hook.Add("HUDPaint","PainEffect",function()
     if not LocalPlayer():Alive() then return end
-    
+
+
     local w,h = ScrW(),ScrH()
     k = Lerp(0.1,k,math_Clamp(pain / 250,0,15))
+
+
 --[[
     surface.SetMaterial(grtodown)
     surface.SetDrawColor(0,0,0,255)
@@ -102,4 +125,6 @@ hook.Add("RenderScreenspaceEffects","renderimpulse",function()
         DrawCA(4 * offset, 2 * offset, 0, 2 * offset, 1 * offset, 0)
     end--]]
 end)
+
 end
+
