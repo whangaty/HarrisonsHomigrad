@@ -8,7 +8,7 @@ local validUserGroup = {
 
 if SERVER then
     COMMANDS.accessspawn = {function(ply,args)
-        SetGlobalBool("AccessSpawn",tonumber(args[1]) > 0)
+        --SetGlobalBool("AccessSpawn",tonumber(args[1]) > 0)
 
         PrintMessage(3,"Spawn Menu Boolean: " .. tostring(GetGlobalBool("AccessSpawn")))
     end}
@@ -53,13 +53,13 @@ else
     --local admin_menu = CreateClientConVar("hg_admin_menu","1",true,false,"enable admin menu",0,1)
     local function CanUseSpawnMenu()
         local ply = LocalPlayer()
-        if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") then return true end
+        if validUserGroup[ply:GetUserGroup()] then return true else return false end
 
         local func = TableRound().CanUseSpawnMenu
         func = func and func(LocalPlayer())
         if func ~= nil then return func end
 
-        if not ply:IsAdmin() then return false end
+        --if not ply:IsAdmin() then return false end
         --if not admin_menu:GetBool() then return false end
     end
 
