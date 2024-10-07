@@ -189,9 +189,9 @@ function homicide.HUDPaint_RoundLeft(white2)
         if not pos.visible then continue end
 
         color.a = 255 * (1 - dis / 350)
-        draw.SimpleText(roundTimeStart, "HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        --draw.SimpleText(roundTimeStart, "HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
         print(roundTimeStart)
-        draw.SimpleText(ply:Nick(),"HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        draw.SimpleText("Buddy: "..ply:Nick(),"HomigradFontBig",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 end
 

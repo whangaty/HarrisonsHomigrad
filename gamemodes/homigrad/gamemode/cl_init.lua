@@ -203,7 +203,7 @@ local laserweps = {
 	["weapon_hk_usp"] = true,
 	["weapon_mk18"] = true,
 	["weapon_fiveseven"] = true,
-	["weapon_hk_usp"] = true,
+	--["weapon_hk_usps"] = true,
 	["weapon_m4a1"] = true,
 	["weapon_ar15"] = true,
 	["weapon_m3super"] = true,
@@ -213,7 +213,7 @@ local laserweps = {
 	["weapon_deagle"] = true,
 	["weapon_beanbag"] = true,
 	["weapon_glock"] = true,
-	["weapon_hk_arbalet"] = true
+--	["weapon_hk_arbalet"] = true
 }
 laserplayers = laserplayers or {}
 local mat = Material("sprites/bluelaser1")
@@ -234,6 +234,8 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 			if att==nil then continue end
 			local pos = att.Pos
 			local ang = att.Ang
+
+			-- Special Case for the Crossbow, fml.
 
 			local t = {}
 

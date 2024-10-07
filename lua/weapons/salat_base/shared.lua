@@ -113,15 +113,15 @@ function SWEP:DrawHUD()
 	local ply = LocalPlayer()
 	local ammo,ammobag = self:GetMaxClip1(), self:Clip1()
 	if ammobag > ammo - 1 then
-		text = "Полон"
+		text = "Full"
 	elseif ammobag > ammo - ammo/3 then
-		text = "~Почти полон"
+		text = "Nearly Full"
 	elseif ammobag > ammo/3 then
-		text = "~Половина"
+		text = "Half Empty"
 	elseif ammobag >= 1 then
-		text = "~Почти пуст"
+		text = "Nearly Empty"
 	elseif ammobag < 1 then
-		text = "Пуст"
+		text = "Empty"
 	end
 
 	local ammomags = ply:GetAmmoCount( self:GetPrimaryAmmoType() )
