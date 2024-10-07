@@ -183,7 +183,8 @@ hook.Add("RenderScene","octoweapons",function(pos,angle,fov)
 
 	hook.Run("Frame",pos,angle)
 	
-	STOPRENDER = not hg_disable_stoprenderunfocus:GetBool() and not developer:GetBool() and not focus
+
+	STOPRENDER = false -- not hg_disable_stoprenderunfocus:GetBool() and not developer:GetBool() and not focus
 
 	if STOPRENDER then
 		cam.Start2D()
