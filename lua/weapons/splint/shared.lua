@@ -13,8 +13,8 @@ SWEP.Category = "Medical"
 SWEP.Slot = 3
 SWEP.SlotPos = 3
 
-SWEP.ViewModel = "models/w_models/weapons/w_eq_medkit.mdl"
-SWEP.WorldModel = "models/w_models/weapons/w_eq_medkit.mdl"
+SWEP.ViewModel = "models/weapons/w_defuser.mdl"
+SWEP.WorldModel = "models/weapons/w_defuser.mdl"
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1

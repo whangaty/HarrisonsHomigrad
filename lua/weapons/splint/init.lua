@@ -2,12 +2,17 @@ if engine.ActiveGamemode() == "homigrad" then
     include("shared.lua")
 
     SWEP.Dealy = 0.25
+    local healsound = Sound("snd_jack_bandage.wav")
 
     function SWEP:PrimaryAttack()
         self:SetNextPrimaryFire(CurTime() + self.Dealy)
         self:SetNextSecondaryFire(CurTime() + self.Dealy)
 
         local owner = self:GetOwner()
+
+        
+        sound.Play(healsound,owner:GetPos())
+
         if self:Heal(owner) then owner:SetAnimation(PLAYER_ATTACK1) self:Remove() self:GetOwner():SelectWeapon("weapon_hands") end
     end
 
@@ -23,6 +28,8 @@ if engine.ActiveGamemode() == "homigrad" then
 
         if self:Heal(ent) then
             if ent:IsPlayer() then
+
+                sound.Play(healsound,ent:GetPos(),75,100,0.5)
                 local dmg = DamageInfo()
                 dmg:SetDamage(-5)
                 dmg:SetAttacker(self)
