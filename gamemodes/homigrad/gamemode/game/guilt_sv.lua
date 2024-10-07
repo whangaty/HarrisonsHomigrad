@@ -54,7 +54,7 @@ COMMANDS.noguilt = {function(ply,args)
 
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 		ply.noguilt = value
-		ply:ChatPrint("Your Guilt is currently: " .. tostring(value) .. "% out of 100%")
+		--ply:ChatPrint("Your Guilt is currently: " .. tostring(value) .. "% out of 100%")
 	end
 end,1}
 
@@ -73,13 +73,15 @@ function GuiltCheck(att,ply)
 		if not att.noguilt and not att:HasGodMode() then
 			--att:Kill()
 			
-			return
+			RunConsoleCommand("ulx","asay",att:Name().." has exceeded their guilt of 100%")
 
+			--[[
 			if not validUserGroup[att:GetUserGroup()] then
 				--RunConsoleCommand("ulx","fakeban",att:Name(),"10","Kicked and Banned for RDM")
 			else
 				--RunConsoleCommand("ulx","fakeban",att:Name(),"10","Kicked and Banned for RDM")
 			end
+			]]
 		end
 	end
 end
