@@ -60,10 +60,10 @@ function gravdm.PlayerSpawn(ply,teamID)
 
     ply:Give("weapon_hands")
     ply:Give("weapon_physcannon")
-    ply:Give("weapon_hg_shovel")
+    ply:Give("weapon_crowbar")
     ply:Give("medkit")
     ply:Give("med_band_big")
-    ply:Give("weapon_radio")
+    --ply:Give("weapon_radio")
 
     ply:SetLadderClimbSpeed(100)
 

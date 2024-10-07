@@ -30,11 +30,11 @@ function AutoBalanceTwoTeam()
 		if favorT then
 			local ply = table_Random(team_GetPlayers(1))
 			ply:SetTeam(2)
-			ply:ChatPrint("Тебя перекинуло в CT команду, из-за неравенства команд.")
+			--ply:ChatPrint("Тебя перекинуло в CT команду, из-за неравенства команд.")
 		else
 			local ply = table_Random(team_GetPlayers(2))
 			ply:SetTeam(1)
-			ply:ChatPrint("Тебя перекинуло в T команду, из-за неравенства команд.")
+			--ply:ChatPrint("Тебя перекинуло в T команду, из-за неравенства команд.")
 		end
 	end
 end

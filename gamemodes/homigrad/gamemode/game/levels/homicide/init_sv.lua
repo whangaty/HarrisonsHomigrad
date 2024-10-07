@@ -1,3 +1,6 @@
+-- Include the player model manager script (adjust the path as necessary)
+include("../../playermodelmanager_sv.lua")
+
 local function GetFriends(play)
     
     local huy = ""
@@ -276,7 +279,15 @@ function homicide.PlayerSpawn(ply,teamID)
     local teamTbl = homicide[homicide.teamEncoder[teamID]]
     local color = teamID == 1 and Color(math.random(55,165),math.random(55,165),math.random(55,165)) or teamTbl[2]
 
-	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+	-- Set the player's model to the custom model if available, otherwise use a random team model
+    local customModel = GetPlayerModelBySteamID(ply:SteamID())
+
+    if customModel then
+        ply:SetModel(customModel)
+    else
+        ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+    end
+    
     ply:SetPlayerColor(color:ToVector())
 
 	ply:Give("weapon_hands")

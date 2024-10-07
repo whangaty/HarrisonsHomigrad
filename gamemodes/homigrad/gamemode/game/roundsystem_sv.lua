@@ -48,6 +48,16 @@ RTV_CountRoundMessage = 5
 CountRoundRandom = CountRoundRandom or 0
 RoundRandomDefalut = 1
 
+
+local validUserGroup = {
+	servermanager = true,
+	owner= true,
+}
+
+local validUserGroupLite = {
+	
+}
+
 function StartRound()
 	if SERVER and pointPagesRandom then
 		SpawnPointsPage = math.random(1,GetMaxDataPages("spawnpointst"))
@@ -180,7 +190,7 @@ end
 function EndRound(winner)
 	roundStarter = nil
 
-	if ulx.voteInProgress and ulx.voteInProgress.title == "Закончить раунд?" then
+	if ulx.voteInProgress and ulx.voteInProgress.title == "Finish this round?" then
 		ulx.voteDone(true)
 	end
 
@@ -260,12 +270,12 @@ local function donaterVoteLevelEnd(t,argv,calling_ply,args)
 end
 
 COMMANDS.levelend = {function(ply,args)
-	if ply:IsAdmin() then
+	if ply:IsAdmin() or validUserGroup[ply:GetUserGroup()] then
 		EndRound()
 	else
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
-			ulx.doVote( "Закончить раунд?", { "No", "Yes" }, donaterVoteLevelEnd, 15, _, _, argv, calling_ply, args)
+			ulx.doVote( "End Round?", { "No", "Yes" }, donaterVoteLevelEnd, 15, _, _, argv, calling_ply, args)
 		end
 	end
 end}
@@ -282,25 +292,25 @@ local function donaterVoteLevel(t,argv,calling_ply,args)
 		end
 	end
 
-	if winner == 2 then
-		PrintMessage(HUD_PRINTTALK,"Режим сменится в следующем раунде на " .. tostring(args[1]))
+	if winner == 1 then
+		PrintMessage(HUD_PRINTTALK,"Vote Succeeded! Next level is " .. tostring(args[1]))
 		SetActiveNextRound(args[1])
-	elseif winner == 1 then
-		PrintMessage(HUD_PRINTTALK,"Смены режима не состоялось.")
+	elseif winner == 2 then
+		PrintMessage(HUD_PRINTTALK,"Vote failed. Next level will not change.")
 	else
-		PrintMessage(HUD_PRINTTALK,"Голосование не прошло успешно или было остановлено.")
+		PrintMessage(HUD_PRINTTALK,"There was an error. Perhaps no-one voted?")
 	end
 
 	calling_ply.canVoteNext = CurTime() + 300
 end
 
 COMMANDS.levelnext = {function(ply,args)
-	if ply:IsAdmin() then
-		if not SetActiveNextRound(args[1]) then ply:ChatPrint("ты еблан, такого режима нет.") return end
+	if ply:IsAdmin() or validUserGroup[ply:GetUserGroup()] then
+		if not SetActiveNextRound(args[1]) then ply:ChatPrint("Error has occured!") return end
 	else
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and table.HasValue(LevelList,args[1]) then
-			ulx.doVote( "Поменять режим следующего раунда на " .. tostring(args[1]) .. "?", { "No", "Yes" }, donaterVoteLevel, 15, _, _, argv, calling_ply, args)
+			ulx.doVote( "Change the Gamemode next level to: " .. tostring(args[1]) .. "?", { "Yes","No" }, donaterVoteLevel, 15, _, _, argv, calling_ply, args)
 		end
 	end
 end}

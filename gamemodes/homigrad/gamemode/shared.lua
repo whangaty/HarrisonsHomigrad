@@ -18,9 +18,9 @@ GM.includeDir("homigrad/gamemode/game/")--все файлы запускает, 
 print("	end homigrad gamemode for " .. math.Round(SysTime() - start,4) .. "s")
 
 function GM:CreateTeams()
-	team.SetUp(1,"Terrorists",Color(255,0,0))
-	team.SetUp(2,"Counter Terrorists",Color(0,0,255))
-	team.SetUp(3,"Other",Color(0,255,0))
+	team.SetUp(1,"Join Game",Color(255,0,0))
+	team.SetUp(2,"Other",Color(0,0,255))
+	team.SetUp(3,"Spectate",Color(0,255,0))
 
 	team.MaxTeams = 3
 end
