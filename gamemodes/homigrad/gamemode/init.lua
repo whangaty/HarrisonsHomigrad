@@ -129,7 +129,7 @@ function GM:PlayerDeathThink(ply)
 	local key = ply:KeyDown(IN_RELOAD)
 	if key ~= ply.oldKeyWalk and key then
 		ply.EnableSpectate = not ply.EnableSpectate
-		ply:ChatPrint(ply.EnableSpectate and "Наблюдение за игроками." or "Свободный полёт.")
+		ply:ChatPrint(ply.EnableSpectate and "Player-Focused Spectate" or "Free-Cam Mode")
 	end
 
 	ply.oldKeyWalk = key
