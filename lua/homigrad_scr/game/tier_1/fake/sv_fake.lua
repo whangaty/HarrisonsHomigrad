@@ -740,7 +740,7 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force) --изменение �
 	
 	rag:AddEFlags(EFL_NO_DAMAGE_FORCES)
 	if IsValid(rag:GetPhysicsObject()) then
-		rag:GetPhysicsObject():SetMass(CustomWeight[rag:GetModel()] or 20)
+		rag:GetPhysicsObject():SetMass(CustomWeight[rag:GetModel()] or 30)
 	end
 	rag:Activate()
 	rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
