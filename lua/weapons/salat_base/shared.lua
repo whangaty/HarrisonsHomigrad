@@ -151,14 +151,14 @@ function SWEP:DrawHUD()
 	local hand = ply:GetAttachment(ply:LookupAttachment("anim_attachment_rh"))
 	local textpos = (hand.Pos+hand.Ang:Forward()*7+hand.Ang:Up()*5+hand.Ang:Right()*-1):ToScreen()
 	if self.revolver then
-		draw.DrawText( "Барабан | "..ammobag, "HomigradFontBig", textpos.x+randomx, textpos.y+randomy, color_gray1, TEXT_ALIGN_RIGHT )
-		draw.DrawText( "Пуль | "..ammomags, "HomigradFontBig", textpos.x+randomxmag, textpos.y+25+randomymag, color_gray, TEXT_ALIGN_RIGHT )
+		draw.DrawText( "Rounds Chambered | "..ammobag, "HomigradFontBig", textpos.x+randomx, textpos.y+randomy, color_gray1, TEXT_ALIGN_RIGHT )
+		draw.DrawText( "Remaining | "..ammomags, "HomigradFontBig", textpos.x+randomxmag, textpos.y+25+randomymag, color_gray, TEXT_ALIGN_RIGHT )
 	elseif self.shotgun then
-		draw.DrawText( "Магазин | "..text, "HomigradFontBig", textpos.x+randomx, textpos.y+randomy, color_gray1, TEXT_ALIGN_RIGHT )
-		draw.DrawText( "Патрон | "..ammomags, "HomigradFontBig", textpos.x+randomxmag, textpos.y+25+randomymag, color_gray, TEXT_ALIGN_RIGHT )
+		draw.DrawText( "Shells Loaded | "..text, "HomigradFontBig", textpos.x+randomx, textpos.y+randomy, color_gray1, TEXT_ALIGN_RIGHT )
+		draw.DrawText( "Remaining | "..ammomags, "HomigradFontBig", textpos.x+randomxmag, textpos.y+25+randomymag, color_gray, TEXT_ALIGN_RIGHT )
 	else
-		draw.DrawText( "Магазин | "..text, "HomigradFontBig", textpos.x+randomx, textpos.y+randomy, color_gray1, TEXT_ALIGN_RIGHT )
-		draw.DrawText( "Магазинов | "..math.Round(ammomags/ammo), "HomigradFontBig", textpos.x+5+randomxmag, textpos.y+25+randomymag, color_gray, TEXT_ALIGN_RIGHT )
+		draw.DrawText( "Bullets Loaded | "..text, "HomigradFontBig", textpos.x+randomx, textpos.y+randomy, color_gray1, TEXT_ALIGN_RIGHT )
+		draw.DrawText( "Remaining| "..math.Round(ammomags/ammo), "HomigradFontBig", textpos.x+5+randomxmag, textpos.y+25+randomymag, color_gray, TEXT_ALIGN_RIGHT )
 	end
 	end
 end
