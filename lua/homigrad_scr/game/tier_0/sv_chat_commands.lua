@@ -203,11 +203,8 @@ COMMANDS.sync = {function(ply,args)
 end}
 
 local validUserGroup = {
-	superadmin = true,
-	admin = true,
-	meagsponsor = true,
-	viptest = true,
-	donator = true
+	servermanager = true,
+	owner= true,
 }
 
 local function getNotDonaters()
