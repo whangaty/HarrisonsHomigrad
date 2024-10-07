@@ -2,7 +2,7 @@ if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = "weapon_hg_melee_base"
 
 SWEP.PrintName = "Shovel"
-SWEP.Category = "Near battle"
+SWEP.Category = "Melee"
 SWEP.Instructions = "Useful for caving both Earth and Bone."
 
 SWEP.Spawnable= true
