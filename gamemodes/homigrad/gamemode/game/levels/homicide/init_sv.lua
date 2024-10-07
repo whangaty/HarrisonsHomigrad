@@ -57,10 +57,10 @@ local function makeT(ply)
 
     timer.Simple(5,function() ply.allowFlashlights = true end)
 
-    AddNotificate( ply,"Вы предатель.")
+    AddNotificate( ply,"You are a traitor.")
 
     if #GetFriends(ply) >= 1 then
-        timer.Simple(1,function() AddNotificate( ply,"Ваши товарищи " .. GetFriends(ply)) end)
+        timer.Simple(1,function() AddNotificate( ply,"Your Traitor Buddies are" .. GetFriends(ply)) end)
     end
 end
 
@@ -174,7 +174,7 @@ function homicide.StartRoundSV()
     end)
 
     local players = PlayersInGame()
-    local count = math.max(math.random(1,math.ceil(#players / 16)),1) - countT
+    local count = math.max(math.ceil(#players / 10), 1) - countT
     for i = 1,count do
         local ply = table.Random(players)
         table.RemoveByValue(players,ply)
@@ -182,7 +182,7 @@ function homicide.StartRoundSV()
         makeT(ply)
     end
 
-    local count = math.max(math.random(1,math.ceil(#players / 16)),1) - countCT
+    local count = math.max(math.ceil(#players / 10), 1) - countCT
 
     for i = 1,count do
         local ply = table.Random(players)
@@ -231,9 +231,9 @@ function homicide.RoundEndCheck()
 		if not homicide.police then
 			homicide.police = true
             if homicide.roundType == 1 then
-                PrintMessage(3,"Спецназ приехал.")
+                PrintMessage(3,"The Police have arrived.")
             else
-                PrintMessage(3,"Полиция приехала.")
+                PrintMessage(3,"The Police have arrived.")
             end
 
 			local aviable = ReadDataMap("spawnpointsct")
