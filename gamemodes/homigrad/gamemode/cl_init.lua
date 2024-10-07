@@ -126,7 +126,7 @@ hook.Add("HUDPaint","spectate",function()
 		end
 		keyOld = key
 
-		draw.SimpleText("Отключение / Включение отображение ников на ALT","HomigradFont",15,ScrH() - 15,showRoundInfoColor,TEXT_ALIGN_LEFT,TEXT_ALIGN_BOTTOM)
+		draw.SimpleText("Enable / Disable Names in Spectator with ALT","HomigradFont",15,ScrH() - 15,showRoundInfoColor,TEXT_ALIGN_LEFT,TEXT_ALIGN_BOTTOM)
 
 		local key = input.IsButtonDown(KEY_F)
 		if not lply:Alive() and keyOld2 ~= key and key then
