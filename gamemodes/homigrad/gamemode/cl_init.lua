@@ -15,6 +15,13 @@ surface.CreateFont("HomigradFontBig",{
 	shadow = true
 })
 
+surface.CreateFont("HomigradFontNotify",{
+	font = "Roboto",
+	size = ScreenScale(20),
+	weight = 1100,
+	outline = false
+})
+
 surface.CreateFont("HomigradFontLarge",{
 	font = "Roboto",
 	size = ScreenScale(30),
@@ -104,8 +111,8 @@ hook.Add("HUDPaint","spectate",function()
 			surface.SetFont("HomigradFont")
 			local tw = surface.GetTextSize(ent:GetName())
 			draw.SimpleText(ent:GetName(),"HomigradFont",ScrW() / 2 - tw / 2,ScrH() - 100,TEXT_ALING_CENTER,TEXT_ALING_CENTER)
-			tw = surface.GetTextSize("Здоровье: " .. ent:Health())
-			draw.SimpleText("Здоровье: " .. ent:Health(),"HomigradFont",ScrW() / 2 - tw / 2,ScrH() - 75,TEXT_ALING_CENTER,TEXT_ALING_CENTER)
+			tw = surface.GetTextSize("Health: " .. ent:Health())
+			draw.SimpleText("Health: " .. ent:Health(),"HomigradFont",ScrW() / 2 - tw / 2,ScrH() - 75,TEXT_ALING_CENTER,TEXT_ALING_CENTER)
 
 			local func = TableRound().HUDPaint_Spectate
 			if func then func(ent) end
@@ -281,7 +288,7 @@ local function ToggleMenu(toggle)
 			end)
 		end
         if wep:Clip1()>0 then
-            wepMenu:AddOption("Разрядить",function()
+            wepMenu:AddOption("Unload Magazine",function()
                 net.Start("Unload")
                 net.WriteEntity(wep)
                 net.SendToServer()
