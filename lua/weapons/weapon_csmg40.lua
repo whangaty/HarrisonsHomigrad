@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "MP40"
 SWEP.Author 				= "Ce1azz"
 SWEP.Instructions			= "Not to be confused with the digital media format."
-SWEP.Category 				= "Weapons"
+SWEP.Category 				= "Weapon"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

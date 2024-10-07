@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "Double Barrel "
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Not a grower."
-SWEP.Category 				= "Weapons"
+SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon			= "pwb2/vgui/weapons/m4super90"
 
 SWEP.Spawnable 				= true

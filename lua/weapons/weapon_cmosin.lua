@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "Mosin Rifle"
 SWEP.Author 				= "Ce1azz"
 SWEP.Instructions			= "A snipers ol' reliable"
-SWEP.Category 				= "Weapons"
+SWEP.Category 				= "Weapon"
 
 
 SWEP.Spawnable 				= true

@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "XM8 LMG"
 SWEP.Author 				= "Niik"
 SWEP.Instructions			= "A big & beefy LMG"
-SWEP.Category 				= "Weapons"
+SWEP.Category 				= "Weapon"
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
 

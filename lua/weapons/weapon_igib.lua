@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "InstaGib Grenade Launcher"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Loaded with tons of grenades, ribbed for YOUR pleasure!"
-SWEP.Category 				= "Weapons"
+SWEP.Category 				= "Weapon"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

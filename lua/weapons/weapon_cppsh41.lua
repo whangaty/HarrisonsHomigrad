@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "PPSh-41"
 SWEP.Author 				= "Ce1azz"
 SWEP.Instructions			= "German built goodness."
-SWEP.Category 				= "Weapons"
+SWEP.Category 				= "Weapon"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

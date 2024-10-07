@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "Crossbow"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "A silent but deadly weapon"
-SWEP.Category 				= "Weapons"
+SWEP.Category 				= "Weapon"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "AT-4 RPG"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "WARNING: DO NOT ATTEMPT TO ROCKET JUMP."
-SWEP.Category 				= "Weapons"
+SWEP.Category 				= "Weapon"
 --SWEP.WepSelectIcon			= "pwb/sprites/m134"
 
 SWEP.Spawnable 				= true

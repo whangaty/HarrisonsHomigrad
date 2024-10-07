@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "Mauser K98"
 SWEP.Author 				= "Ce1azz"
 SWEP.Instructions			= "Винтовка под калибр 7,62х39"
-SWEP.Category 				= "Weapons"
+SWEP.Category 				= "Weapon"
 
 
 SWEP.Spawnable 				= true

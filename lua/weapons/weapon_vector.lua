@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "KRISS Vector"
 SWEP.Author 				= "Niik"
 SWEP.Instructions			= "A powerful SMG that packs insane punch."
-SWEP.Category 				= "Weapons"
+SWEP.Category 				= "Weapon"
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
 
