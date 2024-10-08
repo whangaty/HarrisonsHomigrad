@@ -24,8 +24,8 @@ net.Receive("round_time",function()
 end)
 
 showRoundInfo = CurTime() + 3
-roundActiveName = roundActiveName or "tdm"
-roundActiveNameNext = roundActiveNameNext or "tdm"
+roundActiveName = roundActiveName or "homicide"
+roundActiveNameNext = roundActiveNameNext or "homicide"
 
 net.Receive("round",function()
 	roundActiveName = net.ReadString()
