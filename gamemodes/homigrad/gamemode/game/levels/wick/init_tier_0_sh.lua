@@ -117,6 +117,6 @@ function wick.HUDPaint_RoundLeft(white2)
 
         color.a = 255 * (1 - dis / 750)
 
-        draw.SimpleText(ply.roleT and "Джон Уик" or "","HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        --draw.SimpleText(ply.roleT and "Джон Уик" or "","HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 end

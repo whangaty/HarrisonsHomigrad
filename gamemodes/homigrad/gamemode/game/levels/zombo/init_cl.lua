@@ -1,4 +1,4 @@
-zombo.GetTeamName = tdm.GetTeamName
+--zombo.GetTeamName = tdm.GetTeamName
 
 local colorSpec = ScoreboardSpec
 function zombo.Scoreboard_Status(ply)

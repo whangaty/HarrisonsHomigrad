@@ -39,6 +39,7 @@ local function makeT(ply)
         ply:Give("weapon_hg_t_vxpoison")
         ply:Give("weapon_hidebomb")
         ply:Give("weapon_hg_rgd5")
+        ply:Give("weapon_radar")
     elseif homicide.roundType == 3 then
         local wep = ply:Give("weapon_hk_arbalet")
         ply:GiveAmmo(8, "XBowBolt", true) -- slots = bolts.
@@ -46,6 +47,7 @@ local function makeT(ply)
         ply:Give("weapon_kabar")
         ply:Give("weapon_hg_t_syringepoison")
         ply:Give("weapon_hg_t_vxpoison")
+        ply:Give("weapon_radar")
         print(player.GetCount())
     else
         local wep = ply:Give("weapon_deagle")
@@ -55,6 +57,7 @@ local function makeT(ply)
         ply:Give("weapon_hg_t_vxpoison")
         ply:Give("weapon_hidebomb")
         ply:Give("weapon_hg_rgd5")
+        ply:Give("weapon_radar")
         ply:GiveAmmo(12,5)
     end
 

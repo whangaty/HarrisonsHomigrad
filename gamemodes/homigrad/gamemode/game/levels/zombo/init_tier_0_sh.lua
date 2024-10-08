@@ -1,4 +1,4 @@
-table.insert(LevelList,"zombo")
+--table.insert(LevelList,"zombo")
 zombo = {}
 zombo.Name = "Zombo VIRUS"
 

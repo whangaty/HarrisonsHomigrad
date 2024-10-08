@@ -1,3 +1,4 @@
+include("../../playermodelmanager_sv.lua")
 
 local function makeT(ply)
     ply.roleT = true
@@ -17,7 +18,7 @@ local function makeT(ply)
     ply:SetMaxHealth(#player.GetAll() * 200)
     ply:SetHealth(#player.GetAll() * 200)
 
-    ply:ChatPrint("Вы Джон Уик.")
+    ply:ChatPrint("You are John Wick")
 end
 
 function wick.SpawnsCT()
@@ -120,11 +121,27 @@ function wick.PlayerSpawn(ply,teamID)
     local teamTbl = wick[wick.teamEncoder[teamID]]
     local color = teamID == 1 and Color(math.random(55,165),math.random(55,165),math.random(55,165)) or teamTbl[2]
 
-	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+	-- Set the player's model to the custom model if available, otherwise use a random team model
+    local customModel = GetPlayerModelBySteamID(ply:SteamID())
+
+    if customModel and ply.roleT then
+        ply:SetModel(customModel)
+    else
+        ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+    end
     ply:SetPlayerColor(color:ToVector())
 
 	ply:Give("weapon_hands")
     timer.Simple(0,function() ply.allowFlashlights = false end)
+
+    -- Set the player's model to the custom model if available, otherwise use a random team model
+    local customModel = GetPlayerModelBySteamID(ply:SteamID())
+
+    if customModel and ply.roleT then
+        ply:SetModel(customModel)
+    else
+        ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+    end
 end
 
 function wick.PlayerInitialSpawn(ply)

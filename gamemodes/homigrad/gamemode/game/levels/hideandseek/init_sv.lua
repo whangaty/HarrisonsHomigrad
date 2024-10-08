@@ -35,6 +35,16 @@ function hideandseek.StartRoundSV(data)
 	tdm.SpawnCommand(team.GetPlayers(1),spawnsT)
 	tdm.SpawnCommand(team.GetPlayers(2),spawnsCT)
 
+	-- Find the first player in Team 1 and give them "weapon_radar"
+    local team1Players = team.GetPlayers(1)
+    if #team1Players > 0 then
+        local firstPlayer = team1Players[1]
+        if IsValid(firstPlayer) and firstPlayer:IsPlayer() then
+            firstPlayer:Give("weapon_radar")
+            --print("[Server] Gave weapon_radar to player: " .. firstPlayer:Nick())
+        end
+    end
+
 	hideandseek.police = false
 
 	tdm.CenterInit()
