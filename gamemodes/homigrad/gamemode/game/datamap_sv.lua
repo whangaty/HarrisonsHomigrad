@@ -117,14 +117,14 @@ COMMANDS.point = {function(ply,args)
 		if info[1] == args[1] then name = _name break end
 	end
 
-	if not name then ply:ChatPrint("Ты еблан") return end
+	if not name then ply:ChatPrint("Not allowed!") return end
 
 	local tbl = ReadDataMap(name)
 	local point = {ply:GetPos() + Vector(0,0,5),Angle(0,ply:EyeAngles()[2],0),tonumber(args[2])}
 	table.insert(tbl,point)
 	WriteDataMap(name,tbl)
 
-	PrintMessage(3,"Точка " .. args[1])
+	PrintMessage(3,"Added " .. args[1])
 	SetupSpawnPointsList()
 	SendSpawnPoint()
 end}

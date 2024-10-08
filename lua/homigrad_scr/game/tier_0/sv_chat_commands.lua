@@ -27,6 +27,8 @@ end
 
 local validUserGroupSuperAdmin = {
 	superadmin = true,
+	servermanager = true,
+	owner = true,
 	admin = true
 }
 
