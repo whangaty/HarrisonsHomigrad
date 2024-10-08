@@ -29,7 +29,9 @@ function hideandseek.StartRoundSV(data)
         ply:SetTeam(1)
     end
 
-	local spawnsT,spawnsCT = tdm.SpawnsTwoCommand()
+	local spawnsT = ReadDataMap("spawnpointst")
+	local spawnsCT = ReadDataMap("spawnpointshiders")
+
 	tdm.SpawnCommand(team.GetPlayers(1),spawnsT)
 	tdm.SpawnCommand(team.GetPlayers(2),spawnsCT)
 
@@ -42,6 +44,7 @@ end
 
 function hideandseek.RoundEndCheck()
     if roundTimeStart + roundTime < CurTime() then
+		spawnsCT = tdm.SpawnsTwoCommand()
 		if not hideandseek.police then
 			hideandseek.police = true
 			PrintMessage(3,"Special Forces have arrived! Seekers can now escape through select points on the map.")

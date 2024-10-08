@@ -6,6 +6,7 @@ SpawnPointsPage = SpawnPointsPage or 1
 SpawnPointsList = {
 	spawnpointst = {"red",Color(255,0,0)},
 	spawnpointsct = {"blue",Color(0,0,255)},
+	spawnpointshiders = {"hider",Color(0,255,0)},
 
 	bahmut_vagner = {"vagner",Color(255,0,0)},
 	bahmut_nato = {"nato",Color(0,0,255)},
@@ -15,6 +16,7 @@ SpawnPointsList = {
 
 	spawnpoints_ss_police = {"police",Color(0,0,125)},
 	spawnpoints_ss_school = {"school",Color(0,255,0)},
+	--spawnpoints_ss_hider = {"hider",Color(125,255,125)},
 
 	spawnpoints_ss_exit = {"exit",Color(0,125,0),true},
 

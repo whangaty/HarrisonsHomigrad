@@ -5,7 +5,7 @@ function hideandseek.Scoreboard_Status(ply)
 	local lply = LocalPlayer()
 	if not lply:Alive() or lply:Team() == 1002 then return true end
 
-	return "Неизвестно",colorSpec
+	return "Spectator",colorSpec
 end
 
 local green = Color(0,125,0)
@@ -31,8 +31,8 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
         surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
 
         surface.DrawText("Вы " .. name)]]--
-        draw.DrawText( "Вы " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Прятки", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You are on team: " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Hide & Seek", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply:Team() == 1 then
@@ -59,7 +59,7 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
 	green.a = 255
 
 
-	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and hideandseek.police then
+	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and hideandseek.police and time > 0 then
 		local list = SpawnPointsList.spawnpoints_ss_exit
 		--local list = ReadDataMap("spawnpoints_ss_exit")
 		if list then
