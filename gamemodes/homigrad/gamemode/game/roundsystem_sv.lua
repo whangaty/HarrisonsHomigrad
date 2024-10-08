@@ -41,22 +41,20 @@ end}
 
 local randomize = 0
 
+local validUserGroup = {
+	"servermanager",
+	"owner",
+	"superadmin",
+	"admin",
+	"headmod"
+}
+
 RTV_CountRound = RTV_CountRound or 0
 RTV_CountRoundDefault = 15
 RTV_CountRoundMessage = 5
 
 CountRoundRandom = CountRoundRandom or 0
 RoundRandomDefalut = 1
-
-
-local validUserGroup = {
-	servermanager = true,
-	owner= true,
-}
-
-local validUserGroupLite = {
-	
-}
 
 function StartRound()
 	if SERVER and pointPagesRandom then
@@ -270,7 +268,7 @@ local function donaterVoteLevelEnd(t,argv,calling_ply,args)
 end
 
 COMMANDS.levelend = {function(ply,args)
-	if ply:IsAdmin() or validUserGroup[ply:GetUserGroup()] then
+	if ply:IsAdmin() or ply:IsUserGroup(validUserGroup)  then
 		EndRound()
 	else
 		local calling_ply = ply
@@ -305,7 +303,7 @@ local function donaterVoteLevel(t,argv,calling_ply,args)
 end
 
 COMMANDS.levelnext = {function(ply,args)
-	if ply:IsAdmin() or validUserGroup[ply:GetUserGroup()] then
+	if ply:IsAdmin() or ply:IsUserGroup(validUserGroup) then
 		if not SetActiveNextRound(args[1]) then ply:ChatPrint("Error has occured!") return end
 	else
 		local calling_ply = ply
