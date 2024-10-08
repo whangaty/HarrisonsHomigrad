@@ -34,7 +34,7 @@ tdm.blue = {
 
 tdm.teamEncoder = {
 	[1] = "red",
-	[2] = "blue",
+	[2] = "blue"
 }
 
 function tdm.StartRound()

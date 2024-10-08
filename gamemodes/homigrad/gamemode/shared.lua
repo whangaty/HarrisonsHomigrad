@@ -19,8 +19,8 @@ print("	end homigrad gamemode for " .. math.Round(SysTime() - start,4) .. "s")
 
 function GM:CreateTeams()
 	team.SetUp(1,"Join Game",Color(255,0,0))
-	team.SetUp(2,"Other",Color(0,0,255))
-	team.SetUp(3,"Spectate",Color(0,255,0))
+	team.SetUp(2,"#######",Color(0,0,255))
+	team.SetUp(3,"######",Color(0,255,0))
 
 	team.MaxTeams = 3
 end
