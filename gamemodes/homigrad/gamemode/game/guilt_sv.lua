@@ -72,8 +72,8 @@ function GuiltCheck(att,ply)
 		
 		if not att.noguilt and not att:HasGodMode() then
 			--att:Kill()
-			
-			RunConsoleCommand("ulx","asay",att:Name().." has exceeded their guilt of 100%")
+			return
+			--RunConsoleCommand("ulx","asay",att:Name().." has exceeded their guilt of 100%")
 
 			--[[
 			if not validUserGroup[att:GetUserGroup()] then
