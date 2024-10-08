@@ -26,6 +26,8 @@ SWEP.dwmAUp = 0
 SWEP.dwmARight = 90
 SWEP.dwmAForward = 0
 
+local injectsound = Sound("Underwater.BulletImpact")
+
 local function eyeTrace(ply)
     local att1 = ply:LookupAttachment("eyes")
 
@@ -87,6 +89,8 @@ if SERVER then
 
         local huy = util.IntersectRayWithOBB(tracePos,traceDir, pos, ang, Vector(-8,-1,-1),Vector(2,0,1))
 
+
+
         local bone = entreal:LookupBone("ValveBiped.Bip01_Spine1")
 
         if not bone then return end
@@ -99,30 +103,38 @@ if SERVER then
         local pos = matrix:GetTranslation()
         local huy2 = util.IntersectRayWithOBB(tracePos,traceDir, pos, ang, Vector(-8,-3,-1),Vector(2,-2,1))
 
-        if huy or huy2 then
-            ent.otravlen = true
-            timer.Create("Cyanid"..ent:EntIndex().."1", 30, 1, function()
+    
+
+        if not huy then
+            if not huy2 then
+                self:GetOwner():EmitSound(injectsound)
+                ent:EmitSound("vo/npc/male01/pain0"..math.random(1,5)..".wav",60)
+            end
+        end
+
+        ent.otravlen = true
+        timer.Create("Cyanid"..ent:EntIndex().."1", 30, 1, function()
+            if ent:Alive() and ent.otravlen then
+                ent:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
+            end
+
+            timer.Create( "Cyanid"..ent:EntIndex().."2", 10, 1, function()
                 if ent:Alive() and ent.otravlen then
                     ent:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
                 end
-
-                timer.Create( "Cyanid"..ent:EntIndex().."2", 10, 1, function()
-                    if ent:Alive() and ent.otravlen then
-                        ent:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
-                    end
-                end)
-
-                timer.Create( "Cyanid"..ent:EntIndex().."3", 15, 1, function()
-                    if ent:Alive() and ent.otravlen then
-                        ent.KillReason = "poison"
-                        ent:Kill()
-                    end
-                end)
             end)
-            self:GetOwner():EmitSound("snd_jack_hmcd_needleprick.wav",30)
-            self:Remove()
-            self:GetOwner():SelectWeapon("weapon_hands")
-        end
+
+            timer.Create( "Cyanid"..ent:EntIndex().."3", 15, 1, function()
+                if ent:Alive() and ent.otravlen then
+                    ent.KillReason = "poison"
+                    ent:Kill()
+                end
+            end)
+        end)
+
+        self:GetOwner():EmitSound("snd_jack_hmcd_needleprick.wav",30)
+        self:Remove()
+        self:GetOwner():SelectWeapon("weapon_hands")
         return false
     end
 
@@ -161,6 +173,7 @@ else
 
         local huy = util.IntersectRayWithOBB(tracePos,traceDir, pos, ang, Vector(-8,-1,-1),Vector(2,0,1))
 
+
         local bone = ent:LookupBone("ValveBiped.Bip01_Spine1")
 
         if not bone then return end
@@ -174,11 +187,46 @@ else
         local huy2 = util.IntersectRayWithOBB(tracePos,traceDir, pos, ang, Vector(-8,-3,-1),Vector(2,-2,1))
 
         local hitEnt = (huy or huy2) and 0 or 1
+
         
+        local loudText = "Inject Poison (Loud)"
+        local quietText = "Quietly Inject Poison"
+
+        local loudColor = Color(255,0,0,255)
+        local quietColor = Color(255,255,255,255)
+
         local frac = traceResult.Fraction
-        surface.SetDrawColor(Color(255, 255 * hitEnt, 255 * hitEnt, 255))
+        
+                if huy2 then
+            debugoverlay.BoxAngles(
+                    pos,                             -- Position of the OBB (origin point)
+                    Vector(-8, -1, -1),              -- Minimum bounds of the OBB
+                    Vector(2, 0, 1),                 -- Maximum bounds of the OBB
+                    ang,                             -- Orientation of the OBB
+                    0.01,                            -- Duration (how long to show the box)
+                    Color(125, 255, 0)                 -- Green color for intersection
+                )
+        else
+                debugoverlay.BoxAngles(
+                    pos,
+                    Vector(-8, -1, -1),
+                    Vector(2, 0, 1),
+                    ang,
+                    0.01,
+                    Color(255, 125, 0)                 -- Red color for no intersection
+                )
+        end
+
+
+        if huy or huy2 then
+            draw.DrawText(not tobool(hitEnt) and quietText or "","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_white,TEXT_ALIGN_CENTER)
+            surface.SetDrawColor(quietColor)
+        else
+            surface.SetDrawColor(loudColor)
+            draw.DrawText(loudText or "","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_red,TEXT_ALIGN_CENTER)
+        end
+
         draw.NoTexture()
         Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-        draw.DrawText(not tobool(hitEnt) and "Inject into " or "","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_white,TEXT_ALIGN_CENTER)
     end
 end
