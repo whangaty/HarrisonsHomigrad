@@ -1,4 +1,4 @@
-table.insert(LevelList,"ww2")
+--table.insert(LevelList,"ww2")
 ww2 = {}
 ww2.Name = "Вторая Мировая"
 
