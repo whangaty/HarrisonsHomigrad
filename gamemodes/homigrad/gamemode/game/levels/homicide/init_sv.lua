@@ -142,7 +142,9 @@ function homicide.StartRoundSV()
 
     homicide.police = false
 	roundTimeStart = CurTime()
-	roundTime = math.max(math.ceil(#player.GetAll() / 2),1) * 60
+	roundTime = math.max(math.ceil(#player.GetAll() / 2),1) * 45
+
+    if roundTime > 420 then roundTime = 420 end
 
     if homicide.roundType == 3 then
         roundTime = roundTime * 1.25
