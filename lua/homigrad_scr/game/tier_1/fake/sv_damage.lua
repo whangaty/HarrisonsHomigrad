@@ -233,7 +233,7 @@ hook.Add("PlayerDeath","plymessage",function(ply,hitgroup,dmginfo)
 	elseif att then
 		local dmgtype = "wounded"
 	
-		dmgtype = dmgInfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT) and (dmgInfo:IsDamageType(DMG_BUCKSHOT) and "от ранения осколками/дробью" or "от огнестрельного ранения") or 
+		dmgtype = dmgInfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT) and (dmgInfo:IsDamageType(DMG_BUCKSHOT) and "from a gunshot wound" or "from a gunshot wound") or 
 			dmgInfo:IsExplosionDamage() and "from an explosive" or 
 			dmgInfo:IsDamageType(DMG_SLASH) and "from a knife wound" or 
 			dmgInfo:IsDamageType(DMG_CLUB+DMG_GENERIC) and "from blunt-force trauma" or 
