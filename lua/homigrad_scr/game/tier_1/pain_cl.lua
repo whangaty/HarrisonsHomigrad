@@ -18,7 +18,7 @@ local k4 = 0
 local time = 0
 
 hook.Add("HUDDrawScoreBoard","painlevel",function()
-    if pain > 250 then
+    if pain > 250 and LocalPlayer():Alive() then
         draw.DrawText("You are currently unconcious.", "HomigradFontNotify", ScrW() / 2, ScrH() /2.1 ,
             Color(255, 255, 255,255), TEXT_ALIGN_CENTER)
             
