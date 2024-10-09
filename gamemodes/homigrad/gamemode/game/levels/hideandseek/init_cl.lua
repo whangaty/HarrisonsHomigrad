@@ -59,7 +59,7 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
 	green.a = 255
 
 
-	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and hideandseek.police and time > 0 then
+	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and hideandseek.police and time < 0 then
 		local list = SpawnPointsList.spawnpoints_ss_exit
 		--local list = ReadDataMap("spawnpoints_ss_exit")
 		if list then
