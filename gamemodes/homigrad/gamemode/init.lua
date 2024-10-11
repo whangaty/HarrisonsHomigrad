@@ -66,7 +66,7 @@ function GM:PlayerSpawn(ply)
 	ply:SetViewOffsetDucked(DEFAULT_VIEW_OFFSET_DUCKED)
 
 	local phys = ply:GetPhysicsObject()
-	if phys:IsValid() then phys:SetMass(DEFAULT_MASS) end
+	if phys:IsValid() then phys:SetMass(DEFAULT_MASS) end -- This is for the player in non-ragdoll. Do not change
 
 	ply:SetPlayerClass()
 
