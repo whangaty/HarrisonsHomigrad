@@ -116,6 +116,10 @@ function homicide.Spawns()
         table.insert(aviable,ent:GetPos())
     end
 
+    for i,point in pairs(ReadDataMap("spawnpointshiders")) do
+        table.insert(aviable,point)
+    end
+
     for i,point in pairs(ReadDataMap("spawnpointst")) do
         table.insert(aviable,point)
     end
@@ -144,7 +148,7 @@ function homicide.StartRoundSV()
 	roundTimeStart = CurTime()
 	roundTime = math.max(math.ceil(#player.GetAll() / 2),1) * 45
 
-    if roundTime > 420 then roundTime = 420 end
+    if roundTime > 330 then roundTime = 330 end
 
     if homicide.roundType == 3 then
         roundTime = roundTime * 1.25

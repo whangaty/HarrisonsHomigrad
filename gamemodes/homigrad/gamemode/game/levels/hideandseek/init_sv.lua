@@ -1,3 +1,5 @@
+include("../../playermodelmanager_sv.lua")
+
 function hideandseek.StartRoundSV(data)
     tdm.RemoveItems()
 
@@ -29,7 +31,7 @@ function hideandseek.StartRoundSV(data)
         ply:SetTeam(1)
     end
 
-	local spawnsT = ReadDataMap("spawnpointst")
+	local spawnsT = ReadDataMap("spawnpoints_ss_school")
 	local spawnsCT = ReadDataMap("spawnpointshiders")
 
 	tdm.SpawnCommand(team.GetPlayers(1),spawnsT)
@@ -57,7 +59,7 @@ function hideandseek.RoundEndCheck()
 		spawnsCT = tdm.SpawnsTwoCommand()
 		if not hideandseek.police then
 			hideandseek.police = true
-			PrintMessage(3,"Special Forces have arrived! Seekers can now escape through select points on the map.")
+			PrintMessage(3,"Special Forces have arrived! Hiders can now escape through select points on the map.")
 
 			local aviable = ReadDataMap("spawnpointsct")
 
@@ -119,7 +121,15 @@ function hideandseek.EndRound(winner) tdm.EndRoundMessage(winner) end
 function hideandseek.PlayerSpawn(ply,teamID)
 	local teamTbl = hideandseek[hideandseek.teamEncoder[teamID]]
 	local color = teamTbl[2]
-	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+
+	-- Set the player's model to the custom model if available, otherwise use a random team model
+    local customModel = GetPlayerModelBySteamID(ply:SteamID())
+
+    if customModel and ply.roleT then
+        ply:SetModel(customModel)
+    else
+        ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+    end
     ply:SetPlayerColor(color:ToVector())
 
 	for i,weapon in pairs(teamTbl.weapons) do ply:Give(weapon) end
@@ -175,7 +185,7 @@ function hideandseek.PlayerCanJoinTeam(ply,teamID)
 
 			return true
 		else
-			ply:ChatPrint("Pashol fuck")
+			ply:ChatPrint("Please wait until next round to join!")
 
 			return false
 		end
@@ -188,7 +198,7 @@ function hideandseek.PlayerCanJoinTeam(ply,teamID)
 
 				return true
 			else
-				ply:ChatPrint("Sisit the ass until the end of the round, sucker.")
+				ply:ChatPrint("Please wait until next round to join!")
 
 				return false
 			end

@@ -409,4 +409,15 @@ net.Receive("close_tab",function(len)
 	ToggleScoreboard(false)
 end)
 
+-- Probably not the best place to put it, but who give's a fuck. - Harrison
+hook.Add("HUDDrawScoreBoard","spectatorwarning",function()  
+    if LocalPlayer():Team() == 1002 then
+        draw.DrawText("You are currently in Spectator Mode.", "HomigradFontSmall", ScrW() / 2, ScrH() /1.2 ,
+            Color(255, 255, 255,255), TEXT_ALIGN_CENTER)
+		draw.DrawText("To Join in next round, please press F2 and select 'Join Game'!", "HomigradFontBigger", ScrW() / 2, ScrH() /1.15 ,
+            Color(255, 255, 255,255), TEXT_ALIGN_CENTER)
+    end
+end)
+
+
 ToggleScoreboard(false)
