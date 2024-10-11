@@ -673,7 +673,8 @@ local CustomWeight = {
 	["models/LeymiRBA/Gyokami/Gyokami.mdl"] = 50,
 	["models/player/smoky/Smoky.mdl"] = 65,
 	["models/player/smoky/Smokycl.mdl"] = 65,
-	["models/knyaje pack/dibil/sso_politepeople.mdl"] = 20
+	["models/knyaje pack/dibil/sso_politepeople.mdl"] = 20,
+	["models/xinus22/doot_skelly.mdl"] = 1
 }
 
 for i = 1,6 do
