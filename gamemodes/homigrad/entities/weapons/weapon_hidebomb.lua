@@ -2,8 +2,8 @@ SWEP.Base                   = "weapon_base"
 
 SWEP.PrintName 				= "Improvised Explosive Device"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Small Package, Big Boom!\nLeft click to place/hide, right click to explode."
-SWEP.Category 				= "Traitor Tools"
+SWEP.Instructions			= "Left Mouse to place\nRight Mouse to Explode!"
+SWEP.Category 				= "Traitor Tool"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -37,6 +37,18 @@ SWEP.dwsPos = Vector(20,20,15)
 SWEP.dwsItemPos = Vector(0,0,5)
 
 if SERVER then
+
+    local canDeploy = false
+    
+    -- Used to stop bombs being used at the beginning of game
+    net.Receive("round_time",function()
+	    roundTimeStart = net.ReadFloat()
+	    roundTime = net.ReadFloat()
+	    roundTimeLoot = net.ReadFloat()
+    end)
+    
+    --print(roundTime - (roundTime - 15) + roundTimeStart - CurTime())
+
     local BigFireModels = {
         ["models/props_c17/oildrum001_explosive.mdl"] = true,
         ["models/props_c17/canister_propane01a.mdl"] = true
@@ -139,37 +151,43 @@ if SERVER then
     --local cyka = {}
 
     function SWEP:PrimaryAttack()
-        local owner = self:GetOwner()
-        if IsValid(owner.bomb) then return end
+        local timePassed = roundTime - (roundTime - 22) + roundTimeStart - CurTime()
+        
+        if timePassed < 0 then   
+            local owner = self:GetOwner()
+            if IsValid(owner.bomb) then return end
 
-        local tr = {}
-        tr.start = owner:GetAttachment(owner:LookupAttachment("eyes")).Pos
-        local dir = Vector(1,0,0)
-        dir:Rotate(owner:EyeAngles())
-        tr.endpos = tr.start + dir * 75
-        tr.filter = owner
+            local tr = {}
+            tr.start = owner:GetAttachment(owner:LookupAttachment("eyes")).Pos
+            local dir = Vector(1,0,0)
+            dir:Rotate(owner:EyeAngles())
+            tr.endpos = tr.start + dir * 75
+            tr.filter = owner
 
-        local traceResult = util.TraceLine(tr)
-        local ent = traceResult.Entity
-        --owner:ChatPrint(ent:GetMaterialType())
+            local traceResult = util.TraceLine(tr)
+            local ent = traceResult.Entity
+            --owner:ChatPrint(ent:GetMaterialType())
 
-        if not IsValid(ent) then
-            ent = ents.Create("prop_physics")
-            ent:SetModel("models/props_junk/cardboard_box004a.mdl")
+            if not IsValid(ent) then
+                ent = ents.Create("prop_physics")
+                ent:SetModel("models/props_junk/cardboard_box004a.mdl")
 
-            ent:SetPos(traceResult.HitPos)
-            ent:Spawn()
+                ent:SetPos(traceResult.HitPos)
+                ent:Spawn()
+            end
+
+            self:GetOwner().gg = true
+
+            owner = ent
+            self:GetOwner().bomb = owner
+            ent.parentBomb = self
+            ent.owner = self:GetOwner()
+            ent:CallOnRemove("homigrad-bomb",Bomb)
+            ent:EmitSound("buttons/button24.wav",60,50)
+            self:SetNWBool("hasbomb",true)
+        else
+            self:GetOwner():ChatPrint("You cannot deploy the bomb for another "..math.floor(timePassed).." seconds!")
         end
-
-        self:GetOwner().gg = true
-
-        owner = ent
-        self:GetOwner().bomb = owner
-        ent.parentBomb = self
-        ent.owner = self:GetOwner()
-        ent:CallOnRemove("homigrad-bomb",Bomb)
-        ent:EmitSound("buttons/button24.wav",75,50)
-        self:SetNWBool("hasbomb",true)
     end
 
     function SWEP:SecondaryAttack()
@@ -191,7 +209,7 @@ else
         self.mdl = self.mdl or false
         if not IsValid(self.mdl) then
             self.mdl = ClientsideModel("models/props_junk/cardboard_jox004a.mdl")
-            self.mdl:SetNoDraw(true)
+            --self.mdl:SetNoDraw(true)
             self.mdl:SetModelScale(0.5)
         end
         self:CallOnRemove("huyhuy",function() self.mdl:Remove() end)
@@ -202,6 +220,7 @@ else
         self.mdl:SetRenderAngles(matrix:GetAngles())
         self.mdl:DrawModel()
     end
+    --[[
     function SWEP:DrawHUD()
         local owner = self:GetOwner()
         local tr = {}
@@ -220,12 +239,15 @@ else
             surface.SetDrawColor(Color(255, 255, 255, 255 * hit))
             draw.NoTexture()
             Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
+        end
         else
             local frac = traceResult.Fraction
             surface.SetDrawColor(Color(255, 255, 255, 255))
             draw.NoTexture()
             Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-            draw.DrawText( "Hide in prop "..tostring((util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 3 or util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 66) and "в металлический проп" or ""), "TargetID", traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y - 40, color_white, TEXT_ALIGN_CENTER )
+            draw.DrawText( "Hide Bomb In Prop", "TargetID", traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y - 40, color_white, TEXT_ALIGN_CENTER )
         end
+        
     end
+    ]]
 end
