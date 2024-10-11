@@ -163,11 +163,12 @@ local function GetProtectionFromSlot(ply, slot, dmg, dmgAmt, protectionMul, shou
 									armorData.dur = armorData.dur - ArmorDmgAmt
 
 									if armorData.dur < ArmorInfo.dur * .25 then
-										JMod.EZarmorWarning(ply, "Бронепластина почти сломана")
+										JMod.EZarmorWarning(ply, "You feel your armour breaking apart")
 									end
 
 									if armorData.dur <= 0 then
 										JMod.RemoveArmorByID(ply, id, true)
+										JMod.EZarmorWarning(ply, "Your armour sudddenly shatters.")
 										Busted = true
 									end
 								elseif armorData.chrg and armorData.chrg.chemicals then
