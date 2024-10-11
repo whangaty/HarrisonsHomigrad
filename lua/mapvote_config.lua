@@ -138,7 +138,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
 SolidMapVote[ 'Config' ][ 'Enable Voice' ] = true
 
 -- Allow players to use the chat box while in the mapvote
-SolidMapVote[ 'Config' ][ 'Enable Chat' ] = true
+SolidMapVote[ 'Config' ][ 'Enable Chat' ] = false
 
 -- Here you can specify what players can force the mapvote to appear.
 SolidMapVote[ 'Config' ][ 'Force Vote Permission' ] = function( ply )
