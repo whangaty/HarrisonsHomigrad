@@ -31,7 +31,7 @@ if pointPagesRandom == nil then pointPagesRandom = true end
 COMMANDS.levelrandom = {function(ply,args)
 	if tonumber(args[1]) > 0 then levelrandom = true else levelrandom = false end--тупые калхозники сука
 
-	PrintMessage(3,"Рандомизация режимов : " .. tostring(levelrandom))
+	PrintMessage(3,"Randomisation of Levels: " .. tostring(levelrandom))
 end}
 
 COMMANDS.pointpagesrandom = {function(ply,args)
@@ -42,11 +42,11 @@ end}
 local randomize = 0
 
 local validUserGroup = {
-	"servermanager",
-	"owner",
-	"superadmin",
-	"admin",
-	"headmod"
+	servermanager = true,
+	owner = true,
+	superadmin = true,
+	admin = true,
+	headmod = true
 }
 
 RTV_CountRound = RTV_CountRound or 0
@@ -268,7 +268,7 @@ local function donaterVoteLevelEnd(t,argv,calling_ply,args)
 end
 
 COMMANDS.levelend = {function(ply,args)
-	if ply:IsAdmin() or ply:IsUserGroup(validUserGroup)  then
+	if ply:IsUserGroup(validUserGroup) then
 		EndRound()
 	else
 		local calling_ply = ply
@@ -276,6 +276,7 @@ COMMANDS.levelend = {function(ply,args)
 			ulx.doVote( "End Round?", { "No", "Yes" }, donaterVoteLevelEnd, 15, _, _, argv, calling_ply, args)
 		end
 	end
+	print("Was Recognised!")
 end}
 
 local function donaterVoteLevel(t,argv,calling_ply,args)
@@ -303,9 +304,10 @@ local function donaterVoteLevel(t,argv,calling_ply,args)
 end
 
 COMMANDS.levelnext = {function(ply,args)
-	if ply:IsAdmin() or ply:IsUserGroup(validUserGroup) then
+	if ply:IsUserGroup(validUserGroup) then
 		if not SetActiveNextRound(args[1]) then ply:ChatPrint("Error has occured!") return end
 	else
+		PrintMessageChat("Boorf")
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and table.HasValue(LevelList,args[1]) then
 			ulx.doVote( "Change the Gamemode next level to: " .. tostring(args[1]) .. "?", { "Yes","No" }, donaterVoteLevel, 15, _, _, argv, calling_ply, args)
@@ -322,6 +324,7 @@ COMMANDS.levels = {function(ply,args)
 	text = string.sub(text,1,#text - 1)
 
 	ply:ChatPrint(text)
+	print("Was Recognised!")
 end}
 
 concommand.Add("hg_roundinfoget",function(ply)

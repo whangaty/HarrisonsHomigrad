@@ -22,6 +22,13 @@ surface.CreateFont("HomigradFontNotify",{
 	outline = false
 })
 
+surface.CreateFont("HomigradFontBigger",{
+	font = "Roboto",
+	size = 24,
+	weight = 1100,
+	outline = false
+})
+
 surface.CreateFont("HomigradFontLarge",{
 	font = "Roboto",
 	size = ScreenScale(30),

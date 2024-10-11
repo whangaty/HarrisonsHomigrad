@@ -4,6 +4,8 @@ file.CreateDir("homigrad/maps")
 SpawnPointsPage = SpawnPointsPage or 1
 
 SpawnPointsList = {
+	regular = {"normal",Color(255,240,200)},
+	
 	spawnpointst = {"red",Color(255,0,0)},
 	spawnpointsct = {"blue",Color(0,0,255)},
 	spawnpointshiders = {"hider",Color(0,255,0)},
@@ -124,7 +126,7 @@ COMMANDS.point = {function(ply,args)
 	table.insert(tbl,point)
 	WriteDataMap(name,tbl)
 
-	PrintMessage(3,"Added " .. args[1])
+	PrintMessage(3,"Added New Point: " .. args[1])
 	SetupSpawnPointsList()
 	SendSpawnPoint()
 end}
