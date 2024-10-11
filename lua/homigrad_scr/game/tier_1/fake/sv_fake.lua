@@ -407,7 +407,7 @@ hook.Add("DoPlayerDeath","blad",function(ply,att,dmginfo)
 	rag:SetEyeTarget(Vector(0,0,0))
 	local phys = rag:GetPhysicsObject()
 	if IsValid(phys) then
-		phys:SetMass(20)
+		phys:SetMass(30)
 	end
 
 	net.Start("pophead")
@@ -741,7 +741,7 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force) --изменение �
 	
 	rag:AddEFlags(EFL_NO_DAMAGE_FORCES)
 	if IsValid(rag:GetPhysicsObject()) then
-		rag:GetPhysicsObject():SetMass(CustomWeight[rag:GetModel()] or 15)
+		rag:GetPhysicsObject():SetMass(CustomWeight[rag:GetModel()] or 25)
 	end
 	rag:Activate()
 	rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
@@ -1173,10 +1173,10 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 				angs:RotateAroundAxis(angs:Forward(),90)
 				local shadowparams = {
 					secondstoarrive=0.25, -- Halfed from .50
-					pos=head:GetPos()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
+					pos=head:GetPos()+vector_up*(40/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
 					angle=angs,
 					maxangulardamp=10,
-					maxspeeddamp=5, -- Previously 10
+					maxspeeddamp=2, -- Previously 10
 					maxangular=370,
 					maxspeed=80, -- Doubled from 40 
 					teleportdistance=0,

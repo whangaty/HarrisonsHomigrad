@@ -108,7 +108,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_fastfood_a6",
     --"ttt_clue_xmas",
     --"ttt_winterplant_v4",
-    "hmcd_aircraft",
+    --"hmcd_aircraft",
     --"hmcd_metropolis", -- Toooo buggy
     "mu_smallotown_v2_snow",
     --"mu_powerhermit",
@@ -127,6 +127,9 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "dm_resistance",
     "dm_steamlab",
     "dm_underpass",
+    "ttt_airbus_b3",
+    "ttt_grovestreet_a13",
+    "gm_retreat"
     --"gm_ww1_jlps"
     --"gm_spacetrain"
     --"gm_brutalist_kfc",
@@ -227,5 +230,8 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = 'dm_underpass', displayname = 'City 17 Underpass',image="https://i.imgur.com/oFzdbq3.jpeg", width = 1920, height = 1080 },
     { filename = "dm_steamlab", displayname = 'Steam HQ',image="https://i.imgur.com/2nuVKJr.jpeg", width = 1920, height = 1080 },
     { filename = 'cs_office', displayname = 'Office',image="https://i.imgur.com/8kVbpdc.jpeg", width = 1920, height = 1080 },
-    { filename = 'de_dust2', displayname = 'Dust II',image="materials/levels/minecraftb5.jpg", width = 1920, height = 1080 }
+    { filename = 'de_dust2', displayname = 'Dust II',image="materials/levels/minecraftb5.jpg", width = 1920, height = 1080 },
+    { filename = 'gm_retreat', displayname = 'Antartica Facility',image="https://i.imgur.com/aUCTqLH.jpeg", width = 1920, height = 1080 },
+    { filename = 'ttt_airbus_b3', displayname = 'Airbus',image="https://i.imgur.com/1w3FxcH.jpeg", width = 1920, height = 1080 },
+    { filename = 'ttt_grovestreet_a13', displayname = 'Grove Street',image="https://i.imgur.com/QZBCtOb.jpeg", width = 1920, height = 1080 }
 }

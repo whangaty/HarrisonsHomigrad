@@ -29,12 +29,16 @@ local validUserGroupSuperAdmin = {
 	superadmin = true,
 	servermanager = true,
 	owner = true,
-	admin = true
+	admin = true,
+	headmod = true
 }
 
 local validUserGroup = {
-	megapenis = true,
-	meagsponsor = true
+	user = true,
+	supporter = true,
+	supporterplus = true,
+	regular = true,
+	operator = true
 }
 
 function COMMAND_GETASSES(ply)
@@ -203,11 +207,6 @@ COMMANDS.sync = {function(ply,args)
 
 	PrintMessage(3,"Синхра : " .. tostring(Sync))
 end}
-
-local validUserGroup = {
-	servermanager = true,
-	owner= true,
-}
 
 local function getNotDonaters()
 	local list = player.GetAll()
