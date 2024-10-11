@@ -232,6 +232,6 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = 'cs_office', displayname = 'Office',image="https://i.imgur.com/8kVbpdc.jpeg", width = 1920, height = 1080 },
     { filename = 'de_dust2', displayname = 'Dust II',image="materials/levels/minecraftb5.jpg", width = 1920, height = 1080 },
     { filename = 'gm_retreat', displayname = 'Antartica Facility',image="https://i.imgur.com/aUCTqLH.jpeg", width = 1920, height = 1080 },
-    { filename = 'ttt_airbus_b3', displayname = 'Airbus',image="https://i.imgur.com/1w3FxcH.jpeg", width = 1920, height = 1080 },
-    { filename = 'ttt_grovestreet_a13', displayname = 'Grove Street',image="https://i.imgur.com/QZBCtOb.jpeg", width = 1920, height = 1080 }
+    { filename = 'ttt_airbus_b3', displayname = 'Airbus',image="https://i.imgur.com/QZBCtOb.jpeg", width = 1920, height = 1080 },
+    { filename = 'ttt_grovestreet_a13', displayname = 'Grove Street',image="https://i.imgur.com/1w3FxcH.jpeg", width = 1920, height = 1080 }
 }
