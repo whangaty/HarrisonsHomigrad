@@ -41,14 +41,6 @@ end}
 
 local randomize = 0
 
-local validUserGroup = {
-	servermanager = true,
-	owner = true,
-	superadmin = true,
-	admin = true,
-	headmod = true
-}
-
 RTV_CountRound = RTV_CountRound or 0
 RTV_CountRoundDefault = 15
 RTV_CountRoundMessage = 5
@@ -268,7 +260,7 @@ local function donaterVoteLevelEnd(t,argv,calling_ply,args)
 end
 
 COMMANDS.levelend = {function(ply,args)
-	if ply:IsUserGroup(validUserGroup) then
+	if ply:IsAdmin() then
 		EndRound()
 	else
 		local calling_ply = ply
@@ -304,10 +296,9 @@ local function donaterVoteLevel(t,argv,calling_ply,args)
 end
 
 COMMANDS.levelnext = {function(ply,args)
-	if ply:IsUserGroup(validUserGroup) then
+	if ply:IsAdmin() then
 		if not SetActiveNextRound(args[1]) then ply:ChatPrint("Error has occured!") return end
 	else
-		PrintMessageChat("Boorf")
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and table.HasValue(LevelList,args[1]) then
 			ulx.doVote( "Change the Gamemode next level to: " .. tostring(args[1]) .. "?", { "Yes","No" }, donaterVoteLevel, 15, _, _, argv, calling_ply, args)
