@@ -146,9 +146,8 @@ function homicide.StartRoundSV()
 
     homicide.police = false
 	roundTimeStart = CurTime()
-	roundTime = math.max(math.ceil(#player.GetAll() / 2),1) * 45
+	roundTime = math.min(math.max(math.ceil(#player.GetAll() / 2), 1) * 45, 330)
 
-    if roundTime > 330 then roundTime = 330 end
 
     if homicide.roundType == 3 then
         roundTime = roundTime * 1.25
@@ -323,7 +322,7 @@ util.AddNetworkString("homicide_roleget")
 function homicide.SyncRole(ply,teamID)
     local role = {{},{}}
 
-    for i,ply in pairs(team.GetPlayers(1)) do
+for i,ply in pairs(team.GetPlayers(1)) do
         if teamID ~= 2 and ply.roleT then table.insert(role[1],ply) end
         if teamID ~= 1 and ply.roleCT then table.insert(role[2],ply) end
     end
