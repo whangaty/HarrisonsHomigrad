@@ -228,7 +228,7 @@ if CLIENT then
         local ammodrop = 0
         if !ply:Alive() then return end
         local Frame = vgui.Create( "DFrame" )
-        Frame:SetTitle( "Амуниция" )
+        Frame:SetTitle( "Ammo Inventory" )
         Frame:SetSize( 200,300 )
         Frame:Center()			
         Frame:MakePopup()
@@ -262,7 +262,7 @@ if CLIENT then
         local DermaNumSlider = vgui.Create( "DNumSlider", Frame )
         DermaNumSlider:SetPos( 10, 245 )				
         DermaNumSlider:SetSize( 210, 25 )			
-        DermaNumSlider:SetText( "Кол-во" )	
+        DermaNumSlider:SetText( "Quantity:" )	
         DermaNumSlider:SetMin( 0 )				 	
         DermaNumSlider:SetMax( 60 )				
         DermaNumSlider:SetDecimals( 0 )				
@@ -302,7 +302,7 @@ if CLIENT then
         end
         local DLabel = vgui.Create( "DLabel", Frame )
         DLabel:SetPos( 10, 270 )
-        DLabel:SetText( "ЛКМ - Скинуть Кол-во\nПКМ - Скинуть все" )
+        DLabel:SetText( "Left Mouse - Throw Quantity\nRight Mouse - Throw All" )
         DLabel:SizeToContents()
 
     end
@@ -334,9 +334,9 @@ if SERVER then
         local ammotype = net.ReadFloat()
         local count = net.ReadFloat()
         local pos = ply:EyePos()+ply:EyeAngles():Forward()*15
-        if ply:GetAmmoCount(ammotype)-count < 0 then ply:ChatPrint("У тебя столько нет пулек") return end
-        if count < 1 then ply:ChatPrint("Ноль пулек не скинуть") return end
-        if not ammolistent[ammotype] then ply:ChatPrint("Нету ентити этих патрон...") return end
+        if ply:GetAmmoCount(ammotype)-count < 0 then ply:ChatPrint("You cannot throw too many bullets!") return end
+        if count < 1 then ply:ChatPrint("You need to set a quantity higher than 0!") return end
+        if not ammolistent[ammotype] then ply:ChatPrint("You don't seem to have those catridges.") return end
         local AmmoEnt = ents.Create( "ent_ammo_"..ammolistent[ammotype] )
         AmmoEnt:SetPos( pos )
         AmmoEnt:Spawn()
