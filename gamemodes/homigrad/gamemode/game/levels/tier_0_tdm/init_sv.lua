@@ -191,10 +191,12 @@ function tdm.PlayerSpawn(ply,teamID)
 
     if customModel then
         ply:SetModel(customModel)
+		ply:SetPlayerColor(color:ToVector())
     else
         ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
-		ply:SetPlayerColor(color:ToVector())
     end
+
+	ply:SetPlayerColor(color:ToVector())
 
 	for i,weapon in pairs(teamTbl.weapons) do ply:Give(weapon) end
 
