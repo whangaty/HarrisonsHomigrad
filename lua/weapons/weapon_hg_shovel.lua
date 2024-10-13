@@ -10,8 +10,8 @@ SWEP.AdminSpawnable= true
 SWEP.AdminOnly = false
 
 SWEP.ViewModelFOV = 60
-SWEP.ViewModel = "models/weapons/me_crowbar/w_me_crowbar.mdl"
-SWEP.WorldModel = "models/weapons/me_crowbar/w_me_crowbar.mdl"
+SWEP.ViewModel = "models/weapons/w_crowbar.mdl"
+SWEP.WorldModel = "models/weapons/w_crowbar.mdl"
 SWEP.ViewModelFlip = false
 
 SWEP.AutoSwitchTo = false
