@@ -131,10 +131,10 @@ local function ToggleScoreboard(toggle)
 			draw.SimpleText("Status","HomigradFont",100,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			draw.SimpleText("Name","HomigradFont",w / 2,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 
-			draw.SimpleText("12.10.24","HomigradFontLarge",w / 2,h / 2,Color(155,155,165,50),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Build 13.10.24","HomigradFontLarge",w / 2,h / 2,Color(155,155,165,50),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			--draw.SimpleText("HOMIGRADED","HomigradFontLarge",w / 2,h / 2,Color(155,155,165,5),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			
-			draw.SimpleText("Kills | Deaths","HomigradFont",w - 300,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Role","HomigradFont",w - 300,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			--draw.SimpleText("Дни Часы Минуты","HomigradFont",w - 300,20,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			--draw.SimpleText("M","HomigradFont",w - 300 + 15,15,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 			
@@ -294,10 +294,32 @@ local function ToggleScoreboard(toggle)
 				draw.SimpleText(alive,"HomigradFont",100,h / 2,alivecol,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 				draw.SimpleText(name1,"HomigradFont",w / 2,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 				
-				-- if not ply.TimeStart then
-					local kd = ply:Deaths() .. " | " .. ply:Frags()
+				--Table for usergroup names and corresponding display names and colors
+				local userGroupDisplay = {
+					owner = {name = "Owner", color = Color(0,242,255)},
+					servermanager = {name = "Server Manager", color = Color(255, 25, 25)}, 
+					superadmin = {name = "Head Administrator", color = Color(255,223,0)},
+					admin = {name = "Administrator", color = Color(50, 255, 50)},
+					headmod = {name = "Head Moderator", color = Color(50, 255, 50)},
+					operator = {name = "Moderator", color = Color(75, 200, 75)},
+					tmod = {name = "Trial Mod", color = Color(75, 150, 70)},
+					supporter = {name = "Supporter", color = Color(0, 255, 0)},
+					supporterplus = {name = "Supporter+", color = Color(0, 255, 0)},
+					regular = {name = "Regular", color = Color(0,150,220)},
+					user = {name = "User", color = Color(125, 125, 125)}
+				}
 
-					draw.SimpleText(kd,"HomigradFont",w - 300,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+				-- Function to get the display name and color for a user group
+				local function GetDisplayNameAndColor(usergroup)
+					return userGroupDisplay[usergroup] and userGroupDisplay[usergroup].name or usergroup,
+						userGroupDisplay[usergroup] and userGroupDisplay[usergroup].color or color_white
+				end
+
+				-- Example of how to draw the text with the display name and color
+				local displayName, displayColor = GetDisplayNameAndColor(ply:GetUserGroup())
+				
+				draw.SimpleText(displayName, "HomigradFont", w - 300, h / 2, displayColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
 				-- else
 				-- 	local time = math.floor(CurTime() - ply.TimeStart + (ply.Time or 0))
 				-- 	local dTime,hTime,mTime = math.floor(time / 60 / 60 / 24),tostring(math.floor(time / 60 / 60) % 24),tostring(math.floor(time / 60) % 60)
@@ -310,6 +332,7 @@ local function ToggleScoreboard(toggle)
 				draw.SimpleText(ply:Ping(),"HomigradFont",w - 200,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 
 				local name,color = ply:PlayerClassEvent("TeamName")
+				--print()
 
 				if not name then
 					name,color = TableRound().GetTeamName(ply)
@@ -343,7 +366,7 @@ local function ToggleScoreboard(toggle)
 		local button = SB_CreateButton(HomigradScoreboard)
 		button:SetSize(30,30)
 		button:SetPos(HomigradScoreboard:GetWide() / 2 - button:GetWide() / 2,HomigradScoreboard:GetTall() - 15 - button:GetTall())
-		button.text = "Sky"
+		button.text = "S"
 		function button:DoClick()
 			OpenHomigradMenu()
             HomigradScoreboard:Remove()
