@@ -4,7 +4,7 @@ SWEP.Author = "Harrison"
 SWEP.Instructions = "Allows the player to see everyone else in the map.\nComes with 3 charges!"
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
-SWEP.Category = "Traitor Tool"
+SWEP.Category = "Traitor Tools"
 
 -- Set the weapon base
 SWEP.Base = "weapon_base"

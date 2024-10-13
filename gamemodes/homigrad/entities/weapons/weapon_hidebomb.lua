@@ -3,7 +3,7 @@ SWEP.Base                   = "weapon_base"
 SWEP.PrintName 				= "Improvised Explosive Device"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Left Mouse to place\nRight Mouse to Explode!"
-SWEP.Category 				= "Traitor Tool"
+SWEP.Category 				= "Traitor Tools"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
