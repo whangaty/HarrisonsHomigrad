@@ -72,8 +72,9 @@ function GuiltCheck(att,ply)
 		
 		if not att.noguilt and not att:HasGodMode() then
 			--att:Kill()
-			return
-			--RunConsoleCommand("ulx","asay",att:Name().." has exceeded their guilt of 100%")
+			
+			--RunConsoleCommand("ulx","asay","[AUTOMATED] "..att:Name().." has exceeded their guilt of 100%. They are "..tostring(att:Team()))
+			--print("[GUILT CHECK] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
 
 			--[[
 			if not validUserGroup[att:GetUserGroup()] then
@@ -109,7 +110,7 @@ end)
 
 hook.Add("PlayerInitialSpawn","guiltasdd",function(ply)
 	ply.Guilt = ply:GetPData("Guilt") or 0
-	ply:ChatPrint("Your guilt is currently at " .. tostring(ply.Guilt) .. "% out of 100%")
+	--ply:ChatPrint("Your guilt is currently at " .. tostring(ply.Guilt) .. "% out of 100%")
 	ply.RoundGuilt = 0
 end)
 
@@ -131,7 +132,7 @@ hook.Add("PlayerSpawn","guilt",function(ply)
 	ply.DontGuiltProtect = nil
 	ply.Seizure = false
 	ply.Guilt = ply.Guilt or 0
-	ply:ChatPrint("Your guilt is currently at " .. tostring(ply.Guilt) .. "% out of 100%")
+	--ply:ChatPrint("Your guilt is currently at " .. tostring(math.floor(ply.Guilt + 0.5)) .. "% out of 100%")
 	--[[if ply.Guilt > 30 then
 		timer.Create("seizure"..ply:EntIndex(),math.random(30,50),1, function()
 			Seizure(ply)
