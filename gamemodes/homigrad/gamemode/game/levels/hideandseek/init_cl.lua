@@ -46,6 +46,9 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
 	if time > 0 then
 		draw.SimpleText("Time Left before Special Forces arrive: ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
+		green.a = 0
+	else
+		green.a = 255
 	end
 	/*
 	local time = math.Round(roundTimeStart + (roundTimeLoot or 0) - CurTime())
@@ -56,7 +59,7 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
 		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH() - 50,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 	end
 	*/
-	green.a = 255
+	
 
 
 	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and hideandseek.police and time < 0 then
