@@ -89,7 +89,7 @@ end)
 
 -- Function to get the model directory for a given SteamID (useful for other parts of the code)
 function GetPlayerModelBySteamID(steamID)
-    print(playerModels[steamID])
+    --print(playerModels[steamID])
     return playerModels[steamID]
 end
 
