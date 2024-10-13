@@ -183,14 +183,14 @@ function homicide.HUDPaint_RoundLeft(white2)
 
         local pos = ply:GetPos() + ply:OBBCenter()
         local dis = lply_pos:Distance(pos)
-        if dis > 350 then continue end
+        if dis > 1024 then continue end
 
         local pos = pos:ToScreen()
         if not pos.visible then continue end
 
-        color.a = 255 * (1 - dis / 350)
+        color.a = 255 * (1 - dis / 1024)
         --draw.SimpleText(roundTimeStart, "HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-        print(roundTimeStart)
+        --print(roundTimeStart)
         draw.SimpleText("Buddy: "..ply:Nick(),"HomigradFontBig",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 end

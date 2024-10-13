@@ -45,7 +45,7 @@ weaponscommon = {
 
 	"weapon_knife",
 	"weapon_pipe",
-	
+	"splint",
 	"med_band_small",
 	"med_band_big",
 	"blood_bag"
@@ -55,7 +55,7 @@ weaponsuncommon = {
 	"weapon_glock18",
 	"weapon_per4ik",
 
-	"weapon_hg_crowbar",
+	"weapon_hg_shovel",
 	"weapon_hg_fubar",
 	"weapon_bat",
 	"weapon_hg_metalbat",

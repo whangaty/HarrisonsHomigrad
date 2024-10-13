@@ -1,4 +1,4 @@
-table.insert(LevelList,"gravtdm")
+--table.insert(LevelList,"gravtdm")
 gravtdm = {}
 gravtdm.Name = "Gravity Gun Gambit (TDM)"
 

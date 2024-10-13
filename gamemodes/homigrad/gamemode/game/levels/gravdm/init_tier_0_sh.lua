@@ -1,4 +1,4 @@
-table.insert(LevelList, "gravdm")
+--table.insert(LevelList, "gravdm")
 gravdm = {}
 gravdm.Name = "Gravity Gun Gambit (Free for All)"
 gravdm.LoadScreenTime = 5.5
