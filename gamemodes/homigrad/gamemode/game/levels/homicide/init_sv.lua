@@ -28,6 +28,7 @@ COMMANDS.homicide_get = {function(ply,args)
     net.Send(ply)
 end}
 
+
 local function makeT(ply)
     ply.roleT = true --Игрока не существует. Выдаёт из-за этого ошибку в первый раз.
     table.insert(homicide.t,ply)
@@ -264,7 +265,11 @@ function homicide.RoundEndCheck()
                     end
                 end)
             end)
-			
+            -- Send a message to each police player
+            for _, ply in pairs(ctPlayers) do
+                ply:ChatPrint(#homicide.t > 1 and ("The traitors are: <clr:red>" .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("The traitor is: <clr:red>" .. homicide.t[1]:Name()))
+                ply:ChatPrint("<clr:red>WARNING: <clr:white>Killing friendlies will result in a punishment determined by staff.")
+            end
 		end
 	end
 
@@ -365,3 +370,4 @@ end
 function homicide.GuiltLogic(ply,att,dmgInfo)
     return ply.roleT == att.roleT
 end
+
