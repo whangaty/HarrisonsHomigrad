@@ -72,7 +72,7 @@ function GuiltCheck(att,ply)
 		
 		if not att.noguilt and not att:HasGodMode() then
 			--att:Kill()
-			
+			return 
 			--RunConsoleCommand("ulx","asay","[AUTOMATED] "..att:Name().." has exceeded their guilt of 100%. They are "..tostring(att:Team()))
 			--print("[GUILT CHECK] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
 
