@@ -124,8 +124,12 @@ function wick.PlayerSpawn(ply,teamID)
 	-- Set the player's model to the custom model if available, otherwise use a random team model
     local customModel = GetPlayerModelBySteamID(ply:SteamID())
 
-    if customModel and ply.roleT then
-        ply:SetModel(customModel)
+    if ply.roleT then
+        if customModel then
+            ply:SetModel(customModel)
+        else
+            ply:SetModel("models/wick_chapter2/wick_chapter2.mdl")
+        end
     else
         ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
     end
@@ -133,15 +137,6 @@ function wick.PlayerSpawn(ply,teamID)
 
 	ply:Give("weapon_hands")
     timer.Simple(0,function() ply.allowFlashlights = false end)
-
-    -- Set the player's model to the custom model if available, otherwise use a random team model
-    local customModel = GetPlayerModelBySteamID(ply:SteamID())
-
-    if customModel and ply.roleT then
-        ply:SetModel(customModel)
-    else
-        ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
-    end
 end
 
 function wick.PlayerInitialSpawn(ply)
