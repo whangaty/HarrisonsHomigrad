@@ -2,7 +2,7 @@ table.insert(LevelList,"wick")
 wick = wick or {}
 wick.Name = "John Wick"
 
-wick.red = {"Наемник",Color(125,125,125),
+wick.red = {"Mercenary",Color(125,125,125),
     models = tdm.models
 }
 
@@ -49,7 +49,7 @@ function wick.GetTeamName(ply)
 
     local teamID = ply:Team()
     if teamID == 1 then
-        return "Наемник",ScoreboardSpec
+        return "Mercenary",ScoreboardSpec
     end
 end
 
@@ -91,13 +91,13 @@ function wick.HUDPaint_RoundLeft(white2)
         end
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),3,0.5)
 
-        draw.DrawText( "Вы " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You are " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "John Wick", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply.roleT then
-            draw.DrawText( "Вы - Джон Уик, разберитесь со всеми наемниками.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "You're surrounded by mercenaries. Take them out and remain the only one standing!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "Нейтрализуйте Джона Уика", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Work together with your friends, and eleminate John Wick.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         end
         return
     end
@@ -117,6 +117,6 @@ function wick.HUDPaint_RoundLeft(white2)
 
         color.a = 255 * (1 - dis / 750)
 
-        --draw.SimpleText(ply.roleT and "Джон Уик" or "","HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        --draw.SimpleText(ply.roleT and "John Wick" or "","HomigradFont",pos.x,pos.y-256,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 end
