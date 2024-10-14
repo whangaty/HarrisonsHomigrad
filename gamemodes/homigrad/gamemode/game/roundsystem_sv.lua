@@ -268,7 +268,7 @@ COMMANDS.levelend = {function(ply,args)
 			ulx.doVote( "End Round?", { "No", "Yes" }, donaterVoteLevelEnd, 15, _, _, argv, calling_ply, args)
 		end
 	end
-	print("Was Recognised!")
+	--print("Was Recognised!")
 end}
 
 local function donaterVoteLevel(t,argv,calling_ply,args)
@@ -315,7 +315,7 @@ COMMANDS.levels = {function(ply,args)
 	text = string.sub(text,1,#text - 1)
 
 	ply:ChatPrint(text)
-	print("Was Recognised!")
+	--print("Was Recognised!")
 end}
 
 concommand.Add("hg_roundinfoget",function(ply)
