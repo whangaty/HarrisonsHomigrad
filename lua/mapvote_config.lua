@@ -1,10 +1,10 @@
 -- Time in seconds until the mapvote is over from
 -- when it starts.
-SolidMapVote[ 'Config' ][ 'Length' ] = 15
+SolidMapVote[ 'Config' ][ 'Length' ] = 25
 
 -- The time in seconds that the vote will stay on the screen
 -- after the winning map has been chosen.
-SolidMapVote[ 'Config' ][ 'Post Vote Length' ] = 2
+SolidMapVote[ 'Config' ][ 'Post Vote Length' ] = 5
 
 -- This option controls the size of the map vote buttons.
 -- This will effect how the images look. If your switching from tall to
@@ -45,11 +45,12 @@ SolidMapVote[ 'Config' ][ 'Map Prefix' ] = {
 
 local namecolor = {
    default = COLOR_WHITE,
-   servermanager = Color(212,175,55),
+   servermanager = Color(255,50,55),
+   owner = Color(0, 227, 255),
    admin = Color(0,191,255),
    veteran = Color(255,20,147),
    moderator = Color(124,252,0),
-   supporter = Color(124,252,0),
+   supporter = Color(255,225,0),
    servertreuer = Color(178,34,34),
    nutzer = Color(65,105,225),
    user = Color(230,230,250)
@@ -60,7 +61,7 @@ local namecolor = {
 SolidMapVote[ 'Config' ][ 'Avatar Border Color' ] = function( ply )
 
   if ply:IsUserGroup("servermanager") then
-	return HSVToColor( math.sin( 0.3*RealTime() )*128 + 127, 1, 1 )
+	return HSVToColor( math.sin( 2*RealTime() )*128 + 127, 1, 1 )
   end
 
   if ply:IsUserGroup("servertreuer") then
@@ -111,6 +112,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "hmcd_aircraft",
     --"hmcd_metropolis", -- Toooo buggy
     "mu_smallotown_v2_snow",
+    "mu_hmcd_workplace_v3",
     --"mu_powerhermit",
     "gm_church",
     --"gm_apartments_hl2",
@@ -130,7 +132,11 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     --"dm_underpass",
     "ttt_airbus_b3",
     "ttt_grovestreet_a13",
-    "gm_retreat"
+    "gm_retreat",
+    --"gm_csgoinsertion",
+    --"zs_closure",
+    --"c8m5_rooftop",
+    --""
     --"gm_ww1_jlps"
     --"gm_spacetrain"
     --"gm_brutalist_kfc",
@@ -234,5 +240,11 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = 'de_dust2', displayname = 'Dust II',image="https://i.imgur.com/09vBwAA.jpeg", width = 1920, height = 1080 },
     { filename = 'gm_retreat', displayname = 'Antartica Facility',image="https://i.imgur.com/aUCTqLH.jpeg", width = 1920, height = 1080 },
     { filename = 'ttt_airbus_b3', displayname = 'Airbus',image="https://i.imgur.com/QZBCtOb.jpeg", width = 1920, height = 1080 },
-    { filename = 'ttt_grovestreet_a13', displayname = 'Grove Street',image="https://i.imgur.com/1w3FxcH.jpeg", width = 1920, height = 1080 }
+    { filename = 'ttt_grovestreet_a13', displayname = 'Grove Street',image="https://i.imgur.com/1w3FxcH.jpeg", width = 1920, height = 1080 },
+    -- New Maps
+    { filename = 'mu_hmcd_workplace_v3', displayname = 'Workplace',image="https://i.imgur.com/1w3FxcH.jpeg", width = 1920, height = 1080 },
+    { filename = 'gm_csgoinsertion', displayname = 'Insertion I',image="https://i.imgur.com/1w3FxcH.jpeg", width = 1920, height = 1080 },
+    { filename = 'zs_closure', displayname = 'Closure',image="https://i.imgur.com/1w3FxcH.jpeg", width = 1920, height = 1080 },
+    { filename = 'c8m5_rooftop', displayname = 'No Mercy Rooftop',image="https://i.imgur.com/1w3FxcH.jpeg", width = 1920, height = 1080 },
+    { filename = 'c8m5_rooftop', displayname = 'Sieged City',image="https://i.imgur.com/1w3FxcH.jpeg", width = 1920, height = 1080 },
 }
