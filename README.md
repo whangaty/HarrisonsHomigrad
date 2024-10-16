@@ -4,12 +4,12 @@ Opengrad is an open-source alternative to Homigrad, the popular Russian gamemode
 # What is Homigirad?
 Homigrad is a TTT/Murder-like gamemode that uses 'realistic' health and movement systems. There are several sub-modes that can be played, such as TDM, Deathmatch, and Hide and Seek.   
 
-# Interested in making a server?
+# Server Installation
 We recommend that, for the time-being, you use the Workshop version at [Put here when published.]
 
-Otherwise, if you want the bleeding edge, simply download the repository as a .zip file, and drag and drop the opengrad-main folder into your addons folder. 
+Otherwise, if you want the bleeding edge, simply download the repository as a .zip file, and drag and drop the opengrad-main folder into your addons folder.
 
-Once you've loaded the addon onto your server, please look into the wiki for further information.
+Once you've loaded the addon onto your server, please look into the wiki (No Link Avaiable) for further information.
 
 # FAQ
 ### What language is Opengrad in?
