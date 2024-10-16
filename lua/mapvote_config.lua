@@ -80,8 +80,10 @@ SolidMapVote[ 'Config' ][ 'Vote Power' ] = function( ply )
     end
 
     -- Give our supporters the big benefits!
-    if ply:IsUserGroup("supporter") or ply:IsUserGroup("supporterplus") then
+    if ply:IsUserGroup("supporter")  then
         return 2
+    elseif ply:IsUserGroup("supporterplus") then
+        return 3
     else
         return 1
     end
@@ -133,7 +135,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_airbus_b3",
     "ttt_grovestreet_a13",
     "gm_retreat",
-    --"gm_csgoinsertion",
+    "gm_csgoinsertion",
     --"zs_closure",
     --"c8m5_rooftop",
     --""
