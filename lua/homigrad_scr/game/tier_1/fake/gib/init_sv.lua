@@ -193,7 +193,7 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 
 	if bonetohitgroup[bonename] then hitgroup = bonetohitgroup[bonename] end
 
-	local mul = RagdollDamageBoneMul[hitgroup]
+	local mul = RagdollDamageBoneMul[hitgroup] or 1
 	
 	if dmgInfo:GetDamage() * mul < 350 then return end
 	

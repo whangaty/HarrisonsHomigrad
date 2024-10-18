@@ -416,7 +416,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	if STOPRENDER then return end
 	local fov = CameraSetFOV + ADDFOV
 	local lply = LocalPlayer()
-
+	
 	if !ply:Alive() and timer.Exists("DeathCam") and IsValid(deathrag) then
 		--deathrag:ManipulateBoneScale(6,vecZero)
 		
@@ -789,12 +789,11 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 	end
 
-
 	if not RENDERSCENE then
 		LerpEye = LerpAngleFT(smooth_cam:GetBool() and 0.25 or 1,LerpEye,angEye)
 	else
-		angEye = LerpAngleFT(0.25,LerpEye,angEye)
-		
+		LerpEye = LerpAngleFT(0.25,LerpEye,angEye)
+
 		if GetConVar("hg_bodycam"):GetInt() == 1 and IsValid(wep) and wep:LookupAttachment("muzzle") and scope then
 			vecWep = vecWep + hand.Ang:Up() * 2 - hand.Ang:Forward() * -15 + hand.Ang:Right() * -1.5
 			LerpEye = wep:GetAttachment(wep:LookupAttachment("muzzle")).Ang
@@ -816,7 +815,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 	angEye = LerpEye
 	vecEye = LerpVector(ScopeLerp,vecEye,vecWep or vecEye)
-	angEye = LerpAngle(ScopeLerp/2,angEye,angWep or angEye)
+	--angEye = LerpAngle(ScopeLerp/2,angEye,angWep or angEye)
 	
 	if GetConVar("hg_bodycam"):GetInt() == 1 and not scope then
 		local wep = lply:GetActiveWeapon()
@@ -841,10 +840,10 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		view.origin = ply:EyePos()
 		view.angles = ply:EyeAngles()
 		view.drawviewer = false
-
+		
 		return view
 	end
-
+	
 	local output_ang = angEye + angRecoil
 	local output_pos = vecEye
 
@@ -922,15 +921,15 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	view.origin = output_pos
 	view.angles = output_ang
 	view.drawviewer = true
-
+	
 	oldview = table.Copy(view)
 
 	DRAWMODEL = true
-
+	
 	return view
 end
 
-hook.Add("CalcView","VIEW",CalcView)
+hook.Add("CalcView","VIEWhuy",CalcView)
 
 hide = {
 	["CHudHealth"] = true,
@@ -971,7 +970,7 @@ end )
 ]]--
 
 hook.Add("Think","mouthanim",function()
-	for i, ply in pairs(player.GetAll()) do
+	for i, ply in player.Iterator() do
 		local ent = IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll") or ply
 
 		local flexes = {

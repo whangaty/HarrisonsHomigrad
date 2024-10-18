@@ -311,7 +311,7 @@ function SWEP:ApplyForce()
 			local ply = RagdollOwner(self.CarryEnt)
 			if self:GetOwner():KeyPressed( IN_RELOAD ) then
 				if not ply then
-					self:GetOwner():ChatPrint("This is no pulse pulse. This person is dead.")
+					self:GetOwner():ChatPrint("There is no pulse. This person is dead.")
 				else
 					if ply.heartstop then
 						self:GetOwner():ChatPrint("There is no pulse, but CPR can be performed to attempt to save them.")
