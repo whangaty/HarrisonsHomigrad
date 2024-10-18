@@ -312,26 +312,26 @@ end
 
 local white = Color(255,255,255)
 local bonenames = {
-    ['ValveBiped.Bip01_Head1']="голову",
-    ['ValveBiped.Bip01_Spine']="спину",
-    ['ValveBiped.Bip01_Spine2']="спину",
-    ['ValveBiped.Bip01_Pelvis']="живот",
-    ['ValveBiped.Bip01_R_Hand']="правую кисть",
-    ['ValveBiped.Bip01_R_Forearm']="правое предплечье",
-    ['ValveBiped.Bip01_R_UpperArm']="правое предплечье",
-    ['ValveBiped.Bip01_R_Foot']="правую ногу",
-    ['ValveBiped.Bip01_R_Thigh']='правое бедро',
-    ['ValveBiped.Bip01_R_Calf']='правую голень',
-    ['ValveBiped.Bip01_R_Shoulder']='правое плечо',
-    ['ValveBiped.Bip01_R_Elbow']='правый локоть',
-	['ValveBiped.Bip01_L_Hand']='левую кисть',
-    ['ValveBiped.Bip01_L_Forearm']='левое предплечье',
-    ['ValveBiped.Bip01_L_UpperArm']="левое предплечье",
-    ['ValveBiped.Bip01_L_Foot']='левую ногу',
-    ['ValveBiped.Bip01_L_Thigh']='левое бедро',
-    ['ValveBiped.Bip01_L_Calf']='левую голень',
-    ['ValveBiped.Bip01_L_Shoulder']='левое плечо',
-    ['ValveBiped.Bip01_L_Elbow']='левый локоть'
+    ['ValveBiped.Bip01_Head1']="head",
+    ['ValveBiped.Bip01_Spine']="spine",
+    ['ValveBiped.Bip01_Spine2']="spine",
+    ['ValveBiped.Bip01_Pelvis']="stomach",
+    ['ValveBiped.Bip01_R_Hand']="right hand",
+    ['ValveBiped.Bip01_R_Forearm']="right forearm",
+    ['ValveBiped.Bip01_R_UpperArm']="right upperarm",
+    ['ValveBiped.Bip01_R_Foot']="right foot",
+    ['ValveBiped.Bip01_R_Thigh']='right thigh',
+    ['ValveBiped.Bip01_R_Calf']='right calf',
+    ['ValveBiped.Bip01_R_Shoulder']='right shoulder',
+    ['ValveBiped.Bip01_R_Elbow']='right elbow',
+	['ValveBiped.Bip01_L_Hand']='left hand',
+    ['ValveBiped.Bip01_L_Forearm']='left forearm',
+    ['ValveBiped.Bip01_L_UpperArm']="left upperarm",
+    ['ValveBiped.Bip01_L_Foot']='left foot',
+    ['ValveBiped.Bip01_L_Thigh']='left thigh',
+    ['ValveBiped.Bip01_L_Calf']='left calf',
+    ['ValveBiped.Bip01_L_Shoulder']='left shoulder',
+    ['ValveBiped.Bip01_L_Elbow']='left elbow'
 }
 function SWEP:DrawHUD()
     local owner = self:GetOwner()
@@ -352,5 +352,5 @@ function SWEP:DrawHUD()
     surface.SetDrawColor(Color(255 * hitEnt, 255 * hitEnt, 255 * hitEnt, 255 * hit))
     draw.NoTexture()
     Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-    draw.DrawText(not tRes1 and "" or isRag and ("Прибить "..tostring(bonenames[traceResult.Entity:GetBoneName(traceResult.Entity:TranslatePhysBoneToBone(traceResult.PhysicsBone))])) or (tobool(hitEnt) and tobool(hit)) and "Прибить проп" or "","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_white,TEXT_ALIGN_CENTER)
+    draw.DrawText(not tRes1 and "" or isRag and ("Nail the "..tostring(bonenames[traceResult.Entity:GetBoneName(traceResult.Entity:TranslatePhysBoneToBone(traceResult.PhysicsBone))])) or (tobool(hitEnt) and tobool(hit)) and "Nail a prop" or "","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_white,TEXT_ALIGN_CENTER)
 end

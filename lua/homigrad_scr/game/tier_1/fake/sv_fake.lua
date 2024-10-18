@@ -519,7 +519,7 @@ end)
 
 function Stun(Entity)
 	if Entity:IsPlayer() then
-		Faking(Entity)
+		if not IsValid(Entity.fake) then Faking(Entity) end
 		timer.Create("StunTime"..Entity:EntIndex(), 8, 1, function() end)
 		local fake = Entity:GetNWEntity("Ragdoll")
 		timer.Create( "StunEffect"..Entity:EntIndex(), 0.1, 80, function()
@@ -1179,7 +1179,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 					maxangulardamp=10,
 					maxspeeddamp=2, -- Previously 10
 					maxangular=370,
-					maxspeed=80, -- Doubled from 40 
+					maxspeed=40, -- Doubled from 40 
 					teleportdistance=0,
 					deltatime=deltatime,
 				}
@@ -1282,14 +1282,13 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine" )) )
 			local lh = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
 			local angs = ply:EyeAngles()
-			angs:RotateAroundAxis(angs:Forward(),90)
-			angs:RotateAroundAxis(angs:Up(),90)
-			local speed = 30
+			angs:RotateAroundAxis(angs:Right(),30)
+			local speed = 60
 			
 			if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000) then
 				local shadowparams = {
 					secondstoarrive=0.5,
-					pos=lh:GetPos(),
+					pos=phys:GetPos() + angs:Forward() * 10,
 					angle=phys:GetAngles(),
 					maxangulardamp=10,
 					maxspeeddamp=10,
@@ -1306,14 +1305,13 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine" )) )
 			local rh = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 			local angs = ply:EyeAngles()
-			angs:RotateAroundAxis(angs:Forward(),90)
-			angs:RotateAroundAxis(angs:Up(),90)
-			local speed = 30
+			angs:RotateAroundAxis(angs:Right(),30)
+			local speed = 60
 			
 			if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000)then
 				local shadowparams = {
 					secondstoarrive=0.5,
-					pos=rh:GetPos(),
+					pos=phys:GetPos() + angs:Forward() * 10,
 					angle=phys:GetAngles(),
 					maxangulardamp=10,
 					maxspeeddamp=10,
@@ -1330,14 +1328,13 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			local phys = rag:GetPhysicsObjectNum( 1 )
 			local chst = rag:GetPhysicsObjectNum( 0 )
 			local angs = ply:EyeAngles()
-			angs:RotateAroundAxis(angs:Forward(),90)
-			angs:RotateAroundAxis(angs:Up(),90)
-			local speed = 30
+			angs:RotateAroundAxis(angs:Right(),30)
+			local speed = 60
 			
 			if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000)then
 				local shadowparams = {
 					secondstoarrive=0.5,
-					pos=chst:GetPos(),
+					pos=phys:GetPos() + angs:Forward() * -10,
 					angle=phys:GetAngles(),
 					maxangulardamp=10,
 					maxspeeddamp=10,
@@ -1354,14 +1351,13 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			local phys = rag:GetPhysicsObjectNum( 1 )
 			local chst = rag:GetPhysicsObjectNum( 0 )
 			local angs = ply:EyeAngles()
-			angs:RotateAroundAxis(angs:Forward(),90)
-			angs:RotateAroundAxis(angs:Up(),90)
-			local speed = 30
+			angs:RotateAroundAxis(angs:Right(),30)
+			local speed = 60
 			
 			if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000)then
 				local shadowparams = {
 					secondstoarrive=0.5,
-					pos=chst:GetPos(),
+					pos=phys:GetPos() + angs:Forward() * -10,
 					angle=phys:GetAngles(),
 					maxangulardamp=10,
 					maxspeeddamp=10,

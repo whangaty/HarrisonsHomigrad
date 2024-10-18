@@ -537,6 +537,8 @@ function SWEP:FireBullet(dmg, numbul, spread)
 	end
 
 	if SERVER then self:TakePrimaryAmmo(1) end
+	
+	self:Step()
 
 	if ply:GetNWBool("Suiciding") then
 		if SERVER then
@@ -663,6 +665,33 @@ local angSuicide = Angle(160,30,90)
 local angSuicide2 = Angle(160,30,90)
 local angSuicide3 = Angle(60,-30,90)
 local forearm,clavicle,hand = Angle(0,0,0),Angle(0,0,0),Angle(0,0,0)
+local ENTITY = FindMetaTable("Entity")
+
+function ENTITY:SetBoneMatrix2(boneID,matrix,dontset)
+	local localpos = self:GetManipulateBonePosition(boneID)
+	local localang = self:GetManipulateBoneAngles(boneID)
+	local newmat = Matrix()
+	newmat:SetTranslation(localpos)
+	newmat:SetAngles(localang)
+	local inv = newmat:GetInverse()
+	local oldMat = self:GetBoneMatrix(boneID) * inv
+	local newMat = oldMat:GetInverse() * matrix
+	local lpos,lang = newMat:GetTranslation(),newMat:GetAngles()
+
+	if not dontset then
+		self:ManipulateBonePosition(boneID,lpos,false)
+		self:ManipulateBoneAngles(boneID,lang,false)
+	end
+
+	return lpos,lang
+end
+
+local pistol_hold = Angle(20,-20,0)
+local rifle_hold = Angle(-5,-8,0)
+
+function SWEP:IsPistolHoldType()
+	return self.HoldType == "revolver" 
+end
 
 function SWEP:Step()
 	local ply = self:GetOwner()
@@ -736,7 +765,7 @@ function SWEP:Step()
 			if not ply:GetNWBool("Suiciding") then
 				self:SetWeaponHoldType(self.HoldType)
 				hand:Set(angZero)
-				forearm:Set(angZero)
+				forearm:Set(self:IsPistolHoldType() and pistol_hold or rifle_hold)
 			elseif not self.TwoHands and ply:GetNWBool("Suiciding") then
 				self:SetWeaponHoldType("normal")
 				forearm:Set(angSuicide2)
@@ -778,9 +807,25 @@ function SWEP:Step()
 
 	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end--;c
 
-	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),forearm,false)
-	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),clavicle,false)
-	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),hand,false)
+	local hand_index = ply:LookupBone("ValveBiped.Bip01_R_Hand")
+	local forearm_index = ply:LookupBone("ValveBiped.Bip01_R_Forearm")
+	local clavicle_index = ply:LookupBone("ValveBiped.Bip01_R_Clavicle")
+	
+	local matrix = ply:GetBoneMatrix(hand_index)
+	local ang = ply:EyeAngles()
+	ang:RotateAroundAxis(ang:Forward(),180)
+	ang:RotateAroundAxis(ang:Right(),8)
+	matrix:SetAngles(ang)
+	local lpos,lang = ply:SetBoneMatrix2(hand_index,matrix,false)
+
+
+	if not ply:GetNWBool("Suiciding") and not ply:IsSprinting() then
+		hand = lang
+	end
+
+	ply:ManipulateBoneAngles(forearm_index,forearm,false)
+	ply:ManipulateBoneAngles(clavicle_index,clavicle,false)
+	ply:ManipulateBoneAngles(hand_index,hand,false)
 
 	--ply:ManipulateBonePosition(ply:LookupBone("ValveBiped.Bip01_R_Upperarm"),upperarm_pos,false)
 	--ply:ManipulateBonePosition(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),clavicle_pos,false)
