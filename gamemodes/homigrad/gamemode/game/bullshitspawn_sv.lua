@@ -48,7 +48,7 @@ weaponscommon = {
 	"splint",
 	"med_band_small",
 	"med_band_big",
-	"blood_bag"
+	--"blood_bag"
 }
 
 weaponsuncommon = {
