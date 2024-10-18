@@ -69,7 +69,7 @@ if SERVER then
 
 		local Pos = self:GetPos()
 
-		for i,ply in pairs(player.GetAll()) do
+		for i,ply in player.Iterator() do
 			local plyPos = ply:GetPos()
 			local dis = Pos:Distance(plyPos)
 

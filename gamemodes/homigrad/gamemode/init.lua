@@ -288,14 +288,14 @@ votemap2:addParam{ type=ULib.cmds.StringArg, completes=ulx.maps, hint="map", err
 votemap2:defaultAccess( ULib.ACCESS_ADMIN )
 votemap2:help( "Starts a public map vote." )
 
-hook.Add("Player Think","HasGodMode Rep",function(ply) ply:SetNWBool("HasGodMode",ply:HasGodMode()) end)
+hook.Add("Player Think","HasGodMode Rep",function(ply) ply:SetNWBool("HasGodMode", ply:HasGodMode()) end)
 
 --resource.AddWorkshop("864612139") --remove red death screen
 
 COMMANDS.roll = {function(ply,args)
 	local r = math.random(1,tonumber(args[1]))
 
-	for i,ply2 in pairs(player.GetAll()) do
+	for i,ply2 in player.Iterator() do
 		if GAMEMODE:PlayerCanSeePlayersChat("gg",false,ply2,ply) then
 			PrintMessageChat(ply2,r)
 		end

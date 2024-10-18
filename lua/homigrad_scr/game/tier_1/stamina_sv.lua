@@ -12,13 +12,13 @@ local tbl
 
 local hook_Run = hook.Run
 
-hook.Add("Think", "homigrad-player-thinker", function(ply)
-	tbl = player_GetAll()
+hook.Add("PlayerPostThink", "homigrad-player-thinker", function(ply)
+	--tbl = player_GetAll()
 	time = CurTime()
 
-	for i = 1, #tbl do
-		hook_Run("Player Think", tbl[i], time)
-	end
+	--for i = 1, #tbl do
+		hook_Run("Player Think", ply, time)
+	--end
 end)
 
 hook.Add("PlayerInitialSpawn","homigrad-addcallback",function(ply)

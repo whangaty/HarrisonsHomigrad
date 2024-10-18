@@ -56,7 +56,7 @@ end
 local black = Color(0,0,0,255)
 
 net.Receive("homicide_roleget2",function()
-    for i,ply in pairs(player.GetAll()) do ply.roleT = nil end
+    for i,ply in player.Iterator() do ply.roleT = nil end
     local role = net.ReadTable()
 
     for i,ply in pairs(role[1]) do ply.roleT = true end
@@ -104,7 +104,7 @@ function wick.HUDPaint_RoundLeft(white2)
 
     local lply_pos = lply:GetPos()
 
-    for i,ply in pairs(player.GetAll()) do
+    for i,ply in player.Iterator() do
         local color = ply.roleT and red
         if not color or ply == lply or not ply:Alive() then continue end
 

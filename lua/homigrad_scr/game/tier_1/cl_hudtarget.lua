@@ -4,7 +4,7 @@ nodraw_players = nodraw_players or {}
 hook.Add("Think","ShouldDrawNoclipe",function()
 	local lply = LocalPlayer()
 
-	for i,ply in pairs(player.GetAll()) do
+	for i,ply in player.Iterator() do
 		if ply == lply then continue end
 
 		if ply:GetNWBool("scared") or (ply:Alive() and not ply:InVehicle() and ply:GetMoveType() == MOVETYPE_NOCLIP) then

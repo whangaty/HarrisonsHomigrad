@@ -29,7 +29,7 @@ end, nil, "Shows the potential salvaging yield from whatever you're looking at."
 -- WHY ISN'T THIS A THING ALREADY??
 concommand.Add("jmod_admin_cleanup", function(ply, cmd, args)
 	if (IsValid(ply) and ply:IsSuperAdmin()) or not IsValid(ply) then
-		for k, v in pairs(player.GetAll()) do
+		for k, v in player.Iterator() do
 			if v ~= ply then
 				v:KillSilent()
 			end
@@ -38,7 +38,7 @@ concommand.Add("jmod_admin_cleanup", function(ply, cmd, args)
 		game.CleanUpMap()
 
 		timer.Simple(.1, function()
-			for k, v in pairs(player.GetAll()) do
+			for k, v in player.Iterator() do
 				JMod.Hint(v, "admin cleanup")
 			end
 		end)

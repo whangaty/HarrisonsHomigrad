@@ -13,7 +13,7 @@ hook.Add("PlayerInitialSpawn","Time",function(ply)
     timer.Simple(2,function()
         sync(ply,data[ply:SteamID()] or 0)
 
-        for i,ply2 in pairs(player.GetAll()) do
+        for i,ply2 in player.Iterator() do
             sync(ply2,(data[ply2:SteamID()] or 0) + ply2:TimeConnected(),ply)
         end
     end)

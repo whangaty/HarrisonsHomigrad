@@ -71,7 +71,7 @@ net.Receive("radio_set",function(len,ply)
 end)
 
 function PlayRadio(radio,station)
-	for i, ply in pairs(player.GetAll()) do
+	for i, ply in player.Iterator() do
 		net.Start("play_snd")
 		net.WriteString(station[1])
 		net.WriteBool(station[2])

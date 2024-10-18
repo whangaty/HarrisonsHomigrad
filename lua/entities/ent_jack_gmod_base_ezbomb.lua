@@ -195,7 +195,7 @@ if(SERVER)then
 			sound.Play("ambient/explosions/explode_"..math.random(1,9)..".wav",SelfPos+VectorRand()*1000,160,math.random(80,110))
 		end
 		---
-		for k,ply in pairs(player.GetAll())do
+		for k,ply in player.Iterator()do
 			local Dist=ply:GetPos():Distance(SelfPos)
 			if((Dist>250)and(Dist<4000))then
 				timer.Simple(Dist/6000,function()

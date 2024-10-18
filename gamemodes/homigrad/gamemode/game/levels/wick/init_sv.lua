@@ -51,7 +51,7 @@ function wick.StartRoundSV()
     roundTimeLoot = 5
 
     for i,ply in pairs(team.GetPlayers(2)) do ply:SetTeam(1) end
-    for i,ply in pairs(player.GetAll()) do ply.roleT = false end
+    for i,ply in player.Iterator() do ply.roleT = false end
 
     wick.t = {}
 

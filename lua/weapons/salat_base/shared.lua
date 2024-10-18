@@ -517,7 +517,7 @@ function SWEP:FireBullet(dmg, numbul, spread)
 		effectdata:SetHitBox(tr.HitBox)
 		effectdata:SetFlags(0x0001)
 		util.Effect("Tracer",effectdata,true,true)
-		for i, ply in pairs(player.GetAll()) do
+		for i, ply in player.Iterator() do
 			net.Start("shoot_tracer")
 			net.WriteTable(tr)
 			net.WriteEntity(self)

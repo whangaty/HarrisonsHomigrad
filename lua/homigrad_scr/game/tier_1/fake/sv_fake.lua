@@ -300,7 +300,7 @@ hook.Add("OnEntityCreated","hg-bullseye",function(ent)
 end)
 
 hook.Add("Think","FakedShoot",function() --функция стрельбы лежа
-for i,ply in pairs(player.GetAll()) do
+for i,ply in player.Iterator() do
 	if IsValid(ply:GetNWEntity("Ragdoll")) and ply.FakeShooting and ply:Alive() then
 		SpawnWeapon(ply)
 	else
@@ -578,7 +578,7 @@ concommand.Add("fake",function(ply)
 end)
 
 hook.Add("PreCleanupMap","cleannoobs",function() --все игроки встают после очистки карты
-	for i, v in pairs(player.GetAll()) do
+	for i, v in player.Iterator() do
 		if v.fake then Faking(v) end
 	end
 

@@ -99,7 +99,7 @@ if(SERVER)then
 		self:ConsumeElectricity()
 
 		if parrot then
-			for _, ply in pairs(player.GetAll()) do
+			for _, ply in player.Iterator() do
 				if ply:Alive() and (ply:GetPos():DistToSqr(self:GetPos()) <= 200 * 200 or (self:UserIsAuthorized(ply) and ply.EZarmor and ply.EZarmor.effects.teamComms)) then
 					net.Start("JMod_EZradio")
 					net.WriteBool(true)
@@ -123,7 +123,7 @@ if(SERVER)then
 
 		timer.Simple(.5, function()
 			if IsValid(self) then
-				for _, ply in pairs(player.GetAll()) do
+				for _, ply in player.Iterator() do
 					if ply:Alive() and (ply:GetPos():DistToSqr(self:GetPos()) <= 200 * 200 or (self:UserIsAuthorized(ply) and ply.EZarmor and ply.EZarmor.effects.teamComms)) then
 						net.Start("JMod_EZradio")
 						net.WriteBool(true)

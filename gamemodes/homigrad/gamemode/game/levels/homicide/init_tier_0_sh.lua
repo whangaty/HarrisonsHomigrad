@@ -63,7 +63,7 @@ function homicide.StartRound(data)
     end
 
     if CLIENT then
-        for i,ply in pairs(player.GetAll()) do
+        for i,ply in player.Iterator() do
             ply.roleT = false
             ply.roleCT = false
             ply.countKick = 0
@@ -119,6 +119,21 @@ local red,blue = Color(200,0,10),Color(75,75,255)
 local roundTypes = {"Shotgun", "Regular Round", "No Firearms Permitted Zone", "Wild West"}
 local roundSound = {"snd_jack_hmcd_disaster.mp3","snd_jack_hmcd_shining.mp3","snd_jack_hmcd_panic.mp3","snd_jack_hmcd_wildwest.mp3"}
 
+surface.CreateFont("HomicideFont",{
+    font = "Arial", -- On Windows/macOS, use the font-name which is shown to you by your operating system Font Viewer. On Linux, use the file name
+	extended = false,
+	size = ScreenScale(15),
+	weight = 500,
+	antialias = true,
+})
+
+local DescCT = {
+    [1] = "You have been given a shotgun. Kill the traitor before he kills you.", --emergency
+    [2] = "You have been given a M9 Beretta with one magazine. Kill the traitor.", --base
+    [3] = "You have been given a Taser & Baton. Arrest the traitor to win.", --gunfree
+    [4] = "You have been given a revolver identical to the Traitors." --wildwest
+}
+
 function homicide.HUDPaint_RoundLeft(white2)
     local roundType = homicide.roundType or 2
     local lply = LocalPlayer()
@@ -138,31 +153,23 @@ function homicide.HUDPaint_RoundLeft(white2)
         surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
 
         surface.DrawText("Вы " .. name)]]--
-        draw.DrawText( "You are a " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Homicide", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You are a " .. name, "HomicideFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Homicide", "HomicideFont", ScrW() / 2, ScrH() / 8, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( roundTypes[roundType], "HomicideFont", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply.roleT then --Traitor
             if homicide.roundType == 3 then --gunfree
-                draw.DrawText( "You have a Crossbow.\nDespite its large size, it is hidden from your character.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "You have a Crossbow.\nDespite its large size, it is hidden from your character.", "HomicideFont", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
                 --"", "HomigradFontBig", ScrW() / 2, ScrH() / 1.1, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
             elseif homicide.roundType == 4 then --wildwest
-                draw.DrawText( "You have been given a revolver to take everyone else out.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.1, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "You have been given a revolver to take everyone else out.", "HomicideFont", ScrW() / 2, ScrH() / 1.1, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
             else --emergency/base
-                draw.DrawText( "Kill everyone before the police arrive.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "Kill everyone before the police arrive.", "HomicideFont", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
             end
         elseif lply.roleCT then --Innocent with a gun
-            if homicide.roundType == 1 then --emergency
-                draw.DrawText( "You have been given a shotgun. Kill the traitor before he kills you.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-            elseif homicide.roundType == 2 then --base
-                draw.DrawText( "You have been given a M9 Beretta with one magazine. Kill the traitor.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-            elseif homicide.roundType == 3 then --gunfree
-                draw.DrawText( "You have been given a Taser & Baton. Arrest the traitor to win.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-            elseif homicide.roundType == 4 then --wildwest
-                draw.DrawText( "You have been given a revolver identical to the Traitors.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-            end
+            draw.DrawText( DescCT[homicide.roundType] or "...", "HomicideFont", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "Find the traitor. Tie or Kill him to win.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Find the traitor. Tie or Kill him to win.", "HomicideFont", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         end
         return
     end
@@ -177,7 +184,7 @@ function homicide.HUDPaint_RoundLeft(white2)
 
     local lply_pos = lply:GetPos()
 
-    for i,ply in pairs(player.GetAll()) do
+    for i,ply in player.Iterator() do
         local color = ply.roleT and red or ply.roleCT and blue
         if not color or ply == lply or not ply:Alive() then continue end
 

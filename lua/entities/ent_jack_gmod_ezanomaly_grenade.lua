@@ -70,7 +70,7 @@ local DetonationEffects = {
 			net.Start("JMod_Ravebreak")
 			net.Broadcast()
 
-			for k, v in pairs(player.GetAll()) do
+			for k, v in player.Iterator() do
 				if v:IsBot() then
 					v.JMod_RavebreakStartTime = CurTime() + 2.325
 					v.JMod_RavebreakEndTime = CurTime() + 25.5
@@ -424,7 +424,7 @@ local DetonationEffects = {
 				self:PoofEffect()
 			end
 
-			for k, v in pairs(player.GetAll()) do
+			for k, v in player.Iterator() do
 				v:KillSilent()
 			end
 
@@ -436,7 +436,7 @@ local DetonationEffects = {
 					net.WriteString("snds_jack_gmod/oof.wav")
 					net.Broadcast()
 
-					for k, v in pairs(player.GetAll()) do
+					for k, v in player.Iterator() do
 						v:ScreenFade(SCREENFADE.IN, Color(255, 255, 255, 255), 1, 0)
 					end
 				end)
@@ -579,7 +579,7 @@ if SERVER then
 		net.Start("JMod_Ravebreak")
 		net.Broadcast()
 
-		for k, v in pairs(player.GetAll()) do
+		for k, v in player.Iterator() do
 			if v:IsBot() then
 				v.JMod_RavebreakStartTime = CurTime() + 2.325
 				v.JMod_RavebreakEndTime = CurTime() + 25.5

@@ -29,16 +29,16 @@ SWEP.OverridePaintIcon = OverridePaintIcon
 function TrownGranade(ply,force,granade)
     local granade = ents.Create(granade)
     granade:SetPos(ply:GetShootPos() +ply:GetAimVector()*10)
-	granade:SetAngles(ply:EyeAngles()+Angle(45,45,0))
-	granade:SetOwner(ply)
-	granade:SetPhysicsAttacker(ply)
+    granade:SetAngles(ply:EyeAngles()+Angle(45,45,0))
+    granade:SetOwner(ply)
+    granade:SetPhysicsAttacker(ply)
     granade:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-	granade:Spawn()       
-	granade:Arm()
-	local phys = granade:GetPhysicsObject()              
-	if not IsValid(phys) then granade:Remove() return end                         
-	phys:SetVelocity(ply:GetVelocity() + ply:GetAimVector() * force)
-	phys:AddAngleVelocity(VectorRand() * force/2)
+    granade:Spawn()       
+    granade:Arm()
+    local phys = granade:GetPhysicsObject()              
+    if not IsValid(phys) then granade:Remove() return end                         
+    phys:SetVelocity(ply:GetVelocity() + ply:GetAimVector() * force)
+    phys:AddAngleVelocity(VectorRand() * force/2)
 end
 
 function SWEP:Deploy()

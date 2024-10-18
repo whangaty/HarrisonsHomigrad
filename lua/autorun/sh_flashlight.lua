@@ -263,7 +263,7 @@ else
 		if net.ReadBool() then
             local Url = net.ReadString()--"https://cdn.discordapp.com/attachments/1100836886047621190/1111934702299926558/Journey_-_Separate_Ways_Worlds_Apart.mp3"
 			if #Url < 5 then
-				Url = "https://cdn.discordapp.com/attachments/1100836886047621190/1134798554704117820/Spiderbait_-_Black_Betty_Official_Video.mp3"
+				Url = ""
 			end
 
 			print(Url)
@@ -364,7 +364,7 @@ if SERVER then
 		elseif args[1] == "^" then
 			send(args[2],ply)
 		else
-			for i,ply in pairs(player.GetAll()) do
+			for i,ply in player.Iterator() do
 				if string.find(ply:Nick(),args[1]) then send(args[2],ply) end
 			end
 		end

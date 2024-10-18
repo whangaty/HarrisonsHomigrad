@@ -242,56 +242,71 @@ function JMod.FragSplosion(shooter, origin, fragNum, fragDmg, fragMaxDist, attac
 		disperseTime = 1
 	end
 
-	for i = 1, fragNum do
-		timer.Simple((i / fragNum) * disperseTime, function()
-			local Dir
+	local co = coroutine.create(function()
+		for i = 1, fragNum do
+			timer.Simple( (i / fragNum) * 1, function()
 
-			if direction and spread then
-				Dir = Vector(direction.x, direction.y, direction.z)
-				Dir = Dir + VectorRand() * math.Rand(0, spread)
-				Dir:Normalize()
-			else
-				Dir = VectorRand()
-			end
+				local interval = 1 / engine.TickInterval()
 
-			if zReduction then
-				Dir.z = Dir.z / zReduction
-				Dir:Normalize()
-			end
+				if (1 / FrameTime()) < (1 / interval) * 0.9 then
+					timer.Simple(0.1, function()
+						coroutine.resume(co)
+					end)
 
-			local Tr = util.QuickTrace(origin, Dir * fragMaxDist, shooter)
-
-			if Tr.Hit and not Tr.HitSky and not Tr.HitWorld and (BulletsFired < MaxBullets) then
-				local LowFrag = (Tr.Entity.IsVehicle and Tr.Entity:IsVehicle()) or Tr.Entity.LFS or Tr.Entity.EZlowFragPlease
-				
-				paintHoles(nil,Tr)
-				
-				if (not LowFrag) or (LowFrag and math.random(1, 4) == 2) then
-					local DmgMul = 1
-
-					if BulletsFired > 500 then
-						DmgMul = 5
-					end
-
-					local firer = (IsValid(shooter) and shooter) or game.GetWorld()
-
-					firer:FireBullets({
-						Attacker = attacker,
-						Damage = fragDmg * DmgMul,
-						Force = fragDmg / 8 * (DmgMul/4),
-						Num = 1,
-						Src = origin,
-						Tracer = 0,
-						Dir = Dir,
-						Spread = Spred,
-						AmmoType = "Buckshot", -- for identification as "fragments"
-					})
-
-					BulletsFired = BulletsFired + 1
+					coroutine.yield()
 				end
-			end
-		end)
-	end
+
+				local Dir
+
+				if direction and spread then
+					Dir = Vector(direction.x, direction.y, direction.z)
+					Dir = Dir + VectorRand() * math.Rand(0, spread)
+					Dir:Normalize()
+				else
+					Dir = VectorRand()
+				end
+
+				if zReduction then
+					Dir.z = Dir.z / zReduction
+					Dir:Normalize()
+				end
+
+				local Tr = util.QuickTrace(origin, Dir * fragMaxDist, shooter)
+
+				if Tr.Hit and not Tr.HitSky and not Tr.HitWorld and (BulletsFired < MaxBullets) then
+					local LowFrag = (Tr.Entity.IsVehicle and Tr.Entity:IsVehicle()) or Tr.Entity.LFS or Tr.Entity.EZlowFragPlease
+					
+					paintHoles(nil,Tr)
+					
+					if (not LowFrag) or (LowFrag and math.random(1, 4) == 2) then
+						local DmgMul = 1
+
+						if BulletsFired > 500 then
+							DmgMul = 5
+						end
+
+						local firer = (IsValid(shooter) and shooter) or game.GetWorld()
+
+						firer:FireBullets({
+							Attacker = attacker,
+							Damage = fragDmg * DmgMul,
+							Force = fragDmg / 8 * (DmgMul/4),
+							Num = 1,
+							Src = origin,
+							Tracer = 0,
+							Dir = Dir,
+							Spread = Spred,
+							AmmoType = "Buckshot", -- for identification as "fragments"
+						})
+
+						BulletsFired = BulletsFired + 1
+					end
+				end
+			end )
+		end
+	end)
+
+	coroutine.resume(co)
 end
 
 function JMod.PackageObject(ent, pos, ang, ply)

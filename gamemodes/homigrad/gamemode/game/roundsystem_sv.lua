@@ -111,7 +111,7 @@ function StartRound()
 				SolidMapVote.start()
 				roundActive = false
 				
-				for i,ply in pairs(player.GetAll()) do
+				for i,ply in player.Iterator() do
 					if ply:Alive() then ply:Kill() end
 				end
 
@@ -205,7 +205,7 @@ function EndRound(winner)
 		RoundTimeSync()
 		RoundStateSync(ply,data)
 
-		for i,ply in pairs(player.GetAll()) do
+		for i,ply in player.Iterator() do
 			ply:PlayerClassEvent("EndRound",winner)
 		end
 	end

@@ -20,7 +20,7 @@ if (SERVER) then
 			ply:EmitSound("jendigo/scream" .. math.random(1, 2) .. ".wav", 90, math.random(90, 110))
 			ItsHere = true
 
-			for i,ply in pairs(player.GetAll()) do
+			for i,ply in player.Iterator() do
 				ply:Give("gmod_camera")
 			end
 		end*/

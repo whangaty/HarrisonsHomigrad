@@ -37,7 +37,7 @@ local empty = {}
 hook.Add("Think","PlayerClass",function()
     --[[local list = {}
 
-    for i,ply in pairs(player.GetAll()) do
+    for i,ply in player.Iterator() do
         local class = ply:GetPlayerClass()
         if not class then continue end
 
@@ -63,7 +63,7 @@ hook.Add("PlayerFootstep","PlayerClass",function(ply,...)
 end)
 
 function player.EventPoint(pos,name,radius,...)
-    for i,ply in pairs(player.GetAll()) do
+    for i,ply in player.Iterator() do
         if ply:GetPos():Distance(pos) > radius then continue end
 
         ply:PlayerClassEvent("EventPoint",name,pos,radius,...)

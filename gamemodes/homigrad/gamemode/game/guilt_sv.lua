@@ -156,7 +156,7 @@ end)
 concommand.Add("hg_getguilt",function(ply)
 	local text = "Guilt information\n"
 
-	for i,ply in pairs(player.GetAll()) do
+	for i,ply in player.Iterator() do
 		text = text .. ply:Name() .. "\t\t\t\t" .. ply.Guilt .. "\n"
 	end
 

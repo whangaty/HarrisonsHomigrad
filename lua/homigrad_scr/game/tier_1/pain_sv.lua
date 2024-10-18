@@ -9,7 +9,7 @@ hook.Add("PlayerSpawn","homigrad-pain",function(ply)
 	ply.otravlen2 = false
 end)
 
-for i,ply in pairs(player.GetAll()) do
+for i,ply in player.Iterator() do
 	--hook.Run("PlayerInitialSpawn",ply)
 end
 
@@ -95,8 +95,8 @@ hook.Add("Player Think","homigrad-pain",function(ply,time)
 	if ply.painNextNet <= time then
 		ply.painNextNet = time + 0.25
 		net.Start("info_pain")
-		net.WriteFloat(ply.pain)
-		net.WriteFloat(ply.painlosing)
+			net.WriteFloat(ply.pain)
+			net.WriteFloat(ply.painlosing)
 		net.Send(ply)
 	end
 
@@ -123,8 +123,8 @@ hook.Add("PostPlayerDeath","RefreshPain",function(ply)
 	ply.Otrub = false
 
 	net.Start("info_pain")
-	net.WriteFloat(ply.pain)
-	net.WriteFloat(ply.painlosing)
+		net.WriteFloat(ply.pain)
+		net.WriteFloat(ply.painlosing)
 	net.Send(ply)
 end)
 

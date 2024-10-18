@@ -58,7 +58,7 @@ if SERVER then
     local can,bipp
 
     --[[function SWEP:Bipp(output,pitch,isChat)
-        for _,input in pairs(player.GetAll()) do
+        for _,input in player.Iterator() do
             if input == output then input:EmitSound("buttons/button16.wav",45,pitch) continue end
             if not self:CanLisen(output,input,isChat) then continue end
 

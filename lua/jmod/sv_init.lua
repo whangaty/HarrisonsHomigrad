@@ -305,7 +305,7 @@ hook.Add("Think", "JMOD_SERVER_THINK", function()
 	NextMainThink = Time + 1
 
 	---
-	for k, playa in pairs(player.GetAll()) do
+	for k, playa in player.Iterator() do
 		local Alive = playa:Alive()
 
 		if Alive then
@@ -409,7 +409,7 @@ hook.Add("Think", "JMOD_SERVER_THINK", function()
 	if NextNutritionThink < Time then
 		NextNutritionThink = Time + 10 / JMod.Config.FoodSpecs.DigestSpeed
 
-		for k, playa in pairs(player.GetAll()) do
+		for k, playa in player.Iterator() do
 			if playa.EZnutrition then
 				if playa:Alive() then
 					local Nuts = playa.EZnutrition.Nutrients
@@ -446,7 +446,7 @@ hook.Add("Think", "JMOD_SERVER_THINK", function()
 	if NextArmorThink < Time then
 		NextArmorThink = Time + 2
 
-		for k, playa in pairs(player.GetAll()) do
+		for k, playa in player.Iterator() do
 			if playa.EZarmor and playa:Alive() then
 				if playa.EZarmor.effects.nightVision then
 					for id, armorData in pairs(playa.EZarmor.items) do
@@ -593,7 +593,7 @@ concommand.Add("jacky_player_debug", function(ply, cmd, args)
 	if not GetConVar("sv_cheats"):GetBool() then return end
 	if not ply:IsSuperAdmin() then return end
 
-	for k, v in pairs(player.GetAll()) do
+	for k, v in player.Iterator() do
 		if v ~= ply then
 			v:SetPos(ply:GetPos() + Vector(100 * k, 0, 0))
 			v:SetHealth(100)

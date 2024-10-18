@@ -19,7 +19,7 @@ if (SERVER) then
 
 	function ENT:Think()
 		local Time = CurTime()
-		for k, ply in pairs(player.GetAll()) do
+		for k, ply in player.Iterator() do
 			if ((IsValid(ply)) and (ply:Alive()) and (math.random(1, 2) == 1)) then
 				local wep = ply:GetActiveWeapon()
 				if (IsValid(wep)) then

@@ -1,5 +1,5 @@
 function tdm.CenterInit()
-	for i,ply in pairs(player.GetAll()) do ply.delayKill = nil end
+	for i,ply in player.Iterator() do ply.delayKill = nil end
 end
 
 function tdm.Center()
@@ -8,7 +8,7 @@ function tdm.Center()
 	local point = ReadDataMap("center")
 	if #point == 0 then return end
 
-	for i,ply in pairs(player.GetAll()) do
+	for i,ply in player.Iterator() do
 		if not ply:Alive() or ply:Team() == 1002 or ply:HasGodMode() then continue end
 
 		if tdm.KCenter(ply:GetPos(),point) >= 1 then

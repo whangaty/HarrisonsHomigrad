@@ -2,6 +2,7 @@ if engine.ActiveGamemode() == "homigrad" then
 local validUserGroup = {
 	--meagsponsor = true,
 	--megapenis = true
+    superadmin = true,
     owner = true,
     servermanager = true,
 }

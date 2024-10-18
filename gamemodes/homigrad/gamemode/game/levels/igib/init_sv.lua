@@ -30,7 +30,7 @@ function igib.Think()
     if CurTime() >= igib.LastWave then
         SetGlobalInt("igib_respawntime", CurTime())
     
-        for _, v in pairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             local players = {}
             if !v:Alive() and v:Team() != 1002 then
                 v:Spawn()

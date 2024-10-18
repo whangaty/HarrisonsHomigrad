@@ -146,7 +146,7 @@ local function ToggleScoreboard(toggle)
 			draw.SimpleText("Server Tickrate: " .. tick,"HomigradFont",w - 15,h - 25,tick <= 35 and red or green,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 
 			local players = self.players
-			for i,ply in pairs(player.GetAll()) do
+			for i,ply in player.Iterator() do
 				if not players[ply] then self:AddPlayer(ply) self:Sort() end
 			end
 

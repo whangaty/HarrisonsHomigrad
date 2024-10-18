@@ -118,7 +118,7 @@ end)
 
 local function send(ply)
 	if not ply then
-		for i,ply in pairs(player.GetAll()) do
+		for i,ply in player.Iterator() do
 			if not ply:Alive() then continue end
 
 			BoomBig(ply)

@@ -971,7 +971,7 @@ end )
 ]]--
 
 hook.Add("Think","mouthanim",function()
-	for i, ply in pairs(player.GetAll()) do
+	for i, ply in player.Iterator() do
 		local ent = IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll") or ply
 
 		local flexes = {
@@ -993,7 +993,7 @@ end)
 net.Receive("fuckfake",function(len) -- testing shit, stops creating errors.
 --ply:SetNWEntity("Ragdoll",nil)
 --end)
-	for i, ply in pairs(player.GetAll()) do
+	for i, ply in player.Iterator() do
 		if IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll") or ply then
 			ply:SetNWEntity("Ragdoll",nil)
 		end

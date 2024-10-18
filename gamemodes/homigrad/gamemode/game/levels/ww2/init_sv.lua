@@ -128,7 +128,7 @@ function ww2.Think()
 
     if CurTime() >= ww2.LastWave then
         SetGlobalInt("ww2_respawntime", CurTime())
-        for _, v in pairs(player.GetAll()) do
+        for _, v in player.Iterator() do
             local players = {}
             if !v:Alive() and v:Team() != 1002 then
                 v:Spawn()

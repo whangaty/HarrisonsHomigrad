@@ -110,7 +110,7 @@ net.Receive("darkrp door menu",function(len,ply)
         local menu = vgui.Create("DMenu")
         menu:SetPos(input.GetCursorPos())
 
-        for i,ply in pairs(player.GetAll()) do
+        for i,ply in player.Iterator() do
             if ply == lply or buy.cowner[ply] then continue end
 
             menu:AddOption(ply:Name(),function()
