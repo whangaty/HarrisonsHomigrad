@@ -47,18 +47,22 @@ bonetohitgroup={
 }
 
 function SavePlyInfo(ply)
-    ply.Info = {}
+    ply.Info = ply.Info or {}
 	
     local info = ply.Info
+	local wep = ply.GetActiveWeapon and ply:GetActiveWeapon()
 
-    info.Ammo = ply:GetAmmo()
-    info.ActiveWeapon = ply:GetActiveWeapon():GetClass()
+    info.Ammo = ply.GetAmmo and ply:GetAmmo() or info.Ammo or {}
+    ply.ActiveWeapon = IsValid(wep) and wep:GetClass() or ply.ActiveWeapon or false
+	info.Weapons = info.Weapons or {}
 
-	info.Weapons = {}
+	if ply.GetWeapons then
+		info.Weapons = {}
 
-    for i,wep in pairs(ply:GetWeapons())do
-        info.Weapons[wep:GetClass()] = wep
-    end
+		for i,wep in pairs(ply:GetWeapons())do
+			info.Weapons[wep:GetClass()] = wep
+		end
+	end
 
 	return info
 end
@@ -95,8 +99,8 @@ function Faking(ply,force) -- функция падения
 			rag:GetPhysicsObject():SetVelocity(veh:GetPhysicsObject():GetVelocity() * 5)
 		end
 
-		if IsValid(ply:GetNWEntity("Ragdoll")) then
-			ply.FakeRagdoll=ply:GetNWEntity("Ragdoll")
+		if IsValid(rag) then
+			ply.FakeRagdoll = rag--ply:GetNWEntity("Ragdoll")
 
 			local wep = ply:GetActiveWeapon()
 
@@ -125,7 +129,7 @@ function Faking(ply,force) -- функция падения
 
 			ply:HuySpectate(OBS_MODE_CHASE)
 
-			ply:SpectateEntity(ply:GetNWEntity("Ragdoll"))
+			ply:SpectateEntity(rag)
 
 			ply:SetActiveWeapon(nil)
 			ply:DropObject()
@@ -146,7 +150,7 @@ function Faking(ply,force) -- функция падения
 
 			ply:SetNWBool("fake",IsValid(ply.FakeRagdoll))
 
-			ply.FakeRagdoll=nil
+			ply.FakeRagdoll = nil
 
 			local pos=rag:GetPos()
 			local vel=rag:GetVelocity()
@@ -185,10 +189,10 @@ function Faking(ply,force) -- функция падения
 			ply:DrawViewModel(true)
 			ply:DrawWorldModel(true)
 
-			ply:SetModel(ply:GetNWEntity("Ragdoll"):GetModel())
-			ply:GetNWEntity("Ragdoll").unfaked = true
-			ply:GetNWEntity("Ragdoll"):Remove()
-			ply:SetNWEntity("Ragdoll",nil)
+			ply:SetModel(rag:GetModel())
+			rag.unfaked = true
+			rag:Remove()
+			ply:SetNWEntity("Ragdoll",NULL)
 		end
 	end
 end
@@ -306,10 +310,6 @@ function PlayerMeta:PickupEnt()
 	}
 	local trace = util.TraceLine(traceinfo)
 	if trace.Entity == Entity(0) or trace.Entity == NULL or !trace.Entity.canpickup then return end
-	if trace.Entity:GetClass()=="wep" then
-		ply:Give(trace.Entity.Class,true):SetClip1(trace.Entity:Clip1())
-		trace.Entity:Remove()
-	end
 end
 
 util.AddNetworkString("send_deadbodies")
@@ -410,8 +410,8 @@ hook.Add("PlayerSpawn","resetfakebody",function(ply) --обнуление рег
 			send(plys,lootEnt,true)
 		end
 	end
-
-	ply:SetNWEntity("Ragdoll",nil)
+	
+	ply:SetNWEntity("Ragdoll",NULL)
 end)
 
 util.AddNetworkString("Unload")

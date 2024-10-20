@@ -9,14 +9,13 @@ function SpawnWeapon(ply)
 		local rag = ply:GetNWEntity("Ragdoll")
 		
 		if IsValid(rag) then
-			local wep = ents.Create("prop_physics")
+			local wep = ents.Create("wep")
 			ply.wep = wep
-			
-			wep.Class = ply.ActiveWeapon
+			rag.wep = wep
 
 			wep:SetModel(weapon.WorldModel)
 
-			wep:SetOwner(ply)
+			wep:SetOwner(rag)
 			wep:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
 			local rh = rag:GetBoneMatrix(rag:LookupBone("ValveBiped.Bip01_R_Hand"))

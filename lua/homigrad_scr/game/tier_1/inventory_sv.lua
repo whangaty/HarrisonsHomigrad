@@ -7,7 +7,6 @@ local function send(ply,lootEnt,remove)
 	if ply then
 		net.Start("inventory")
 		net.WriteEntity(not remove and lootEnt or nil)
-
 		net.WriteTable(lootEnt.Info.Weapons)
 		net.WriteTable(lootEnt.Info.Ammo)
 		net.Send(ply)
@@ -73,60 +72,90 @@ net.Receive("inventory",function(len,ply)
 	player.Event(ply,"inventory close",lootEnt)
 end)
 
+hook.Add("DoPlayerDeath","huyhuy",function(ply)
+	local info = SavePlyInfo(ply)
+
+	ply.weps = {}
+
+	local actwep = ply:GetActiveWeapon()
+	
+	actwep = IsValid(actwep) and actwep:GetClass() or IsValid(ply.ActiveWeapon) and ply.ActiveWeapon:GetClass()
+	for class, wep in pairs(info.Weapons) do
+		local tbl = wep:GetTable()
+
+		local ent = ents.Create(class)
+		ent:SetPos(ply:GetPos() + vector_up * 10)
+
+		local clip1 = wep:Clip1()
+		timer.Simple(0.1,function()
+			local rag = ply:GetNWEntity("Ragdoll",ply.FakeRagdoll)
+			ent:SetClip1(clip1)
+			ent:SetTable(tbl)
+			ent:SetOwner(rag)
+			ent:SetParent(rag, 0)
+			ent:SetRenderMode(RENDERMODE_NONE)
+		end)
+
+		ent:Spawn()
+		ent:SetRenderMode(RENDERMODE_NONE)
+		ent:DrawShadow(false)
+		ent:SetSolidFlags(FSOLID_NOT_SOLID)
+
+		if IsValid(wep) then wep:Remove() end
+		ply.weps[class] = ent
+	end
+
+	timer.Simple(0.1,function()
+		local rag = ply:GetNWEntity("Ragdoll",ply.FakeRagdoll)
+		if IsValid(rag) then
+			rag.Info = rag.Info or {}
+			if ply.weps then
+				rag.Info.Weapons = ply.weps
+				rag.ActiveWeapon = ply.weps[actwep]
+			end
+			ply.weps = nil
+		end
+	end)
+end)
+
 net.Receive("ply_take_item",function(len,ply)
 	--if ply:Team() ~= 1002 then return end
 
 	local lootEnt = net.ReadEntity()
 	if not IsValid(lootEnt) then return end
 
-	local wep = net.ReadString()
-	--local takeammo = net.ReadBool()
+	local weapon = net.ReadEntity()
+	local wep = weapon:GetClass()
 
 	local lootInfo = lootEnt.Info
 	local wepInfo = lootInfo.Weapons[wep]
 	
 	if not wepInfo then return end
-
+	
 	if prekol[wep] and not ply:IsAdmin() then ply:Kick("You have been kicked. Error Code: AT6001") return end
 
 	if ply:HasWeapon(wep) then
-		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon:GetClass() == wep and not lootEnt.Otrub) then return end
-		if wepInfo.Clip1!=nil and wepInfo.Clip1 > 0 then
-			ply:GiveAmmo(wepInfo.Clip1,wepInfo.AmmoType)
-			wepInfo.Clip1 = 0
+		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon == weapon and not lootEnt.Otrub) then return end
+		if weapon:Clip1() > 0 then
+			ply:GiveAmmo(weapon:Clip1(),weapon:GetPrimaryAmmoType())
+			weapon:SetClip1(0)
 		else
 			ply:ChatPrint("You already have this weapon.")
 		end
 	else
-		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon:GetClass() == wep and not lootEnt.Otrub) then return end
+		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon == weapon and not lootEnt.Otrub) then return end
 		
-		ply.slots = ply.slots or {}
-		
-		local realwep = weapons.Get(wep)
-		
-		if IsValid(lootEnt.wep) and lootEnt.ActiveWeapon:GetClass() == wep then
-			DespawnWeapon(lootEnt)
-			lootEnt.wep:Remove()
-		end
+		if lootEnt:IsPlayer() then lootEnt:DropWeapon(weapon) end
+		ply:PickupWeapon(weapon)
 
-		local actwep = ply:GetActiveWeapon()
+		weapon:SetRenderMode(RENDERMODE_NORMAL)
+		weapon:DrawShadow(true)
+		--weapon:SetSolidFlags(FSOLID_)
 
-		local wep1 = ply:Give(wep)
-		if IsValid(wep1) and wep1:IsWeapon() then
-			wep1:SetClip1(wepInfo.Clip1 or 0)
-		end
-		
-		ply:SelectWeapon(actwep:GetClass())
-
-		if lootEnt:IsPlayer() then lootEnt:StripWeapon(wep) end
 		lootInfo.Weapons[wep] = nil
-		table.RemoveByValue(lootInfo.Weapons2,wep)
-
-		if lootEnt:IsRagdoll() then
-			deadBodies[lootEnt:EntIndex()] = {lootEnt,lootEnt.Info}
-			net.Start("send_deadbodies")
-			net.WriteTable(deadBodies)
-			net.Broadcast()
+		
+		if lootEnt.ActiveWeapon == weapon then
+			DespawnWeapon(lootEnt)
 		end
 	end
 
@@ -143,6 +172,11 @@ net.Receive("ply_take_ammo",function(len,ply)
 	if not lootInfo.Ammo[ammo] then return end
 
 	ply:GiveAmmo(lootInfo.Ammo[ammo],ammo)
+
+	if lootEnt:IsPlayer() then
+		lootEnt:SetAmmo(0,ammo)
+	end
+
 	lootInfo.Ammo[ammo] = nil
 
 	send(nil,lootEnt)

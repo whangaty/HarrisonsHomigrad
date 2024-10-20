@@ -70,6 +70,7 @@ if SERVER then
         ent:EmitSound("bomb_raw.wav")
 
 		timer.Simple(math.Rand(1.02,1.04),function()
+            if not IsValid(ent) then return end
             ParticleEffect("pcf_jack_groundsplode_large",SelfPos,vector_up:Angle())
             util.ScreenShake(SelfPos,99999,99999,1,3000)
             sound.Play("BaseExplosionEffect.Sound", SelfPos,120,math.random(90,110))
@@ -135,7 +136,7 @@ if SERVER then
             timer.Simple(0,function()
                 local ZaWarudo = game.GetWorld()
                 local Infl, Att = (IsValid(ent) and ent) or ZaWarudo, (IsValid(ent) and IsValid(ent.owner) and ent.owner) or (IsValid(ent) and ent) or ZaWarudo
-                util.BlastDamage(Infl,Att,SelfPos,60 * PowerMult,120 * PowerMult)
+                util.BlastDamage(Infl,Att,SelfPos,60 * PowerMult,240 * PowerMult)
 
                 --util.BlastDamage(Infl,Att,SelfPos,20 * PowerMult,1000 * PowerMult)
             end)

@@ -67,16 +67,22 @@ hook.Add("Player Think","homigrad-blood",function(ply,time)
 
 	local ent = IsValid(ply.FakeRagdoll) and ply.FakeRagdoll or ply
 
-	local neck = ent:GetBoneMatrix(ent:LookupBone("ValveBiped.Bip01_Neck1")):GetTranslation()
-	
-	if ply.Organs["artery"] == 0 and (ply.arteriaThink or 0) < time and ply.Blood > 0 then
-		ply.arteriaThink = time + 0.1
-		if not ply.holdingartery then
-			ply.Blood = math.max(ply.Blood - 10,0)
-			BloodParticle(neck,ent:GetAttachment(ent:LookupAttachment("eyes")).Ang:Forward() * 200)
-		else
-			ply.Blood = math.max(ply.Blood - 2,0)
-			BloodParticle(neck,ent:GetAttachment(ent:LookupAttachment("eyes")).Ang:Forward() * 50)
+	local neckb = ent:LookupBone("ValveBiped.Bip01_Neck1")
+	if neckb then
+		local neck = ent:GetBoneMatrix(neckb)
+		
+		if neck then
+			neck = neck:GetTranslation()
+			if ply.Organs["artery"] == 0 and (ply.arteriaThink or 0) < time and ply.Blood > 0 then
+				ply.arteriaThink = time + 0.1
+				if not ply.holdingartery then
+					ply.Blood = math.max(ply.Blood - 10,0)
+					BloodParticle(neck,ent:GetAttachment(ent:LookupAttachment("eyes")).Ang:Forward() * 200)
+				else
+					ply.Blood = math.max(ply.Blood - 2,0)
+					BloodParticle(neck,ent:GetAttachment(ent:LookupAttachment("eyes")).Ang:Forward() * 50)
+				end
+			end
 		end
 	end
 

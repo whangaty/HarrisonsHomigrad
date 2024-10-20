@@ -9,60 +9,6 @@ local blackListedAmmo = {
 	[10] = true
 }
 
-Gunshuy = {
-	"weapon_glock18",
-	"weapon_csmg40",
-	"weapon_cppsh41",
-	"weapon_ck98",
-	"weapon_cmosin",
-	"weapon_p220",
-	"weapon_mp5",
-	"weapon_ar15",
-	"weapon_ak74",
-	"weapon_akm",
-	"weapon_fiveseven",
-	"weapon_hk_usp",
-	"weapon_deagle",
-	"weapon_beretta",
-	"weapon_ak74u",
-	"weapon_l1a1",
-	"weapon_fal",
-	"weapon_galil",
-	"weapon_galilsar",
-	"weapon_m14",
-	"weapon_m1a1",
-	"weapon_mk18",
-	"weapon_m249",
-	"weapon_m4a1",
-	"weapon_minu14",
-	"weapon_mp40",
-	"weapon_rpk",
-	"weapon_ump",
-	"weapon_hk_usps",
-	"weapon_m3super",
-	"weapon_glock",
-	"weapon_mp7",
-	"weapon_remington870",
-	"weapon_xm1014",
-	"bandage",
-	"morphine",
-	"medkit",
-	"painkiller",
-	"weapon_physgun",
-	"weapon_kabar",
-	"weapon_bat",
-	"weapon_gurkha",
-	"weapon_jmoddynamite",
-	"weapon_jmodflash",
-	"weapon_jmodnade",
-	"weapon_taser",
-	"weapon_t",
-	"weapon_knife",
-	"weapon_pipe",
-	"weapon_sar2",
-	"weapon_civil_famas"
-}
-
 local AmmoTypes = {
 	[47] = "vgui/hud/hmcd_round_792",
 	[44] = "vgui/hud/hmcd_round_792",
@@ -118,7 +64,7 @@ net.Receive("inventory",function()
 
 	if not success or not lootEnt then return end
 	
-	if items[lootEnt:GetNWEntity("ActiveWeapon")] and table.HasValue(Gunshuy,lootEnt:GetNWEntity("ActiveWeapon")) then items[lootEnt:GetNWEntity("ActiveWeapon")] = nil end
+	if IsValid(lootEnt:GetNWEntity("ActiveWeapon")) and items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] then items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] = nil end
 
 	local items_ammo = net.ReadTable()
 
@@ -160,7 +106,7 @@ net.Receive("inventory",function()
 
 	local corner = 6
 
-	for wep in pairs(items) do
+	for wep, weapon in pairs(items) do
 		local button = vgui.Create("DButton",panel)
 		button:SetPos(x,y)
 		button:SetSize(64,64)
@@ -173,7 +119,7 @@ net.Receive("inventory",function()
 
 		button:SetText("")
 
-		local wepTbl = weapons.Get(wep) or WeaponByModel[wep] or wep
+		local wepTbl = wep
 
 		local text = type(wepTbl) == "table" and wepTbl.PrintName or wep
 		text = getText(text,button:GetWide() - corner * 2)
@@ -198,14 +144,14 @@ net.Receive("inventory",function()
 		button.DoRightClick = function()
 			net.Start("ply_take_item")
 			net.WriteEntity(lootEnt)
-			net.WriteString(tostring(wep))
+			net.WriteEntity(weapon)
 			net.SendToServer()
 		end
 
 		button.DoClick = function()
 			net.Start("ply_take_item")
 			net.WriteEntity(lootEnt)
-			net.WriteString(tostring(wep))
+			net.WriteEntity(weapon)
 			net.SendToServer()
 		end
 	end

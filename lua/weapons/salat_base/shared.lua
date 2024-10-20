@@ -80,9 +80,13 @@ hook.Add("HUDPaint","admin_hitpos",function()
 
 		local tr = util.QuickTrace(pos,ang:Forward() * 1000,LocalPlayer())
 		local hit = tr.HitPos:ToScreen()
+		local start = pos:ToScreen()
 		
 		surface.SetDrawColor( 255, 255, 255, 100 )
 		surface.DrawRect(hit.x - 2,hit.y - 2,4,4)
+
+		surface.SetDrawColor( 255, 255, 255, 255 )
+		surface.DrawRect(start.x - 2,start.y - 2,4,4)
 
 		surface.SetDrawColor( 255, 255, 255, 20 )
 		surface.DrawRect(ScrW() / 2 - 2,ScrH() / 2 - 2,4,4)
@@ -290,6 +294,8 @@ if CLIENT then
 		end
 	end)
 end
+
+SWEP.ZazhimYaycami = 0
 
 function SWEP:PrimaryAttack()
 	self.ShootNext = self.NextShot or NextShot
@@ -624,6 +630,7 @@ hook.Add("Think","weapons-sadsalat",function()
 		if not IsValid(wep) then homigrad_weapons[wep] = nil continue end
 
 		local owner = wep:GetOwner()
+		if not owner.GetActiveWeapon then continue end
 		if not IsValid(owner) or (owner:IsPlayer() and not owner:Alive()) or owner:GetActiveWeapon() ~= wep then continue end--wtf i dont know
 
 		if wep.Step then wep:Step() end
@@ -1038,6 +1045,7 @@ if CLIENT then
 	local lerpaim = 0
 	function SWEP:Camera(ply, origin, angles)
 		local pos, ang = self:GetTrace(true)
+		local _, anglef = self:GetTrace()
 		
 		lerpaim = LerpFT(0.1, lerpaim, self:IsSighted() and 1 or 0)
 		
@@ -1046,9 +1054,9 @@ if CLIENT then
 		origin = Lerp(lerpaim,origin,neworigin)
 		
 		local animpos = math.max(self:LastShootTime() - CurTime() + 0.1,0) * 20
-		origin = origin + ang:Forward() * animpos --+ angles:Up() * animpos / 20
+		origin = origin + anglef:Forward() * animpos --+ angles:Up() * animpos / 20
 		
-		origin = origin + ang:Right() * math.random(-0.1,0.1) * (animpos/200) + angles:Up() * math.random(-0.1,0.1) * (animpos/200)
+		origin = origin + anglef:Right() * math.random(-0.1,0.1) * (animpos/200) + anglef:Up() * math.random(-0.1,0.1) * (animpos/200)
 
 		return origin, angles
 	end

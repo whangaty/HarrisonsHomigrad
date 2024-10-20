@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() ~= "homigrad" then return end
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
@@ -48,34 +48,23 @@ function ENT:GetPrimaryAmmoType()
 end
 
 function ENT:Use(taker)
-	local ply = self:GetOwner()
+	local ply = RagdollOwner(self:GetOwner()) or self:GetOwner()
 	local phys = self:GetPhysicsObject()
 
 	SavePlyInfo(ply)
+	
+	if not ply:IsPlayer() or ply.Otrub then
+		local weapon = ply.ActiveWeapon
 
-	local lootInfo = IsValid(ply) and ply.Info
-	if (ply.Otrub or not ply:IsPlayer() or not ply:Alive()) then
-		local rag = self.rag
-		
-		if taker:HasWeapon(self.Class) then
-			if lootInfo then
-				taker:GiveAmmo(self:Clip1(), lootInfo.Weapons[self.Class]:GetPrimaryAmmoType())
-				lootInfo.Weapons[self.Class]:SetClip1(0)
-			end
-		else
-			self:Remove()
-			lootInfo.Weapons[self.Class]:SetOwner(taker)
-			if lootInfo then lootInfo.Weapons[self.Class] = nil end
-			if IsValid(ply) and ply:IsPlayer() then ply:StripWeapon(self.Class) end
-		end
+		if IsValid(weapon) then
+			local can = hook.Run("PlayerCanPickupWeapon",taker,weapon)
 
-		if self:Clip1() == 0 then
-			if self:IsPlayerHolding() then
-				taker:DropObject()
-			else
-				taker:PickupObject(self)
+			if can then
+				if ply:IsPlayer() then ply:DropWeapon(weapon) end
+				taker:PickupWeapon(weapon)
+				self:Remove()
 			end
 		end
 	end
 
-end end
+end

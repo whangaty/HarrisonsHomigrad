@@ -60,7 +60,7 @@ function SWEP:PrimaryAttack()
         cmm:Arm()
         local cmm2 = cmm:GetPhysicsObject()
 		if IsValid(cmm2) then
-            timer.Create("Trowing"..cmm:EntIndex(),0.1,5,function() if not IsValid(cmm2) then return end cmm2:ApplyForceCenter((ang:Forward() * self.ThrowVel) + (self:GetOwner():GetVelocity() * 1)) end)
+            --timer.Create("Trowing"..cmm:EntIndex(),0.1,5,function() if not IsValid(cmm2) then return end cmm2:ApplyForceCenter((ang:Forward() * self.ThrowVel) + (self:GetOwner():GetVelocity() * 1)) end)
 			cmm2:ApplyForceCenter((ang:Forward() * self.ThrowVel) + (self:GetOwner():GetVelocity() * 1))
 		end
         

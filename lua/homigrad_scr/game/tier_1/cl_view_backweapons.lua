@@ -205,7 +205,7 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
     end
 
     local tbl2 = deadBodies or tblNil
-
+    
     for i,val in pairs(tbl2) do
         
         if not tbl2[i] then continue end

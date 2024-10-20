@@ -72,6 +72,15 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	if IsValid(ent:GetPhysicsObject()) and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_CLUB+DMG_GENERIC+DMG_BLAST) then ent:GetPhysicsObject():ApplyForceOffset(dmginfo:GetDamageForce():GetNormalized() * math.min(dmginfo:GetDamage() * 10,3000),dmginfo:GetDamagePosition()) end
 	local ply = RagdollOwner(ent) or ent
 
+	if ent:IsRagdoll() and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_BLAST+DMG_SLASH) then
+		local effdata = EffectData()
+		effdata:SetOrigin(dmginfo:GetDamagePosition())
+		effdata:SetRadius(1)
+		effdata:SetMagnitude(1)
+		effdata:SetScale(1)
+		util.Effect("BloodImpact",effdata)
+	end
+
 	if ent.IsArmor then
 		ply = ent.Owner
 		ent = ply:GetNWEntity("Ragdoll") or ply.FakeRagdoll or ply

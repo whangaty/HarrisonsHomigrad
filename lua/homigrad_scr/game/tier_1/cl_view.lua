@@ -289,11 +289,12 @@ hook.Add("entity_killed","killedplayer",function(data)
 	end
 end)
 
+local oldrag
 hook.Add("Player Death","huyhuykilled",function(ent)
 	if ent ~= LocalPlayer() then return end
 
 	if GetConVar("hg_deathscreen"):GetBool() then
-		deathrag = ent:GetNWEntity("Ragdoll")
+		deathrag = ent:GetNWEntity("Ragdoll",oldrag)
 		deathtext = table.Random(deathtexts)
 
 		-- TODO: Fix issue where, upon dying and immediately respawning, screen still fades to black 
@@ -321,8 +322,8 @@ hook.Add("Player Death","huyhuykilled",function(ent)
 		if GetConVar("hg_deathscreen"):GetBool() then
 			LocalPlayer():ScreenFade( SCREENFADE.OUT, Color( 0, 0, 0, 255 ), 0.2, 1 )
 		end
-		if deathrag:IsValid() then
-			deathrag:ManipulateBoneScale(6,Vector(1,1,1))
+		if IsValid(deathrag) then
+			deathrag:ManipulateBoneScale(deathrag:LookupBone("ValveBiped.Bip01_Head1"),Vector(1,1,1))
 		end
 	end)
 end)
@@ -452,10 +453,12 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		angEye = eye.Ang--bodyang
 		vecEye = (eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 14 + bodyang:Right() * -6) or lply:EyePos()
 	end
+
 	local ragdoll = ply:GetNWEntity("Ragdoll")
 
 	if ply:Alive() and IsValid(ragdoll) then
-		ragdoll:ManipulateBoneScale(6,vecZero)
+		oldrag = ragdoll
+		ragdoll:ManipulateBoneScale(ragdoll:LookupBone("ValveBiped.Bip01_Head1"),vecZero)
 		
 		local att = ragdoll:GetAttachment(ragdoll:LookupAttachment("eyes"))
 		
@@ -648,7 +651,7 @@ hook.Add("Think","mouthanim",function()
 
 		local weight = ply:IsSpeaking() and math.Clamp( ply:VoiceVolume() * 6, 0, 6 ) or 0
 
-		for k, v in pairs( flexes ) do
+		for k, v in ipairs( flexes ) do
 			ent:SetFlexWeight( v, weight * 4 )
 		end
 	end
@@ -657,11 +660,11 @@ end)
 net.Receive("fuckfake",function(len) -- testing shit, stops creating errors.
 --ply:SetNWEntity("Ragdoll",nil)
 --end)
-	for i, ply in player.Iterator() do
-		if IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll") or ply then
-			ply:SetNWEntity("Ragdoll",nil)
-		end
-	end
+	--for i, ply in player.Iterator() do
+	--	if IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll") or ply then
+	--		ply:SetNWEntity("Ragdoll",nil)
+	--	end
+	--end
 end)
 
 local tab = {

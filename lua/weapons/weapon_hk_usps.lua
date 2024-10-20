@@ -48,7 +48,6 @@ SWEP.ViewModel				= "models/weapons/v_bean_beansmusp.mdl"
 SWEP.WorldModel				= "models/weapons/w_bean_beansmusp.mdl"
 
 SWEP.vbwPos = Vector(7.5,0.1,-6)
-
 SWEP.Supressed = true
 
 SWEP.dwmModeScale = 1
@@ -60,7 +59,7 @@ SWEP.dwmAUp = 4
 SWEP.dwmARight = -5.5
 SWEP.dwmAForward = -90
 
-SWEP.addAng = Angle(1.55,-0.6,2)
-SWEP.addPos = Vector(0,0,0)
+SWEP.addAng = Angle(1.55,-0.9,2)
+SWEP.addPos = Vector(10,3.7,-0.45)
 
 SWEP.SightPos = Vector(-10,4.96,-0.05)
