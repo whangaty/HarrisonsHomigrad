@@ -285,6 +285,7 @@ end
 function PlayerMeta:DropWeapon1(wep)
     local ply = self
 	wep = wep or ply:GetActiveWeapon()
+	wep = IsValid(wep) and wep or ply.ActiveWeapon
     if !IsValid(wep) then return end
 
 	if wep:GetClass() == "weapon_hands" then return end
@@ -294,6 +295,11 @@ function PlayerMeta:DropWeapon1(wep)
 
 	ply:DropWeapon(wep)
 	wep.Spawned = true
+	if ply.ActiveWeapon == wep and IsValid(ply.wep) then
+		wep:SetPos(ply.wep:GetPos())
+		wep:SetAngles(ply.wep:GetAngles())
+		DespawnWeapon(ply.wep)
+	end
 	ply:SelectWeapon("weapon_hands")
 end
 
@@ -834,10 +840,10 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 	local attachment = rag:GetAttachment( rag:LookupAttachment( "eyes" ) )
 	local LocalPos, LocalAng = WorldToLocal( lookat, Angle( 0, 0, 0 ), attachment.Pos, attachment.Ang )
 
-	if !ply.Otrub then rag:SetEyeTarget( LocalPos ) else rag:SetEyeTarget( Vector(0,0,0) ) end
+	if !ply.unconscious then rag:SetEyeTarget( LocalPos ) else rag:SetEyeTarget( Vector(0,0,0) ) end
 
 	if ply:Alive() then
-		if !ply.Otrub then
+		if !ply.unconscious then
 			if ply:KeyDown( IN_JUMP ) and (table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))>0 or ((rag.IsWeld or 0) > 0)) and ply.stamina>45 and (ply.lastuntietry or 0) < CurTime() then
 				ply.lastuntietry = CurTime() + 2
 				
@@ -944,7 +950,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 				head:ComputeShadowControl(shadowparams)
 			end
 		end
-		if(ply:KeyDown(IN_SPEED)) and !ply.Otrub and !timer.Exists("StunTime"..ply:EntIndex()) then
+		if(ply:KeyDown(IN_SPEED)) and !ply.unconscious and !timer.Exists("StunTime"..ply:EntIndex()) then
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" ))
 			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
 
@@ -981,7 +987,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			end
 		end
 
-		if(ply:KeyDown(IN_WALK)) and !ply.Otrub and !timer.Exists("StunTime"..ply:EntIndex()) then
+		if(ply:KeyDown(IN_WALK)) and !ply.unconscious and !timer.Exists("StunTime"..ply:EntIndex()) then
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" ))
 			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 			if(!IsValid(rag.ZacConsRH) and (!rag.ZacNextGrRH || rag.ZacNextGrRH<=CurTime()))then
@@ -1122,7 +1128,7 @@ hook.Add("Player Think","VelocityPlayerFallOnPlayerCheck",function(ply,time)
 end)
 util.AddNetworkString("ebal_chellele")
 hook.Add("PlayerSwitchWeapon","fakewep",function(ply,oldwep,newwep)
-	if ply.Otrub then return true end
+	if ply.unconscious then return true end
 
 	if IsValid(ply.FakeRagdoll) then
 		DespawnWeapon(ply)
@@ -1207,12 +1213,11 @@ end)
 
 hook.Add("PlayerSay", "unconsay", function(ply,text)
 	if not roundActive then return end
-	if ply.Otrub and ply:Alive() then return false end
+	if ply.unconscious and ply:Alive() then return false end
 end)
 
 hook.Add("PlayerSay","dropweaponhuy",function(ply,text)
     if string.lower(text)=="*drop" then
-		DespawnWeapon(ply)
         ply:DropWeapon1()
 		return ""
     end

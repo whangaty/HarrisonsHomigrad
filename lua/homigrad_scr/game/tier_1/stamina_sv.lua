@@ -67,7 +67,7 @@ hook.Add("Player Think","saystamina",function(ply,time)
 	if ply.stamina < 20 and ent:WaterLevel() == 3 then
 		ply.o2 = math.max((ply.o2 or 1) - 0.2,-3)
 		
-		if not ply.Otrub then
+		if not ply.unconscious then
 			ent:EmitSound( "Player.DrownContinue", 40,100, 0.6, CHAN_AUTO )
 		end
 

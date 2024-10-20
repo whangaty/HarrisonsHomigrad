@@ -330,7 +330,7 @@ if SERVER then
     util.AddNetworkString( "drop_ammo" )
 
     net.Receive( "drop_ammo", function( len, ply )
-        if !ply:Alive() or ply.Otrub then return end
+        if !ply:Alive() or ply.unconscious then return end
         local ammotype = net.ReadFloat()
         local count = net.ReadFloat()
         local pos = ply:EyePos()+ply:EyeAngles():Forward()*15

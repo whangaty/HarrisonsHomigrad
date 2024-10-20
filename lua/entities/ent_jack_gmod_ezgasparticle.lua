@@ -88,7 +88,7 @@ if SERVER then
 						obj.pain = obj.pain+25
 					end
 					if obj:IsRagdoll() and RagdollOwner(obj) then
-						if !RagdollOwner(obj).Otrub then
+						if !RagdollOwner(obj).unconscious then
 							JMod.TryCough(RagdollOwner(obj))
 						end
 						RagdollOwner(obj).pain = RagdollOwner(obj).pain+15

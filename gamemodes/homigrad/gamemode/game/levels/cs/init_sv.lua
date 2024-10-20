@@ -200,7 +200,7 @@ function css.PointsThink()
         v.BlueAmount = 0
 
         for _, v2 in pairs(ents.FindInSphere(v[1], 256)) do
-            if !v2:IsPlayer() or !v2:Alive() or v2.Otrub then continue end
+            if !v2:IsPlayer() or !v2:Alive() or v2.unconscious then continue end
 
             if v2:Team() == 1 then
                 v.RedAmount = v.RedAmount + 1

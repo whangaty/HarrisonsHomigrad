@@ -232,7 +232,7 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 		if not IsValid(ply) then laserplayers[i] = nil end
 		ply.Laser = ply.Laser or false
 		local actwep = (IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass()) or (ply:GetNWString("curweapon")!=nil and ply:GetNWString("curweapon"))
-		if IsValid(ply) and ply.Laser and !ply:GetNWInt("Otrub") and laserweps[IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() or ply:GetNWEntity("ActiveWeapon")] then
+		if IsValid(ply) and ply.Laser and !ply:GetNWInt("unconscious") and laserweps[IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() or ply:GetNWEntity("ActiveWeapon")] then
 			local wep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon() or (IsValid(ply:GetNWEntity('wep')) and ply:GetNWEntity('wep'))
 			if !IsValid(wep) then continue end
 			
@@ -376,13 +376,18 @@ end)
 
 hook.Add("OnEntityCreated", "homigrad-colorragdolls", function(ent)
 	if ent:IsRagdoll() then
-		timer.Create("ragdollcolors-timer" .. tostring(ent), 0.1, 0, function()
-			--ent.ply = ent.ply or RagdollOwner(ent)
-			--local ply = ent.ply
-			--if IsValid(ply) then
+		timer.Create("ragdollcolors-timer" .. tostring(ent), 0.1, 10, function()
+
 			if IsValid(ent) then
-				ent.playerColor = ent:GetNWVector("plycolor")
-				--print(ent.ply,ent.playerColor)
+				local owner = RagdollOwner(ent)
+
+				local plr_clr
+				if owner then
+					plr_clr = owner:GetPlayerColor()
+				end
+
+				ent.playerColor = ent:GetNWVector("plycolor", plr_clr) or plr_clr
+				
 				ent.GetPlayerColor = function()
 					return ent.playerColor
 				end

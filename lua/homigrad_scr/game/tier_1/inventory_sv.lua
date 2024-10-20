@@ -98,6 +98,7 @@ hook.Add("DoPlayerDeath","huyhuy",function(ply)
 
 		ent:Spawn()
 		ent:SetRenderMode(RENDERMODE_NONE)
+		--ent:SetNoDraw(true)
 		ent:DrawShadow(false)
 		ent:SetSolidFlags(FSOLID_NOT_SOLID)
 
@@ -135,7 +136,7 @@ net.Receive("ply_take_item",function(len,ply)
 	if prekol[wep] and not ply:IsAdmin() then ply:Kick("You have been kicked. Error Code: AT6001") return end
 
 	if ply:HasWeapon(wep) then
-		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon == weapon and not lootEnt.Otrub) then return end
+		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon == weapon and not lootEnt.unconscious) then return end
 		if weapon:Clip1() > 0 then
 			ply:GiveAmmo(weapon:Clip1(),weapon:GetPrimaryAmmoType())
 			weapon:SetClip1(0)
@@ -143,7 +144,7 @@ net.Receive("ply_take_item",function(len,ply)
 			ply:ChatPrint("You already have this weapon.")
 		end
 	else
-		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon == weapon and not lootEnt.Otrub) then return end
+		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon == weapon and not lootEnt.unconscious) then return end
 		
 		if lootEnt:IsPlayer() then lootEnt:DropWeapon(weapon) end
 		ply:PickupWeapon(weapon)

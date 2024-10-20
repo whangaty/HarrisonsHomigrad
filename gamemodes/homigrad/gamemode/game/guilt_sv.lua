@@ -97,7 +97,7 @@ end)
 
 hook.Add("Should Fake Collide","guilt",function(ply,hitEnt,data)
 	if hitEnt == game.GetWorld() then return end
-	hitEnt = RagdollOwner(hitEnt)
+	hitEnt = RagdollOwner(hitEnt) or hitEnt
 	if not hitEnt:IsPlayer() then return end --Убийство с РПГ = ошибка ))
 
 	local dmgInfo = DamageInfo()

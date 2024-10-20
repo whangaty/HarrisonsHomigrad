@@ -181,6 +181,8 @@ hook.Add("PlayerDeath","Gib",function(ply)
 		local rag = ply:GetNWEntity("Ragdoll")
 		local bone = rag:LookupBone(ply.LastHitBoneName)
 
+		bone = bone ~= 0 and bone or 1
+
 		if not IsValid(rag) or not bone then return end--not fucking fucking fuck
 
 		Gib_Input(rag,bone,dmgInfo)
@@ -195,7 +197,7 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 	if ply then return end
 	
 	local phys_bone = GetPhysicsBoneDamageInfo(ent,dmgInfo)
-	
+
 	phys_bone = phys_bone == 0 and 1 or phys_bone
 	--if phys_bone == 0 then return end--lol
 
@@ -207,7 +209,7 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 
 	local mul = RagdollDamageBoneMul[hitgroup] or 1
 	
-	if dmgInfo:GetDamage() * mul < 350 then return end
+	if dmgInfo:GetDamage() < 350 then return end
 	
 	Gib_Input(ent,ent:TranslatePhysBoneToBone(phys_bone),dmgInfo)
 end)
