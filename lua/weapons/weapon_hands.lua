@@ -316,10 +316,11 @@ function SWEP:ApplyForce()
 					if ply.heartstop then
 						self:GetOwner():ChatPrint("There is no pulse, but CPR can be performed to attempt to save them.")
 					else
-						self:GetOwner():ChatPrint(ply.nextPulse < 0.9 and "This person is in great condition." or 
+						local uncon = (ply.unconscious and " They are unconscious." or "")
+						self:GetOwner():ChatPrint(((ply.nextPulse < 0.9 and "This person is in great condition.") or 
 						(ply.nextPulse <= 1.5 and "This person seems to be a little roughed up.") or 
 						(ply.nextPulse < 2 and "This person seems to be in a bad physical state.") or 
-						(ply.nextPulse >= 2 and "This person is barely holding onto their life."))
+						(ply.nextPulse >= 2 and "This person is barely holding onto their life."))..uncon)
 					end
 				end
 			end

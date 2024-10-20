@@ -73,20 +73,20 @@ if SERVER then
     hook.Add("PlayerUse","poisoneditem",function(ply,ent)
         if not ent.poisoned then return end -- TODO: Add a check to see if player is ragdolled.
 
-        ent.otravlen2 = true
+        ent.poisoned2 = true
         timer.Create("Cyanid"..ent:EntIndex().."12", 30, 1, function()
-            if ent:Alive() and ent.otravlen2 then
+            if ent:Alive() and ent.poisoned2 then
                 ent:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
             end
 
             timer.Create( "Cyanid"..ent:EntIndex().."22", 10, 1, function()
-                if ent:Alive() and ent.otravlen2 then
+                if ent:Alive() and ent.poisoned2 then
                     ent:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
                 end
             end)
 
             timer.Create( "Cyanid"..ent:EntIndex().."32", 15, 1, function()
-                if ent:Alive() and ent.otravlen2 then
+                if ent:Alive() and ent.poisoned2 then
                     ent.KillReason = "poison"
                     ent:Kill()
                 end

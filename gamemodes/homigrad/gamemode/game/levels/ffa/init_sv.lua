@@ -33,7 +33,7 @@ function ffa.SpawnPlayer(ply)
     local roundDmType = math.random(1, 4)
     if roundDmType == 1 then
         local r = math.random(1, 8)
-        ply:Give((r == 1 and "weapon_mp7") or (r == 2 and "weapon_ak74u") or (r == 3 and "weapon_akm") or (r == 4 and "weapon_rpgg" and "weapon_ump") or (r == 5 and "weapon_m4a1") or (r == 6 and "weapon_mk18") or (r == 7 and "weapon_m4a1") or (r == 8 and "weapon_galil"))
+        ply:Give((r == 1 and "weapon_mp7") or (r == 2 and "weapon_ak74u") or (r == 3 and "weapon_akm") or (r == 4 and "weapon_ump") or (r == 5 and "weapon_m4a1") or (r == 6 and "weapon_mk18") or (r == 7 and "weapon_m4a1") or (r == 8 and "weapon_galil"))
         ply:Give("weapon_kabar")
         ply:Give("medkit")
         ply:Give("med_band_big")

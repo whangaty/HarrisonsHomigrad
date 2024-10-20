@@ -741,6 +741,16 @@ function SWEP:Step()
 	end
 
 	if SERVER then self:WorldModelTransform() end
+
+	if SERVER then
+		local pos, ang = self:GetTrace()
+		local tr = {}
+		tr.start = pos
+		tr.endpos = pos + ang:Forward() * 9999
+		tr.filter = {ply}
+		local trace = util.TraceLine(tr)
+		debugoverlay.Sphere(trace.HitPos,2,0.1,color_white)
+	end
 end
 
 function SWEP:ApplyAnim(ply)
@@ -846,16 +856,7 @@ function SWEP:ApplyAnim(ply)
 	localAng:RotateAroundAxis(localAng:Forward(),0)
 
 	if not ply:GetNWBool("Suiciding") and not ply:IsSprinting() then
-		self.localAng = Lerp(0.2,self.localAng or angle_zero,localAng)
-	end
-
-	if SERVER then
-		local tr = {}
-		tr.start = attPos
-		tr.endpos = attPos + attAng:Forward() * 9999
-		tr.filter = {ply}
-		local trace = util.TraceLine(tr)
-		debugoverlay.Sphere(trace.HitPos,2,0.1,color_white)
+		self.localAng = Lerp(0.2, self.localAng or angle_zero, localAng)
 	end
 	
 	ply:ManipulateBoneAngles(forearm_index,forearm,false)
@@ -869,6 +870,16 @@ hook.Add("UpdateAnimation","weapon_animations",function(ply,vel,maxseqgroundspee
 	if IsValid(wep) and ishgweapon(wep) then
 		wep:ApplyAnim(ply)
 	end
+
+	local spine_index = ply:LookupBone("ValveBiped.Bip01_Spine")
+	if not spine_index then return end
+	local spine_angle = ply.spine_angle or Angle(0,0,0)
+	if not spine_angle then return end
+
+	spine_angle[1] = LerpFT(0.1, spine_angle[1], ply:KeyDown(IN_ALT1) and -30 or ply:KeyDown(IN_ALT2) and 30 or 0)
+
+	ply:ManipulateBoneAngles(spine_index, spine_angle, false)
+	ply.spine_angle = spine_angle
 end)
 
 function SWEP:Holster( wep )
@@ -954,7 +965,12 @@ function SWEP:WorldModelTransform()
     end
 
     local Pos,Ang = self:GetTransform(model)
-	
+	--local _,ang = self:GetTrace()
+	--local _,localang = WorldToLocal(vector_origin,owner:EyeAngles(),vector_origin,ang)
+	--print(localang)
+	--Ang:RotateAroundAxis(ang:Up(),localang[2])
+	--Ang:RotateAroundAxis(ang:Right(),localang[1])
+
     model:SetPos(Pos)
     model:SetAngles(Ang)
 

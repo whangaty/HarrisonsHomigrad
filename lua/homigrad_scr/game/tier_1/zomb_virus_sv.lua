@@ -29,7 +29,7 @@ end
 
 local function ZsVirusCough(ply)
     local r = math.random(0,25)
-    if r > 15 and !ply.Otrub then
+    if r > 15 and !ply.unconscious then
         --ply:EmitSound("ambient/voices/cough" .. math.random(1, 4) .. ".wav", 75, math.random(90, 110))
         if r > 22 then
             local snd = table.Random(blevotasfx)
@@ -129,7 +129,7 @@ end,1}]]--
 
 -- FIXME: hg_blevota 
 concommand.Add( "vomit", function( ply, cmd, args )
-    if !ply:Alive() or ply.Otrub then return end
+    if !ply:Alive() or ply.unconscious then return end
     local r = math.random(1,30)
 
     r = 26

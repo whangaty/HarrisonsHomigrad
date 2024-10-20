@@ -186,6 +186,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	dmginfo:ScaleDamage(0.5)
 	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
 	dmginfo:ScaleDamage(0.2)
+	if dmginfo:IsDamageType(DMG_BLAST) then
+		dmginfo:ScaleDamage(2)
+	end
 	if rag then
 		if dmginfo:GetDamageType() == DMG_CRUSH then
 			dmginfo:ScaleDamage(1 / 40 / 15)

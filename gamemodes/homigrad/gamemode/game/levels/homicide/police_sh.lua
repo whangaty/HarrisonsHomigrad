@@ -131,7 +131,7 @@ local soundDeaths = {
 }
 
 function CLASS:PlayerDeath()
-	if not self.Otrub then 
+	if not self.unconscious then 
 		local name = table.Random(soundDeaths)
 		--EmitSound(self,name)
 	end
@@ -156,7 +156,7 @@ end
 local active,oldValue
 
 function CLASS:HomigradDamage(hitGroup,dmgInfo,rag)
-	if self.Otrub then return end
+	if self.unconscious then return end
 
 	if (self.delaysoundpain or 0) > CurTime() then
 		self.delaysoundpain = CurTime() + math.Rand(0.1,0.25)
@@ -189,7 +189,7 @@ local function ebal(name,max)
 end
 
 function CLASS:EventPoint(name,pos,radius,a1,a2)
-	if self.Otrub then return end
+	if self.unconscious then return end
 
 	if self:GetMoveType() ~= MOVETYPE_NOCLIP and name == "fragnade pre detonate" and tracerSee(self,pos,52) then
 		--EmitSound(self,"bot/noo.wav")
@@ -215,7 +215,7 @@ function CLASS:EventPoint(name,pos,radius,a1,a2)
 end
 
 function CLASS:Event(name,a1)
-	if self.Otrub then return end
+	if self.unconscious then return end
 
 	if name == "flashbang" and a1 >= 0.45 then
 		local hp = self:Health()

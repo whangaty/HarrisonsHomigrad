@@ -53,7 +53,7 @@ function ENT:Use(taker)
 
 	SavePlyInfo(ply)
 	
-	if not ply:IsPlayer() or ply.Otrub then
+	if not ply:IsPlayer() or ply.unconscious then
 		local weapon = ply.ActiveWeapon
 
 		if IsValid(weapon) then

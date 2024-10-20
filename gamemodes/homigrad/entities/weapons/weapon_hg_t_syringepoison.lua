@@ -112,20 +112,20 @@ if SERVER then
             end
         end
 
-        ent.otravlen = true
+        ent.poisoned = true
         timer.Create("Cyanid"..ent:EntIndex().."1", 30, 1, function()
-            if ent:Alive() and ent.otravlen then
+            if ent:Alive() and ent.poisoned then
                 ent:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
             end
 
             timer.Create( "Cyanid"..ent:EntIndex().."2", 10, 1, function()
-                if ent:Alive() and ent.otravlen then
+                if ent:Alive() and ent.poisoned then
                     ent:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
                 end
             end)
 
             timer.Create( "Cyanid"..ent:EntIndex().."3", 15, 1, function()
-                if ent:Alive() and ent.otravlen then
+                if ent:Alive() and ent.poisoned then
                     ent.KillReason = "poison"
                     ent:Kill()
                 end

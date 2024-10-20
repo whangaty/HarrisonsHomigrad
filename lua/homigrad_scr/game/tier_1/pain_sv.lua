@@ -5,8 +5,8 @@ hook.Add("PlayerSpawn","homigrad-pain",function(ply)
 	ply.pain = 0
 	ply.painNext = 0
 	ply.painNextNet = 0
-	ply.otravlen = false
-	ply.otravlen2 = false
+	ply.poisoned = false
+	ply.poisoned2 = false
 end)
 
 for i,ply in player.Iterator() do
@@ -40,7 +40,7 @@ hook.Add("HomigradDamage","PlayerPainGrowth",function(ply,hitGroup,dmginfo,rag,a
 
 		dmginfo:SetDamage(dmginfo:GetDamage())
 
-		if ply.painlosing > 10 or ply.pain > 250 + ply:GetNWInt("SharpenAMT") * 5 or ply.Blood < 3000 and not ply.Otrub then
+		if ply.painlosing > 10 or ply.pain > 250 + ply:GetNWInt("SharpenAMT") * 5 or ply.Blood < 3000 and not ply.unconscious then
 			ply.gotuncon = true
 		end
 	end
@@ -88,7 +88,7 @@ hook.Add("Player Think","homigrad-pain",function(ply,time)
 		--ply.KillReason = "adrenaline"
 		--ply:Kill()
 	end
-	--PrintMessage(3,tostring(ply.Otrub)..ply:Name())
+	--PrintMessage(3,tostring(ply.unconscious)..ply:Name())
 	ply.pain = math.max(ply.pain - ply.painlosing * 1 + ply.adrenalineNeed * k,0)
 	ply.painlosing = math.max(ply.painlosing - 0.01,1)
 	
@@ -115,12 +115,12 @@ hook.Add("PostPlayerDeath","RefreshPain",function(ply)
 	ply.pain = 0
 	ply.painlosing = 1
 	
-	ply.otravlen = false
-	ply.otravlen2 = false
+	ply.poisoned = false
+	ply.poisoned2 = false
 
 	ply:ConCommand("soundfade 0 1")
 
-	ply.Otrub = false
+	ply.unconscious = false
 
 	net.Start("info_pain")
 		net.WriteFloat(ply.pain)
@@ -130,11 +130,11 @@ end)
 
 function IsUnconscious(ply)
 	if ply.painlosing > 20 or ply.pain > 250 + ply:GetNWInt("SharpenAMT") * 5 or ply.Blood < 3000 or ply.heartstop then
-		ply.Otrub = true
+		ply.unconscious = true
 
 		ply:SetDSP(16)
 	else
-		ply.Otrub = false
+		ply.unconscious = false
 
 		if ply.EZarmor.effects.earPro then
 			ply:SetDSP(58)
@@ -143,9 +143,9 @@ function IsUnconscious(ply)
 		end
 	end
 
-	ply:SetNWInt("Otrub",ply.Otrub)
+	ply:SetNWInt("unconscious",ply.unconscious)
 
-	return ply.Otrub
+	return ply.unconscious
 end
 
 function GetUnconscious(ply)
@@ -163,6 +163,6 @@ function GetUnconscious(ply)
 	ply.gotuncon = false
 
 	local rag = ply:GetNWEntity("Ragdoll")
-	if IsValid(rag) and ply.Otrub then rag:SetEyeTarget(Vector(0,0,0)) end
+	if IsValid(rag) and ply.unconscious then rag:SetEyeTarget(Vector(0,0,0)) end
 end
 end

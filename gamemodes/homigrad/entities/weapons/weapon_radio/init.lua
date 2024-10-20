@@ -16,7 +16,7 @@ function SWEP:BippSound(ent,pitch)
 end
 
 function SWEP:CanLisen(output,input,isChat)
-    if not output:Alive() or output.Otrub or not input:Alive() or input.Otrub then return false end
+    if not output:Alive() or output.unconscious or not input:Alive() or input.unconscious then return false end
     if output:InVehicle() and output:IsSpeaking() then self.voiceSpeak = CurTime() + 0.5 end
 
     if not input:HasWeapon("weapon_radio") then return end
