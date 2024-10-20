@@ -45,7 +45,7 @@ hook.Add("Player Think","saystamina",function(ply,time)
 	ply.adrenaline = math.max(ply.adrenaline - 0.05,0)
 
 	local ent = ply:GetNWEntity("Ragdoll")
-	local ent = ply.fake and IsValid(ent) and ent or ply
+	local ent = IsValid(ply.FakeRagdoll) and IsValid(ent) and ent or ply
 
 	if ply.stamina < 60 and ply:WaterLevel() <= 2 and not ply.heartstop then
 		ent:EmitSound("snds_jack_hmcd_breathing/m" .. math.random(1,6) .. ".wav",60,100,0.6,CHAN_AUTO)

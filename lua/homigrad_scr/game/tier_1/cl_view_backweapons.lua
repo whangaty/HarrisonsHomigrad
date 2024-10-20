@@ -66,10 +66,6 @@ for i = 1,6 do femaleMdl["models/player/group03/female_0" .. i .. ".mdl"] = true
     print(LocalPlayer():GetBoneName(count))
 end]]--
 
-net.Receive("ebal_chellele",function(len)
-    net.ReadEntity().curweapon = net.ReadString()
-end)
-
 local CurTime = CurTime
 local wtf
 local tblNil = {}
@@ -110,8 +106,8 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
         
         local activeWep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass()
 
-        local ent = ply:GetNWBool("fake") and ply:GetNWEntity("Ragdoll")
-        activeWep = IsValid(ent) and ply.curweapon or activeWep
+        local ent = ply:GetNWEntity("Ragdoll")
+        activeWep = IsValid(ent) and ply:GetNWEntity("ActiveWeapon") or activeWep
         ent = IsValid(ent) and ent or ply
 
         if cameraPos:Distance(ent:GetPos()) > dis then continue end
@@ -219,7 +215,7 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
         
         if not IsValid(ent) or not list then continue end
         
-        local activeWep = val.curweapon
+        local activeWep = val:GetNWEntity("ActiveWeapon")
         
         if cameraPos:Distance(ent:GetPos()) > dis then continue end
 

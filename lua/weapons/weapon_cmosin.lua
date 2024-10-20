@@ -52,6 +52,8 @@ SWEP.WorldModel				= "models/weapons/w_grub_mosin.mdl"
 
 SWEP.vbwPos = Vector(5,-6,-6)
 
-SWEP.addAng = Angle(-0.1,0,0)
+SWEP.addAng = Angle(0,2,6.5)
 SWEP.addPos = Vector(0,0,0)
+
+SWEP.SightPos = Vector(-52,-0.5,0)
 end

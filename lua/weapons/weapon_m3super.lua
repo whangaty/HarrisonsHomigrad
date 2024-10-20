@@ -55,6 +55,8 @@ SWEP.WorldModel				= "models/pwb2/weapons/w_m4super90.mdl"
 SWEP.vbwPos = Vector(-2,-3.7,2)
 SWEP.vbwAng = Angle(5,-30,0)
 
+SWEP.SightPos = Vector(-34,1.5,-0.37)
+
 function SWEP:ApplyEyeSpray()
     self.eyeSpray = self.eyeSpray - Angle(5,math.Rand(-2,2),0)
 end

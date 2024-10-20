@@ -89,7 +89,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         then
             timer.Simple(0.01,function()
                 local wep = ply:GetActiveWeapon()
-                if ply:Alive() and not ply.fake and not ply.nopain and (IsValid(wep) and not wep.GetBlocking and true or not wep:GetBlocking()) then Faking(ply) end
+                if ply:Alive() and not IsValid(ply.FakeRagdoll) and not ply.nopain and (IsValid(wep) and not (wep.GetBlocking and wep:GetBlocking())) then Faking(ply) end
             end)
         end
 
@@ -192,7 +192,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
                 ply.Organs['spine']=math.Clamp(ply.Organs['spine']-dmg,0,1)
                 if ply.Organs['spine']==0 then
                     timer.Simple(0.01,function()
-                        if !ply.fake then
+                        if !IsValid(ply.FakeRagdoll) then
                             Faking(ply)
                         end
                     end)

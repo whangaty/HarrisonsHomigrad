@@ -220,7 +220,7 @@ local laserweps = {
 	["weapon_deagle"] = true,
 	["weapon_beanbag"] = true,
 	["weapon_glock"] = true,
---	["weapon_hk_arbalet"] = true
+--	["weapon_hg_crossbow"] = true
 }
 laserplayers = laserplayers or {}
 local mat = Material("sprites/bluelaser1")
@@ -232,7 +232,7 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 		if not IsValid(ply) then laserplayers[i] = nil end
 		ply.Laser = ply.Laser or false
 		local actwep = (IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass()) or (ply:GetNWString("curweapon")!=nil and ply:GetNWString("curweapon"))
-		if IsValid(ply) and ply.Laser and !ply:GetNWInt("Otrub") and laserweps[IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() or ply.curweapon] then
+		if IsValid(ply) and ply.Laser and !ply:GetNWInt("Otrub") and laserweps[IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() or ply:GetNWEntity("ActiveWeapon")] then
 			local wep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon() or (IsValid(ply:GetNWEntity('wep')) and ply:GetNWEntity('wep'))
 			if !IsValid(wep) then continue end
 			

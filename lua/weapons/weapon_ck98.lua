@@ -52,6 +52,8 @@ SWEP.WorldModel				= "models/weapons/doi/w_kar98k.mdl"
 
 SWEP.vbwPos = Vector(5,-6,-6)
 
-SWEP.addAng = Angle(-0.1,0,0)
+SWEP.addAng = Angle(0,-0.2,0)
 SWEP.addPos = Vector(0,0,0)
+
+SWEP.SightPos = Vector(-32,1.6,0.04)
 end

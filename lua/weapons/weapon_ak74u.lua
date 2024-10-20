@@ -51,4 +51,6 @@ SWEP.ViewModel				= "models/pwb/weapons/w_aks74u.mdl"
 SWEP.WorldModel				= "models/pwb/weapons/w_aks74u.mdl"
 
 SWEP.vbwPos = Vector(5,-6,-6)
+
+SWEP.SightPos = Vector(-30,0.85,-0.24)
 end

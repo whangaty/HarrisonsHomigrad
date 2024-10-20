@@ -53,6 +53,8 @@ SWEP.WorldModel				= "models/pwb2/weapons/w_remington870police.mdl"
 
 SWEP.vbwPos = Vector(-8,-6,-6)
 
-SWEP.addAng = Angle(0.4,0,0)
+SWEP.addAng = Angle(0.1,0,2)
 SWEP.addPos = Vector(0,0,0)
+
+SWEP.SightPos = Vector(-40,1.95,-0.6)
 end

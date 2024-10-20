@@ -51,6 +51,8 @@ SWEP.WorldModel				= "models/pwb2/weapons/w_usptactical.mdl"
 SWEP.vbwPos = Vector(6.5,3.4,-4)
 
 
-SWEP.addPos = Vector(0,0,-0.9)
-SWEP.addAng = Angle(-0.4,0.5,0)
+SWEP.addPos = Vector(0,-2,-0.8)
+SWEP.addAng = Angle(0.35,0.4,1.5)
+
+SWEP.SightPos = Vector(-22,-0.55,-0.7)
 end

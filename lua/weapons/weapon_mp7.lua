@@ -52,6 +52,18 @@ SWEP.WorldModel				= "models/pwb2/weapons/w_mp7.mdl"
 SWEP.vbwPos = Vector(-2,-3.7,1)
 SWEP.vbwAng = Angle(5,-30,0)
 
+SWEP.dwmModeScale = 1
+SWEP.dwmForward = 5
+SWEP.dwmRight = 0
+SWEP.dwmUp = 1.5
+
+SWEP.dwmAUp = 0
+SWEP.dwmARight = 0
+SWEP.dwmAForward = 0
+
 SWEP.addPos = Vector(0,0,0)
-SWEP.addAng = Angle(-0.5,0,0)
+SWEP.addAng = Angle(-0.1,0,0.8)
+
+
+SWEP.SightPos = Vector(-16,4.95,-0.25)
 end

@@ -37,16 +37,21 @@ SWEP.WorldModel				= "models/weapons/w_jmod_at4.mdl"
 SWEP.vbwPos = Vector(14,5,-7)
 SWEP.vbwAng = Angle(60,0,90)
 
+SWEP.addAng = Angle(-5.5,-0.3,-90)
+SWEP.SightPos = Vector(-40,-3.6,-4.85)
 function SWEP:PrimaryAttack()
     if self:Clip1() <= 0 then return end
-    local shotpos = self:GetOwner():GetPos()+Vector(0,0,50)+self:GetOwner():EyeAngles():Forward()*90+self:GetOwner():EyeAngles():Right()*5
+    
+    local pos, ang = self:GetTrace()
+
     if SERVER then 
         local rocket = ents.Create( "gb_rocket_rp3" )
-        rocket:SetPos(shotpos)
-        rocket:SetAngles(self:GetOwner():EyeAngles()+Angle(-7,0,0))
+        rocket:SetPos(pos)
+        rocket:SetAngles(ang)
         rocket:Spawn()
         rocket:Launch()
     end
+
     self:TakePrimaryAmmo(1)
 end
 --models/weapons/insurgency/w_rpg7.mdl

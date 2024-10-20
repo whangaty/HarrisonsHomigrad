@@ -53,6 +53,8 @@ SWEP.dwsItemPos = Vector(10,-1,-3)
 
 SWEP.vbwPos = Vector(8,-9,-8)
 
-SWEP.addAng = Angle(0.4,-0.2,0)
+SWEP.addAng = Angle(-0.18,0,0)
 SWEP.addPos = Vector(0.1,0,-0.9)
+
+SWEP.SightPos = Vector(-20,0.35,-0.98)
 end

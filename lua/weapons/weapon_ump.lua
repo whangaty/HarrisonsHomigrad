@@ -1,4 +1,5 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() ~= "homigrad" then return end
+
 SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "IMI Micro Uzi"
@@ -35,7 +36,7 @@ SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
-SWEP.HoldType = "pistol"
+SWEP.HoldType = "revolver"
 
 ------------------------------------------
 
@@ -48,6 +49,6 @@ SWEP.ViewModel				= "models/pwb/weapons/w_uzi.mdl"
 SWEP.WorldModel				= "models/pwb/weapons/w_uzi.mdl"
 
 SWEP.vbwPos = Vector(-2,-4,-4)
-SWEP.addAng = Angle( 7, -0.5, 0 )
+SWEP.addAng = Angle(-0.18,-6.95,0)
 SWEP.addPos = Vector(0,0,0)
-end
+SWEP.SightPos = Vector(-18,1.68,-0.225)

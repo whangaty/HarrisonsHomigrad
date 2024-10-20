@@ -54,4 +54,7 @@ SWEP.addAng = Angle(0,0,0)
 SWEP.addPos = Vector(0,0,0)
 
 SWEP.Supressed = true
+
+
+SWEP.SightPos = Vector(-32,1.8,-0.45)
 end

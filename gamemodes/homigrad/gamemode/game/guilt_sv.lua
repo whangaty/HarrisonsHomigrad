@@ -117,7 +117,7 @@ end)
 --[[local function Seizure(ply)
 	ply.Seizure = true
 	ply:ChatPrint("У тебя приступ.")
-	if not ply.fake then
+	if not IsValid(ply.FakeRagdoll) then
 		Faking(ply)
 	end
 	timer.Create("seizure"..ply:EntIndex(),math.random(7,15),1,function()

@@ -42,6 +42,8 @@ SWEP.HoldType = "ar2"
 
 ------------------------------------------
 
+SWEP.addAng = Angle(0,-0.8,0)
+
 SWEP.Slot					= 2
 SWEP.SlotPos				= 0
 SWEP.DrawAmmo				= true
@@ -52,4 +54,6 @@ SWEP.WorldModel				= "models/pwb2/weapons/w_m4a1.mdl"
 
 SWEP.vbwPos = Vector(-4,-4.2,1)
 SWEP.vbwAng = Angle(7,-30,0)
+
+SWEP.SightPos = Vector(-30,2.35,-0.3)
 end

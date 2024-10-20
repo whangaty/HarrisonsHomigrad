@@ -71,16 +71,17 @@ local NULLENTITY = Entity(-1)
 hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по разным костям регдолла
 	if IsValid(ent:GetPhysicsObject()) and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_CLUB+DMG_GENERIC+DMG_BLAST) then ent:GetPhysicsObject():ApplyForceOffset(dmginfo:GetDamageForce():GetNormalized() * math.min(dmginfo:GetDamage() * 10,3000),dmginfo:GetDamagePosition()) end
 	local ply = RagdollOwner(ent) or ent
+
 	if ent.IsArmor then
 		ply = ent.Owner
-		ent = ply:GetNWEntity("Ragdoll") or ply
+		ent = ply:GetNWEntity("Ragdoll") or ply.FakeRagdoll or ply
 	end
 
 	if not ply or not ply:IsPlayer() or not ply:Alive() or ply:HasGodMode() then
 		return
 	end
 
-	local rag = ply ~= ent and ent
+	local rag = ply:IsPlayer() and IsValid(ply.FakeRagdoll) and ply.FakeRagdoll
 	
 	if rag and dmginfo:IsDamageType(DMG_CRUSH) and att and att:IsRagdoll() then
 		dmginfo:SetDamage(0)

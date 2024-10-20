@@ -35,15 +35,15 @@ hook.Add("HomigradDamage","ImpulseShock",function(ply,hitGroup,dmginfo)
 	local force = dmginfo:GetDamageForce() / 5
 
 	if hitGroup == HITGROUP_RIGHTLEG or hitGroup == HITGROUP_LEFTLEG then --shotguns imbalanced shit
-		--if ply.dmgimpulse > 12 then timer.Simple(0,function() if not ply.fake then Faking(ply,force) end end) end
+		--if ply.dmgimpulse > 12 then timer.Simple(0,function() if not IsValid(ply.FakeRagdoll) then Faking(ply,force) end end) end
 	end
 
 	if hitGroup == HITGROUP_CHEST then
-		if ply.dmgimpulse > 24 then timer.Simple(0,function() if not ply.fake then Faking(ply,force) end end) end
+		if ply.dmgimpulse > 24 then timer.Simple(0,function() if not IsValid(ply.FakeRagdoll) then Faking(ply,force) end end) end
 	end
 
 	if hitGroup == HITGROUP_STOMACH then
-		if ply.dmgimpulse > 48 then timer.Simple(0,function() if not ply.fake then Faking(ply,force) end end) end
+		if ply.dmgimpulse > 48 then timer.Simple(0,function() if not IsValid(ply.FakeRagdoll) then Faking(ply,force) end end) end
 	end
 end)
 

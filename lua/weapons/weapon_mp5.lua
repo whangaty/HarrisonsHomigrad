@@ -52,4 +52,6 @@ SWEP.vbwPos = Vector(-4,-3.7,2)
 SWEP.vbwAng = Angle(2,-30,0)
 
 SWEP.addAng = Angle(0,0,0)
+
+SWEP.SightPos = Vector(-22,2.1,-0.23)
 end

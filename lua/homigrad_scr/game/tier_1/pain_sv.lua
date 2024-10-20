@@ -158,7 +158,7 @@ function GetUnconscious(ply)
 		--ply:SetDSP(0)
 	end
 
-	if not ply.fake then Faking(ply) end
+	if not IsValid(ply.FakeRagdoll) then Faking(ply) end
 	if ply.gotuncon then ply.pain = ply.pain + 100 end
 	ply.gotuncon = false
 

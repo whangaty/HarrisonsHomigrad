@@ -65,7 +65,7 @@ hook.Add("Player Think","homigrad-blood",function(ply,time)
 		ply.o2 = (ply.heartstop) and math.max((ply.o2 or 1) - 0.1,-3) or math.min((ply.o2 or 1) + 0.1,1)
 	end
 
-	local ent = IsValid(ply.fakeragdoll) and ply.fakeragdoll or ply
+	local ent = IsValid(ply.FakeRagdoll) and ply.FakeRagdoll or ply
 
 	local neck = ent:GetBoneMatrix(ent:LookupBone("ValveBiped.Bip01_Neck1")):GetTranslation()
 	

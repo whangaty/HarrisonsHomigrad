@@ -52,4 +52,7 @@ SWEP.WorldModel				= "models/pwb2/weapons/w_famasg2.mdl"
 
 SWEP.vbwPos = Vector(-2,-4.2,1)
 SWEP.vbwAng = Angle(5,-30,0)
+
+SWEP.SightPos = Vector(-21,4.5,-0.32)
+
 end

@@ -61,5 +61,6 @@ SWEP.vbwAng = Angle(5,-30,0)
 SWEP.CLR_Scope = 0.05
 SWEP.CLR = 0.025
 
-SWEP.addAng = Angle(-0.2,-0.15,0)
+SWEP.addAng = Angle(-0.1,0.2,0)
+SWEP.SightPos = Vector(-30,0,-0.16)
 end

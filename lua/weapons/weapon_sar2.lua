@@ -55,5 +55,16 @@ SWEP.WorldModel				= "models/weapons/arccw/w_irifle.mdl"
 SWEP.vbwPos = Vector(2,-4.2,1)
 SWEP.vbwAng = Angle(5,-30,0)
 
-SWEP.addAng = Angle(0.5,0.9,0)
+SWEP.addAng = Angle(0,0.8,90)
+
+SWEP.dwmModeScale = 1
+SWEP.dwmForward = 0
+SWEP.dwmRight = 0
+SWEP.dwmUp = 0
+
+SWEP.dwmAUp = 0
+SWEP.dwmARight = 0
+SWEP.dwmAForward = 0
+
+SWEP.SightPos = Vector(-32,0,3.2)
 end

@@ -51,5 +51,7 @@ SWEP.WorldModel				= "models/weapons/w_grub_mp40.mdl"
 SWEP.vbwPos = Vector(-4,-3.7,2)
 SWEP.vbwAng = Angle(2,-30,0)
 
-SWEP.addAng = Angle(0,0,0)
+SWEP.addAng = Angle(0,1.5,5)
+
+SWEP.SightPos = Vector(-37,0.3,0)
 end

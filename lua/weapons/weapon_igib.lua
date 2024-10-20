@@ -25,7 +25,7 @@ SWEP.AutoSwitchFrom			= false
 
 SWEP.HoldType = "smg"
 
-SWEP.Slot					= 0
+SWEP.Slot					= 2
 SWEP.SlotPos				= 0
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
@@ -38,26 +38,36 @@ SWEP.ShootWait = 0.333
 SWEP.Automatic = false
 SWEP.vbwPos = Vector(14,5,-7)
 SWEP.vbwAng = Angle(60,0,90)
-SWEP.ThrowVel = 1500
+SWEP.ThrowVel = 55000
+SWEP.addAng = Angle(-8,0,-90)
+
+SWEP.SightPos = Vector(-35,-1.1,-5)
+
 function SWEP:PrimaryAttack()
     self.ShootNext=self.NextShot or NextShot
     if ( self.NextShot > CurTime() ) then return end
     if self:Clip1() <= 0 then return end
     self.NextShot = CurTime() + self.ShootWait
-    local shotpos = self:GetOwner():GetPos()+Vector(0,0,35)+self:GetOwner():EyeAngles():Forward()*90+self:GetOwner():EyeAngles():Right()*5
+    local pos,ang = self:GetTrace()
+    if CLIENT then
+        self.eyeSpray:Add(Angle(-5,math.random(-2,2),0))
+    end
     if SERVER then 
         local cmm = ents.Create( "ent_hgjack_40mm_contact" )
-        cmm:SetPos(shotpos)
-        cmm:SetAngles(self:GetOwner():EyeAngles()+Angle(0,0,0))
+        cmm:SetPos(pos)
+        cmm:SetAngles(ang)
         cmm:Spawn()
         cmm:Arm()
         local cmm2 = cmm:GetPhysicsObject()
 		if IsValid(cmm2) then
-			cmm2:SetVelocity(self:GetOwner():GetAimVector() * self.ThrowVel/2 + (self:GetOwner():GetVelocity() * 0.75))
+            timer.Create("Trowing"..cmm:EntIndex(),0.1,5,function() if not IsValid(cmm2) then return end cmm2:ApplyForceCenter((ang:Forward() * self.ThrowVel) + (self:GetOwner():GetVelocity() * 1)) end)
+			cmm2:ApplyForceCenter((ang:Forward() * self.ThrowVel) + (self:GetOwner():GetVelocity() * 1))
 		end
+        
     end
     --self:TakePrimaryAmmo(1)
 end
 --models/weapons/insurgency/w_rpg7.mdl
 --models/weapons/insurgency/w_rpg7_projectile.mdl
+
 end

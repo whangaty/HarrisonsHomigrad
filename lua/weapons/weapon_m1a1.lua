@@ -35,7 +35,7 @@ SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
-SWEP.HoldType = "pistol"
+SWEP.HoldType = "revolver"
 
 ------------------------------------------
 
@@ -49,6 +49,8 @@ SWEP.WorldModel				= "models/pwb/weapons/w_vz61.mdl"
 
 SWEP.vbwPos = Vector(-2,-3.7,-8)
 SWEP.vbwAng = Angle(10,-30,0)
-SWEP.addAng = Angle(2.3,-0.25,0)
+SWEP.addAng = Angle(0,0,0)
 SWEP.addPos = Vector(0,0,0)
+
+SWEP.SightPos = Vector(-30,-0.4,-0.05)
 end

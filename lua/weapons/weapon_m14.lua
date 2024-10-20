@@ -49,8 +49,19 @@ SWEP.DrawCrosshair			= false
 SWEP.ViewModel				= "models/pwb/weapons/w_tmp.mdl"
 SWEP.WorldModel				= "models/pwb/weapons/w_tmp.mdl"
 
-SWEP.addAng = Angle( 1.8, 0.9, 0 )
+SWEP.addAng = Angle( 0.7, -2, 0 )
 SWEP.addPos = Vector(0,0,0)
-SWEP.vbwPos = Vector(12,-1.7,-12)
+SWEP.vbwPos = Vector(12,-1.5,-12)
 SWEP.vbwAng = Angle(10,-30,0)
+
+SWEP.dwmModeScale = 1
+SWEP.dwmForward = 3
+SWEP.dwmRight = 0
+SWEP.dwmUp = 0
+
+SWEP.dwmAUp = 0
+SWEP.dwmARight = 0
+SWEP.dwmAForward = 0
+
+SWEP.SightPos = Vector(-25,1.85,-0.2)
 end

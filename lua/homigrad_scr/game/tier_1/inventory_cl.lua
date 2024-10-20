@@ -118,7 +118,7 @@ net.Receive("inventory",function()
 
 	if not success or not lootEnt then return end
 	
-	if items[lootEnt.curweapon] and table.HasValue(Gunshuy,lootEnt.curweapon) then items[lootEnt.curweapon] = nil end
+	if items[lootEnt:GetNWEntity("ActiveWeapon")] and table.HasValue(Gunshuy,lootEnt:GetNWEntity("ActiveWeapon")) then items[lootEnt:GetNWEntity("ActiveWeapon")] = nil end
 
 	local items_ammo = net.ReadTable()
 

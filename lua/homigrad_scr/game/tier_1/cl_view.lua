@@ -279,28 +279,38 @@ local deathtexts = {
 	"TRY AGAIN",
 	"CУКА"
 }
-net.Receive("pophead",function(len)
-	local rag = net.ReadEntity()
-	if GetConVar("hg_deathscreen"):GetBool() then
-	deathrag = rag
-	deathtext = table.Random(deathtexts)
 
-	-- TODO: Fix issue where, upon dying and immediately respawning, screen still fades to black 
-	LocalPlayer():ScreenFade( SCREENFADE.IN, Color( 0, 0, 0, 255 ), 0.5, 1 )
-	if !playing and GetConVar("hg_deathsound"):GetBool() then
-		playing = true
-		sound.PlayURL ( table.Random(deathtrack), "mono", function( station )
-			if ( IsValid( station ) ) then
-				station:SetPos( LocalPlayer():GetPos() )
-				station:Play()
-				station:SetVolume(3)
+gameevent.Listen("entity_killed")
+hook.Add("entity_killed","killedplayer",function(data)
+	local ent = Entity(data.entindex_killed)
 
-				-- Keep a reference to the audio object, so it doesn't get garbage collected which will stop the sound
-				g_station = station
-		
-			else end
-		end )
+	if ent:IsPlayer() then
+		hook.Run("Player Death",ent)
 	end
+end)
+
+hook.Add("Player Death","huyhuykilled",function(ent)
+	if ent ~= LocalPlayer() then return end
+
+	if GetConVar("hg_deathscreen"):GetBool() then
+		deathrag = ent:GetNWEntity("Ragdoll")
+		deathtext = table.Random(deathtexts)
+
+		-- TODO: Fix issue where, upon dying and immediately respawning, screen still fades to black 
+		LocalPlayer():ScreenFade( SCREENFADE.IN, Color( 0, 0, 0, 255 ), 0.5, 1 )
+		if !playing and GetConVar("hg_deathsound"):GetBool() then
+			playing = true
+			sound.PlayURL ( table.Random(deathtrack), "mono", function( station )
+				if ( IsValid( station ) ) then
+					station:SetPos( LocalPlayer():GetPos() )
+					station:Play()
+					station:SetVolume(3)
+
+					g_station = station				
+				end
+			end )
+		end
+
 		timer.Create("DeathCam",5,1,function()
 			LocalPlayer():ScreenFade( SCREENFADE.IN, Color( 0, 0, 0, 255 ), 1, 1 )
 			playing = false
@@ -311,60 +321,11 @@ net.Receive("pophead",function(len)
 		if GetConVar("hg_deathscreen"):GetBool() then
 			LocalPlayer():ScreenFade( SCREENFADE.OUT, Color( 0, 0, 0, 255 ), 0.2, 1 )
 		end
-		if rag:IsValid() then
-			rag:ManipulateBoneScale(6,Vector(1,1,1))
+		if deathrag:IsValid() then
+			deathrag:ManipulateBoneScale(6,Vector(1,1,1))
 		end
 	end)
 end)
-
-local weps = {
-["weapon_glock18"] = true,
-["weapon_csmg40"] = true,
-["weapon_cppsh41"] = true,
-["weapon_ck98"] = true,
-["weapon_cmosin"] = true,
-["weapon_glock"] = true,
-["weapon_ak74"] = true,
-["weapon_ar15"] = true,
-["weapon_beretta"] = true,
-["weapon_fiveseven"] = true,
-["weapon_mp5"] = true,
-["weapon_m3super"] = true,
-["weapon_p220"] = true,
-["weapon_hk_usp"] = true,
-["weapon_mp7"] = true,
-["weapon_hk_usps"] = true,
-["weapon_akm"] = true,
-["weapon_deagle"] = true,
-["weapon_ak74u"] = true,
-["weapon_l1a1"] = true,
-["weapon_fal"] = true,
-["weapon_galil"] = true,
-["weapon_galilsar"] = true,
-["weapon_m14"] = true,
-["weapon_m1a1"] = true,
-["weapon_mk18"] = true,
-["weapon_m249"] = true,
-["weapon_m4a1"] = true,
-["weapon_minu14"] = true,
-["weapon_mp40"] = true,
-["weapon_rpk"] = true,
-["weapon_ump"] = true,
-["weapon_xm1014"] = true,
-["weapon_remington870"] = true,
-["weapon_taser"] = true,
-["weapon_sar2"] = true,
-["weapon_rpgg"] = true,
-["weapon_beanbag"] = true,
-["weapon_civil_famas"] = true,
-["weapon_spas12"] = true,
-["weapon_xm8_lmg"] = true,
-["weapon_hk_arbalet"] = true,
-["weapon_vector"] = true,
-["weapon_doublebarrel"] = true,
-["weapon_doublebarrel_dulo"] = true,
-["weapon_awp"] = true,
-}
 
 local ScopeLerp = 0
 local scope
@@ -493,7 +454,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	end
 	local ragdoll = ply:GetNWEntity("Ragdoll")
 
-	if ply:Alive() and ply:GetNWBool("fake") and IsValid(ragdoll) then
+	if ply:Alive() and IsValid(ragdoll) then
 		ragdoll:ManipulateBoneScale(6,vecZero)
 		
 		local att = ragdoll:GetAttachment(ragdoll:LookupAttachment("eyes"))
@@ -532,306 +493,6 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local traca = lply:GetEyeTrace()
 	local dist = traca.HitPos:Distance(lply:EyePos())
 
-	if not RENDERSCENE then
-		scope = IsValid(wep) and wep.IsScope and wep:IsScope() and not wep.isClose
-		if scope then
-			if lply:KeyPressed(IN_WALK) then
-				pointshooting = not pointshooting
-			end
-			if pointshooting then
-				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.1 or 1,ScopeLerp,0.85)
-			else
-				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.1 or 1,ScopeLerp,1)
-			end
-		else
-			ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.1 or 1,ScopeLerp,0)
-		end
-	end
-
-	fov = Lerp(ScopeLerp,fov,75)
-
-	angRecoil[3] = 0
-	
-	if wep and weps[wep:GetClass()] then
-		local weaponClass = wep:GetClass()
-		local att = wep.Attachments
-
-		if not RENDERSCENE then
-			local lastShootTime = wep:LastShootTime()
-			if not oldShootTime then oldShootTime = lastShootTime else
-				if oldShootTime ~= lastShootTime then
-					oldShootTime = lastShootTime
-					startRecoil = CurTime() + 0.05
-					recoil = math.Rand(0.9,1.1) * (scope and 0.5 or 0.5)
-				end
-			end
-		end
-		
-		local anim_pos = max(startRecoil - CurTime(),0) * 5
-
-		fov = fov - anim_pos * (scope and 2 or 1)
-		angRecoil[3] = anim_pos * (scope and 10 or 5)
-
-		if weaponClass == "weapon_glock18" then
-			--Vector(3.85,10,1.45)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.5 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.25
-			angWep = hand.Ang + Angle(5,10,0)
-		end
-		if weaponClass == "weapon_csmg40" then
-			--Vector(3.85,10,1.45)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.3 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.25
-			angWep = hand.Ang + Angle(5,10,0)
-		end
-		if weaponClass == "weapon_cppsh41" then
-			--Vector(3.85,10,1.45)
-			vecWep = hand.Pos + hand.Ang:Up() * 4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.45
-			angWep = hand.Ang + Angle(5,10,0)
-		end
-		if weaponClass == "weapon_ck98" then
-			--Vector(5.1,5,0.76)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.5 - hand.Ang:Forward() * 6 + hand.Ang:Right() * 1
-			angWep = hand.Ang + Angle(-8,5,0)
-		end
-		if weaponClass == "weapon_cmosin" then
-			--Vector(5.1,5,0.76)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.5 - hand.Ang:Forward() * 8.5 + hand.Ang:Right() * 0.35
-			angWep = hand.Ang + Angle(-8,5,0)
-		end
-		if weaponClass == "weapon_glock" then
-			--Vector(2.3,10,0)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.3 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0
-			angWep = hand.Ang + Angle(-15,5,0)
-		end
-		if weaponClass == "weapon_ak74" then
-			--Vector(5.2,-2,1.1)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.2 - hand.Ang:Forward() * -2 + hand.Ang:Right() * 1.1
-			angWep = hand.Ang + Angle(-25,20,-25)
-		end
-		if weaponClass == "weapon_xm1014" then
-			--Vector(3.55,4,0.95)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.55 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.95
-			angWep = hand.Ang + Angle(-8,0,0)
-		end
-		if weaponClass == "weapon_remington870" then
-			--Vector(3.8,4,0.65)
-			vecWep = hand.Pos + hand.Ang:Up() * 4.4 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 1.20
-			angWep = hand.Ang + Angle(-1,0,0)
-		end
-		if weaponClass == "weapon_ar15" then
-			--Vector(5.05,7,0.725)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.01 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 0.725
-			angWep = hand.Ang + Angle(-5,0,0)
-		end
-		if weaponClass == "weapon_mp7" then
-			--Vector(3.25,7,0.79)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.9 - hand.Ang:Forward() * 9 + hand.Ang:Right() * 0.79
-			angWep = hand.Ang + Angle(-10,0,0)
-		end
-		if weaponClass == "weapon_beretta" then
-			--Vector(2.5,10,0.05)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.5 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.05
-			angWep = hand.Ang + Angle(-10,2,0)
-		end
-		if weaponClass == "weapon_deagle" then
-			--Vector(2.7,10,0.4)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.7 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.4
-			angWep = hand.Ang + Angle(-10,0,0)
-		end
-		if weaponClass == "weapon_fiveseven" then
-			--Vector(2.5,10,0.1)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.5 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.05
-			angWep = hand.Ang + Angle(-10,3,0)
-		end
-		if weaponClass == "weapon_mp5" then
-			--Vector(4.22,7,0.8)
-			vecWep = hand.Pos + hand.Ang:Up() * 4.17 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 0.79	
-			angWep = hand.Ang + Angle(-5,0,0)
-		end
-		if weaponClass == "weapon_m3super" then
-			--Vector(3.66,5,0.65)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.66 - hand.Ang:Forward() * 5 + hand.Ang:Right() * 0.65
-			angWep = hand.Ang + Angle(-5,0,0)
-		end
-		if weaponClass == "weapon_p220" then
-			--Vector(2.7,10,0.12)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.7 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.12
-			angWep = hand.Ang + Angle(-15,02,0)
-		end
-		if weaponClass == "weapon_hk_usp" then
-			--Vector(2.5,10,0.3)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.43 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.3
-			angWep = hand.Ang + Angle(-15,5,0)
-		end
-		if weaponClass == "weapon_hk_usps" then
-			--Vector(3.9,10,1.09)
-			vecWep = hand.Pos + hand.Ang:Up() * 4.25 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.05
-			angWep = hand.Ang + Angle(0,0,0)
-		end
-		if weaponClass == "weapon_akm" then
-			--Vector(5.1,5,0.76)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.0 - hand.Ang:Forward() * 5 + hand.Ang:Right() * 0.76
-			angWep = hand.Ang + Angle(-8,5,0)
-		end
-		if weaponClass == "weapon_ak74u" then
-			--Vector(5.3,4,0.78)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.2 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.78
-			angWep = hand.Ang + Angle(-8,0,0)
-		end
-		if weaponClass == "weapon_l1a1" then
-			--Vector(5.7,4,1.1)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.65 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.77
-			angWep = hand.Ang + Angle(-15,15,15)
-		end
-		if weaponClass == "weapon_fal" then
-			--Vector(5.45,10,0.69)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.45 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.69
-			angWep = hand.Ang + Angle(-8,0,0)
-		end
-		if weaponClass == "weapon_galil" then
-			--Vector(5.7,4,0.75)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.7 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.75
-			angWep = hand.Ang + Angle(-5,0,0)
-		end
-		if weaponClass == "weapon_galilsar" then
-			--Vector(3.9,7,0.57)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.75 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 0.58
-			angWep = hand.Ang + Angle(-8,0,0)
-		end
-		if weaponClass == "weapon_m14" then
-			--Vector(6,4,0.95)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.5 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 0.75
-			angWep = hand.Ang + Angle(25,35,15)
-		end
-		if weaponClass == "weapon_m1a1" then
-			--Vector(5.25,4,1.15)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.35 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.925
-			angWep = hand.Ang + Angle(25,35,15)
-		end
-		if weaponClass == "weapon_mk18" then
-			--Vector(6.2,6,0.88)
-			vecWep = hand.Pos + hand.Ang:Up() * 6.15 - hand.Ang:Forward() * 6 + hand.Ang:Right() * 0.88
-			angWep = hand.Ang + Angle(-7,0,0)
-		end
-		if weaponClass == "weapon_m249" then
-			--Vector(5.8,8,0.88)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.8 - hand.Ang:Forward() * 8 + hand.Ang:Right() * .88
-			angWep = hand.Ang + Angle(-6,0,0)
-		end
-		if weaponClass == "weapon_m4a1" then
-			--Vector(5.05,7,0.725)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.05 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 0.725
-			angWep = hand.Ang + Angle(-5,0,0)
-		end
-		if weaponClass == "weapon_minu14" then
-			--Vector(5,4,0.95)
-			vecWep = hand.Pos + hand.Ang:Up() * 5 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.95
-			angWep = hand.Ang + Angle(15,35,15)
-		end
-		if weaponClass == "weapon_mp40" then
-			--Vector(6.5,4,0.67)
-			vecWep = hand.Pos + hand.Ang:Up() * 6.5 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.67
-			angWep = hand.Ang + Angle(-5,0,0)
-		end
-		if weaponClass == "weapon_rpk" then
-			--Vector(4.9,4,0.8)
-			vecWep = hand.Pos + hand.Ang:Up() * 4.75 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.8
-			angWep = hand.Ang + Angle(-7,0,0)
-		end
-		if weaponClass == "weapon_ump" then
-			--Vector(6.6,7,1.35)
-			vecWep = hand.Pos + hand.Ang:Up() * 4.4 - hand.Ang:Forward() * 11 + hand.Ang:Right() * 0.79
-			angWep = hand.Ang + Angle(25,35,15)
-		end
-		if weaponClass == "weapon_sar2" then
-			--Vector(6,5,1.42)
-			vecWep = hand.Pos + hand.Ang:Up() * 6.0 - hand.Ang:Forward() * 5 + hand.Ang:Right() * 0.93
-			angWep = hand.Ang + Angle(-10,0,0)
-		end
-		if weaponClass == "weapon_rpgg" then
-			--Vector(7,5,1)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.5 - hand.Ang:Forward() * 6 - hand.Ang:Right() * 1.9
-			angWep = hand.Ang + Angle(10,15,0)
-		end
-		if weaponClass == "weapon_beanbag" then
-			--Vector(4.41,4,0.41)
-			vecWep = hand.Pos + hand.Ang:Up() * 4.41 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.41
-			angWep = hand.Ang + Angle(-5,0,0)
-		end
-		if weaponClass == "weapon_civil_famas" then
-			--Vector(6,6,0.69)
-			vecWep = hand.Pos + hand.Ang:Up() * 6 - hand.Ang:Forward() * 6 + hand.Ang:Right() * 0.69
-			angWep = hand.Ang + Angle(-5,0,0)
-		end
-		if weaponClass == "weapon_spas12" then
-			--Vector(6,6,0.69)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.1 - hand.Ang:Forward() * 6 + hand.Ang:Right() * 0.85
-			angWep = hand.Ang + Angle(-7,0,0)
-		end--new weapons starts here
-		if weaponClass == "weapon_vector" then
-			--Vector(6,6,0.69)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.3 - hand.Ang:Forward() * 6 + hand.Ang:Right() * 0.75
-			angWep = hand.Ang + Angle(-7,0,0)
-		end
-		if weaponClass == "weapon_xm8_lmg" then
-			--Vector(6,6,0.69)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.3 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.6
-			angWep = hand.Ang + Angle(-7,0,0)
-		end
-		if weaponClass == "weapon_hk_arbalet" then
-			--Vector(2.5,10,0.3)
-			vecWep = hand.Pos + hand.Ang:Up() * 8.3 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 1.4
-			angWep = hand.Ang + Angle(15,0,0)
-		end
-		if weaponClass == "weapon_doublebarrel" or weaponClass == "weapon_doublebarrel_dulo" then
-			--Vector(5.3,4,0.78)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
-			angWep = hand.Ang + Angle(-24,0,0)
-		end
-	end
-
-	if not RENDERSCENE then
-		LerpEye = LerpAngleFT(smooth_cam:GetBool() and 0.25 or 1,LerpEye,angEye)
-	else
-		LerpEye = LerpAngleFT(0.25,LerpEye,angEye)
-
-		if GetConVar("hg_bodycam"):GetInt() == 1 and IsValid(wep) and wep:LookupAttachment("muzzle") and scope then
-			vecWep = vecWep + hand.Ang:Up() * 2 - hand.Ang:Forward() * -15 + hand.Ang:Right() * -1.5
-			LerpEye = wep:GetAttachment(wep:LookupAttachment("muzzle")).Ang
-			--LerpEye[3] = 0
-			
-			if wep.HoldType == "revolver" then
-				angEye[1] = angEye[1] - 10
-				angEye[2] = angEye[2] + 5
-				--angEye[3] = 0
-			end
-			if wep.HoldType == "smg" or wep.HoldType == "ar2" then
-				angEye[1] = angEye[1] - 10
-				angEye[2] = angEye[2] + 10
-				--angEye[3] = 0
-			end
-		end
-
-	end
-
-	angEye = LerpEye
-	vecEye = LerpVector(ScopeLerp,vecEye,vecWep or vecEye)
-	--angEye = LerpAngle(ScopeLerp/2,angEye,angWep or angEye)
-	
-	if GetConVar("hg_bodycam"):GetInt() == 1 and not scope then
-		local wep = lply:GetActiveWeapon()
-
-		if wep.HoldType == "revolver" then
-			angEye[1] = angEye[1] - 10
-			angEye[2] = angEye[2] + 5
-			--angEye[3] = 0
-		end
-		if wep.HoldType == "smg" or wep.HoldType == "ar2" then
-			angEye[1] = angEye[1] - 15
-			angEye[2] = angEye[2] + 5
-			--angEye[3] = 0
-		end
-	end
-
 	view.fov = fov
 
 	if lply:InVehicle() or not firstPerson then return end
@@ -846,6 +507,10 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	
 	local output_ang = angEye + angRecoil
 	local output_pos = vecEye
+
+	if wep and wep.Camera then
+		output_pos, output_ang = wep:Camera(ply, output_pos, output_ang)
+	end
 
 	if wep and hand then
 		local posRecoil = Vector(recoil * 8,0,recoil * 1.5)
@@ -880,7 +545,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	diffang = LerpFT(0.1,diffang,(output_ang:Forward() - (oldview.angles or output_ang):Forward()) * 50 + (lply:EyeAngles() + (lply:GetActiveWeapon().eyeSpray or angZero) * 1000):Forward() * anim_pos * 1)
 
 	if RENDERSCENE then
-		if hg_cool_camera:GetBool() then
+		if hg_cool_camera:GetBool() then 
 			output_ang[3] = output_ang[3] + math.min(diffang:Dot(output_ang:Right()) * 3 * val,10)
 		end
 		
@@ -908,13 +573,13 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	tr = util.TraceHull(tr)
 
 	local pos = lply:GetPos()
-	pos[3] = tr.HitPos[3] + 1
+	pos[3] = tr.HitPos[3] + 1--wtf is this bullshit
 	local trace = util.TraceLine({start = lply:EyePos(),endpos = pos,filter = ply,mask = MASK_SOLID_BRUSHONLY})
 	tr.HitPos[3] = trace.HitPos[3] - 1
 	output_pos = tr.HitPos
 	output_pos = output_pos
 
-	if trZNear.Hit then view.znear = 0.1 else view.znear = 1 end--САСАТЬ!!11.. не работает ;c
+	if trZNear.Hit then view.znear = 0.1 else view.znear = 1 end--САСАТЬ!!11.. не работает ;c sharik loh
 
 	output_ang[3] = output_ang[3] + ADDROLL
 	

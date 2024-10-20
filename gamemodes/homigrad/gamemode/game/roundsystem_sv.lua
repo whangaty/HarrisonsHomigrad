@@ -324,22 +324,27 @@ end)
 
 hook.Add("WeaponEquip","PlayerManualPickup",function(wep,ply)
 	timer.Simple(0,function()
-		if wep.Base == "salat_base" then
-			if wep.TwoHands then
-				for i,weap in pairs(ply:GetWeapons()) do
-					if weap:GetClass() == ply.slots[3] then
-						ply:DropWeapon1(weap)
-					end
-				end
-				ply.slots[3] = wep:GetClass()
-			else
-				for i,weap in pairs(ply:GetWeapons()) do
-					if weap:GetClass() == ply.slots[2] then
-						ply:DropWeapon1(weap)
-					end
-				end
-				ply.slots[2] = wep:GetClass()
+		if ishgweapon(wep) then
+			local isbig = ishgweapon(wep) and not wep:IsPistolHoldType()
+			local issmall = ishgweapon(wep) and wep:IsPistolHoldType()
+			
+			if ply.SlotBig and isbig then
+				ply:DropWeapon1(ply.SlotBig)
 			end
+
+			if ply.SlotSmall and issmall then
+				ply:DropWeapon1(ply.SlotSmall)
+			end
+
+			if isbig then
+				ply.SlotBig = wep
+			end
+
+			if issmall then
+				ply.SlotSmall = wep
+			end
+
+			ply:SelectWeapon(wep)
 		end
 	end)
 end)

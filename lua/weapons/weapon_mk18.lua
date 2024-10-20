@@ -50,4 +50,6 @@ SWEP.WorldModel				= "models/pwb/weapons/w_hk416.mdl"
 
 SWEP.vbwPos = Vector(5,-3.7,-8)
 SWEP.vbwAng = Angle(5,-30,0)
+
+SWEP.SightPos = Vector(-35,2.95,-0.14)
 end

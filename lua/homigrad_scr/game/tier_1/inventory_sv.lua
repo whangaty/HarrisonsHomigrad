@@ -32,7 +32,7 @@ end)
 hook.Add("Player Think","Looting",function(ply)
 	local key = ply:KeyDown(IN_USE)
 
-	if not ply.fake and ply:Alive() and ply:KeyDown(IN_ATTACK2) then
+	if not IsValid(ply.FakeRagdoll) and ply:Alive() and ply:KeyDown(IN_ATTACK2) then
 		if ply.okeloot ~= key and key then
 			local tr = {}
 			tr.start = ply:GetAttachment(ply:LookupAttachment("eyes")).Pos
@@ -45,7 +45,8 @@ hook.Add("Player Think","Looting",function(ply)
 			if IsValid(RagdollOwner(hitEnt)) then hitEnt = RagdollOwner(hitEnt) end
 			if IsValid(hitEnt) and hitEnt.IsJModArmor then hitEnt = hitEnt.Owner end
 			if not IsValid(hitEnt) then return end
-			if hitEnt:IsPlayer() and hitEnt:Alive() and not hitEnt.fake then return end
+			if hitEnt:IsPlayer() and hitEnt:Alive() and not IsValid(hitEnt.FakeRagdoll) then return end
+			SavePlyInfo(hitEnt)
 			if not hitEnt.Info then return end
 			
 			hitEnt.UsersInventory = hitEnt.UsersInventory or {}
@@ -89,7 +90,7 @@ net.Receive("ply_take_item",function(len,ply)
 	if prekol[wep] and not ply:IsAdmin() then ply:Kick("You have been kicked. Error Code: AT6001") return end
 
 	if ply:HasWeapon(wep) then
-		if lootEnt:IsPlayer() and (lootEnt.curweapon == wep and not lootEnt.Otrub) then return end
+		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon:GetClass() == wep and not lootEnt.Otrub) then return end
 		if wepInfo.Clip1!=nil and wepInfo.Clip1 > 0 then
 			ply:GiveAmmo(wepInfo.Clip1,wepInfo.AmmoType)
 			wepInfo.Clip1 = 0
@@ -97,13 +98,13 @@ net.Receive("ply_take_item",function(len,ply)
 			ply:ChatPrint("You already have this weapon.")
 		end
 	else
-		if lootEnt:IsPlayer() and (lootEnt.curweapon == wep and not lootEnt.Otrub) then return end
+		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon:GetClass() == wep and not lootEnt.Otrub) then return end
 		
 		ply.slots = ply.slots or {}
 		
 		local realwep = weapons.Get(wep)
 		
-		if IsValid(lootEnt.wep) and lootEnt.curweapon == wep then
+		if IsValid(lootEnt.wep) and lootEnt.ActiveWeapon:GetClass() == wep then
 			DespawnWeapon(lootEnt)
 			lootEnt.wep:Remove()
 		end

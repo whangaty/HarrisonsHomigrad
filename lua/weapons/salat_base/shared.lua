@@ -76,31 +76,16 @@ hook.Add("HUDPaint","admin_hitpos",function()
 		local wep = LocalPlayer():GetActiveWeapon()
 		if not IsValid(wep) or wep.Base != "salat_base" then return end
 
-		local att = wep:LookupAttachment("muzzle")
+		local pos,ang = wep:GetTrace()
 
-		local att = wep:GetAttachment(att)
-		
-		if not att then
-			local Pos,Ang = wep:GetPosAng()
-			att = {Pos = Pos,Ang = Ang}
-		end
-
-		local shootOrigin = att.Pos
-		local vec = vecZero
-		vec:Set(wep.addPos)
-		vec:Rotate(att.Ang)
-		shootOrigin:Add(vec)
-	
-		local shootAngles = att.Ang
-		local ang = angZero
-		ang:Set(wep.addAng)
-		shootAngles:Add(ang)
-
-		local tr = util.QuickTrace(shootOrigin,shootAngles:Forward() * 1000,LocalPlayer())
+		local tr = util.QuickTrace(pos,ang:Forward() * 1000,LocalPlayer())
 		local hit = tr.HitPos:ToScreen()
 		
-		surface.SetDrawColor( 255, 255, 255, 255 )
-		surface.DrawRect(hit.x - 2.5,hit.y - 2.5,5,5)
+		surface.SetDrawColor( 255, 255, 255, 100 )
+		surface.DrawRect(hit.x - 2,hit.y - 2,4,4)
+
+		surface.SetDrawColor( 255, 255, 255, 20 )
+		surface.DrawRect(ScrW() / 2 - 2,ScrH() / 2 - 2,4,4)
 	end
 end)
 
@@ -394,7 +379,7 @@ function SWEP:PrimaryAttack()
 		if func then
 			func(self)
 		else
-			self.eyeSpray:Add(Angle(math.Rand(-0.9,0.5) * self.Primary.Damage / 30 * math.max((self.ZazhimYaycami / self.Primary.ClipSize),0.2),math.Rand(-0.5,0.5) * self.Primary.Damage / 30 * math.max((self.ZazhimYaycami / self.Primary.ClipSize),0.2),0))
+			self.eyeSpray:Add(Angle(math.Rand(-0.9,0) * self.Primary.Damage / 30 * math.max((self.ZazhimYaycami / self.Primary.ClipSize),0.2),math.Rand(-0.5,0.5) * self.Primary.Damage / 30 * math.max((self.ZazhimYaycami / self.Primary.ClipSize),0.2),0))
 		end
 	end
 end
@@ -440,6 +425,47 @@ else
 	end)
 end
 
+function SWEP:GetSAttachment(obj)
+	local pos, ang = self:GetTransform()
+
+	local att = self:GetAttachment(obj)
+	
+	if not att then return end
+
+	local bon = att.Bone or 0
+	local mat = self:GetBoneMatrix(bon)
+	local bonepos, boneang = mat:GetTranslation(), mat:GetAngles()
+	local lpos, lang = WorldToLocal(att.Pos or bonepos, att.Ang or boneang, bonepos, boneang)
+	
+	if CLIENT then self:SetupBones() end
+
+	local mat = self:GetBoneMatrix(bon)
+	local bonepos, boneang = mat:GetTranslation(), mat:GetAngles()
+
+	local pos, ang = LocalToWorld(lpos, lang, bonepos, boneang)
+	
+	return {Pos = pos, Ang = ang, Bone = bon}
+end
+
+function SWEP:GetTrace(nomodify)
+	local obj = self:LookupAttachment("muzzle") or 0
+	
+	local att = self:GetSAttachment(self.att or obj)
+	if not att then
+		local Pos, Ang = self:GetTransform()
+		
+		att = {Pos = Pos, Ang = Ang}
+	end
+	
+	local pos, ang = att.Pos, att.Ang
+
+	if not nomodify then
+		pos, ang = LocalToWorld(self.addPos or vector_origin,self.addAng or angle_zero,att.Pos,att.Ang)
+	end
+
+	return pos, ang
+end
+
 function SWEP:FireBullet(dmg, numbul, spread)
 	if self:Clip1() <= 0 then return end
 	if timer.Exists("reload"..self:EntIndex()) then return nil end
@@ -448,28 +474,14 @@ function SWEP:FireBullet(dmg, numbul, spread)
 
 	ply:LagCompensation(true)
 
-	local obj = self:LookupAttachment("muzzle")
-	
-	local Attachment = self:GetAttachment(obj)
+	local shootOrigin, shootAngles = self:GetTrace()
 
-	if not Attachment then
-		local Pos,Ang = self:GetPosAng()
-		
-		Attachment = {Pos = Pos,Ang = Ang}
-	end
-	
 	local cone = self.Primary.Cone
-
-	local shootOrigin = Attachment.Pos
-	local vec = vecZero
-	vec:Set(self.addPos)
-	vec:Rotate(Attachment.Ang)
-	shootOrigin:Add(vec)
-
-	local shootAngles = Attachment.Ang
-	local ang = angZero
-	ang:Set(self.addAng)
-	shootAngles:Add(ang)
+	
+	local _
+	if not ply:IsNPC() then
+		_, shootOrigin, _ = util.DistanceToLine(shootOrigin - shootAngles:Forward(),shootOrigin,ply:EyePos())
+	end
 
 	local shootDir = shootAngles:Forward()
 
@@ -538,7 +550,6 @@ function SWEP:FireBullet(dmg, numbul, spread)
 
 	if SERVER then self:TakePrimaryAmmo(1) end
 	
-	self:Step()
 
 	if ply:GetNWBool("Suiciding") then
 		if SERVER then
@@ -686,11 +697,17 @@ function ENTITY:SetBoneMatrix2(boneID,matrix,dontset)
 	return lpos,lang
 end
 
-local pistol_hold = Angle(20,-20,0)
+local pistol_hold = Angle(10,-10,0)
 local rifle_hold = Angle(-5,-8,0)
 
 function SWEP:IsPistolHoldType()
 	return self.HoldType == "revolver" 
+end
+
+SWEP.ishgweapon = true
+
+function ishgweapon(wep)
+	return wep.ishgweapon
 end
 
 function SWEP:Step()
@@ -716,6 +733,10 @@ function SWEP:Step()
 		ply:SetNWInt("LeftArm",ply.LeftArm)
 	end
 
+	if SERVER then self:WorldModelTransform() end
+end
+
+function SWEP:ApplyAnim(ply)
 	local t = {}
 
 	if not self.TwoHands then
@@ -785,22 +806,6 @@ function SWEP:Step()
 	end
 	self.lerpClose = LerpFT(0.1,self.lerpClose,(self.isClose and 1) or 0)
 
-	local eyeangles = (-ply:GetEyeTrace().HitPos + ply:EyePos()):Angle()
-	eyeangles:RotateAroundAxis(eyeangles:Up(),180)
-	
-	if ((CLIENT and isLocal) or SERVER) then
-		if not ply:GetNWBool("Suiciding") and not ply:IsSprinting() then
-			local numbr = self.TwoHands and 50 or 80
-			if eyeangles[1] > numbr then
-				hand[1] = hand[1] - (eyeangles[1] - numbr)
-			end
-
-			if eyeangles[1] < -numbr then
-				hand[1] = hand[1] - (eyeangles[1] + numbr)
-			end
-		end
-	end
-
 	clavicle:Set(angZero)
 	closeAng[3] = -40 * self.lerpClose--(-60 + math_Clamp(ply:EyeAngles()[1],0,60)) * self.lerpClose
 	clavicle:Add(closeAng)
@@ -811,31 +816,59 @@ function SWEP:Step()
 	local forearm_index = ply:LookupBone("ValveBiped.Bip01_R_Forearm")
 	local clavicle_index = ply:LookupBone("ValveBiped.Bip01_R_Clavicle")
 	
-	local matrix = ply:GetBoneMatrix(hand_index)
-	local ang = ply:EyeAngles()
-	ang:RotateAroundAxis(ang:Forward(),180)
-	ang:RotateAroundAxis(ang:Right(),8)
-	matrix:SetAngles(ang)
-	local lpos,lang = ply:SetBoneMatrix2(hand_index,matrix,false)
+	local attPos,attAng = self:GetTrace()
 
+	local matrix = ply:GetBoneMatrix(hand_index)
+	if not matrix then return end
+	local plyang = ply:EyeAngles()
+	plyang:RotateAroundAxis(plyang:Forward(),0)
+
+	local _,newAng = LocalToWorld(vector_origin,self.localAng or angle_zero,vector_origin,plyang)
+	local ang = newAng
+	ang:RotateAroundAxis(ang:Forward(),-90)
+	--ang:RotateAroundAxis(ang:Right(),8)
+	matrix:SetAngles(ang)
+	
+	local lpos,lang = ply:SetBoneMatrix2(hand_index,matrix,false)
 
 	if not ply:GetNWBool("Suiciding") and not ply:IsSprinting() then
 		hand = lang
 	end
 
+	local _,localAng = WorldToLocal(vector_origin,attAng,vector_origin,ang)
+	localAng:RotateAroundAxis(localAng:Forward(),0)
+
+	if not ply:GetNWBool("Suiciding") and not ply:IsSprinting() then
+		self.localAng = Lerp(0.2,self.localAng or angle_zero,localAng)
+	end
+
+	if SERVER then
+		local tr = {}
+		tr.start = attPos
+		tr.endpos = attPos + attAng:Forward() * 9999
+		tr.filter = {ply}
+		local trace = util.TraceLine(tr)
+		debugoverlay.Sphere(trace.HitPos,2,0.1,color_white)
+	end
+	
 	ply:ManipulateBoneAngles(forearm_index,forearm,false)
 	ply:ManipulateBoneAngles(clavicle_index,clavicle,false)
 	ply:ManipulateBoneAngles(hand_index,hand,false)
-
-	--ply:ManipulateBonePosition(ply:LookupBone("ValveBiped.Bip01_R_Upperarm"),upperarm_pos,false)
-	--ply:ManipulateBonePosition(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),clavicle_pos,false)
 end
+
+hook.Add("UpdateAnimation","weapon_animations",function(ply,vel,maxseqgroundspeed)
+	local wep = ply:GetActiveWeapon()
+
+	if IsValid(wep) and ishgweapon(wep) then
+		wep:ApplyAnim(ply)
+	end
+end)
 
 function SWEP:Holster( wep )
 	--if not IsFirstTimePredicted() then return end
 	local ply = self:GetOwner()
 
-	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end--;c
+	if not IsValid(ply) or not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end--;c
 
 	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_Hand" ), Angle( 0,0,0 ) )
 	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_Forearm" ), Angle( 0,0,0 ))
@@ -865,4 +898,159 @@ end
 
 function SWEP:ShouldDropOnDie()
 	return false
+end
+
+function SWEP:IsSighted()
+	return IsValid(self:GetOwner()) and self:GetOwner():KeyDown(IN_ATTACK2)
+end
+
+function SWEP:CreateWorldModel()
+	if CLIENT then
+		local model = ClientsideModel(self.WorldModel,RENDER_GROUP_OPAQUE_ENTITY)
+		model:SetNoDraw(true)
+		model:SetModel(self.WorldModel)
+		model:SetModelScale(self.dwmModeScale or 1)
+		return model
+	else
+		local model = ents.Create("prop_physics")
+		model:SetNoDraw(true)
+		model:SetModel(self.WorldModel)
+		model:SetMaterial("models/wireframe")
+		model:Spawn()
+		model:PhysicsDestroy()
+		model:SetMoveType(MOVETYPE_NONE)
+		model:SetNWBool("nophys", true)
+		model:SetSolidFlags(FSOLID_NOT_SOLID)
+		model:AddEFlags(EFL_NO_DISSOLVE)
+
+		return model
+	end
+end
+
+function SWEP:WorldModelTransform()
+    local owner = self:GetOwner()
+    if not IsValid(owner) then
+		if IsValid(self.worldModel) then
+			self.worldModel:Remove()
+			self.worldModel = nil
+		end
+
+		self:DrawModel()
+
+        return
+    end
+
+    local model = self.worldModel
+    if not IsValid(self.worldModel) then
+        self.worldModel = self:CreateWorldModel()
+        model = self.worldModel
+    end
+
+    local Pos,Ang = self:GetTransform(model)
+	
+    model:SetPos(Pos)
+    model:SetAngles(Ang)
+
+	if CLIENT then
+		model:SetRenderOrigin(Pos)
+    	model:SetRenderAngles(Ang)
+	end
+
+	if CLIENT then model:SetupBones() end
+
+    --model:DrawModel()
+end
+
+function SWEP:DrawWorldModel()
+	--self:DrawModel()
+	self:WorldModelTransform()
+
+	if IsValid(self.worldModel) then
+		self.worldModel:DrawModel()
+	end
+end
+
+SWEP.localpos = Vector(0,0,0)
+SWEP.localang = Angle(0,0,0)
+
+function SWEP:GetTransform(model)
+	local model = IsValid(model) and model
+	
+	if not IsValid(model) then
+		self.worldModel = IsValid(self.worldModel) and self.worldModel or self:CreateWorldModel()
+		model = self.worldModel
+	end
+
+    local owner = self:GetOwner()
+
+	if CLIENT then model:SetPredictable(true) end
+
+	if CLIENT then owner:SetupBones() model:SetupBones() end
+
+	local bon = owner:LookupBone("ValveBiped.Bip01_R_Hand")
+
+	if not bon then return self:GetPos(),self:GetAngles() end
+
+	local rh = owner:GetBoneMatrix(bon)
+
+	if not rh then return self:GetPos(),self:GetAngles() end
+
+	local pos,ang = rh:GetTranslation(),rh:GetAngles()
+
+	local oldpos,oldang = model:GetPos(),model:GetAngles()
+
+	model:SetPos(pos)
+	model:SetAngles(ang)
+
+	if CLIENT then
+		model:SetRenderOrigin(pos)
+    	model:SetRenderAngles(ang)
+	end
+	
+	if CLIENT then model:SetupBones() end
+
+	local bon2 = model:LookupBone("ValveBiped.Bip01_R_Hand")
+	if bon2 then
+		local rh_wep = model:GetBoneMatrix(bon2)
+
+		if rh_wep then
+			local newmat = rh_wep:GetInverse() * rh
+
+			pos,ang = LocalToWorld(newmat:GetTranslation(),newmat:GetAngles(), pos, ang)
+		end
+	end
+	
+    pos:Add(ang:Forward() * (self.dwmForward or 0))
+    pos:Add(ang:Right() * (self.dwmRight or 0))
+    pos:Add(ang:Up() * (self.dwmUp or 0))
+
+    ang:RotateAroundAxis(ang:Up(),(self.dwmAUp or 0))
+    ang:RotateAroundAxis(ang:Right(),(self.dwmARight or 0))
+    ang:RotateAroundAxis(ang:Forward(),(self.dwmAForward or 0))
+
+    return pos, ang
+end
+
+if CLIENT then
+	SWEP.SightPos = Vector(-30, 2.3, -0.28)
+	SWEP.SightAng = Angle(0, 0, 0)--unused (D)
+
+	local lerpaim = 0
+	function SWEP:Camera(ply, origin, angles)
+		local pos, ang = self:GetTrace(true)
+		
+		lerpaim = LerpFT(0.1, lerpaim, self:IsSighted() and 1 or 0)
+		
+		local neworigin, _ = LocalToWorld(self.SightPos, self.SightAng, pos, ang)
+
+		origin = Lerp(lerpaim,origin,neworigin)
+		
+		local animpos = math.max(self:LastShootTime() - CurTime() + 0.1,0) * 20
+		origin = origin + ang:Forward() * animpos --+ angles:Up() * animpos / 20
+		
+		origin = origin + ang:Right() * math.random(-0.1,0.1) * (animpos/200) + angles:Up() * math.random(-0.1,0.1) * (animpos/200)
+
+		return origin, angles
+	end
+
 end

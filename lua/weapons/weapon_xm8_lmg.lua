@@ -42,10 +42,12 @@ SWEP.DrawCrosshair			= false
 SWEP.ViewModel				= "models/pwb2/weapons/w_xm8lmg.mdl"
 SWEP.WorldModel				= "models/pwb2/weapons/w_xm8lmg.mdl"
 
-SWEP.addAng = Angle(0.3,-0.25,0)
+SWEP.addAng = Angle(0.2,-0,0)
 SWEP.addPos = Vector(0,4,-0.7)
 SWEP.vbwPos = Vector(1.5,-7.1,0)
 SWEP.vbwAng = Angle(15,10,-90)
+
+SWEP.SightPos = Vector(-33,4,-0.4)
 
 --DO NOT APPLY 3D CROSSHAIRS ON GUNS WITH TRANSPARENT GLASS. BROKEN AF.
 /*----------------------------------------- this is so fucking broken.
