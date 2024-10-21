@@ -1,3 +1,4 @@
+
 function ffa.StartRoundSV()
     tdm.RemoveItems()
 
@@ -8,7 +9,7 @@ function ffa.StartRoundSV()
     for i, ply in pairs(players) do
         ply:SetTeam(1)
         ply:SetNWInt("KillCount", 0)
-        ffa.SpawnPlayer(ply) 
+        ffa.SpawnPlayer(ply)
     end
 
     local aviable = ReadDataMap("dm")
@@ -23,6 +24,7 @@ function ffa.StartRoundSV()
 
     return {roundTimeStart, roundTime}
 end
+
 
 function ffa.SpawnPlayer(ply)
     ply:SetModel(tdm.models[math.random(#tdm.models)])
@@ -43,7 +45,7 @@ function ffa.SpawnPlayer(ply)
         local r = math.random(1, 4)
         local p = math.random(1, 4)
         ply:Give((r == 1 and "weapon_spas12") or (r == 2 and "weapon_xm1014") or (r == 3 and "weapon_remington870") or (r == 4 and "weapon_minu14"))
-        ply:Give((p == 1 and "weapon_ump") or p == 2 and "weapon_fiveseven" or p == 3 and "weapon_glock" or p == 4 and "weapon_glock18")
+        ply:Give((p == 1 and "weapon_ump") or p == 2 and "weapon_fiveseven" or p == 3 and "weapon_glock" or p == 4 and "weapon_glock18"))
         ply:Give("weapon_kabar")
         ply:Give("medkit")
         ply:Give("med_band_big")
@@ -72,6 +74,7 @@ function ffa.SpawnPlayer(ply)
     ply:SetLadderClimbSpeed(100)
 end
 
+
 function ffa.RoundEndCheck()
     local winner = nil
     local highestKills = 0
@@ -98,6 +101,7 @@ function ffa.RoundEndCheck()
     end
 end
 
+
 function ffa.EndRound(winner)
     if winner then
         PrintMessage(3, winner:GetName() .. " won with " .. winner:GetNWInt("KillCount") .. " kills!")
@@ -109,9 +113,10 @@ function ffa.EndRound(winner)
         ply:SetNWInt("KillCount", 0)
     end
 
-    hook.Remove("EntityTakeDamage", "FFA_TrackPlayerDamage")
-    hook.Remove("PlayerDeath", "FFA_HandlePlayerDeath")
+
+    damageTracking = {}
 end
+
 
 function ffa.TrackPlayerDamage(target, dmgInfo)
     if target:IsPlayer() and dmgInfo:GetAttacker():IsPlayer() then
@@ -128,6 +133,7 @@ function ffa.TrackPlayerDamage(target, dmgInfo)
         damageTracking[target][attacker] = damageTracking[target][attacker] + dmgInfo:GetDamage()
     end
 end
+
 
 function ffa.HandlePlayerDeath(victim)
     if damageTracking[victim] then
@@ -150,10 +156,11 @@ function ffa.HandlePlayerDeath(victim)
 
     timer.Simple(10, function()
         if IsValid(victim) then
-            ffa.SpawnPlayer(victim) 
+            ffa.SpawnPlayer(victim)
         end
     end)
 end
+
 
 function ffa.PlayerInitialSpawn(ply)
     ply:SetTeam(1)
@@ -166,5 +173,6 @@ function ffa.PlayerCanJoinTeam(ply, teamID)
     end
     return true
 end
+
 
 damageTracking = {}

@@ -3,29 +3,39 @@ ffa = {}
 ffa.Name = "Free For All"
 ffa.LoadScreenTime = 5.5
 
-
 function ffa.StartRound(data)
-    team.SetColor(1, Color(255, 0, 0))  
+    team.SetColor(1, Color(9, 255, 0))  
+
 
     game.CleanUpMap(false)
 
     if CLIENT then
         roundTimeStart = data[1]
         roundTime = data[2]
-        ffa.StartRoundCL()
+        ffa.StartRoundCL()  
+
         return
     end
 
-    return ffa.StartRoundSV()
+
+    return ffa.StartRoundSV()  
 end
 
+
 if SERVER then return end
+
 
 local white, red = Color(255, 255, 255), Color(255, 0, 0)
 local playsound = false
 
 function ffa.StartRoundCL()
     playsound = true
+end
+
+function ffa.GetTeamName(ply)
+    local teamID = ply:Team()
+
+     if teamID == 1 then return "Fighter",red end
 end
 
 
