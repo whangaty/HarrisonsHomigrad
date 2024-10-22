@@ -4,7 +4,9 @@ local bloodparticels1 = bloodparticels1
 
 local bloodparticels_hook = bloodparticels_hook
 
-local tr = {filter = function(ent) return not ent:IsPlayer() and not ent:IsRagdoll() end}
+local tr = {
+    mask = MASK_SOLID_BRUSHONLY,
+}
 
 local vecDown = Vector(0,0,-40)
 local vecZero = Vector(0,0,0)

@@ -172,7 +172,7 @@ function wick.PlayerDeath(ply,inf,att) return false end
 
 local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
 local uncommon = {"medkit","weapon_molotok","painkiller"}
-local rare = {"weapon_glock18","weapon_gurkha","weapon_t","weapon_per4ik","*ammo*"}
+local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_per4ik","*ammo*"}
 
 function wick.ShouldSpawnLoot()
     return false

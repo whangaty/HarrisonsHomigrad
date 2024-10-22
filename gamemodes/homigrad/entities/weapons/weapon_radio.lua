@@ -49,7 +49,7 @@ if SERVER then
     function SWEP:Initialize()
         self:SetHoldType("normal")
 
-        homigrad_weapons[self] = true
+        AddHomigradWeapon(self)
 
         self.voiceSpeak = 0
         self.lisens = {}
@@ -147,12 +147,10 @@ else
     function SWEP:DrawHUD()
         if LocalPlayer():InVehicle() or not hg_hint:GetBool() then return end
 
-        draw.SimpleText("В голосовой","DebugFixedSmall",ScrW() / 2 - 200,ScrH() - 175,white)
-        draw.SimpleText("Зажми ПКМ и говори","DebugFixedSmall",ScrW() / 2 + 200,ScrH() - 175,white,TEXT_ALIGN_RIGHT)
-        draw.SimpleText("В чат","DebugFixedSmall",ScrW() / 2 - 200,ScrH() - 150,white)
-        draw.SimpleText("Просто пиши и держи в руках","DebugFixedSmall",ScrW() / 2 + 200,ScrH() - 150,white,TEXT_ALIGN_RIGHT)
-        draw.SimpleText("Сидя в машине нужно просто говорить","DebugFixedSmall",ScrW() / 2 ,ScrH() - 125,white,TEXT_ALIGN_CENTER)
+        draw.SimpleText("RMB to use voice chat on the radio","DebugFixedSmall",ScrW() / 2 - 200,ScrH() - 175,white)
+        draw.SimpleText("If you're in a car, just speak to use voice chat on the radio","DebugFixedSmall",ScrW() / 2 ,ScrH() - 125,white,TEXT_ALIGN_CENTER)
+        draw.SimpleText("Type to use text chat on the radio","DebugFixedSmall",ScrW() / 2 - 200,ScrH() - 150,white)
 
-        draw.SimpleText("Убрать подсказки hg_hint 0","DebugFixedSmall",ScrW() / 2,ScrH() - 100,white,TEXT_ALIGN_CENTER)
+        draw.SimpleText("hg_hint 0 to not show this shit","DebugFixedSmall",ScrW() / 2,ScrH() - 100,white,TEXT_ALIGN_CENTER)
     end
 end

@@ -2,7 +2,7 @@ local CLASS = player.RegClass("contr")
 
 CLASS.weapons = {"weapon_radio","weapon_police_bat","med_band_big","medkit","painkiller","adrenaline","weapon_handcuffs","weapon_taser","weapon_hg_flashbang"}
 CLASS.main_weapon = {"weapon_ar15","weapon_m3super"}
-CLASS.secondary_weapon = {"weapon_beretta","weapon_fiveseven"}
+CLASS.secondary_weapon = {"weapon_beretta","weapon_p99"}
 CLASS.models = {"models/monolithservers/mpd/male_04_2.mdl","models/monolithservers/mpd/male_06_2.mdl","models/monolithservers/mpd/male_07_2.mdl","models/monolithservers/mpd/male_08_2.mdl","models/monolithservers/mpd/male_09_2.mdl"}
 CLASS.color = Color(75,75,75)
 

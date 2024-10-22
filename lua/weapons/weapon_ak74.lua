@@ -57,12 +57,20 @@ function SWEP:PrimaryAttack()
 
 	if timer.Exists("reload"..self:EntIndex()) then return nil end
 	if self:Clip1()<=0 then return nil end
-	if self:GetOwner():IsSprinting() then return nil end
 	local ply = self:GetOwner()
+	if ply:IsSprinting() then return nil end
 	self.NextShot = CurTime() + self.ShootWait
 	self:EmitSound(self.Primary.Sound)
     self:FireBullet(self.Primary.Damage, 1, 5)
-    self:GetOwner():SetVelocity(self:GetOwner():EyeAngles():Forward()*-200)
+    ply:SetVelocity(ply:EyeAngles():Forward()*-200)
+
+	local ent = IsValid(ply.FakeRagdoll) and ply.FakeRagdoll or ply
+	if IsValid(ent) then
+		local phys = ent:GetPhysicsObjectNum(1)
+		if IsValid(phys) then
+			phys:ApplyForceCenter(ply:EyeAngles():Forward() * -5000)
+		end
+	end
 end
 
 SWEP.vbwPos = Vector(-4,-4,4)

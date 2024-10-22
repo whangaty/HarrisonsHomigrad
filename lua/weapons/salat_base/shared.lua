@@ -39,7 +39,49 @@ SWEP.ReloadSound = ""
 SWEP.TwoHands = false
 
 
+FrameTimeClamped = 1/66
+ftlerped = 1/66
 
+local def = 1 / 144
+
+local FrameTime, TickInterval, engine_AbsoluteFrameTime = FrameTime, engine.TickInterval, engine.AbsoluteFrameTime
+local Lerp, LerpVector, LerpAngle = Lerp, LerpVector, LerpAngle
+local math_min = math.min
+local math_Clamp = math.Clamp
+
+hook.Add("Think", "Mul lerp", function()
+	local ft = FrameTime()
+	ftlerped = math_Clamp(ft,0.001,0.1)
+end)
+
+function hg.FrameTimeClamped(ft)
+	return math_Clamp(1 - math.exp(-0.5 * (ft or ftlerped)), 0.001, 0.01)
+end
+
+local FrameTimeClamped_ = hg.FrameTimeClamped
+
+local function lerpFrameTime(lerp,frameTime)
+	return math_Clamp(1 - lerp ^ (frameTime or FrameTime()), 0, 1)
+end
+
+local function lerpFrameTime2(lerp,frameTime)
+	return math_Clamp(lerp * FrameTimeClamped_(frameTime) * 150, 0, 1)
+end
+
+hg.lerpFrameTime2 = lerpFrameTime2
+hg.lerpFrameTime = lerpFrameTime
+
+function LerpFT(lerp, source, set)
+	return Lerp(lerpFrameTime2(lerp), source, set)
+end
+
+function LerpVectorFT(lerp, source, set)
+	return LerpVector(lerpFrameTime2(lerp), source, set)
+end
+
+function LerpAngleFT(lerp, source, set)
+	return LerpAngle(lerpFrameTime2(lerp), source, set)
+end
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
@@ -256,8 +298,20 @@ local skini = {
 	"models/jacky_camouflage/digi2"
 }
 
+--util.AddNetworkString("SendHomigradWeapons")
+
+function AddHomigradWeapon(self)
+	table.insert(homigrad_weapons,self)
+	
+	--[[if SERVER then
+		net.Start("SendHomigradWeapons", true)
+		net.WriteEntity(homigrad_weapons)
+		net.Broadcast()
+	end--]]
+end
+
 function SWEP:Initialize()
-	homigrad_weapons[self] = true
+	AddHomigradWeapon(self)
 
 	if SERVER then
 		self:SetNWString( "skin", table.Random(skini) )
@@ -273,28 +327,6 @@ function SWEP:CanFireBullet()
 	return true
 end
 
-if SERVER then
-	util.AddNetworkString("huysound")
-end
-
-if CLIENT then
-	net.Receive("huysound",function(len)
-		local pos = net.ReadVector()
-		local sound = net.ReadString()
-		local farsound = net.ReadString() or "m9/m9_dist.wav"
-		local ent = net.ReadEntity()
-
-		if ent == LocalPlayer() then return end
-
-		local dist = LocalPlayer():EyePos():Distance(pos)
-		if ent:IsValid() and dist < 1100 then
-			ent:EmitSound(sound,ent.Supressed and 35 or 125,math.random(100,120),1,CHAN_WEAPON,0,0)
-		elseif ent:IsValid() then
-			ent:EmitSound(farsound,ent.Supressed and 35 or 125,math.random(100,120),1,CHAN_WEAPON,0,0)
-		end
-	end)
-end
-
 SWEP.ZazhimYaycami = 0
 
 function SWEP:PrimaryAttack()
@@ -308,7 +340,7 @@ function SWEP:PrimaryAttack()
 
 	local canfire = self:CanFireBullet()
 	--self:GetOwner():ChatPrint(tostring(canfire)..(CLIENT and " client" or " server"))
-	if self:Clip1() <= 0 or not canfire and self.NextShot < CurTime() then
+	if self:Clip1() <= 0 or not canfire then
 		if SERVER then
 			sound.Play("snd_jack_hmcd_click.wav",self:GetPos(),65,100)
 		end
@@ -323,39 +355,13 @@ function SWEP:PrimaryAttack()
 
 	local ply = self:GetOwner() -- а ну да
 	self.NextShot = CurTime() + self.ShootWait
-
-	--[[if SERVER then
-		sound.Emit(self,self.Primary.Sound,511,2,100,self:GetOwner(),1)
-	else
-		sound.Emit(self,self.Primary.Sound,511,2,100,1)
-	end]]-- Шарик ты даун
-
-	--[[
-	if SERVER then
-		local Dist = 60
-		local Pitch = 100
-
-		if self.Suppressed then Dist = 55 end
-
-		sound.Play(self.Primary.Sound,self:GetOwner():GetShootPos(),Dist,Pitch) --  надо звук а ну или так Я звуки с хомиса добавил, кетовскго, можно дальние оттуда взять
-
-		sound.Play(self.Primary.Sound,self:GetOwner():GetShootPos(),Dist * 5,Pitch / 2,1)
-	end
-	--]]
 	
 	if SERVER then
-		net.Start("huysound")
-		net.WriteVector(self:GetPos())
-		net.WriteString(self.Primary.Sound)
-		net.WriteString(self.Primary.SoundFar)
-		net.WriteEntity(self:GetOwner())
-		net.Broadcast()
-	else
-		self:EmitSound(self.Primary.Sound,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
+		local ent = IsValid(ply.FakeRagdoll) and ply.FakeRagdoll or ply
+		ent:EmitSound(self.Primary.Sound,80,math.random(100,120),1,CHAN_WEAPON)
 	end
 	
-	local dmg = self.Primary.Damage--self.TwoHands and self.Primary.Damage * 2 or self.Primary.Damage
-    self:FireBullet(dmg, 1, 5)
+    self:FireBullet()
 
 	if SERVER and not ply:IsNPC() then
 		if ply.RightArm < 1 then
@@ -433,19 +439,24 @@ end
 
 function SWEP:GetSAttachment(obj)
 	local pos, ang = self:GetTransform()
-
-	local att = self:GetAttachment(obj)
+	local owner = self:GetOwner()
+	
+	local model = IsValid(owner.wep) and owner.wep or self
+	
+	local att = model:GetAttachment(obj)
 	
 	if not att then return end
 
+	if IsValid(owner.wep) then return att end
+	
 	local bon = att.Bone or 0
-	local mat = self:GetBoneMatrix(bon)
+	local mat = model:GetBoneMatrix(bon)
 	local bonepos, boneang = mat:GetTranslation(), mat:GetAngles()
 	local lpos, lang = WorldToLocal(att.Pos or bonepos, att.Ang or boneang, bonepos, boneang)
 	
 	if CLIENT then self:SetupBones() end
 
-	local mat = self:GetBoneMatrix(bon)
+	local mat = model:GetBoneMatrix(bon)
 	local bonepos, boneang = mat:GetTranslation(), mat:GetAngles()
 
 	local pos, ang = LocalToWorld(lpos, lang, bonepos, boneang)
@@ -454,12 +465,20 @@ function SWEP:GetSAttachment(obj)
 end
 
 function SWEP:GetTrace(nomodify)
+	local owner = self:GetOwner()
 	local obj = self:LookupAttachment("muzzle") or 0
 	
 	local att = self:GetSAttachment(self.att or obj)
+	
 	if not att then
-		local Pos, Ang = self:GetTransform()
-		
+		local Pos, Ang
+
+		if IsValid(owner.wep) then
+			Pos, Ang = owner.wep:GetPos(), owner.wep:GetAngles()
+		else
+			Pos, Ang = self:GetTransform()
+		end
+
 		att = {Pos = Pos, Ang = Ang}
 	end
 	
@@ -471,8 +490,48 @@ function SWEP:GetTrace(nomodify)
 
 	return pos, ang
 end
+--[[
+local huyprecahche = {
+    "muzzleflash_SR25",
+    "pcf_jack_mf_tpistol",
+    "pcf_jack_mf_mshotgun",
+    "pcf_jack_mf_msmg",
+    "pcf_jack_mf_spistol",
+    "pcf_jack_mf_mrifle2",
+    "pcf_jack_mf_mrifle1",
+    "pcf_jack_mf_mpistol",
+    "pcf_jack_mf_suppressed",
+    "muzzleflash_pistol_rbull",
+    "muzzleflash_m24",
+    "muzzleflash_m79",
+    "muzzleflash_M3",
+    "muzzleflash_m14",
+    "muzzleflash_g3",
+    "muzzleflash_FAMAS",
+    "muzzleflash_ak74",
+    "muzzleflash_ak47",
+    "muzzleflash_mp5",
+    "muzzleflash_suppressed",
+    "muzzleflash_MINIMI",
+    "muzzleflash_svd",
+    "new_ar2_muzzle"
+}
+]]
+local CaliberEffects = {
+	[".44 Remington Magnum"] = "pcf_jack_mf_mshotgun",
+	["5.7×28 mm"] = "pcf_jack_mf_msmg",
+	["4.6×30 mm"] = "pcf_jack_mf_msmg",
+	[".45 Rubber"] = "pcf_jack_mf_spistol",
+	["12/70 beanbag"] = "pcf_jack_mf_mshotgun",
+	["12/70 gauge"] = "pcf_jack_mf_mshotgun",
+	["7.62x39 mm"] = "pcf_jack_mf_mrifle1",
+	["5.56x45 mm"] = "pcf_jack_mf_mrifle1",
+	["5.45x39 mm"] = "pcf_jack_mf_mrifle2",
+	["9x19 mm"] = "pcf_jack_mf_spistol",
+	["9x39 mm"] = "pcf_jack_mf_spistol",
+}
 
-function SWEP:FireBullet(dmg, numbul, spread)
+function SWEP:FireBullet()
 	if self:Clip1() <= 0 then return end
 	if timer.Exists("reload"..self:EntIndex()) then return nil end
 	
@@ -481,12 +540,19 @@ function SWEP:FireBullet(dmg, numbul, spread)
 	ply:LagCompensation(true)
 
 	local shootOrigin, shootAngles = self:GetTrace()
-
+	
 	local cone = self.Primary.Cone
 	
 	local _
 	if not ply:IsNPC() then
 		_, shootOrigin, _ = util.DistanceToLine(shootOrigin - shootAngles:Forward(),shootOrigin,ply:EyePos())
+	end
+
+	if IsValid(ply.wep) then
+		local phys = ply.wep:GetPhysicsObject()
+		if IsValid(phys) then
+			phys:ApplyForceCenter(phys:GetAngles():Forward() * -250)
+		end
 	end
 
 	local shootDir = shootAngles:Forward()
@@ -504,10 +570,11 @@ function SWEP:FireBullet(dmg, numbul, spread)
 	bullet.Attacker 	= self:GetOwner()
 	bullet.Tracer       = 1
 	bullet.TracerName   = self.Tracer or "Tracer"
-	bullet.IgnoreEntity = not self:GetOwner():IsNPC() and self:GetOwner():GetVehicle() or self:GetOwner()
+	bullet.IgnoreEntity = IsValid(self:GetOwner():GetVehicle()) and self:GetOwner():GetVehicle() or IsValid(self:GetOwner().wep) and self:GetOwner().wep or self:GetOwner()
 
+	local wep = self
 	bullet.Callback = function(ply,tr,dmgInfo)
-		ply:GetActiveWeapon():BulletCallbackFunc(self.Primary.Damage,ply,tr,self.Primary.Damage,false,true,false)
+		wep:BulletCallbackFunc(self.Primary.Damage,ply,tr,self.Primary.Damage,false,true,false)
 
 		--dmgInfo:SetDamageForce(dmgInfo:GetDamageForce())
 
@@ -527,28 +594,7 @@ function SWEP:FireBullet(dmg, numbul, spread)
 		effectdata:SetHitBox(tr.HitBox)
 
 		util.Effect("Impact",effectdata,true,true)
-		
-		--[[local effectdata = EffectData()
-		effectdata:SetEntity(tr.Entity)
-		effectdata:SetOrigin(tr.HitPos)
-		effectdata:SetStart(tr.StartPos)
-		effectdata:SetHitBox(tr.HitBox)
-		effectdata:SetFlags(0x0001)
-		util.Effect("Tracer",effectdata,true,true)
-		for i, ply in player.Iterator() do
-			net.Start("shoot_tracer")
-			net.WriteTable(tr)
-			net.WriteEntity(self)
-			net.Send(ply)
-		end
-		local effectdata = EffectData()
-		effectdata:SetEntity(tr.Entity)
-		effectdata:SetOrigin(tr.HitPos)
-		effectdata:SetStart(tr.StartPos)
-		effectdata:SetHitBox(tr.HitBox)
-		effectdata:SetFlags(0x0001)]]--
-		--util.Effect("Tracer",effectdata,true,true)
-		--util.ParticleTracerEx("Tracer",tr.StartPos,tr.HitPos,true,self:EntIndex(),self:LookupAttachment("muzzle"))
+
 		net.Start("shoot_huy")
 		net.WriteTable(tr)
 		net.Broadcast()
@@ -589,45 +635,22 @@ function SWEP:FireBullet(dmg, numbul, spread)
 
 	ply:LagCompensation(false)
 
-	local effectdata = EffectData()
-	effectdata:SetOrigin(shootOrigin)
-	effectdata:SetAngles(shootAngles)
-	effectdata:SetScale(self:IsScope() and 0.1 or 1)
-	effectdata:SetNormal(shootDir)
-	util.Effect(self.Efect or "MuzzleEffect",effectdata)
+	--local effectdata = EffectData()
+	--effectdata:SetOrigin(shootOrigin)
+	--effectdata:SetAngles(shootAngles)
+	--effectdata:SetScale(self:IsScope() and 0.1 or 1)
+	--effectdata:SetNormal(shootDir)
+	--util.Effect(self.Efect or "MuzzleEffect",effectdata, true, true)
+	local particle = ParticleEffect(self.Supressed and "pcf_jack_mf_suppressed" or CaliberEffects[self.Primary.Ammo] or "pcf_jack_mf_spistol",npc,npcdir:Angle(),self)
 
 	if self:GetOwner():IsNPC() then
 		self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 	end
 end
 
-local mul = 1
-local FrameTime,TickInterval = FrameTime,engine.TickInterval
-
-hook.Add("Think","Mul lerp",function()
-	mul = FrameTime() / TickInterval()
-end)
-
-local Lerp,LerpVector,LerpAngle = Lerp,LerpVector,LerpAngle
-local math_min = math.min
-
-function LerpFT(lerp,source,set)
-	return Lerp(math_min(lerp * mul,1),source,set)
-end
-
-function LerpVectorFT(lerp,source,set)
-	return LerpVector(math_min(lerp * mul,1),source,set)
-end
-
-function LerpAngleFT(lerp,source,set)
-	return LerpAngle(math_min(lerp * mul,1),source,set)
-end
-
-local pairs,IsValid = pairs,IsValid
-
 hook.Add("Think","weapons-sadsalat",function()
-	for wep in pairs(homigrad_weapons) do
-		if not IsValid(wep) then homigrad_weapons[wep] = nil continue end
+	for i,wep in ipairs(homigrad_weapons) do
+		if not IsValid(wep) then table.remove(homigrad_weapons,i) continue end
 
 		local owner = wep:GetOwner()
 		if not owner.GetActiveWeapon then continue end
@@ -877,6 +900,8 @@ hook.Add("UpdateAnimation","weapon_animations",function(ply,vel,maxseqgroundspee
 	if not spine_angle then return end
 
 	spine_angle[1] = LerpFT(0.1, spine_angle[1], ply:KeyDown(IN_ALT1) and -30 or ply:KeyDown(IN_ALT2) and 30 or 0)
+	spine_angle[2] = 0
+	spine_angle[3] = 0
 
 	ply:ManipulateBoneAngles(spine_index, spine_angle, false)
 	ply.spine_angle = spine_angle
@@ -996,7 +1021,8 @@ end
 SWEP.localpos = Vector(0,0,0)
 SWEP.localang = Angle(0,0,0)
 
-function SWEP:GetTransform(model)
+function SWEP:GetTransform(model, force)
+    local owner = self:GetOwner()
 	local model = IsValid(model) and model
 	
 	if not IsValid(model) then
@@ -1004,7 +1030,10 @@ function SWEP:GetTransform(model)
 		model = self.worldModel
 	end
 
-    local owner = self:GetOwner()
+	if IsValid(owner.wep) and not force then return owner.wep:GetPos(),owner.wep:GetAngles() end
+	
+	local owner = IsValid(owner.FakeRagdoll) and owner.FakeRagdoll or owner
+	local model = IsValid(owner.wep) and owner.wep or model
 
 	if CLIENT then model:SetPredictable(true) end
 
@@ -1039,16 +1068,22 @@ function SWEP:GetTransform(model)
 		if rh_wep then
 			local newmat = rh_wep:GetInverse() * rh
 
-			pos,ang = LocalToWorld(newmat:GetTranslation(),newmat:GetAngles(), pos, ang)
+			pos, ang = LocalToWorld(newmat:GetTranslation(),newmat:GetAngles(), pos, ang)
 		end
 	end
-	
+
+	model:SetPos(oldpos)
+	model:SetAngles(oldang)
+
     pos:Add(ang:Forward() * (self.dwmForward or 0))
     pos:Add(ang:Right() * (self.dwmRight or 0))
     pos:Add(ang:Up() * (self.dwmUp or 0))
 
+	local timehuy = 0.1
+	local animpos = math.ease.InBack(math.max(self:LastShootTime() - CurTime() + timehuy,0) / timehuy) * 1
+	
     ang:RotateAroundAxis(ang:Up(),(self.dwmAUp or 0))
-    ang:RotateAroundAxis(ang:Right(),(self.dwmARight or 0))
+    ang:RotateAroundAxis(ang:Right(),(self.dwmARight or 0))-- + animpos * (self:IsPistolHoldType() and 1 or 0))
     ang:RotateAroundAxis(ang:Forward(),(self.dwmAForward or 0))
 
     return pos, ang

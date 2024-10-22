@@ -9,15 +9,15 @@ css.WinPoints[2] = css.WinPoints[2] or 0
 
 css.red = {"Террористы",Color(176,0,0),
 	weapons = {"megamedkit","weapon_binokle","weapon_hands","weapon_hg_hatchet","med_band_small","med_band_big","med_band_small","painkiller","weapon_handcuffs","weapon_radio"},
-	main_weapon = {"weapon_galilsar", "weapon_mp5", "weapon_m3super"},
-	secondary_weapon = {"weapon_beretta","weapon_fiveseven","weapon_beretta"},
+	main_weapon = {"weapon_asval", "weapon_mp5", "weapon_m3super"},
+	secondary_weapon = {"weapon_beretta","weapon_p99","weapon_beretta"},
 	models = {"models/player/leet.mdl","models/player/phoenix.mdl"}
 }
 
 css.blue = {"Контр-Терористы",Color(79,59,187),
 	weapons = {"megamedkit","weapon_binokle","weapon_hg_hatchet","weapon_hands","med_band_big","med_band_small","medkit","painkiller","weapon_handcuffs","weapon_radio"},
 	main_weapon = {"weapon_m4a1","weapon_mp7","weapon_galil"},
-	secondary_weapon = {"weapon_hk_usp", "weapon_deagle"},
+	secondary_weapon = {"weapon_hk_usp", "weapon_mateba"},
 	models = {"models/player/riot.mdl"}
 }
 

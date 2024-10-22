@@ -83,10 +83,6 @@ net.Receive("blood particle headshoot",function()
 
 		addBloodPart(Lerp(i / r * Rand(0.9,1.1),l1,l2),vel,mats[random(1,#mats)],random(10,15),random(10,15))
 	end
-
-	for i = 1,8 do
-		addBloodPart2(pos,vecZero,mats[random(1,#mats)],random(30,45),random(30,45),Rand(1,2))
-	end
 end)
 
 concommand.Add("testpart",function()

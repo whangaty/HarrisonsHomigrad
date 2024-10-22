@@ -20,30 +20,48 @@ hook.Add("Initialize","homigrad-prechache",function()
     end
 end)
 
-local mul = 1
-local FrameTime,TickInterval = FrameTime,engine.TickInterval
+FrameTimeClamped = 1/66
+ftlerped = 1/66
 
-hook.Add("Think","Mul lerp",function()
-	mul = FrameTime() / TickInterval()
+local def = 1 / 144
+
+local FrameTime, TickInterval, engine_AbsoluteFrameTime = FrameTime, engine.TickInterval, engine.AbsoluteFrameTime
+local Lerp, LerpVector, LerpAngle = Lerp, LerpVector, LerpAngle
+local math_min = math.min
+local math_Clamp = math.Clamp
+
+hook.Add("Think", "Mul lerp", function()
+	local ft = FrameTime()
+	ftlerped = math_Clamp(ft,0.001,0.1)
 end)
 
-local Lerp,LerpVector,LerpAngle = Lerp,LerpVector,LerpAngle
-local math_min = math.min
-
-function LerpFT(lerp,source,set)
-	return Lerp(math_min(lerp * mul,1),source,set)
+function hg.FrameTimeClamped(ft)
+	return math_Clamp(1 - math.exp(-0.5 * (ft or ftlerped)), 0.001, 0.01)
 end
 
-function LerpVectorFT(lerp,source,set)
-	return LerpVector(math_min(lerp * mul,1),source,set)
+local FrameTimeClamped_ = hg.FrameTimeClamped
+
+local function lerpFrameTime(lerp,frameTime)
+	return math_Clamp(1 - lerp ^ (frameTime or FrameTime()), 0, 1)
 end
 
-function LerpAngleFT(lerp,source,set)
-	return LerpAngle(math_min(lerp * mul,1),source,set)
+local function lerpFrameTime2(lerp,frameTime)
+	return math_Clamp(lerp * FrameTimeClamped_(frameTime) * 150, 0, 1)
 end
 
-local function func_error(err)
-	ErrorNoHaltWithStack(err)
+hg.lerpFrameTime2 = lerpFrameTime2
+hg.lerpFrameTime = lerpFrameTime
+
+function LerpFT(lerp, source, set)
+	return Lerp(lerpFrameTime2(lerp), source, set)
+end
+
+function LerpVectorFT(lerp, source, set)
+	return LerpVector(lerpFrameTime2(lerp), source, set)
+end
+
+function LerpAngleFT(lerp, source, set)
+	return LerpAngle(lerpFrameTime2(lerp), source, set)
 end
 
 local result,r1,r2,r3,r4,r5,r6,_error,errorH,tbl

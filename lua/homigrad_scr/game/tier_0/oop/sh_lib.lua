@@ -106,7 +106,7 @@ end--никогда не юзал
 local _event,r1,r2,r3,r4,r5,r6,success
 local empty = {}
 
-local pcall = util.pcall
+local pcall = pcall
 
 function LIB:Event_Call(class,...)
 	_event = self.event[class]

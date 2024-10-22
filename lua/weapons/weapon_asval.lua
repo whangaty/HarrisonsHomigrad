@@ -1,7 +1,7 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "Galil-SAR"
+SWEP.PrintName 				= "AS-VAL"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Powerful Automatic Rifle"
 SWEP.Category 				= "Weapon"

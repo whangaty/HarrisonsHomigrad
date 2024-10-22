@@ -51,7 +51,7 @@ end
 homigrad_weapons = homigrad_weapons or {}
 
 function SWEP:Initialize()
-    homigrad_weapons[self] = true
+    AddHomigradWeapon(self)
 end
 
 if SERVER then

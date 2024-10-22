@@ -56,7 +56,7 @@ end
 local function rolldrum(ply,wpn)
     local wep = type(wpn) == "string" and ply:GetActiveWeapon() or wpn
     
-    if not IsValid(ply) or not IsValid(wep) or wep:GetClass() != "weapon_deagle" then return end
+    if not IsValid(ply) or not IsValid(wep) or wep:GetClass() != "weapon_mateba" then return end
 
     wep.tries = math.random(math.max(7 - wep:Clip1(),1))
     --ply:ChatPrint(tostring(wep.tries)..(CLIENT and " client" or " server"))

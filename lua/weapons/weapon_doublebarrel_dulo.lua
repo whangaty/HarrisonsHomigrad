@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "M4 Shotgun"
+SWEP.PrintName 				= "Double Barrel"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Pump it up!"
+SWEP.Instructions			= "Cool gun for a farmer"
 SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon			= "pwb2/vgui/weapons/m4super90"
 

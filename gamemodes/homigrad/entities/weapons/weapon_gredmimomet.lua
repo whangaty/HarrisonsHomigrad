@@ -64,7 +64,7 @@ end
 homigrad_weapons = homigrad_weapons or {}
 
 function SWEP:Initialize()
-    homigrad_weapons[self] = true
+    AddHomigradWeapon(self)
 
     if SERVER then
         local _,ent = table.Random(list)

@@ -52,7 +52,7 @@ local function makeT(ply)
         ply:Give("weapon_radar")
         print(player.GetCount())
     else
-        local wep = ply:Give("weapon_deagle")
+        local wep = ply:Give("weapon_mateba")
         ply:GiveAmmo(3*8, ".44 Remington Magnum", true) -- slots = bullets.
         wep:SetClip1(wep:GetMaxClip1())
         ply:Give("weapon_kabar")
@@ -89,7 +89,7 @@ local function makeCT(ply)
         wep:SetClip1(wep:GetMaxClip1())
         AddNotificate( ply,"You have been given a Taser & Baton to take care of the traitor.")
     elseif homicide.roundType == 4 then
-        local wep = ply:Give("weapon_deagle")
+        local wep = ply:Give("weapon_mateba")
         wep:SetClip1(wep:GetMaxClip1())
         AddNotificate( ply,"You & the traitor have been given identical revolvers. Find them and kill them.")
     else
@@ -101,7 +101,7 @@ COMMANDS.russian_roulette = {function(ply,args)
     if not ply:IsAdmin() then return end
 
 	for i,plya in pairs(player.GetListByName(args[1]) or {ply}) do
-		local wep = plya:Give("weapon_deagle",true)
+		local wep = plya:Give("weapon_mateba",true)
         wep:SetClip1(1)
         wep:RollDrum()
 	end
@@ -342,7 +342,7 @@ function homicide.PlayerDeath(ply,inf,att) return false end
 
 local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
 local uncommon = {"medkit","weapon_molotok","weapon_per4ik","painkiller"}
-local rare = {"weapon_glock18","weapon_gurkha","weapon_t","weapon_deagle","weapon_minu14"}
+local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_mateba","weapon_m590"}
 
 function homicide.ShouldSpawnLoot()
 if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end

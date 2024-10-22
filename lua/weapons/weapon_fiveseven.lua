@@ -1,27 +1,28 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "P99"
+SWEP.PrintName 				= "Five-Seven"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "A small pistol with a smaller punch."
+SWEP.Instructions			= "Why was five afraid of seven? Because seven killed Five's parents."
 SWEP.Category 				= "Weapon"
-SWEP.WepSelectIcon			= "pwb/sprites/p99"
+SWEP.WepSelectIcon			= "entities/weapon_insurgencymakarov.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
 
 ------------------------------------------
 
-SWEP.Primary.ClipSize		= 15
-SWEP.Primary.DefaultClip	= 15
+SWEP.Primary.ClipSize		= 20
+SWEP.Primary.DefaultClip	= 20
 SWEP.Primary.Automatic		= false
-SWEP.Primary.Ammo			= "9х19 mm Parabellum"
+SWEP.Primary.Ammo			= "5.7×28 mm"
 SWEP.Primary.Cone = 0
-SWEP.Primary.Damage = 25
+SWEP.Primary.Damage = 10
+SWEP.RubberBullets = false
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "pwb/weapons/p99/shoot.wav"
+SWEP.Primary.Sound = "pwb2/weapons/fiveseven/fire.wav"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"
-SWEP.Primary.Force = 80/3
+SWEP.Primary.Force = 0.1
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.12
 
@@ -45,16 +46,12 @@ SWEP.SlotPos				= 1
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/pwb/weapons/w_p99.mdl"
-SWEP.WorldModel				= "models/pwb/weapons/w_p99.mdl"
+SWEP.ViewModel				= "models/pwb2/weapons/w_fiveseven.mdl"
+SWEP.WorldModel				= "models/pwb2/weapons/w_fiveseven.mdl"
 
-SWEP.dwsPos = Vector(15,15,5)
-SWEP.dwsItemPos = Vector(10,-1,-3)
+SWEP.vbwPos = Vector(8,0,-6)
+SWEP.addPos = Vector(0,0,0.2)
+SWEP.addAng = Angle(0.4,0,0)
 
-SWEP.vbwPos = Vector(8,-9,-8)
-
-SWEP.addAng = Angle(-0.18,0,0)
-SWEP.addPos = Vector(0.1,0,-0.9)
-
-SWEP.SightPos = Vector(-20,0.35,-0.98)
+SWEP.SightPos = Vector(-20,0.4,-0.55)
 end

@@ -91,13 +91,17 @@ hook.Add("DoPlayerDeath","huyhuy",function(ply)
 			local rag = ply:GetNWEntity("Ragdoll",ply.FakeRagdoll)
 			ent:SetClip1(clip1)
 			ent:SetTable(tbl)
-			ent:SetOwner(rag)
+			--ent:SetOwner(rag)
 			ent:SetParent(rag, 0)
-			ent:SetRenderMode(RENDERMODE_NONE)
+			--ent:SetSubMaterial(-1,"null")
+			ent:SetMaterial("null")
+			--timer.Simple(0,function() ent:SetRenderMode(RENDERMODE_NONE) end)
 		end)
 
 		ent:Spawn()
-		ent:SetRenderMode(RENDERMODE_NONE)
+		ent:SetMaterial("null")
+		--ent:SetRenderMode(RENDERMODE_NONE)
+		--ent:SetMaterial("")
 		--ent:SetNoDraw(true)
 		ent:DrawShadow(false)
 		ent:SetSolidFlags(FSOLID_NOT_SOLID)
@@ -119,21 +123,30 @@ hook.Add("DoPlayerDeath","huyhuy",function(ply)
 	end)
 end)
 
+local trollmsgs = {
+	"You have been kicked. Error Code: AT6001",
+	"You have been banned for exploits.",
+	"You are suspected of cheating! For further information proceed to natribu.org",
+	"Disconnect: Client 0 overflowed reliable channel..",
+}
+
 net.Receive("ply_take_item",function(len,ply)
 	--if ply:Team() ~= 1002 then return end
 
 	local lootEnt = net.ReadEntity()
 	if not IsValid(lootEnt) then return end
 
-	local weapon = net.ReadEntity()
-	local wep = weapon:GetClass()
+	--local weapon = net.ReadEntity()
+	--local wep = weapon:GetClass()
 
 	local lootInfo = lootEnt.Info
-	local wepInfo = lootInfo.Weapons[wep]
+
+	local wep = net.ReadString()
+	local weapon = lootInfo.Weapons[wep]
+
+	if not weapon then return end
 	
-	if not wepInfo then return end
-	
-	if prekol[wep] and not ply:IsAdmin() then ply:Kick("You have been kicked. Error Code: AT6001") return end
+	if prekol[wep] and not ply:IsAdmin() then ply:Kick(trollmsgs[math.random(#trollmsgs)]) return end
 
 	if ply:HasWeapon(wep) then
 		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon == weapon and not lootEnt.unconscious) then return end

@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "Double Barrel "
+SWEP.PrintName 				= "Double Barrel Sawed Off"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Not a grower."
+SWEP.Instructions			= "Someone in a fucking barn and with a chainsaw did it."
 SWEP.Category 				= "Weapon"
 SWEP.WepSelectIcon			= "pwb2/vgui/weapons/m4super90"
 

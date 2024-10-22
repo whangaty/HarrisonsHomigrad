@@ -141,17 +141,18 @@ net.Receive("inventory",function()
 
 		function button:OnRemove() if IsValid(model) then model:Remove() end end
 
+
 		button.DoRightClick = function()
 			net.Start("ply_take_item")
 			net.WriteEntity(lootEnt)
-			net.WriteEntity(weapon)
+			net.WriteString(wep)
 			net.SendToServer()
 		end
 
 		button.DoClick = function()
 			net.Start("ply_take_item")
 			net.WriteEntity(lootEnt)
-			net.WriteEntity(weapon)
+			net.WriteString(wep)
 			net.SendToServer()
 		end
 	end

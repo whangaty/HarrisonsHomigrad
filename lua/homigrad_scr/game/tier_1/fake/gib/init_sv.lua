@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() ~= "homigrad" then return end
 local vecZero = Vector(0,0,0)
 local vecInf = Vector(0,0,0) / 0
 
@@ -129,7 +129,12 @@ function Gib_Input(rag,bone,dmgInfo)
 			rag:EmitSound("physics/flesh/flesh_bloody_break.wav",90,75,2)
 		end)
 
-		Gib_RemoveBone(rag,bone,phys_bone)
+		if bone ~= 0 then
+			Gib_RemoveBone(rag,bone,phys_bone)
+		else
+			BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos())
+			rag:Remove()
+		end
 
 		BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
 	end
@@ -151,8 +156,13 @@ function Gib_Input(rag,bone,dmgInfo)
 				sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
 				sound.Emit(rag,"physics/body/body_medium_break3.wav")
 				sound.Emit(rag,"physics/flesh/flesh_bloody_break.wav",nil,75)
-				
-				Gib_RemoveBone(rag,bone,phys_bone)
+
+				if bone ~= 0 then
+					Gib_RemoveBone(rag,bone,phys_bone)
+				else
+					BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos())
+					rag:Remove()
+				end
 
 				BloodParticleMore(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 10)
 			end
@@ -181,7 +191,7 @@ hook.Add("PlayerDeath","Gib",function(ply)
 		local rag = ply:GetNWEntity("Ragdoll")
 		local bone = rag:LookupBone(ply.LastHitBoneName)
 
-		bone = bone ~= 0 and bone or 1
+		--bone = bone ~= 0 and bone or 1
 
 		if not IsValid(rag) or not bone then return end--not fucking fucking fuck
 
@@ -198,7 +208,7 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 	
 	local phys_bone = GetPhysicsBoneDamageInfo(ent,dmgInfo)
 
-	phys_bone = phys_bone == 0 and 1 or phys_bone
+	--phys_bone = phys_bone == 0 and 1 or phys_bone
 	--if phys_bone == 0 then return end--lol
 
 	local hitgroup
@@ -261,4 +271,3 @@ hook.Add("Think","Gib",function()
 		end
 	end
 end)
-end

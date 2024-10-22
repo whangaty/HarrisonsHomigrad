@@ -5,7 +5,7 @@ homigrad_weapons = homigrad_weapons or {}
 function SWEP:Initialize()
     self:SetHoldType("normal")
 
-    homigrad_weapons[self] = true
+    AddHomigradWeapon(self)
 
     self.voiceSpeak = 0
     self.lisens = {}

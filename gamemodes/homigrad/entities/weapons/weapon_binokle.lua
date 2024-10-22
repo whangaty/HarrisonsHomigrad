@@ -49,7 +49,7 @@ SWEP.DrawWeaponSelection = DrawWeaponSelection
 SWEP.OverridePaintIcon = OverridePaintIcon
 
 function SWEP:Initialize()
-    homigrad_weapons[self] = true
+    AddHomigradWeapon(self)
 end
 
 function SWEP:PrimaryAttack()
@@ -80,6 +80,7 @@ if SERVER then return end
 
 local value = 0
 hook.Add("CalcAddFOV","Binokle",function(ply)
+    if not LerpFT then return end
     local wep = ply:GetActiveWeapon()
     wep = IsValid(wep) and wep:GetClass() == "weapon_binokle" and ply:KeyDown(IN_ATTACK2)
     value = LerpFT(0.1,value,wep and -75 or 0) 

@@ -93,24 +93,31 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
 
     local cameraPos = EyePos()
     local dis = hg_vbw_dis:GetInt()
-    local tbl = GetAll()
+    local tbl = homigrad_weapons
     
     for i = 1,#tbl do
-        local ply = tbl[i]
+        local wep = tbl[i]
+        if not IsValid(wep) then continue end
+        
+        local ply = wep:GetParent()
+        
+        if not IsValid(ply) then continue end
 
+        ply = IsValid(ply:GetNWEntity("RagdollOwner")) and ply:GetNWEntity("RagdollOwner") or ply
+        
+        if not IsValid(ply) then return end
+
+        local rag = ply:GetNWEntity("Ragdoll")
+        local ent = IsValid(rag) and rag or ply
+        
         if lply == ply and not firstPerson then continue end
-
-        local list = ply:GetWeapons()
         
-        if #list == 0 then continue end
-        
-        local activeWep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass()
-
-        local ent = ply:GetNWEntity("Ragdoll")
-        activeWep = IsValid(ent) and ply:GetNWEntity("ActiveWeapon") or activeWep
-        ent = IsValid(ent) and ent or ply
+        local activeWep = IsValid(ply:GetNWEntity("ActiveWeapon")) and ply:GetNWEntity("ActiveWeapon") or ply.GetActiveWeapon and ply:GetActiveWeapon()
 
         if cameraPos:Distance(ent:GetPos()) > dis then continue end
+        if activeWep == wep then continue end
+        
+        if gameVBWHide and gameVBWHide(ply, wep) then continue end
 
         local matrix = ent:LookupBone("ValveBiped.Bip01_Spine1")
         matrix = matrix and ent:GetBoneMatrix(matrix)
@@ -120,28 +127,45 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
         matrix = ent:GetBoneMatrix(ent:LookupBone("ValveBiped.Bip01_Pelvis"))
         local pelvisPos,pelvisAng = matrix:GetTranslation(),matrix:GetAngles()
         
-        if gameVBWHide then list = gameVBWHide(ply,list) or list end
-
         local mdl = ply:GetModel()
-        --local isFamale = femaleMdl[mdl]
         
         local sUp,sRight,sForward = spineAng:Up(),spineAng:Right(),spineAng:Forward()
         local pUp,pRight,pForward = pelvisAng:Up(),pelvisAng:Right(),pelvisAng:Forward()
         
-        for i,wep in pairs(list) do
-            local active = activeWep ~= wep:GetClass() and wep.vbw
+        local active = activeWep ~= wep:GetClass() and wep.vbw
+        
+        wep.vbwActive = active
+        if not active then continue end
+        
+        local localPos,localAng,pistol
+
+        local func = wep.vbwFunc
+
+        local clone
+
+        if func then
+            localPos,localAng,pistol = func(wep,ply,mdl)
+
+            Offset:Set(pelvisPos)
+            Ang:Set(pelvisAng)
+
+            clone = Vector(localPos[1],localPos[2],localPos[3])
+            clone:Rotate(Ang)
+
+            Ang:RotateAroundAxis(pUp,localAng[1])
+            Ang:RotateAroundAxis(pRight,localAng[2])
+            Ang:RotateAroundAxis(pForward,localAng[3])
+        else
+            pistol = not wep.vbwRifle and (wep.vbwPistol or not wep.TwoHands)
             
-            wep.vbwActive = active
-            if not active then continue end
-
-            local localPos,localAng,pistol
-
-            local func = wep.vbwFunc
-
-            local clone
-
-            if func then
-                localPos,localAng,pistol = func(wep,ply,mdl)
+            if pistol then
+                --[[if isFamale then
+                    localPos = wep.vbwPosF or wep.vbwPos or PistolOffsetF
+                    localAng = wep.vbwAngF or wep.vbwAng or PistolAngF
+                else]]--
+                    localPos = wep.vbwPos or PistolOffset
+                    localAng = wep.vbwAng or PistolAng
+                --end
 
                 Offset:Set(pelvisPos)
                 Ang:Set(pelvisAng)
@@ -153,162 +177,33 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
                 Ang:RotateAroundAxis(pRight,localAng[2])
                 Ang:RotateAroundAxis(pForward,localAng[3])
             else
-                pistol = not wep.vbwRifle and (wep.vbwPistol or not wep.TwoHands)
+                --[[if isFamale then
+                    localPos = wep.vbwPosF or wep.vbwPos or RifleOffsetF
+                    localAng = wep.vbwAngF or wep.vbwAng or RifleAngF
+                else]]--
+                    localPos = wep.vbwPos or RifleOffset
+                    localAng = wep.vbwAng or RifleAng
+                --end
                 
-                if pistol then
-                    --[[if isFamale then
-                        localPos = wep.vbwPosF or wep.vbwPos or PistolOffsetF
-                        localAng = wep.vbwAngF or wep.vbwAng or PistolAngF
-                    else]]--
-                        localPos = wep.vbwPos or PistolOffset
-                        localAng = wep.vbwAng or PistolAng
-                    --end
-
-                    Offset:Set(pelvisPos)
-                    Ang:Set(pelvisAng)
-
-                    clone = Vector(localPos[1],localPos[2],localPos[3])
-                    clone:Rotate(Ang)
-
-                    Ang:RotateAroundAxis(pUp,localAng[1])
-                    Ang:RotateAroundAxis(pRight,localAng[2])
-                    Ang:RotateAroundAxis(pForward,localAng[3])
-                else
-                    --[[if isFamale then
-                        localPos = wep.vbwPosF or wep.vbwPos or RifleOffsetF
-                        localAng = wep.vbwAngF or wep.vbwAng or RifleAngF
-                    else]]--
-                        localPos = wep.vbwPos or RifleOffset
-                        localAng = wep.vbwAng or RifleAng
-                    --end
-                    
-                    Offset:Set(spinePos)
-                    Ang:Set(spineAng)
-
-                    clone = Vector(localPos[1],localPos[2],localPos[3])
-                    clone:Rotate(Ang)
-
-                    Ang:RotateAroundAxis(sUp,localAng[1])
-                    Ang:RotateAroundAxis(sRight,localAng[2])
-                    Ang:RotateAroundAxis(sForward,localAng[3])
-                end
-            end
-
-            Offset:Add(clone)
-           
-            worldModel:SetModel(wep.WorldModel)--"models/hunter/plates/plate05.mdl"
-            worldModel:SetModelScale(wep.vbwModelScale or 1)
-            worldModel:SetPos(Offset)
-            worldModel:SetAngles(Ang)
-            worldModel:DrawModel()
-        end
-    end
-
-    local tbl2 = deadBodies or tblNil
-    
-    for i,val in pairs(tbl2) do
-        
-        if not tbl2[i] then continue end
-
-        local ent = val[1]
-        local list = val[2].Weapons
-        
-        if not IsValid(ent) or not list then continue end
-        
-        local activeWep = val:GetNWEntity("ActiveWeapon")
-        
-        if cameraPos:Distance(ent:GetPos()) > dis then continue end
-
-        local matrix = ent:LookupBone("ValveBiped.Bip01_Spine2")
-        matrix = matrix and ent:GetBoneMatrix(matrix)
-        if not matrix then continue end
-        local spinePos,spineAng = matrix:GetTranslation(),matrix:GetAngles()
-
-        matrix = ent:GetBoneMatrix(ent:LookupBone("ValveBiped.Bip01_Pelvis"))
-        local pelvisPos,pelvisAng = matrix:GetTranslation(),matrix:GetAngles()
-        
-        if gameVBWHide then list = gameVBWHide(ent,list) or list end
-        
-        local mdl = ent:GetModel()
-        --local isFamale = femaleMdl[mdl]
-
-        local sUp,sRight,sForward = spineAng:Up(),spineAng:Right(),spineAng:Forward()
-        local pUp,pRight,pForward = pelvisAng:Up(),pelvisAng:Right(),pelvisAng:Forward()
-        
-        for i,wep in pairs(list) do
-            local active = activeWep ~= wep.ClassName and wep.vbw
-            
-            wep.vbwActive = active
-            if not active then continue end
-            
-            local localPos,localAng,pistol
-
-            local func = wep.vbwFunc
-
-            local clone
-            
-            if func then
-                localPos,localAng,pistol = func(wep,ent,mdl)
-                
-                Offset:Set(pelvisPos)
-                Ang:Set(pelvisAng)
+                Offset:Set(spinePos)
+                Ang:Set(spineAng)
 
                 clone = Vector(localPos[1],localPos[2],localPos[3])
                 clone:Rotate(Ang)
 
-                Ang:RotateAroundAxis(pUp,localAng[1])
-                Ang:RotateAroundAxis(pRight,localAng[2])
-                Ang:RotateAroundAxis(pForward,localAng[3])
-            else
-                pistol = not wep.vbwRifle and (wep.vbwPistol or not wep.TwoHands)
-                
-                if pistol then
-                    --[[if isFamale then
-                        localPos = wep.vbwPosF or wep.vbwPos or PistolOffsetF
-                        localAng = wep.vbwAngF or wep.vbwAng or PistolAngF
-                    else]]--
-                        localPos = wep.vbwPos or PistolOffset
-                        localAng = wep.vbwAng or PistolAng
-                    --end
-
-                    Offset:Set(pelvisPos)
-                    Ang:Set(pelvisAng)
-
-                    clone = Vector(localPos[1],localPos[2],localPos[3])
-                    clone:Rotate(Ang)
-
-                    Ang:RotateAroundAxis(pUp,localAng[1])
-                    Ang:RotateAroundAxis(pRight,localAng[2])
-                    Ang:RotateAroundAxis(pForward,localAng[3])
-                else
-                    --[[if isFamale then
-                        localPos = wep.vbwPosF or wep.vbwPos or RifleOffsetF
-                        localAng = wep.vbwAngF or wep.vbwAng or RifleAngF
-                    else]]--
-                        localPos = wep.vbwPos or RifleOffset
-                        localAng = wep.vbwAng or RifleAng
-                    --end
-                    
-                    Offset:Set(spinePos)
-                    Ang:Set(spineAng)
-
-                    clone = Vector(localPos[1],localPos[2],localPos[3])
-                    clone:Rotate(Ang)
-
-                    Ang:RotateAroundAxis(sUp,localAng[1])
-                    Ang:RotateAroundAxis(sRight,localAng[2])
-                    Ang:RotateAroundAxis(sForward,localAng[3])
-                end
+                Ang:RotateAroundAxis(sUp,localAng[1])
+                Ang:RotateAroundAxis(sRight,localAng[2])
+                Ang:RotateAroundAxis(sForward,localAng[3])
             end
-
-            Offset:Add(clone)
-           
-            worldModel:SetModel(wep.WorldModel)--"models/hunter/plates/plate05.mdl"
-            worldModel:SetModelScale(wep.vbwModelScale or 1)
-            worldModel:SetPos(Offset)
-            worldModel:SetAngles(Ang)
-            worldModel:DrawModel()
         end
+
+        Offset:Add(clone)
+        
+        worldModel:SetModel(wep.WorldModel)--"models/hunter/plates/plate05.mdl"
+        worldModel:SetModelScale(wep.vbwModelScale or 1)
+        worldModel:SetPos(Offset)
+        worldModel:SetAngles(Ang)
+        worldModel:DrawModel()
     end
 end)
 

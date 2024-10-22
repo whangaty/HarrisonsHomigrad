@@ -76,6 +76,13 @@ function PlayerMeta:HuySpectate()
 	ply:SetMoveType(MOVETYPE_OBSERVER)
 end
 
+util.AddNetworkString("Override Spawn")
+function hg.OverrideSpawn(ply)
+	net.Start("Override Spawn")
+	net.WriteEntity(ply)
+	net.Broadcast()
+end
+
 function Faking(ply,force) -- функция падения
 	if not ply:Alive() then return end
 
@@ -125,6 +132,8 @@ function Faking(ply,force) -- функция падения
 			bull:Activate()
 			bull:SetNotSolid(true)
 
+			hook.Run("Fake", ply, rag)
+
 			FakeBullseyeTrigger(rag, ply)
 
 			ply:HuySpectate(OBS_MODE_CHASE)
@@ -156,6 +165,8 @@ function Faking(ply,force) -- функция падения
 			local vel=rag:GetVelocity()
 			
 			PLYSPAWN_OVERRIDE = true
+			
+			hg.OverrideSpawn(ply)
 
 			local eyepos = ply:EyeAngles()
 			local health = ply:Health()
@@ -294,6 +305,8 @@ function PlayerMeta:DropWeapon1(wep)
 	if ply.SlotSmall == wep then ply.SlotSmall = nil end
 
 	ply:DropWeapon(wep)
+	--wep:SetPos(ply:EyePos())
+	--wep:SetAngles(ply:GetAngles())
 	wep.Spawned = true
 	if ply.ActiveWeapon == wep and IsValid(ply.wep) then
 		wep:SetPos(ply.wep:GetPos())
@@ -808,9 +821,8 @@ hook.Add("StartCommand","asdfgghh",function(ply,cmd)
 	if IsValid(rag) then cmd:RemoveKey(IN_DUCK) end
 end)
 
-local dvec = Vector(0,0,-64)
+local dvec = Vector(0,0,0)
 hook.Add("Player Think","FakeControl",function(ply,time) --управление в фейке
-	ply.holdingartery = false
 	if not ply:Alive() then return end
 	local rag = ply:GetNWEntity("Ragdoll")
 
@@ -887,48 +899,116 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			end
 
 			if(ply:KeyDown(IN_ATTACK))then
-				local pos = ply:EyePos()
-				pos[3] = head:GetPos()[3]
-				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
-				local ang=ply:EyeAngles()
-				ang:RotateAroundAxis(eyeangs:Forward(),90)
-				ang:RotateAroundAxis(eyeangs:Right(),75)
-				local shadowparams = {
-					secondstoarrive=0.4,
-					pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
-					angle=ang,
-					maxangular=670,
-					maxangulardamp=600,
-					maxspeeddamp=50,
-					maxspeed=500,
-					teleportdistance=0,
-					deltatime=0.01,
-				}
-				phys:Wake()
-				phys:ComputeShadowControl(shadowparams)
+				if not (IsValid(ply.ActiveWeapon) and ishgweapon(ply.ActiveWeapon)) then
+					local pos = ply:EyePos()
+					pos[3] = head:GetPos()[3]
+					local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
+					local ang=ply:EyeAngles()
+					ang:RotateAroundAxis(eyeangs:Forward(),90)
+					ang:RotateAroundAxis(eyeangs:Right(),75)
+					local shadowparams = {
+						secondstoarrive=0.4,
+						pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
+						angle=ang,
+						maxangular=670,
+						maxangulardamp=600,
+						maxspeeddamp=50,
+						maxspeed=500,
+						teleportdistance=0,
+						deltatime=0.01,
+					}
+					phys:Wake()
+					phys:ComputeShadowControl(shadowparams)
+				end
 			end
 
 			if(ply:KeyDown(IN_ATTACK2))then
-				local physa = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
-				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) ) --rhand
-				local ang=ply:EyeAngles()
-				ang:RotateAroundAxis(eyeangs:Forward(),90)
-				ang:RotateAroundAxis(eyeangs:Right(),75)
-				local pos = ply:EyePos()
-				pos[3] = head:GetPos()[3]
-				local shadowparams = {
-					secondstoarrive=0.4,
-					pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*15,
-					angle=ang,
-					maxangular=670,
-					maxangulardamp=100,
-					maxspeeddamp=50,
-					maxspeed=600,
-					teleportdistance=0,
-					deltatime=0.01,
-				}
-				physa:Wake()
-				physa:ComputeShadowControl(shadowparams)
+
+				if IsValid(ply.ActiveWeapon) and ishgweapon(ply.ActiveWeapon) then
+					if ply.ActiveWeapon:IsPistolHoldType() then
+						local physa = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
+						local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) ) --rhand
+						local ang=ply:EyeAngles()
+						ang:RotateAroundAxis(eyeangs:Forward(),90)
+						ang:RotateAroundAxis(eyeangs:Forward(),90)
+						ang:RotateAroundAxis(eyeangs:Up(),90)
+						local pos = ply:EyePos()
+						pos[3] = head:GetPos()[3]
+						local shadowparams = {
+							secondstoarrive=0.4,
+							pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*15,
+							angle=ang,
+							maxangular=670,
+							maxangulardamp=100,
+							maxspeeddamp=50,
+							maxspeed=600,
+							teleportdistance=0,
+							deltatime=0.01,
+						}
+						physa:Wake()
+						physa:ComputeShadowControl(shadowparams)
+					else
+						local pos = ply:EyePos()
+						pos[3] = head:GetPos()[3]
+						local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
+						local physa = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
+						local ang=ply:EyeAngles()
+						ang:RotateAroundAxis(eyeangs:Forward(),90)
+						local shadowparams = {
+							secondstoarrive=0.4,
+							pos=head:GetPos()+eyeangs:Forward()*60+eyeangs:Right()*10+eyeangs:Up()*0,
+							angle=ang,
+							maxangular=670,
+							maxangulardamp=600,
+							maxspeeddamp=50,
+							maxspeed=500,
+							teleportdistance=0,
+							deltatime=0.01,
+						}
+						phys:Wake()
+						phys:ComputeShadowControl(shadowparams)
+
+
+						local ang=ply:EyeAngles()
+						ang:RotateAroundAxis(eyeangs:Forward(),90)
+						ang:RotateAroundAxis(eyeangs:Forward(),90)
+
+						local shadowparams = {
+							secondstoarrive=0.4,
+							pos=physa:GetPos() + ang:Forward() * 10,
+							angle=ang,
+							maxangular=670,
+							maxangulardamp=100,
+							maxspeeddamp=50,
+							maxspeed=600,
+							teleportdistance=0,
+							deltatime=0.01,
+						}
+						physa:Wake()
+						physa:ComputeShadowControl(shadowparams)
+					end
+				else
+					local physa = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
+					local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) ) --rhand
+					local ang=ply:EyeAngles()
+					ang:RotateAroundAxis(eyeangs:Forward(),90)
+					ang:RotateAroundAxis(eyeangs:Right(),75)
+					local pos = ply:EyePos()
+					pos[3] = head:GetPos()[3]
+					local shadowparams = {
+						secondstoarrive=0.4,
+						pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*15,
+						angle=ang,
+						maxangular=670,
+						maxangulardamp=100,
+						maxspeeddamp=50,
+						maxspeed=600,
+						teleportdistance=0,
+						deltatime=0.01,
+					}
+					physa:Wake()
+					physa:ComputeShadowControl(shadowparams)
+				end
 			end
 
 			if(ply:KeyDown(IN_USE))then
@@ -1031,7 +1111,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			
 			if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000) then
 				local shadowparams = {
-					secondstoarrive=0.5,
+					secondstoarrive=0.4,
 					pos=phys:GetPos() + angs:Forward() * 10,
 					angle=phys:GetAngles(),
 					maxangulardamp=10,
@@ -1054,7 +1134,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			
 			if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000)then
 				local shadowparams = {
-					secondstoarrive=0.5,
+					secondstoarrive=0.4,
 					pos=phys:GetPos() + angs:Forward() * 10,
 					angle=phys:GetAngles(),
 					maxangulardamp=10,
@@ -1129,6 +1209,12 @@ end)
 util.AddNetworkString("ebal_chellele")
 hook.Add("PlayerSwitchWeapon","fakewep",function(ply,oldwep,newwep)
 	if ply.unconscious then return true end
+
+	if IsValid(newwep) and ishgweapon(newwep) then
+		ply:SetNWEntity("ActiveWeapon",newwep)
+	else
+		ply:SetNWEntity("ActiveWeapon",NULL)
+	end
 
 	if IsValid(ply.FakeRagdoll) then
 		DespawnWeapon(ply)

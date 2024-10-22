@@ -657,16 +657,6 @@ hook.Add("Think","mouthanim",function()
 	end
 end)
 
-net.Receive("fuckfake",function(len) -- testing shit, stops creating errors.
---ply:SetNWEntity("Ragdoll",nil)
---end)
-	--for i, ply in player.Iterator() do
-	--	if IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll") or ply then
-	--		ply:SetNWEntity("Ragdoll",nil)
-	--	end
-	--end
-end)
-
 local tab = {
 	[ "$pp_colour_addr" ] = 0,
 	[ "$pp_colour_addg" ] = 0,

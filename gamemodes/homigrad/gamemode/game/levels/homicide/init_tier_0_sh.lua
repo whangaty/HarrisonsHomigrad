@@ -202,20 +202,10 @@ function homicide.HUDPaint_RoundLeft(white2)
     end
 end
 
-function homicide.VBWHide(ply,list)
+function homicide.VBWHide(ply,wep)
     if (not ply:IsRagdoll() and ply:Team() == 1002) then return end -- t weps hide
 
-    local blad = {}
-    
-    for i,wep in pairs(list) do
-        local wep = type(i) == "string" and weapons.Get(i) or list[i]
-        
-        if not wep.TwoHands then continue end
-
-        blad[#blad + 1] = wep
-    end--ufff
-
-    return blad
+    return not wep.TwoHands
 end
 
 function homicide.Scoreboard_DrawLast(ply)

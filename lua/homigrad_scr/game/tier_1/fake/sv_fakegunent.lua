@@ -18,22 +18,18 @@ function SpawnWeapon(ply)
 			wep:SetOwner(rag)
 			wep:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
-			local rh = rag:GetBoneMatrix(rag:LookupBone("ValveBiped.Bip01_R_Hand"))
-			local pos,ang = rh:GetTranslation(),rh:GetAngles()
-
-			wep:SetPos(pos)
-			wep:SetAngles(ang)
-
-			local rh_wep = wep:GetBoneMatrix(wep:LookupBone("ValveBiped.Bip01_R_Hand") or 0)
-			local newmat = rh_wep:GetInverse() * rh
-			
-			local pos,ang = LocalToWorld(newmat:GetTranslation(),newmat:GetAngles(),pos,ang)
-
+			local pos, ang = weapon:GetTransform(wep, true)
 			wep:SetPos(pos)
 			wep:SetAngles(ang)
 			
 			wep:Spawn()
 			
+			local phys = wep:GetPhysicsObject()
+
+			if IsValid(phys) then
+				phys:SetMass(weapon:IsPistolHoldType() and 1 or 5)
+			end
+
 			if IsValid(ply.WepCons) then ply.WepCons:Remove() ply.WepCons = nil end
 			
 			local cons = constraint.Weld(wep,rag,0,rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )),0,true)
@@ -47,7 +43,7 @@ function SpawnWeapon(ply)
 
 				if IsValid(lh) then
 					local rhang = rh:GetAngles()
-					lh:SetPos(rh:GetPos() + rhang:Forward() * 10 + rhang:Up() * -3)
+					lh:SetPos(rh:GetPos() + rhang:Forward() * 4 + rhang:Up() * -3 + rhang:Right() * 2)
 					rhang:RotateAroundAxis(rhang:Forward(),180)
 					lh:SetAngles(rhang)
 
@@ -71,48 +67,12 @@ function DespawnWeapon(ply)
 	end
 end
 
-local pos = Vector(0,0,0)
-
-function FireShot(wep)
-	if not IsValid(wep) then return end
-	local ply = wep:GetOwner()
-
-	local weapon = ply.ActiveWeapon
-
-	if IsValid(wep) then return nil end
+hook.Add("Player Think","shooting",function(ply)
+	if not ply:Alive() or ply.unconscious then return end
+	if not IsValid(ply.FakeRagdoll) or not IsValid(ply.wep) then return end
+	local wep = ply.ActiveWeapon
 	
-	if ( (wep.NextShot or 0) > CurTime() ) then return end
-
-	wep.NextShot = CurTime() + weapon.ShootWait
-
-	local Attachment = wep:GetAttachment(wep:LookupAttachment("muzzle") or 1)
-
-	local shootOrigin = Attachment and Attachment.Pos or wep:GetPos() + wep:GetAngles():Forward() * 10
-	local shootAngles = Attachment and Attachment.Ang or wep:GetAngles()
-	local shootDir = shootAngles:Forward()
-
-	local damage = weapon.Primary.Damage
-	
-	local bullet = {}
-	bullet.Num 			= (weapon.NumBullet or 1)
-	bullet.Src 			= shootOrigin
-	bullet.Dir 			= shootDir
-	bullet.Spread 		= Vector(weapon.Primary.Cone or 0,weapon.Primary.Cone or 0,0)
-	bullet.Tracer		= 1
-	bullet.TracerName 	= 4
-	bullet.Force		= weapon.Primary.Force / 90
-	bullet.Damage		= damage
-	bullet.Attacker 	= ply
-	bullet.Callback=function(ply,tr)
-		wep:BulletCallbackFunc(damage,ply,tr,damage,false,true,false)
+	if wep.Primary.Automatic and ply:KeyDown(IN_ATTACK) or ply:KeyPressed(IN_ATTACK) then
+		wep:PrimaryAttack()
 	end
-
-	wep:FireBullets( bullet )
-	
-	-- Make a muzzle flash
-	local effectdata = EffectData()
-	effectdata:SetOrigin( shootOrigin )
-	effectdata:SetAngles( shootAngles )
-	effectdata:SetScale( 1 )
-	util.Effect( "MuzzleEffect", effectdata )
-end
+end)

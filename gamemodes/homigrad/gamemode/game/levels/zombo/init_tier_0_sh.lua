@@ -6,8 +6,8 @@ zombo.Name = "Zombo VIRUS"
 
 zombo.red = {"Люди",Color(255,155,120),
     weapons = {"weapon_radio","weapon_gurkha","weapon_hands","med_band_big","med_band_small","medkit","painkiller"},
-    main_weapon = {"weapon_m3super","weapon_remington870","weapon_xm1014", "weapon_civil_famas", "weapon_mp5", "weapon_xm8_lmg", "weapon_csmg40", "weapon_ak74u", "weapon_akm", "weapon_m249", "weapon_doublebarrel", "weapon_cmosin", "weapon_l1a1", "weapon_m1a1", "weapon_ar15"},
-    secondary_weapon = {"weapon_p220","weapon_deagle","weapon_glock","weapon_fiveseven", "weapon_glock18"},
+    main_weapon = {"weapon_m3super","weapon_remington870","weapon_xm1014", "weapon_civil_famas", "weapon_mp5", "weapon_xm8_lmg", "weapon_csmg40", "weapon_ak74u", "weapon_akm", "weapon_m249", "weapon_doublebarrel", "weapon_cmosin", "weapon_tar21", "weapon_scorpian", "weapon_ar15"},
+    secondary_weapon = {"weapon_p220","weapon_mateba","weapon_glock","weapon_p99", "weapon_fiveseven"},
     models = tdm.models
 }
 
