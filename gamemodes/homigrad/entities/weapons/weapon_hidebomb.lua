@@ -210,9 +210,10 @@ else
         self.mdl = self.mdl or false
         if not IsValid(self.mdl) then
             self.mdl = ClientsideModel("models/props_junk/cardboard_jox004a.mdl")
-            --self.mdl:SetNoDraw(true)
+            
             self.mdl:SetModelScale(0.5)
         end
+        self.mdl:SetNoDraw(true)
         self:CallOnRemove("huyhuy",function() self.mdl:Remove() end)
         local matrix = self:GetOwner():GetBoneMatrix(11)
         if not matrix then return end
