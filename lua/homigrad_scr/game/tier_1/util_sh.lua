@@ -42,7 +42,17 @@ hook.Add("Player Activate","SetHull",function(ply)
     ply:SetRenderMode(RENDERMODE_NORMAL)
     if SERVER then
         ply:SetSolidFlags(bit.band(ply:GetSolidFlags(),bit.bnot(FSOLID_NOT_SOLID)))
+        ply:SetNWEntity("ragdollWeapon", NULL)
+        ply:SetNWEntity("ActiveWeapon", NULL)
     end
+    timer.Simple(0,function()
+        local ang = ply:EyeAngles()
+        if ang[3] == 180 then
+            ang[2] = ang[2] + 180
+        end
+        ang[3] = 0
+        ply:SetEyeAngles(ang)
+    end)
 end)
 
 if CLIENT then

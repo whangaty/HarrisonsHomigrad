@@ -79,12 +79,24 @@ local validBone = {
 	["ValveBiped.Bip01_R_Foot"] = true
 }
 
-function SpawnGore(pos, headpos)
-	local ent = ents.Create("prop_physics")
-	ent:SetModel("models/Gibs/HGIBS.mdl")
-	ent:SetPos(headpos or pos)
-	ent:SetVelocity(VectorRand(-100,100))
-	ent:Spawn()
+local validBone2 = {
+	["ValveBiped.Bip01_L_Thigh"] = true,
+	["ValveBiped.Bip01_L_Calf"] = true,
+	["ValveBiped.Bip01_L_Foot"] = true,
+	["ValveBiped.Bip01_R_Thigh"] = true,
+	["ValveBiped.Bip01_R_Calf"] = true,
+	["ValveBiped.Bip01_R_Foot"] = true,
+	["ValveBiped.Bip01_Head1"] = true,
+}
+
+function SpawnGore(ent, pos, headpos)
+	if ent.gibRemove and not ent.gibRemove[ent:TranslateBoneToPhysBone(ent:LookupBone("ValveBiped.Bip01_Head1"))] then
+		local ent = ents.Create("prop_physics")
+		ent:SetModel("models/Gibs/HGIBS.mdl")
+		ent:SetPos(headpos or pos)
+		ent:SetVelocity(VectorRand(-100,100))
+		ent:Spawn()
+	end
 
 	for i = 1, 2 do
 		local ent = ents.Create("prop_physics")
@@ -107,7 +119,7 @@ function SpawnGore(pos, headpos)
 	end
 end
 
-function Gib_Input(rag,bone,dmgInfo)
+function Gib_Input(rag, bone, dmgInfo)
 	if not IsValid(rag) then return end
 
 	local hitgroup = bonetohitgroup[rag:GetBoneName(bone)]
@@ -118,13 +130,26 @@ function Gib_Input(rag,bone,dmgInfo)
 		gibRemove = rag.gibRemove
 
 		gib_ragdols[rag] = true
-
+ 
 		if not dmgInfo:IsDamageType(DMG_CRUSH) then
 			rag.Blood = rag.Blood or 5000
 			rag.BloodNext = 0
 			rag.BloodGibs = {}
 		end
 	end
+	
+	--[[if hitgroup == HITGROUP_HEAD and rag.EZarmor then
+		local helmet
+		local currentArmorItems = rag.EZarmor
+
+		for id, currentArmorData in pairs(currentArmorItems) do
+			if JMod.ArmorTable[currentArmorData.name].slots["head"] ~= nil then helmet = id break end
+		end
+		print(helmet)
+		if helmet then
+			JMod.RemoveArmorByID(helmet)
+		end
+	end--]]
 
 	local phys_bone = rag:TranslateBoneToPhysBone(bone)
 
@@ -146,7 +171,7 @@ function Gib_Input(rag,bone,dmgInfo)
 			Gib_RemoveBone(rag,bone,phys_bone)
 		else
 			BloodParticleExplode(rag:GetPhysicsObjectNum(phys_bone):GetPos())
-			SpawnGore(rag:GetPhysicsObjectNum(phys_bone):GetPos(),rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos())
+			SpawnGore(rag, rag:GetPhysicsObjectNum(phys_bone):GetPos(),rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos())
 			rag:Remove()
 		end
 
@@ -175,7 +200,7 @@ function Gib_Input(rag,bone,dmgInfo)
 					Gib_RemoveBone(rag,bone,phys_bone)
 				else
 					BloodParticleExplode(rag:GetPhysicsObjectNum(phys_bone):GetPos())
-					SpawnGore(rag:GetPhysicsObjectNum(phys_bone):GetPos(),rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos())
+					SpawnGore(rag, rag:GetPhysicsObjectNum(phys_bone):GetPos(),rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos())
 					rag:Remove()
 				end
 
@@ -191,9 +216,6 @@ hook.Add("PlayerDeath","Gib",function(ply)
 	dmgInfo = ply.LastDMGInfo
 	if not dmgInfo then return end
 
-	--разве это не смешно когда ножом башка взрывается?
-	--нет
-
 	local hitgroup
 
 	if bonetohitgroup[ply.LastHitBoneName] then hitgroup = bonetohitgroup[ply.LastHitBoneName] end
@@ -206,7 +228,7 @@ hook.Add("PlayerDeath","Gib",function(ply)
 		local rag = ply:GetNWEntity("Ragdoll")
 		if not IsValid(rag) then return end
 		local bone = rag:LookupBone(ply.LastHitBoneName)
-
+		
 		--bone = bone ~= 0 and bone or 1
 
 		if not IsValid(rag) or not bone then return end--not fucking fucking fuck
@@ -220,7 +242,7 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 	
 	local ply = RagdollOwner(ent)
 	ply = ply and ply:Alive() and ply
-	if ply then return end
+	--if ply then return end
 	
 	local phys_bone = GetPhysicsBoneDamageInfo(ent,dmgInfo)
 
@@ -231,6 +253,9 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 
 	local bonename = ent:GetBoneName(ent:TranslatePhysBoneToBone(phys_bone))
 
+	if ply and bonename == "ValveBiped.Bip01_Head1" then ply:Kill() end
+	if ply and not validBone2[bonename] then return end
+
 	if bonetohitgroup[bonename] then hitgroup = bonetohitgroup[bonename] end
 
 	local mul = RagdollDamageBoneMul[hitgroup] or 1
@@ -238,6 +263,10 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 	if dmgInfo:GetDamage() < 350 then return end
 	
 	Gib_Input(ent,ent:TranslatePhysBoneToBone(phys_bone),dmgInfo)
+end)
+
+hook.Add("Fake Up","gib",function(ply,rag)
+    if gib_ragdols[rag] then return false end
 end)
 
 local max = math.max

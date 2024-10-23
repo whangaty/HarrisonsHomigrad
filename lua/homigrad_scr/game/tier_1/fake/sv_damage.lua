@@ -36,11 +36,6 @@ hook.Add("PlayerSpawn","Damage",function(ply)
 	ply.LastAttacker = nil
 end)
 
-local filterEnt
-local function filter(ent)
-	return ent == filterEnt
-end
-
 local util_TraceLine = util.TraceLine
 
 function GetPhysicsBoneDamageInfo(ent,dmgInfo)
@@ -52,8 +47,6 @@ function GetPhysicsBoneDamageInfo(ent,dmgInfo)
 	local tr = {}
 	tr.start = pos
 	tr.endpos = pos + dir
-	tr.filter = filter
-	filterEnt = ent
 	tr.ignoreworld = true
 
 	local result = util_TraceLine(tr)

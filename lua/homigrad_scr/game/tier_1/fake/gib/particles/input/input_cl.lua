@@ -32,6 +32,7 @@ net.Receive("blood particle more",function()
 	local pos,vel = net.ReadVector(),net.ReadVector()
 
 	for i = 1,random(10,15) do
+		addBloodPart2(pos,VectorRand(-100,100),cloudmat,50,50,1)
 		addBloodPart(pos,vel + Vector(Rand(-15,15),Rand(-15,15)),mats[random(1,#mats)],random(10,15),random(10,15))
 	end
 end)
@@ -83,6 +84,8 @@ net.Receive("blood particle headshoot",function()
 	for i = 1,r do
 		local vel = Vector(vel[1],vel[2],vel[3])
 		vel:Rotate(Angle(Rand(-15,15) * Rand(0.9,1.1),Rand(-15,15) * Rand(0.9,1.1)))
+		
+		addBloodPart2(pos,VectorRand(-100,100),cloudmat,50,50,1)
 
 		addBloodPart(Lerp(i / r * Rand(0.9,1.1),l1,l2),vel,mats[random(1,#mats)],random(10,15),random(10,15))
 	end

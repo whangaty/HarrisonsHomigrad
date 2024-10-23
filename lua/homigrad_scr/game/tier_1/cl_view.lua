@@ -638,21 +638,10 @@ hook.Add("PostDrawOpaqueRenderables", "example", function()
 	cam.End3D2D()
 end )
 ]]--
-local turned = false
 
 hook.Add("InputMouseApply", "asdasd2", function(cmd, x, y, angle)
 	if not IsValid(LocalPlayer()) or not LocalPlayer():Alive() then return end
-	if not IsValid(follow) then
-		if turned then
-			local ang = LocalPlayer():EyeAngles()
-			ang.yaw = ang.yaw + 180
-			ang.roll = 0
-			cmd:SetViewAngles(ang)
-			turned = false
-			return true
-		end
-		return
-	end
+	if not IsValid(follow) then return end
 	
 	local att = follow:GetAttachment(follow:LookupAttachment("eyes"))
 	if not att or not istable(att) then return end
@@ -668,7 +657,6 @@ hook.Add("InputMouseApply", "asdasd2", function(cmd, x, y, angle)
 	angle.yaw = angle.yaw - newX / 50
 
 	if math.abs(angle.pitch) > 89 then
-		turned = not turned
 		angle.roll = angle.roll + 180
 		angle.yaw = angle.yaw + 180
 		angle.pitch = 89 * (angle.pitch / math.abs(angle.pitch))
