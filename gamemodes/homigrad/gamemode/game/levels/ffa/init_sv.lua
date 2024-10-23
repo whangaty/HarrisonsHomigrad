@@ -6,10 +6,10 @@ function ffa.StartRoundSV()
     roundTime = 300 + math.random(0, 300)
 
     local players = PlayersInGame()
-    for i, ply in pairs(players) do
+    for i, ply in ipairs(players) do
         ply:SetTeam(1)
         ply:SetNWInt("KillCount", 0)
-        ffa.SpawnPlayer(ply)
+        ffa.PlayerSpawn(ply)
     end
 
     local aviable = ReadDataMap("dm")
@@ -22,57 +22,76 @@ function ffa.StartRoundSV()
     freezing = true
     roundTimeRespawn = CurTime() + 10
 
+    
     return {roundTimeStart, roundTime}
 end
 
+local function giveAmmoForWeapons(ply)
+    for _, weapon in ipairs(ply:GetWeapons()) do
+        local ammoType = weapon:GetPrimaryAmmoType()
+        if ammoType >= 0 then 
+            ply:SetAmmo(weapon:GetMaxClip1() * 3, ammoType) 
+        end
+    end
+end
 
-function ffa.SpawnPlayer(ply)
+local primaryWeapons = {
+    [1] = {"weapon_mp7", "weapon_ak74u", "weapon_akm", "weapon_uzi", "weapon_m4a1", "weapon_hk416", "weapon_galil"},
+    [2] = {"weapon_spas12", "weapon_xm1014", "weapon_remington870", "weapon_m590"},
+    [3] = {"weapon_mateba"},
+    [4] = {"weapon_hk_usp", "weapon_p99", "weapon_beretta"}
+}
+
+local secondaryWeapons = {
+    [2] = {"weapon_uzi", "weapon_p99", "weapon_glock", "weapon_fiveseven"}
+}
+
+local extraItems = {
+    ["knife"] = "weapon_kabar",
+    ["medkit"] = "medkit",
+    ["bandage"] = "med_band_big",
+    ["grenade"] = "weapon_hg_rgd5",
+    ["bomb"] = "weapon_hidebomb",
+    ["radio"] = "weapon_radio"
+}
+
+function ffa.PlayerSpawn(ply)
     ply:SetModel(tdm.models[math.random(#tdm.models)])
     ply:SetPlayerColor(Vector(0, 1, 0.051))
 
-    ply:Give("weapon_hands")
-
     local roundDmType = math.random(1, 4)
-    if roundDmType == 1 then
-        local r = math.random(1, 8)
-        ply:Give((r == 1 and "weapon_mp7") or (r == 2 and "weapon_ak74u") or (r == 3 and "weapon_akm") or (r == 4 and "weapon_uzi") or (r == 5 and "weapon_m4a1") or (r == 6 and "weapon_hk416") or (r == 7 and "weapon_m4a1") or (r == 8 and "weapon_galil"))
-        ply:Give("weapon_kabar")
-        ply:Give("medkit")
-        ply:Give("med_band_big")
-        ply:SetAmmo(90, (r == 1 and 46) or (r == 2 and 44) or (r == 3 and 47) or (r >= 5 and 45))
+    local primaryWeapon = primaryWeapons[roundDmType][math.random(#primaryWeapons[roundDmType])]
+    ply:Give(primaryWeapon)
 
-    elseif roundDmType == 2 then
-        local r = math.random(1, 4)
-        local p = math.random(1, 4)
-        ply:Give((r == 1 and "weapon_spas12") or (r == 2 and "weapon_xm1014") or (r == 3 and "weapon_remington870") or (r == 4 and "weapon_m590"))
-        ply:Give((p == 1 and "weapon_uzi") or p == 2 and "weapon_p99" or p == 3 and "weapon_glock" or p == 4 and "weapon_fiveseven")
-        ply:Give("weapon_kabar")
-        ply:Give("medkit")
-        ply:Give("med_band_big")
-        ply:Give("weapon_hg_rgd5")
-        ply:SetAmmo(90, (p <= 3 and 49) or (p == 4 and "5.7×28 mm"))
-        ply:SetAmmo(90, 41)
 
-    elseif roundDmType == 3 then
-        ply:Give("weapon_mateba")
-        ply:Give("weapon_kabar")
-        ply:Give("medkit")
-        ply:Give("med_band_big")
-        ply:SetAmmo(90, ".44 Remington Magnum")
-
-    elseif roundDmType == 4 then
-        local r = math.random(1, 3)
-        ply:Give((r == 1 and "weapon_hk_usp") or (r == 2 and "weapon_p99") or (r == 3 and "weapon_beretta"))
-        ply:Give("weapon_kabar")
-        ply:Give("med_band_big")
-        ply:Give("weapon_hg_rgd5")
-        ply:Give("weapon_hidebomb")
-        ply:SetAmmo(50, 49)
+    if roundDmType == 2 then
+        local secondaryWeapon = secondaryWeapons[2][math.random(#secondaryWeapons[2])]
+        ply:Give(secondaryWeapon)
     end
 
-    ply:Give("weapon_radio")
+
+    ply:Give(extraItems["knife"])
+    ply:Give(extraItems["medkit"])
+    ply:Give(extraItems["bandage"])
+    ply:Give(extraItems["radio"])
+
+
+    if roundDmType == 2 or roundDmType == 4 then
+        ply:Give(extraItems["grenade"])
+    end
+
+    if roundDmType == 4 then
+        ply:Give(extraItems["bomb"])
+    end
+
+
+    giveAmmoForWeapons(ply)
+
     ply:SetLadderClimbSpeed(100)
+    
+    ply:Give("weapon_hands")
 end
+
 
 
 function ffa.RoundEndCheck()
@@ -80,7 +99,7 @@ function ffa.RoundEndCheck()
     local highestKills = 0
     local topPlayer = nil
 
-    for i, ply in pairs(team.GetPlayers(1)) do
+    for i, ply in ipairs(team.GetPlayers(1)) do
         local kills = ply:GetNWInt("KillCount", 0)
 
         if kills >= 50 then
@@ -112,7 +131,6 @@ function ffa.EndRound(winner)
     for i, ply in ipairs(player.GetAll()) do
         ply:SetNWInt("KillCount", 0)
     end
-
 
     damageTracking = {}
 end
@@ -147,7 +165,7 @@ function ffa.HandlePlayerDeath(victim)
             end
         end
 
-        if killer and killer:IsValid() then
+        if killer and IsValid(killer) then
             killer:SetNWInt("KillCount", killer:GetNWInt("KillCount") + 1)
         end
 
@@ -156,7 +174,7 @@ function ffa.HandlePlayerDeath(victim)
 
     timer.Simple(10, function()
         if IsValid(victim) then
-            ffa.SpawnPlayer(victim)
+            ffa.PlayerSpawn(victim)
         end
     end)
 end
