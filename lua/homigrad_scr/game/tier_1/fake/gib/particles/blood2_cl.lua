@@ -18,7 +18,7 @@ local render_SetMaterial = render.SetMaterial
 local render_DrawSprite = render.DrawSprite
 local surface_SetDrawColor = surface.SetDrawColor
 
-local color = Color(255,255,255,255)
+local color = Color(90,0,0,122)
 
 bloodparticels_hook[3] = function(anim_pos)
     local time = CurTime()
@@ -26,7 +26,7 @@ bloodparticels_hook[3] = function(anim_pos)
     for i = 1,#bloodparticels2 do
         local part = bloodparticels2[i]
 
-        color.a = 255 * (part[7] - time) / part[8]
+        color.a = math.max(122 * (part[7] - time) / part[8],0)
         render_SetMaterial(part[4])
         render_DrawSprite(LerpVector(anim_pos,part[2],part[1]),part[5],part[6],color)
     end

@@ -3,6 +3,8 @@ local mats = {}
 for i = 1,8 do mats[i] = Material("decals/blood" .. i) end
 local countmats = #mats
 
+local cloudmat = Material("effects/smoke_b")
+
 local random = math.random
 local Rand = math.Rand
 
@@ -43,12 +45,13 @@ local function addBloodPart2(pos,vel,mat,w,h,time)
 	bloodparticels2[#bloodparticels2 + 1] = {pos,pos2,vel,mat,w,h,CurTime() + time,time}
 end
 
-
 local function explode(pos)
 	local xx,yy = 12,12
 	local w,h = 360 / xx,360 / yy
 
 	for x = 1,xx do
+		addBloodPart2(pos + VectorRand(-20,20),VectorRand(-100,100),cloudmat,100,100,1)
+		
 		for y = 1,yy do
 			local dir = Vector(0,0,-1)
 			dir:Rotate(Angle(h * y * Rand(0.9,1.1),w * x * Rand(0.9,1.1),0))

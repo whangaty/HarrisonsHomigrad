@@ -79,6 +79,34 @@ local validBone = {
 	["ValveBiped.Bip01_R_Foot"] = true
 }
 
+function SpawnGore(pos, headpos)
+	local ent = ents.Create("prop_physics")
+	ent:SetModel("models/Gibs/HGIBS.mdl")
+	ent:SetPos(headpos or pos)
+	ent:SetVelocity(VectorRand(-100,100))
+	ent:Spawn()
+
+	for i = 1, 2 do
+		local ent = ents.Create("prop_physics")
+		ent:SetModel("models/Gibs/HGIBS_spine.mdl")
+		ent:SetPos(pos)
+		ent:SetVelocity(VectorRand(-100,100))
+		ent:Spawn()
+		
+		local ent = ents.Create("prop_physics")
+		ent:SetModel("models/Gibs/HGIBS_scapula.mdl")
+		ent:SetPos(pos)
+		ent:SetVelocity(VectorRand(-100,100))
+		ent:Spawn()
+
+		local ent = ents.Create("prop_physics")
+		ent:SetModel("models/Gibs/HGIBS_rib.mdl")
+		ent:SetPos(pos)
+		ent:SetVelocity(VectorRand(-100,100))
+		ent:Spawn()
+	end
+end
+
 function Gib_Input(rag,bone,dmgInfo)
 	if not IsValid(rag) then return end
 
@@ -102,21 +130,6 @@ function Gib_Input(rag,bone,dmgInfo)
 
 	local dmgPos = dmgInfo:GetDamagePosition()
 
-	--[[if dmgInfo:GetDamage() >= 50 and dmgInfo:IsDamageType(DMG_BLAST) then
-		local bone = rag:LookupBone("ValveBiped.Bip01_Spine3")
-		if bone and rag:GetPhysicsObjectNum(bone):Distance(dmgPos) <= 75 then
-			sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
-			sound.Emit(rag,"physics/body/body_medium_break3.wav")
-			sound.Emit(rag,"physics/flesh/flesh_bloody_break.wav",nil,75)
-
-			BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos())
-
-			--rag:Remove()
-
-			return
-		end
-	end--]]
-
 	if not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
 		sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
 		sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
@@ -132,11 +145,12 @@ function Gib_Input(rag,bone,dmgInfo)
 		if bone ~= 0 then
 			Gib_RemoveBone(rag,bone,phys_bone)
 		else
-			BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos())
+			BloodParticleExplode(rag:GetPhysicsObjectNum(phys_bone):GetPos())
+			SpawnGore(rag:GetPhysicsObjectNum(phys_bone):GetPos(),rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos())
 			rag:Remove()
 		end
 
-		BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
+		BloodParticleHeadshoot(rag:GetPhysicsObjectNum(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
 	end
 
 	-- FIXME: 	if dmgInfo:GetDamage() >= 50 and dmgInfo:IsDamageType(DMG_BLAST) and not gibRemove[phys_bone] then
@@ -160,11 +174,12 @@ function Gib_Input(rag,bone,dmgInfo)
 				if bone ~= 0 then
 					Gib_RemoveBone(rag,bone,phys_bone)
 				else
-					BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos())
+					BloodParticleExplode(rag:GetPhysicsObjectNum(phys_bone):GetPos())
+					SpawnGore(rag:GetPhysicsObjectNum(phys_bone):GetPos(),rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos())
 					rag:Remove()
 				end
 
-				BloodParticleMore(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 10)
+				BloodParticleMore(rag:GetPhysicsObjectNum(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 10)
 			end
 		end
 	end
@@ -189,6 +204,7 @@ hook.Add("PlayerDeath","Gib",function(ply)
 
 	timer.Simple(0,function()
 		local rag = ply:GetNWEntity("Ragdoll")
+		if not IsValid(rag) then return end
 		local bone = rag:LookupBone(ply.LastHitBoneName)
 
 		--bone = bone ~= 0 and bone or 1

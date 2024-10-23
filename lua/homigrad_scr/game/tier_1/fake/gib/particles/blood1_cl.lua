@@ -57,6 +57,7 @@ bloodparticels_hook[2] = function(mul)
         end
 
         part[3] = LerpVector(0.25 * mul,part[3],vecZero)
+
         part[3]:Add(vecDown)
     end
 end

@@ -406,6 +406,7 @@ function SWEP:Reload()
 		self:GetOwner():SetAnimation(PLAYER_RELOAD)
 		if SERVER then self:GetOwner():EmitSound(self.ReloadSound,60,100,0.8,CHAN_AUTO) end
 		timer.Create( "reload"..self:EntIndex(), self.ReloadTime, 1, function()
+			if not IsValid(self:GetOwner()) then return end
 			local wep = self:GetOwner():GetActiveWeapon()
 			if IsValid(self) and IsValid(self:GetOwner()) and (IsValid(wep) and wep or self:GetOwner().ActiveWeapon) == self then
 				local oldclip = self:Clip1()
@@ -443,13 +444,15 @@ function SWEP:GetSAttachment(obj)
 	local pos, ang = self:GetTransform()
 	local owner = self:GetOwner()
 	
-	local model = IsValid(owner.wep) and owner.wep or self
+	local wep = owner:GetNWEntity("ragdollWeapon")
+
+	local model = IsValid(wep) and wep or self
 	
 	local att = model:GetAttachment(obj)
 	
 	if not att then return end
 
-	if IsValid(owner.wep) then return att end
+	if IsValid(wep) then return att end
 	
 	local bon = att.Bone or 0
 	local mat = model:GetBoneMatrix(bon)
@@ -474,9 +477,10 @@ function SWEP:GetTrace(nomodify)
 	
 	if not att then
 		local Pos, Ang
-
-		if IsValid(owner.wep) then
-			Pos, Ang = owner.wep:GetPos(), owner.wep:GetAngles()
+		
+		local wep = owner:GetNWEntity("ragdollWeapon")
+		if IsValid(wep) then
+			Pos, Ang = wep:GetPos(), wep:GetAngles()
 		else
 			Pos, Ang = self:GetTransform()
 		end
@@ -546,8 +550,8 @@ function SWEP:FireBullet()
 	local cone = self.Primary.Cone
 	
 	local _
-	if not ply:IsNPC() then
-		_, shootOrigin, _ = util.DistanceToLine(shootOrigin - shootAngles:Forward(),shootOrigin,ply:EyePos())
+	if not ply:IsNPC() and not IsValid(ply.FakeRagdoll) then
+		--_, shootOrigin, _ = util.DistanceToLine(shootOrigin - shootAngles:Forward(),shootOrigin,ply:EyePos())
 	end
 
 	if IsValid(ply.wep) then
@@ -1027,15 +1031,18 @@ function SWEP:GetTransform(model, force)
     local owner = self:GetOwner()
 	local model = IsValid(model) and model
 	
+	if not IsValid(owner) then return self:GetPos(),self:GetAngles() end
+
 	if not IsValid(model) then
 		self.worldModel = IsValid(self.worldModel) and self.worldModel or self:CreateWorldModel()
 		model = self.worldModel
 	end
 
-	if IsValid(owner.wep) and not force then return owner.wep:GetPos(),owner.wep:GetAngles() end
+	local wep = owner:GetNWEntity("ragdollWeapon")
+	if IsValid(wep) and not force then return wep:GetPos(),wep:GetAngles() end
 	
 	local owner = IsValid(owner.FakeRagdoll) and owner.FakeRagdoll or owner
-	local model = IsValid(owner.wep) and owner.wep or model
+	local model = IsValid(wep) and wep or model
 
 	if CLIENT then model:SetPredictable(true) end
 

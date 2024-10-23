@@ -61,7 +61,7 @@ SWEP.dwmAForward = 0
 SWEP.addAng = Angle( -6,0,-90 )
 SWEP.addPos = Vector(0,0,0)
 SWEP.Efect = "PhyscannonImpact"
-
+SWEP.vbw = false
 SWEP.SightPos = Vector(-30,-1,-4.5)
 
 end

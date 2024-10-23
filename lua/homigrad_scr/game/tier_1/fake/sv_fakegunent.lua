@@ -24,6 +24,8 @@ function SpawnWeapon(ply)
 			
 			wep:Spawn()
 			
+			ply:SetNWEntity("ragdollWeapon", wep)
+
 			local phys = wep:GetPhysicsObject()
 
 			if IsValid(phys) then
@@ -61,6 +63,7 @@ function SpawnWeapon(ply)
 end
 
 function DespawnWeapon(ply)
+	ply:SetNWEntity("ragdollWeapon", NULL)
 	if IsValid(ply.wep) then
 		ply.wep:Remove()
 		ply.wep = nil

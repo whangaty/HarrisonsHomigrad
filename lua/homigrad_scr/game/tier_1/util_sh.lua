@@ -37,17 +37,35 @@ hook.Add("Player Activate","SetHull",function(ply)
 	ply:SetHullDuck(ply:GetNWVector("HullMin",HullMin) or HullMin,ply:GetNWVector("HullDuck",HullDuck) or HullDuck)
 	ply:SetViewOffset(Vector(0,0,64))
 	ply:SetViewOffsetDucked(Vector(0,0,38))
+    ply:SetMoveType(MOVETYPE_WALK)
+    ply:DrawShadow(true)
+    ply:SetRenderMode(RENDERMODE_NORMAL)
+    if SERVER then
+        ply:SetSolidFlags(bit.band(ply:GetSolidFlags(),bit.bnot(FSOLID_NOT_SOLID)))
+    end
 end)
 
 if CLIENT then
     hook.Add("EntityNetworkedVarChanged", "newfakeentity", function(ply, name, oldval, rag)
         --print(ply,name,oldval,rag)
-        if name == "Ragdoll" then
+        --[[if name == "Ragdoll" then
             ply.FakeRagdoll = rag
             if IsValid(rag) then
                 hook.Run("Fake", "faked", ply, rag)
             end
-        end
+        end--]]
+    end)
+end
+
+if CLIENT then
+    hook.Add("NetworkEntityCreated","huyhuy",function(ent)
+        if not ent:IsRagdoll() then return end
+        timer.Simple(LocalPlayer():Ping() / 100 + 0.1,function()
+            if not IsValid(ent) then return end
+            if IsValid(ent:GetNWEntity("RagdollOwner")) then
+                hook.Run("Fake",ent:GetNWEntity("RagdollOwner"),ent)
+            end
+        end)
     end)
 end
 
@@ -56,6 +74,7 @@ hook.Add("Fake","faked",function(ply, rag)
 	ply:SetHullDuck(-Vector(0,0,0),Vector(0,0,0))
     ply:SetViewOffset(Vector(0,0,0))
     ply:SetViewOffsetDucked(Vector(0,0,0))
+    ply:SetMoveType(MOVETYPE_NONE)
 end)
 
 -- PewPaws!!!

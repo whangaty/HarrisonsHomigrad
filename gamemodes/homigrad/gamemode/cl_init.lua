@@ -226,34 +226,26 @@ laserplayers = laserplayers or {}
 local mat = Material("sprites/bluelaser1")
 local mat2 = Material("Sprites/light_glow02_add_noz")
 hook.Add("PostDrawOpaqueRenderables", "laser", function()
-	--local ply = (LocalPlayer():Alive() and LocalPlayer()) or (!LocalPlayer():Alive() and LocalPlayer():GetNWEntity("SpectateGuy"))
-	--if !IsValid(ply) then return end
 	for i,ply in pairs(laserplayers) do
 		if not IsValid(ply) then laserplayers[i] = nil end
 		ply.Laser = ply.Laser or false
-		local actwep = (IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass()) or (ply:GetNWString("curweapon")!=nil and ply:GetNWString("curweapon"))
-		if IsValid(ply) and ply.Laser and !ply:GetNWInt("unconscious") and laserweps[IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() or ply:GetNWEntity("ActiveWeapon")] then
-			local wep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon() or (IsValid(ply:GetNWEntity('wep')) and ply:GetNWEntity('wep'))
-			if !IsValid(wep) then continue end
+		local wep = ply:GetActiveWeapon()
+		wep = IsValid(wep) and wep or ply:GetNWEntity("ActiveWeapon")
+		if IsValid(wep) and IsValid(ply) and ply.Laser and not ply:GetNWInt("unconscious") and laserweps[wep:GetClass()] then			
+			if not IsValid(wep) then continue end
 			
-			local att = wep:GetAttachment(wep:LookupAttachment("muzzle"))
+			local pos, ang = wep:GetTrace()
 			
-			if att==nil then continue end
-			local pos = att.Pos
-			local ang = att.Ang
-
-			-- Special Case for the Crossbow, fml.
-
 			local t = {}
 
-			t.start = pos+ang:Right()*2+ang:Forward()*-5+ang:Up()*-0.5
+			t.start = pos + ang:Right() * 0 + ang:Forward() * -5 + ang:Up() * -0.5
 			
-			t.endpos = t.start + ang:Forward()*9000
+			t.endpos = t.start + ang:Forward() * 9000
 			
-			t.filter = {ply,wep,LocalPlayer()}
+			t.filter = {ply,wep,LocalPlayer(),ply:GetNWEntity("Ragdoll"),ply:GetNWEntity("ragdollWeapon")}
 			t.mask = MASK_SOLID
 			local tr = util.TraceLine(t)
-
+			
 			local angle = (tr.StartPos - tr.HitPos):Angle()
 			
 			cam.Start3D(EyePos(),EyeAngles())
@@ -266,7 +258,7 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 			local tra = util.TraceLine({
 				start = tr.HitPos - (tr.HitPos - EyePos()):GetNormalized(),
 				endpos = EyePos(),
-				filter = {LocalPlayer(),ply,wep,ply:GetNWEntity("Ragdoll")},
+				filter = {LocalPlayer(),ply,wep,ply:GetNWEntity("Ragdoll"),ply:GetNWEntity("ragdollWeapon")},
 				mask = MASK_SHOT
 			})
 
@@ -286,6 +278,7 @@ local function ToggleMenu(toggle)
         if IsValid(wepMenu) then wepMenu:Remove() end
         local lply = LocalPlayer()
         local wep = lply:GetActiveWeapon()
+		wep = IsValid(wep) and wep or lply:GetNWEntity("ActiveWeapon")
         if !IsValid(wep) then return end
         wepMenu = vgui.Create("DMenu")
         wepMenu:SetPos(w/3,h/2)
@@ -480,3 +473,21 @@ end)
 
 hook.Add("DrawDeathNotice","no",function() return false end)
 
+function GM:MouthMoveAnimation( ply )
+	local ent = IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll") or ply
+	
+	local flexes = {
+		ent:GetFlexIDByName( "jaw_drop" ),
+		ent:GetFlexIDByName( "left_part" ),
+		ent:GetFlexIDByName( "right_part" ),
+		ent:GetFlexIDByName( "left_mouth_drop" ),
+		ent:GetFlexIDByName( "right_mouth_drop" )
+	}
+	
+	local weight = ply:IsSpeaking() and math.Clamp( ply:VoiceVolume() * 6, 0, 6 ) or 0
+
+	for k, v in ipairs( flexes ) do
+		ent:SetFlexWeight( v, weight * 4 )
+	end
+
+end

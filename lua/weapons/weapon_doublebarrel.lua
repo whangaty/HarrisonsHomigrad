@@ -56,7 +56,7 @@ SWEP.vbwPos = Vector(0,-4.7,1)
 SWEP.vbwAng = Angle(15,5,-90)
 
 SWEP.addAng = Angle(0,0,90)
-SWEP.addPos = Vector(0,0,0)-- shamanskie to4ki
+SWEP.addPos = Vector(18,0,1.5) -- shamanskie to4ki
 
 SWEP.dwmModeScale = 1 -- pos
 SWEP.dwmForward = 3

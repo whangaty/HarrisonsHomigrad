@@ -136,10 +136,19 @@ function Faking(ply,force) -- функция падения
 
 			FakeBullseyeTrigger(rag, ply)
 
-			ply:HuySpectate(OBS_MODE_CHASE)
+			--ply:HuySpectate(OBS_MODE_CHASE)
+			--ply:SpectateEntity(rag)
+			ply:SetMoveType(MOVETYPE_NONE)
+			ply:DrawShadow(false)
+			local hull = Vector(10,10,10)
+			ply:SetHull(-hull,hull)
+			ply:SetHullDuck(-hull,hull)
+			ply:SetViewOffset(Vector(0,0,0))
+			ply:SetViewOffsetDucked(Vector(0,0,0))
+			ply:SetRenderMode(RENDERMODE_NONE)
 
-			ply:SpectateEntity(rag)
-
+			ply:SetSolidFlags(bit.bor(ply:GetSolidFlags(),FSOLID_NOT_SOLID))
+			
 			ply:SetActiveWeapon(nil)
 			ply:DropObject()
 
@@ -934,14 +943,14 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 						local physa = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 						local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) ) --rhand
 						local ang=ply:EyeAngles()
-						ang:RotateAroundAxis(eyeangs:Forward(),90)
-						ang:RotateAroundAxis(eyeangs:Forward(),90)
-						ang:RotateAroundAxis(eyeangs:Up(),90)
+						ang:RotateAroundAxis(eyeangs:Forward(),180)
+						ang:RotateAroundAxis(eyeangs:Up(),10)
+						ang:RotateAroundAxis(eyeangs:Right(),-10)
 						local pos = ply:EyePos()
 						pos[3] = head:GetPos()[3]
 						local shadowparams = {
 							secondstoarrive=0.4,
-							pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*15,
+							pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*0,
 							angle=ang,
 							maxangular=670,
 							maxangulardamp=100,

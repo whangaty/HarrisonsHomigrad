@@ -679,7 +679,7 @@ hook.Add("InputMouseApply", "asdasd2", function(cmd, x, y, angle)
 end)
 
 hook.Add("Think","mouthanim",function()
-	for i, ply in player.Iterator() do
+	--[[for i, ply in player.Iterator() do
 		local ent = IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll") or ply
 
 		local flexes = {
@@ -689,13 +689,13 @@ hook.Add("Think","mouthanim",function()
 			ent:GetFlexIDByName( "left_mouth_drop" ),
 			ent:GetFlexIDByName( "right_mouth_drop" )
 		}
-
+		
 		local weight = ply:IsSpeaking() and math.Clamp( ply:VoiceVolume() * 6, 0, 6 ) or 0
 
 		for k, v in ipairs( flexes ) do
 			ent:SetFlexWeight( v, weight * 4 )
 		end
-	end
+	end--]]
 end)
 
 local tab = {
