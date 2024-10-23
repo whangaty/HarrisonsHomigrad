@@ -205,7 +205,7 @@ end
 function homicide.VBWHide(ply,wep)
     if (not ply:IsRagdoll() and ply:Team() == 1002) then return end -- t weps hide
 
-    return not wep.TwoHands
+    return (wep.IsPistolHoldType and wep:IsPistolHoldType())
 end
 
 function homicide.Scoreboard_DrawLast(ply)

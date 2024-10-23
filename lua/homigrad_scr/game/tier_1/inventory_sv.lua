@@ -87,8 +87,10 @@ hook.Add("DoPlayerDeath","huyhuy",function(ply)
 		ent:SetPos(ply:GetPos() + vector_up * 10)
 
 		local clip1 = wep:Clip1()
-		timer.Simple(0.1,function()
+		timer.Simple(0,function()
 			local rag = ply:GetNWEntity("Ragdoll",ply.FakeRagdoll)
+			rag = IsValid(rag) and rag or ply.FakeRagdoll
+			if not IsValid(rag) then return end
 			ent:SetClip1(clip1)
 			ent:SetTable(tbl)
 			--ent:SetOwner(rag)
@@ -112,6 +114,7 @@ hook.Add("DoPlayerDeath","huyhuy",function(ply)
 
 	timer.Simple(0.1,function()
 		local rag = ply:GetNWEntity("Ragdoll",ply.FakeRagdoll)
+		rag = IsValid(rag) and rag or ply.FakeRagdoll
 		if IsValid(rag) then
 			rag.Info = rag.Info or {}
 			if ply.weps then

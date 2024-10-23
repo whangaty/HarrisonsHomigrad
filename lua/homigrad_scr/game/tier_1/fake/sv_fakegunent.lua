@@ -27,7 +27,7 @@ function SpawnWeapon(ply)
 			local phys = wep:GetPhysicsObject()
 
 			if IsValid(phys) then
-				phys:SetMass(weapon:IsPistolHoldType() and 1 or 5)
+				phys:SetMass(weapon:IsPistolHoldType() and 1 or 1)
 			end
 
 			if IsValid(ply.WepCons) then ply.WepCons:Remove() ply.WepCons = nil end
@@ -37,7 +37,7 @@ function SpawnWeapon(ply)
 				ply.WepCons=cons
 			end
 
-			if weapon.TwoHands then
+			if not (weapon.IsPistolHoldType and weapon:IsPistolHoldType()) then
 				local lh = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand")))
 				local rh = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
 
@@ -74,5 +74,9 @@ hook.Add("Player Think","shooting",function(ply)
 	
 	if wep.Primary.Automatic and ply:KeyDown(IN_ATTACK) or ply:KeyPressed(IN_ATTACK) then
 		wep:PrimaryAttack()
+	end
+
+	if ply:KeyPressed(IN_RELOAD) then
+		wep:Reload()
 	end
 end)

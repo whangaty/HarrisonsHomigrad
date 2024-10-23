@@ -5,7 +5,7 @@ local n, e, r, o
 local d = Material('materials/scopes/scope_dbm.png')
 CameraSetFOV = 120
 
-CreateClientConVar("hg_fov","120",true,false,nil,90,120)
+CreateClientConVar("hg_fov","120",true,false,nil,70,120)
 local smooth_cam = CreateClientConVar("hg_smooth_cam","1",true,false,nil,0,1)
 
 CreateClientConVar("hg_bodycam","0",true,false,nil,0,1)
@@ -158,10 +158,10 @@ local text
 local hg_disable_stoprenderunfocus = CreateClientConVar("hg_disable_stoprenderunfocus","0",true)
 
 local prekols = {
-	"Get a job",
-	"Get a life",
-	"возможно, команда hg_disable_stoprenderunfocus 1 выключит этот прикол...",
-	"ураааа, ты свернулся... Потрогай траву, играть вечность плохо.",
+	"afk?",
+	"no",
+	"hg_disable_stoprenderunfocus 1",
+	"huy",
 	"kys"
 }
 
@@ -368,6 +368,8 @@ local view = {}
 ADDFOV = 0
 ADDROLL = 0
 
+follow = follow or NULL
+
 local helmEnt
 
 net.Receive("nodraw_helmet",function()
@@ -457,7 +459,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local ragdoll = ply:GetNWEntity("Ragdoll")
 
 	if ply:Alive() and IsValid(ragdoll) then
-		oldrag = ragdoll
+		follow = ragdoll
 		ragdoll:ManipulateBoneScale(ragdoll:LookupBone("ValveBiped.Bip01_Head1"),vecZero)
 		
 		local att = ragdoll:GetAttachment(ragdoll:LookupAttachment("eyes"))
@@ -636,6 +638,45 @@ hook.Add("PostDrawOpaqueRenderables", "example", function()
 	cam.End3D2D()
 end )
 ]]--
+local turned = false
+
+hook.Add("InputMouseApply", "asdasd2", function(cmd, x, y, angle)
+	if not IsValid(LocalPlayer()) or not LocalPlayer():Alive() then return end
+	if not IsValid(follow) then
+		if turned then
+			local ang = LocalPlayer():EyeAngles()
+			ang.yaw = ang.yaw + 180
+			ang.roll = 0
+			cmd:SetViewAngles(ang)
+			turned = false
+			return true
+		end
+		return
+	end
+	
+	local att = follow:GetAttachment(follow:LookupAttachment("eyes"))
+	if not att or not istable(att) then return end
+
+	local attang = LocalPlayer():EyeAngles()
+	local view = render.GetViewSetup(true)
+	local anglea = view.angles
+	local angRad = math.rad(angle[3])
+	local newX = x * math.cos(angRad) - y * math.sin(angRad)
+	local newY = x * math.sin(angRad) + y * math.cos(angRad)
+
+	angle.pitch = math.Clamp(angle.pitch + newY / 50, -180, 180)
+	angle.yaw = angle.yaw - newX / 50
+
+	if math.abs(angle.pitch) > 89 then
+		turned = not turned
+		angle.roll = angle.roll + 180
+		angle.yaw = angle.yaw + 180
+		angle.pitch = 89 * (angle.pitch / math.abs(angle.pitch))
+	end
+
+	cmd:SetViewAngles(angle)
+	return true
+end)
 
 hook.Add("Think","mouthanim",function()
 	for i, ply in player.Iterator() do

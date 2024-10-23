@@ -50,7 +50,6 @@ SWEP.WorldModel				= "models/weapons/w_jmod_crossbow.mdl"
 SWEP.vbwPos = Vector(0,0,0)
 
 SWEP.Supressed = true
-
 SWEP.dwmModeScale = 0.9
 SWEP.dwmForward = 0
 SWEP.dwmRight = 0

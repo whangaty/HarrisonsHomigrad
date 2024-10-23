@@ -178,6 +178,11 @@ function Faking(ply,force) -- функция падения
 			ply:SetHealth(health)
 			ply:SetVelocity(vel)
 			ply:SetEyeAngles(eyepos)
+			if IsValid(ply.ActiveWeapon) then
+				ply:SetActiveWeapon(ply.ActiveWeapon)
+			else
+				ply:SetActiveWeapon(ply:GetWeapon("weapon_hands"))
+			end
 
 			PLYSPAWN_OVERRIDE = nil
 

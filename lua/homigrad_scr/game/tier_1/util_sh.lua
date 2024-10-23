@@ -41,7 +41,7 @@ end)
 
 if CLIENT then
     hook.Add("EntityNetworkedVarChanged", "newfakeentity", function(ply, name, oldval, rag)
-        print(ply,name,oldval,rag)
+        --print(ply,name,oldval,rag)
         if name == "Ragdoll" then
             ply.FakeRagdoll = rag
             if IsValid(rag) then

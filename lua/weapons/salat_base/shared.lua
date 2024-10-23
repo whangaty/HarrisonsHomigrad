@@ -397,15 +397,17 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:Reload()
+	
 	if !self:GetOwner():KeyDown(IN_WALK) then
 		self.AmmoChek = 3
 		if timer.Exists("reload"..self:EntIndex())  or self:Clip1()>=self:GetMaxClip1() or self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )<=0 then return nil end
 		if self:GetOwner():IsSprinting() then return nil end
 		if ( self.NextShot > CurTime() ) then return end
 		self:GetOwner():SetAnimation(PLAYER_RELOAD)
-		self:EmitSound(self.ReloadSound,60,100,0.8,CHAN_AUTO)
+		if SERVER then self:GetOwner():EmitSound(self.ReloadSound,60,100,0.8,CHAN_AUTO) end
 		timer.Create( "reload"..self:EntIndex(), self.ReloadTime, 1, function()
-			if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon()==self then
+			local wep = self:GetOwner():GetActiveWeapon()
+			if IsValid(self) and IsValid(self:GetOwner()) and (IsValid(wep) and wep or self:GetOwner().ActiveWeapon) == self then
 				local oldclip = self:Clip1()
 				self:SetClip1(math.Clamp(self:Clip1()+self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() ),0,self:GetMaxClip1()))
 				local needed = self:Clip1()-oldclip

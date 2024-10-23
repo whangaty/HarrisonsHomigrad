@@ -224,7 +224,7 @@ function JMod.FragSplosion(shooter, origin, fragNum, fragDmg, fragMaxDist, attac
 	Eff:SetMagnitude(spread or 0)
 	util.Effect("eff_jack_gmod_fragsplosion", Eff, true, true)
 	---
-	shooter = shooter or game.GetWorld()
+	shooter = IsValid(shooter) and shooter or game.GetWorld()
 	zReduction = zReduction or 2
 
 	if not JMod.Config.FragExplosions then
