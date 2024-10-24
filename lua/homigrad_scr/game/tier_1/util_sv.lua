@@ -82,3 +82,10 @@ COMMANDS.arm = {function(ply,args)
     ply:GetEyeTrace().Entity:Arm()
     ply:GetEyeTrace().Entity:Activate()
 end,1}
+
+
+local perf = physenv.GetPerformanceSettings()
+if perf then
+    perf.MaxVelocity = 100000 --default 2000
+    physenv.SetPerformanceSettings(perf)
+end

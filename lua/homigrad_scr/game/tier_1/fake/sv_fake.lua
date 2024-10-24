@@ -252,6 +252,8 @@ hook.Add("OnEntityCreated","hg-bullseye",function(ent)
 		if exchangeEnt then
 			local entr = type(exchangeEnt) == "table" and table.Random(exchangeEnt) or exchangeEnt
 			local ent2 = ents.Create(entr)
+			
+			if not IsValid(ent2) then return end
 
 			ent2:SetPos(pos)
 			ent2:SetAngles(ang)

@@ -444,7 +444,7 @@ function SWEP:GetSAttachment(obj)
 	local pos, ang = self:GetTransform()
 	local owner = self:GetOwner()
 	
-	local wep = owner:GetNWEntity("ragdollWeapon")
+	local wep = IsValid(owner) and owner:GetNWEntity("ragdollWeapon",self) or self
 
 	local model = IsValid(wep) and wep or self
 	

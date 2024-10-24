@@ -22,6 +22,15 @@ local function addBloodPart(pos,vel,mat,w,h)
 	bloodparticels1[#bloodparticels1 + 1] = {pos,pos2,vel,mat,w,h}
 end
 
+local function addBloodPart2(pos,vel,mat,w,h,time)
+	pos = pos + vecZero
+	vel = vel + vecZero
+	local pos2 = Vector()
+	pos2:Set(pos)
+	
+	bloodparticels2[#bloodparticels2 + 1] = {pos,pos2,vel,mat,w,h,CurTime() + time,time}
+end
+
 net.Receive("blood particle",function()
 	addBloodPart(net.ReadVector(),net.ReadVector(),mats[random(1,#mats)],random(10,15),random(10,15))
 end)
@@ -36,15 +45,6 @@ net.Receive("blood particle more",function()
 		addBloodPart(pos,vel + Vector(Rand(-15,15),Rand(-15,15)),mats[random(1,#mats)],random(10,15),random(10,15))
 	end
 end)
-
-local function addBloodPart2(pos,vel,mat,w,h,time)
-	pos = pos + vecZero
-	vel = vel + vecZero
-	local pos2 = Vector()
-	pos2:Set(pos)
-	
-	bloodparticels2[#bloodparticels2 + 1] = {pos,pos2,vel,mat,w,h,CurTime() + time,time}
-end
 
 local function explode(pos)
 	local xx,yy = 12,12

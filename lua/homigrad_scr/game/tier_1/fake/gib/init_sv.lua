@@ -131,11 +131,11 @@ function Gib_Input(rag, bone, dmgInfo)
 
 		gib_ragdols[rag] = true
  
-		if not dmgInfo:IsDamageType(DMG_CRUSH) then
+		--if not dmgInfo:IsDamageType(DMG_CRUSH) then
 			rag.Blood = rag.Blood or 5000
 			rag.BloodNext = 0
 			rag.BloodGibs = {}
-		end
+		--end
 	end
 	
 	--[[if hitgroup == HITGROUP_HEAD and rag.EZarmor then
@@ -154,8 +154,8 @@ function Gib_Input(rag, bone, dmgInfo)
 	local phys_bone = rag:TranslateBoneToPhysBone(bone)
 
 	local dmgPos = dmgInfo:GetDamagePosition()
-
-	if not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
+	
+	if not gibRemove[phys_bone] then
 		sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
 		sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
 		sound.Emit(rag,"physics/body/body_medium_break3.wav")
@@ -170,6 +170,7 @@ function Gib_Input(rag, bone, dmgInfo)
 		if bone ~= 0 then
 			Gib_RemoveBone(rag,bone,phys_bone)
 		else
+			gibRemove[phys_bone] = true
 			BloodParticleExplode(rag:GetPhysicsObjectNum(phys_bone):GetPos())
 			SpawnGore(rag, rag:GetPhysicsObjectNum(phys_bone):GetPos(),rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos())
 			rag:Remove()
@@ -199,6 +200,7 @@ function Gib_Input(rag, bone, dmgInfo)
 				if bone ~= 0 then
 					Gib_RemoveBone(rag,bone,phys_bone)
 				else
+					gibRemove[phys_bone] = true
 					BloodParticleExplode(rag:GetPhysicsObjectNum(phys_bone):GetPos())
 					SpawnGore(rag, rag:GetPhysicsObjectNum(phys_bone):GetPos(),rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos())
 					rag:Remove()
@@ -209,7 +211,7 @@ function Gib_Input(rag, bone, dmgInfo)
 		end
 	end
 
-	rag:GetPhysicsObject():SetMass(20)
+	rag:GetPhysicsObject():SetMass(10)
 end
 
 hook.Add("PlayerDeath","Gib",function(ply)
@@ -248,6 +250,7 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 
 	--phys_bone = phys_bone == 0 and 1 or phys_bone
 	--if phys_bone == 0 then return end--lol
+	if dmgInfo:GetDamage() < 350 then return end
 
 	local hitgroup
 
@@ -259,9 +262,7 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 	if bonetohitgroup[bonename] then hitgroup = bonetohitgroup[bonename] end
 
 	local mul = RagdollDamageBoneMul[hitgroup] or 1
-	
-	if dmgInfo:GetDamage() < 350 then return end
-	
+		
 	Gib_Input(ent,ent:TranslatePhysBoneToBone(phys_bone),dmgInfo)
 end)
 
@@ -284,7 +285,7 @@ hook.Add("Think","Gib",function()
 		if ent.BloodGibs and ent.Blood > 0 then
 			local k = ent.Blood / 5000
 
-			if (ent.BloodNext or 0) < time then
+			--[[if (ent.BloodNext or 0) < time then
 				ent.BloodNext = time + Rand(0.25,0.5) / max(k,0.25)
 				ent.Blood = max(ent.Blood - 25,0)
 
@@ -300,11 +301,12 @@ hook.Add("Think","Gib",function()
 				else
 					BloodParticle(ent:GetPos() + ent:OBBCenter(),ent:GetVelocity() + Vector(math.Rand(-5,5),math.Rand(-5,5),0))
 				end
-			end
+			end--]]
 
 			local BloodGibs = ent.BloodGibs
 
 			for phys_bone,phys_obj in pairs(ent.gibRemove) do
+				if type(phys_obj) != "PhysObj" or not IsValid(phys_obj) then continue end
 				if (BloodGibs[phys_bone] or 0) < time then
 					ent.Blood = max(ent.Blood - 25,0)
 

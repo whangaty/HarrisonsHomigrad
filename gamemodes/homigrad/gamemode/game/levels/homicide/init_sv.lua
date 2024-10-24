@@ -28,7 +28,6 @@ COMMANDS.homicide_get = {function(ply,args)
     net.Send(ply)
 end}
 
-
 local function makeT(ply)
     ply.roleT = true --Игрока не существует. Выдаёт из-за этого ошибку в первый раз.
     table.insert(homicide.t,ply)

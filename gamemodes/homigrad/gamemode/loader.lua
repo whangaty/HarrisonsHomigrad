@@ -145,4 +145,34 @@ function GM.includeDir(path,includes)
 end
 hg_includeDir = GM.includeDir
 
---бесплатно!
+hg.modesHooks = {}
+
+local function LoadModes()   
+	for i, name in pairs(LevelList) do
+		local mode = _G[name]
+		for k, v2 in pairs(mode) do
+			if isfunction(v2) then
+				hg.modesHooks[name] = hg.modesHooks[name] or {}
+				hg.modesHooks[name][k] = v2
+			end
+		end
+	end
+end
+
+LoadModes()
+
+local oldHook = oldHook or hook.Call
+
+function hook.Call(name, gm, ...)
+    local Current = roundActiveName
+
+    if hg.modesHooks[Current] and hg.modesHooks[Current][name] then
+        local a, b, c, d, e, f = hg.modesHooks[Current][name](_G[name], name, ...)
+
+        if (a != nil) then
+            return a, b, c, d, e, f
+        end
+    end
+
+    return oldHook(name, gm, ...)
+end
