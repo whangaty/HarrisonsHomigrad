@@ -53,7 +53,6 @@ end
 hook.Add("Player Think","homigrad-blood",function(ply,time)
 	if not ply:Alive() or ply:HasGodMode() then return end
 	ply.Organs = ply.Organs or {}
-
 	local nextPulse,heartstop = homigradPulse(ply)
 
 	ply.heartstop = heartstop

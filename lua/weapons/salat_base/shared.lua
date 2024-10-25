@@ -1074,7 +1074,7 @@ function SWEP:GetTransform(model, force)
 	if bon2 then
 		local rh_wep = model:GetBoneMatrix(bon2)
 
-		if rh_wep then
+		if rh_wep and rh then
 			local newmat = rh_wep:GetInverse() * rh
 
 			pos, ang = LocalToWorld(newmat:GetTranslation(),newmat:GetAngles(), pos, ang)

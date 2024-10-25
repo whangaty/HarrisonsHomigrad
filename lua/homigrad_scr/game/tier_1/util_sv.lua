@@ -84,8 +84,10 @@ COMMANDS.arm = {function(ply,args)
 end,1}
 
 
-local perf = physenv.GetPerformanceSettings()
-if perf then
-    perf.MaxVelocity = 100000 --default 2000
-    physenv.SetPerformanceSettings(perf)
-end
+hook.Add("InitPostEntity","changeperfsettings",function()
+    local perf = physenv.GetPerformanceSettings()
+    if perf then
+        perf.MaxVelocity = 100000 --default 2000
+        physenv.SetPerformanceSettings(perf)
+    end
+end)

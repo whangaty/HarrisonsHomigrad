@@ -79,16 +79,6 @@ local validBone = {
 	["ValveBiped.Bip01_R_Foot"] = true
 }
 
-local validBone2 = {
-	["ValveBiped.Bip01_L_Thigh"] = true,
-	["ValveBiped.Bip01_L_Calf"] = true,
-	["ValveBiped.Bip01_L_Foot"] = true,
-	["ValveBiped.Bip01_R_Thigh"] = true,
-	["ValveBiped.Bip01_R_Calf"] = true,
-	["ValveBiped.Bip01_R_Foot"] = true,
-	["ValveBiped.Bip01_Head1"] = true,
-}
-
 function SpawnGore(ent, pos, headpos)
 	if ent.gibRemove and not ent.gibRemove[ent:TranslateBoneToPhysBone(ent:LookupBone("ValveBiped.Bip01_Head1"))] then
 		local ent = ents.Create("prop_physics")
@@ -214,6 +204,24 @@ function Gib_Input(rag, bone, dmgInfo)
 	rag:GetPhysicsObject():SetMass(10)
 end
 
+local validBone2 = {
+	["ValveBiped.Bip01_L_Thigh"] = true,
+	["ValveBiped.Bip01_L_Calf"] = true,
+	["ValveBiped.Bip01_L_Foot"] = true,
+	["ValveBiped.Bip01_R_Thigh"] = true,
+	["ValveBiped.Bip01_R_Calf"] = true,
+	["ValveBiped.Bip01_R_Foot"] = true,
+	
+	--["ValveBiped.Bip01_Head1"] = true, --bad idea
+
+	["ValveBiped.Bip01_R_UpperArm"] = true,
+	["ValveBiped.Bip01_R_Forearm"] = true,
+	["ValveBiped.Bip01_R_Hand"] = true,
+	["ValveBiped.Bip01_L_UpperArm"] = true,
+	["ValveBiped.Bip01_L_Forearm"] = true,
+	["ValveBiped.Bip01_L_Hand"] = true,
+}
+
 hook.Add("PlayerDeath","Gib",function(ply)
 	dmgInfo = ply.LastDMGInfo
 	if not dmgInfo then return end
@@ -251,6 +259,8 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 	--phys_bone = phys_bone == 0 and 1 or phys_bone
 	--if phys_bone == 0 then return end--lol
 	if dmgInfo:GetDamage() < 350 then return end
+	--print(dmgInfo:GetDamage())
+	if dmgInfo:GetAttacker():IsRagdoll() then return end--maybe this will get a return
 
 	local hitgroup
 
@@ -281,9 +291,12 @@ hook.Add("Think","Gib",function()
 
 	for ent in pairs(gib_ragdols) do
 		if not IsValid(ent) then gib_ragdols[ent] = nil continue end
+		local ply = RagdollOwner(ent) or ent
+		ply.Blood = ply.Blood or 5000
+		ent.Blood = ply.Blood
 
-		if ent.BloodGibs and ent.Blood > 0 then
-			local k = ent.Blood / 5000
+		if ent.BloodGibs and ply.Blood > 0 then
+			local k = ply.Blood / 5000
 
 			--[[if (ent.BloodNext or 0) < time then
 				ent.BloodNext = time + Rand(0.25,0.5) / max(k,0.25)
@@ -304,15 +317,19 @@ hook.Add("Think","Gib",function()
 			end--]]
 
 			local BloodGibs = ent.BloodGibs
-
+			
 			for phys_bone,phys_obj in pairs(ent.gibRemove) do
 				if type(phys_obj) != "PhysObj" or not IsValid(phys_obj) then continue end
+				local parent_bone = ent:GetBoneParent(ent:TranslatePhysBoneToBone(phys_bone))
+				if parent_bone and parent_bone ~= -1 and ent.gibRemove[ent:TranslateBoneToPhysBone(ent:GetBoneParent(ent:TranslatePhysBoneToBone(phys_bone)))] then continue end
+				local parent_obj = ent:GetPhysicsObjectNum(ent:TranslateBoneToPhysBone(parent_bone))
+				parent_obj = IsValid(parent_obj) and parent_obj or phys_obj
 				if (BloodGibs[phys_bone] or 0) < time then
-					ent.Blood = max(ent.Blood - 25,0)
+					ply.Blood = max(ply.Blood - 5,0)
+					
+					BloodGibs[phys_bone] = time + Rand(0.07,0.1) / max(k,0.5)
 
-					BloodGibs[phys_bone] = time + Rand(0.07,0.1) / max(k,0.25)
-
-					BloodParticle(phys_obj:GetPos(),phys_obj:GetVelocity() + phys_obj:GetAngles():Forward() * Rand(200,250) * k)
+					BloodParticle(phys_obj:GetPos() - parent_obj:GetAngles():Forward() * 1,phys_obj:GetVelocity() + parent_obj:GetAngles():Forward() * Rand(200,250) * k + VectorRand(-20,20))
 				end
 			end
 		end

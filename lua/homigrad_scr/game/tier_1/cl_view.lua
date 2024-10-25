@@ -457,9 +457,9 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	end
 
 	local ragdoll = ply:GetNWEntity("Ragdoll")
+	follow = ragdoll
 
 	if ply:Alive() and IsValid(ragdoll) then
-		follow = ragdoll
 		ragdoll:ManipulateBoneScale(ragdoll:LookupBone("ValveBiped.Bip01_Head1"),vecZero)
 		
 		local att = ragdoll:GetAttachment(ragdoll:LookupAttachment("eyes"))

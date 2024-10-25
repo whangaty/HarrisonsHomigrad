@@ -61,7 +61,11 @@ function ENT:Use(taker)
 
 			if can then
 				if ply:IsPlayer() then ply:DropWeapon(weapon) end
-				taker:PickupWeapon(weapon)
+				
+				timer.Simple(0,function()
+					taker:PickupWeapon(weapon)
+				end)
+
 				self:Remove()
 			end
 		end

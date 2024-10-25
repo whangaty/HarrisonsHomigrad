@@ -48,7 +48,10 @@ bloodparticels_hook[2] = function(mul)
             
             local dir = result.HitNormal
 
-            util_Decal("Blood",hitPos + dir,hitPos - dir)
+            local tr = util.QuickTrace(hitPos,hitPos)
+
+            local filter = IsValid(tr.Entity) and tr.Entity:IsRagdoll() and tr.Entity or nil
+            util.Decal("Blood",hitPos + dir,hitPos - dir,filter)
             sound.Play("ambient/water/drip" .. math_random(1,4) .. ".wav",hitPos,60,math_random(230,240))
             continue
         else

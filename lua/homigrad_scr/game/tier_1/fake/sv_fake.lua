@@ -47,6 +47,7 @@ bonetohitgroup={
 }
 
 function SavePlyInfo(ply)
+	if not ply:IsPlayer() and not ply:IsRagdoll() then return end
     ply.Info = ply.Info or {}
 	
     local info = ply.Info
@@ -135,6 +136,13 @@ function Faking(ply,force) -- функция падения
 			hook.Run("Fake", ply, rag)
 
 			FakeBullseyeTrigger(rag, ply)
+
+			if ply.LastDMGInfo then
+				local phys = rag:GetPhysicsObject()
+				if IsValid(phys) then
+					phys:ApplyForceCenter(ply.LastDMGInfo:GetDamageForce())
+				end
+			end
 
 			--ply:HuySpectate(OBS_MODE_CHASE)
 			--ply:SpectateEntity(rag)

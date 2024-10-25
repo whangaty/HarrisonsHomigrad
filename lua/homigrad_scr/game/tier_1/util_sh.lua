@@ -11,6 +11,14 @@ hook.Add("player_spawn","player_activatehg",function(data)
     end
 end)
 
+gameevent.Listen( "entity_killed" )
+hook.Add("entity_killed","player_deathhg",function(data) 
+	local ply = Entity(data.entindex_killed)
+	if not IsValid(ply) or not ply:IsPlayer() then return end
+	
+	hook.Run("Player Death", ply)
+end)
+
 local override = {}
 net.Receive("Override Spawn", function() override[net.ReadEntity()] = true end)
 hook.Add("Player Spawn", "!Override", function(ply)
@@ -55,6 +63,17 @@ hook.Add("Player Activate","SetHull",function(ply)
     end)
 end)
 
+hook.Add("Player Death","SetHull",function(ply)
+    timer.Simple(0,function()
+        local ang = ply:EyeAngles()
+        if ang[3] == 180 then
+            ang[2] = ang[2] + 180
+        end
+        ang[3] = 0
+        ply:SetEyeAngles(ang)
+    end)
+end)
+
 if CLIENT then
     hook.Add("EntityNetworkedVarChanged", "newfakeentity", function(ply, name, oldval, rag)
         --print(ply,name,oldval,rag)
@@ -80,8 +99,8 @@ if CLIENT then
 end
 
 hook.Add("Fake","faked",function(ply, rag)
-    ply:SetHull(-Vector(0,0,0),Vector(0,0,0))
-	ply:SetHullDuck(-Vector(0,0,0),Vector(0,0,0))
+    --ply:SetHull(-Vector(0,0,0),Vector(0,0,0))
+	--ply:SetHullDuck(-Vector(0,0,0),Vector(0,0,0))
     ply:SetViewOffset(Vector(0,0,0))
     ply:SetViewOffsetDucked(Vector(0,0,0))
     ply:SetMoveType(MOVETYPE_NONE)
