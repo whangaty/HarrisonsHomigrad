@@ -1,4 +1,4 @@
-table.insert(LevelList,"wick")
+--table.insert(LevelList,"wick")
 wick = wick or {}
 wick.Name = "John Wick"
 

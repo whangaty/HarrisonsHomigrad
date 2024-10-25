@@ -119,7 +119,7 @@ local red,blue = Color(200,0,10),Color(75,75,255)
 local roundTypes = {"Shotgun", "Regular Round", "No Firearms Permitted Zone", "Wild West"}
 local roundSound = {"snd_jack_hmcd_disaster.mp3","snd_jack_hmcd_shining.mp3","snd_jack_hmcd_panic.mp3","snd_jack_hmcd_wildwest.mp3"}
 
-surface.CreateFont("HomicideFont",{
+surface.CreateFont("HomigradRoundFont",{
     font = "Arial", -- On Windows/macOS, use the font-name which is shown to you by your operating system Font Viewer. On Linux, use the file name
 	extended = false,
 	size = ScreenScale(15),
@@ -153,23 +153,23 @@ function homicide.HUDPaint_RoundLeft(white2)
         surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
 
         surface.DrawText("Вы " .. name)]]--
-        draw.DrawText( "You are a " .. name, "HomicideFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Homicide", "HomicideFont", ScrW() / 2, ScrH() / 8, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( roundTypes[roundType], "HomicideFont", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You are a " .. name, "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Homicide", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( roundTypes[roundType], "HomigradRoundFont", ScrW() / 2, ScrH() / 5, Color( color.r,color.g,color.b ,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply.roleT then --Traitor
             if homicide.roundType == 3 then --gunfree
-                draw.DrawText( "You have a Crossbow.\nDespite its large size, it is hidden from your character.", "HomicideFont", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "You have a Crossbow.\nDespite its large size, it is hidden from your character.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
                 --"", "HomigradFontBig", ScrW() / 2, ScrH() / 1.1, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
             elseif homicide.roundType == 4 then --wildwest
-                draw.DrawText( "You have been given a revolver to take everyone else out.", "HomicideFont", ScrW() / 2, ScrH() / 1.1, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "You have been given a revolver to take everyone else out.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.1, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
             else --emergency/base
-                draw.DrawText( "Kill everyone before the police arrive.", "HomicideFont", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "Kill everyone before the police arrive.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
             end
         elseif lply.roleCT then --Innocent with a gun
-            draw.DrawText( DescCT[homicide.roundType] or "...", "HomicideFont", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( DescCT[homicide.roundType] or "...", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "Find the traitor. Tie or Kill him to win.", "HomicideFont", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Find the traitor. Tie or Kill him to win.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         end
         return
     end

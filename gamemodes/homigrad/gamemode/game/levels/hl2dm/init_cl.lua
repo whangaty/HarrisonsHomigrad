@@ -17,9 +17,9 @@ function hl2dm.HUDPaint_RoundLeft(white)
         end
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),0.5,0.5)
 
-        draw.DrawText( "You Are On Team: " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "HL2 DM", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,155,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Neutralise the enemy team, and take back what's yours!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You Are On Team: " .. name, "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "HL2 DM", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( 155,155,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Neutralise the enemy team, and take back what's yours!", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         return
     end
 end
