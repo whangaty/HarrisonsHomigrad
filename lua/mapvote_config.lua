@@ -19,7 +19,7 @@ SolidMapVote[ 'Config' ][ 'Map Button Size' ] = 0.5
 -- option controls how long before it comes up in seconds. Simply math
 -- can be used to control the length. The last option sets how long before
 -- the vote pops up to show a reminder that it is going to happen.
-SolidMapVote[ 'Config' ][ 'Enable Vote Autostart' ] = true
+SolidMapVote[ 'Config' ][ 'Enable Vote Autostart' ] = false
 SolidMapVote[ 'Config' ][ 'Vote Autostart Delay' ] = 60*60  -- 60 Minutes
 SolidMapVote[ 'Config' ][ 'Autostart Reminder' ] = 3*60 -- 3 minutes
 SolidMapVote[ 'Config' ][ 'Time Left Commands' ] = {

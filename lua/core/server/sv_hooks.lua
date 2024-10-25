@@ -175,7 +175,7 @@ end
 
 -- Checks if the map vote is over and changes the level
 function SolidMapVote.postMapVoteChange()
-    if SolidMapVote.changeTime < RealTime() and SolidMapVote.finished then
+    if SolidMapVote.changeTime < RealTime() and SolidMapVote.finished and SolidMapVote.isOpen then
         SolidMapVote.isOpen = false
 
         if SolidMapVote.realWinner == 'extend' then
