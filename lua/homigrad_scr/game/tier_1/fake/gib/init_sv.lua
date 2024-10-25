@@ -256,7 +256,7 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 
 	local bonename = ent:GetBoneName(ent:TranslatePhysBoneToBone(phys_bone))
 
-	if ply and bonename == "ValveBiped.Bip01_Head1" then ply:Kill() end
+	--if ply and bonename == "ValveBiped.Bip01_Head1" then ply:Kill() end
 	if ply and not validBone2[bonename] then return end
 
 	if bonetohitgroup[bonename] then hitgroup = bonetohitgroup[bonename] end
