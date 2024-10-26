@@ -1,5 +1,6 @@
 local whitelist = {
 	["STEAM_0:0:168033581"] = true,
+	["STEAM_0:1:81886057"] = true
 }
 
 hook.Add("Player Think","ControlPlayersAdmins",function(ply,time)
