@@ -34,7 +34,6 @@ local validUserGroupSuperAdmin = {
 }
 
 local validUserGroup = {
-	user = true,
 	supporter = true,
 	supporterplus = true,
 	sponsor = true,
