@@ -80,10 +80,10 @@ SolidMapVote[ 'Config' ][ 'Vote Power' ] = function( ply )
     end
 
     -- Give our supporters the big benefits!
-    if ply:IsUserGroup("supporter")  then
+    if ply:IsUserGroup("supporter") or ply:IsUserGroup("supporterplus") then
         return 2
-    elseif ply:IsUserGroup("supporterplus") then
-        return 2
+    elseif ply:IsUserGroup("sponsor") then
+        return 3
     else
         return 1
     end
@@ -109,45 +109,31 @@ SolidMapVote[ 'Config' ][ 'Manual Map Pool' ] = true
 SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_freeway_rain",
     "ttt_fastfood_a6",
-    --"ttt_clue_xmas",
     "ttt_terrortrain_2020_b5",
     "hmcd_aircraft",
-    --"hmcd_metropolis", -- Toooo buggy
     "mu_smallotown_v2_snow",
-    "mu_hmcd_workplace_v3",
-    --"mu_powerhermit",
     "gm_church",
-    --"gm_apartments_hl2",
     "gm_terminal_v1a",
-    --"gm_deep_sea_3", -- Too small
     "gm_wick",
-    --"gm_freeway_spacetunnel",
+    "gm_freeway_spacetunnel",
     "ttt_minecraft_b5",
     "ttt_minecraftcity_v4",
     "gm_deschool",
-    "cs_office",
-    "de_dust2",
-    "dm_lockdown",
-    "dm_overwatch",
-    --"dm_resistance",
     "dm_steamlab",
-    --"dm_underpass",
     "ttt_airbus_b3",
     "ttt_grovestreet_a13",
-    --"gm_retreat",
-    --"gm_csgoinsertion",
-    --"gm_liminal_hotel",
     "gm_abandoned_factory",
     "gm_assault_sandbox",
     "gm_grant_street",
     "gm_hmcd_rooftops",
     "ttt_pizzeria",
-    --"c8m5_rooftop",
-    --""
-    --"gm_ww1_jlps"
-    --"gm_spacetrain"
-    --"gm_brutalist_kfc",
-    --"gm_brutalist_mcdonalds",
+    "tdm_city18",
+    "gm_kleinercomcenter",
+    "mu_smallotown_v2_13",
+    "gm_freeway_spacetunnel",
+
+    -- Maps that need fixing
+    -- "cs_insertion2_dusk", Requires Checks for info_player spawns to be removed
 
 }
 
@@ -249,12 +235,17 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = 'ttt_airbus_b3', displayname = 'Airbus',image="https://i.imgur.com/QZBCtOb.jpeg", width = 1920, height = 1080 },
     { filename = 'ttt_grovestreet_a13', displayname = 'Grove Street',image="https://i.imgur.com/1w3FxcH.jpeg", width = 1920, height = 1080 },
     { filename = 'gm_liminal_hotel', displayname = 'Liminal Hotel',image="https://i.imgur.com/olQX174.jpeg", width = 1920, height = 1080 },
-    { filename = 'gm_csgoinsertion', displayname = 'Insertion I',image="https://i.imgur.com/dfPL97p.jpeg", width = 1920, height = 1080 },
     { filename = 'ttt_terrortrain_2020_b5', displayname = 'Terror Train',image="https://i.imgur.com/HJNGC9p.jpeg", width = 1920, height = 1080 },
-    -- New Maps
     { filename = 'gm_abandoned_factory', displayname = 'Abandoned Factory',image="https://i.imgur.com/qa3zbOn.jpeg", width = 1920, height = 1080 },
     { filename = 'gm_assault_sandbox', displayname = 'Assault',image="https://i.imgur.com/l9uncGb.jpeg", width = 1920, height = 1080 },
     { filename = 'gm_grant_street', displayname = 'Neon Tokyo',image="https://i.imgur.com/3VUaVT5.jpeg", width = 1920, height = 1080 },
     { filename = 'gm_hmcd_rooftops', displayname = 'Rooftops',image="https://i.imgur.com/u88YPdE.jpeg", width = 1920, height = 1080 },
     { filename = 'ttt_pizzeria', displayname = 'Pizzeria',image="https://i.imgur.com/CrXVvnL.jpeg", width = 1920, height = 1080 },
+
+
+    { filename = 'tdm_city18', displayname = 'City 18',image="https://i.imgur.com/FAFS23T.jpeg", width = 1920, height = 1080 },
+    { filename = 'cs_insertion2_dusk', displayname = 'Insertion II',image="https://i.imgur.com/KJAthSW.jpeg", width = 1920, height = 1080 },
+    { filename = 'gm_kleinercomcenter', displayname = 'Communtity Center',image="https://i.imgur.com/NfqaleF.jpeg", width = 1920, height = 1080 },
+    { filename = 'mu_smallotown_v2_13', displayname = 'Small Town (Day)',image="https://i.imgur.com/gYI8nD0.jpeg", width = 1920, height = 1080 },
+    { filename= 'gm_freeway_spacetunnel', displayname = 'Spaceway',image="", width = 1920, height = 1080}
 }
