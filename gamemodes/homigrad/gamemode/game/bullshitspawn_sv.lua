@@ -51,14 +51,14 @@ local ammos = { "ent_ammo_.44magnum", "ent_ammo_12/70gauge", "ent_ammo_762x39mm"
 
 
 local function randomLoot()
-    local gunchance = math.random(1, 100)
-    if gunchance < 2 then
+    local gunchance = math.random(1, 200)
+    if gunchance < 3 then
         return table.Random(weaponslegendary), "legend"
-    elseif gunchance < 5 then
+    elseif gunchance < 12 then
         return table.Random(weaponsveryrare), "veryrare"
-    elseif gunchance < 20 then
+    elseif gunchance < 30 then
         return table.Random(weaponsrare), "rare"
-    elseif gunchance < 45 then
+    elseif gunchance < 90 then
         return table.Random(weaponsuncommon), "uncommon"
     else
         return table.Random(weaponscommon), "common"
