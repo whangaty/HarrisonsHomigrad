@@ -150,6 +150,12 @@ function homicide.StartRoundSV()
 	roundTimeStart = CurTime()
 	roundTime = math.min(math.max(math.ceil(#player.GetAll() / 2), 1) * 45, 330)
 
+    -- Bullshit check.
+    if game.GetMap() == "gm_freeway_spacetunnel" then
+        RunConsoleCommand("sv_gravity", "300")
+    else
+        RunConsoleCommand("sv_gravity", "600")
+    end
 
     if homicide.roundType == 3 then
         roundTime = roundTime * 1.25
