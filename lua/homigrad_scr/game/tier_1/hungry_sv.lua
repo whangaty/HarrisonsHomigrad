@@ -14,7 +14,10 @@ hook.Add("Player Think","homigrad-hungry",function(ply,time)
 		ply:SetHealth(ply:Health() - 1)
 		if ply:Health() <= 0 then
 			ply.KillReason = "hungry"
-			ply:Kill()
+			--ply:Kill()
+			ply.nohook = true
+			ply:TakeDamage(10000,ply.LastAttacker)
+			ply.nohook = nil
 			return
 		end
 	end

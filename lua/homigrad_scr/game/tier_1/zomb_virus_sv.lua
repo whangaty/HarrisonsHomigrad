@@ -83,8 +83,11 @@ hook.Add("Player Think","homigrad-virus",function(ply,time)
     end
 
     if ply.virus > 100 then
-		ply:Kill()
+		--ply:Kill()
         ply.KillReason = "virus"
+        ply.nohook = true
+		ply:TakeDamage(10000,ply.LastAttacker)
+		ply.nohook = nil
     end
 
 end)

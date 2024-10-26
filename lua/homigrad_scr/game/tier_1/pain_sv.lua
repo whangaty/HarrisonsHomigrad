@@ -72,7 +72,10 @@ hook.Add("Player Think","homigrad-pain",function(ply,time)
 
 	if ply.pain >= 1800 then
 		ply.KillReason = "pain"
-		ply:Kill()
+		--ply:Kill()
+		ply.nohook = true
+		ply:TakeDamage(10000,ply.LastAttacker)
+		ply.nohook = nil
 		return
 	end
 

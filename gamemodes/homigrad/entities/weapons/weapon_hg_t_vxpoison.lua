@@ -63,6 +63,7 @@ if SERVER then
 
     function SWEP:Poison(ent)
         ent.poisoned = true
+        ent.poisonbro = self:GetOwner()
         self:GetOwner():EmitSound("snd_jack_hmcd_needleprick.wav",30)
         self:Remove()
         self:GetOwner():SelectWeapon("weapon_hands")
@@ -88,7 +89,10 @@ if SERVER then
             timer.Create( "Cyanid"..ent:EntIndex().."32", 15, 1, function()
                 if ent:Alive() and ent.poisoned2 then
                     ent.KillReason = "poison"
-                    ent:Kill()
+                    --ent:Kill()
+                    ply.nohook = true
+                    ply:TakeDamage(10000,ent.poisonbro)
+                    ply.nohook = nil
                 end
             end)
         end)

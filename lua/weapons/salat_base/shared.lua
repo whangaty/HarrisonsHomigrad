@@ -406,7 +406,7 @@ function SWEP:Reload()
 		self:GetOwner():SetAnimation(PLAYER_RELOAD)
 		if SERVER then self:GetOwner():EmitSound(self.ReloadSound,60,100,0.8,CHAN_AUTO) end
 		timer.Create( "reload"..self:EntIndex(), self.ReloadTime, 1, function()
-			if not IsValid(self:GetOwner()) then return end
+			if not IsValid(self) or not IsValid(self:GetOwner()) then return end
 			local wep = self:GetOwner():GetActiveWeapon()
 			if IsValid(self) and IsValid(self:GetOwner()) and (IsValid(wep) and wep or self:GetOwner().ActiveWeapon) == self then
 				local oldclip = self:Clip1()
@@ -478,8 +478,8 @@ function SWEP:GetTrace(nomodify)
 	if not att then
 		local Pos, Ang
 		
-		local wep = owner:GetNWEntity("ragdollWeapon")
-		if IsValid(wep) then
+		local wep = IsValid(owner) and owner:GetNWEntity("ragdollWeapon")
+		if wep and IsValid(wep) then
 			Pos, Ang = wep:GetPos(), wep:GetAngles()
 		else
 			Pos, Ang = self:GetTransform()
@@ -644,7 +644,7 @@ function SWEP:FireBullet()
 	--local effectdata = EffectData()
 	--effectdata:SetOrigin(shootOrigin)
 	--effectdata:SetAngles(shootAngles)
-	--effectdata:SetScale(self:IsScope() and 0.1 or 1)
+	--effectdata:SetScale(self:IsSighted() and 0.1 or 1)
 	--effectdata:SetNormal(shootDir)
 	--util.Effect(self.Efect or "MuzzleEffect",effectdata, true, true)
 	local particle = ParticleEffect(self.Supressed and "pcf_jack_mf_suppressed" or CaliberEffects[self.Primary.Ammo] or "pcf_jack_mf_spistol",npc,npcdir:Angle(),self)
@@ -679,14 +679,14 @@ function SWEP:IsReloaded()
 	return timer_Exists("reload"..self:EntIndex())
 end
 
-function SWEP:IsScope()
+function SWEP:IsSighted()
 	local ply = self:GetOwner()
 	if ply:IsNPC() then return end
 
-	if self:IsLocal() or SERVER then
+	if (self:IsLocal() or SERVER) and ply:IsPlayer() then
 		return not ply:IsSprinting() and ply:KeyDown(IN_ATTACK2) and not self:IsReloaded()
 	else
-		return self:GetNWBool("IsScope")
+		return self:GetNWBool("IsSighted")
 	end
 end
 
@@ -797,8 +797,8 @@ function SWEP:ApplyAnim(ply)
 	self.dist = (tr.HitPos - t.start):Length()
 
 	if not ply:IsSprinting() then
-		local scope = self:IsScope()
-		if SERVER then self:SetNWBool("IsScope",scope) end
+		local scope = self:IsSighted()
+		if SERVER then self:SetNWBool("IsSighted",scope) end
 
 		if isLocal then
 			--self.eyeSpray = self.eyeSpray + Angle(math.Rand(-0.03,0.03),math.Rand(-0.03,0.03),math.Rand(-0.03,0.03))
@@ -947,10 +947,6 @@ end
 
 function SWEP:ShouldDropOnDie()
 	return false
-end
-
-function SWEP:IsSighted()
-	return IsValid(self:GetOwner()) and self:GetOwner():KeyDown(IN_ATTACK2)
 end
 
 function SWEP:CreateWorldModel()

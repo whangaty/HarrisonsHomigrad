@@ -11,13 +11,17 @@ local function send(ply,lootEnt,remove)
 		net.WriteTable(lootEnt.Info.Ammo)
 		net.Send(ply)
 	else
-		for ply in pairs(lootEnt.UsersInventory) do
-			if not IsValid(ply) or not ply:Alive() or remove then lootEnt.UsersInventory[ply] = nil continue end
+		if lootEnt.UsersInventory and istable(lootEnt.UsersInventory) then
+			for ply in pairs(lootEnt.UsersInventory) do
+				if not IsValid(ply) or not ply:Alive() or remove then lootEnt.UsersInventory[ply] = nil end
 
-			send(ply,lootEnt,remove)
+				send(ply,lootEnt,remove)
+			end
 		end
 	end
 end
+
+hg.send = send
 
 hook.Add("PlayerSpawn","!!!huyassdd",function(lootEnt)
 	if lootEnt.UsersInventory ~= nil then
@@ -138,7 +142,8 @@ net.Receive("ply_take_item",function(len,ply)
 
 	local lootEnt = net.ReadEntity()
 	if not IsValid(lootEnt) then return end
-
+	if lootEnt:IsPlayer() and not IsValid(lootEnt.FakeRagdoll) then return end
+	
 	--local weapon = net.ReadEntity()
 	--local wep = weapon:GetClass()
 
@@ -184,6 +189,7 @@ net.Receive("ply_take_ammo",function(len,ply)
 
 	local lootEnt = net.ReadEntity()
 	if not IsValid(lootEnt) then return end
+	if lootEnt:IsPlayer() and not IsValid(lootEnt.FakeRagdoll) then return end
 	local ammo = net.ReadFloat()
 	local lootInfo = lootEnt.Info
 	if not lootInfo.Ammo[ammo] then return end

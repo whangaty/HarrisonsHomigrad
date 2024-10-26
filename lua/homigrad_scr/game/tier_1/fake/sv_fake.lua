@@ -68,15 +68,6 @@ function SavePlyInfo(ply)
 	return info
 end
 
-function PlayerMeta:HuySpectate()
-	local ply = self
-	ply:Spectate(OBS_MODE_CHASE)
-	ply:UnSpectate()
-
-	ply:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
-	ply:SetMoveType(MOVETYPE_OBSERVER)
-end
-
 util.AddNetworkString("Override Spawn")
 function hg.OverrideSpawn(ply)
 	net.Start("Override Spawn")
@@ -144,11 +135,9 @@ function Faking(ply,force) -- функция падения
 				end
 			end
 
-			--ply:HuySpectate(OBS_MODE_CHASE)
-			--ply:SpectateEntity(rag)
 			ply:SetMoveType(MOVETYPE_NONE)
 			ply:DrawShadow(false)
-			local hull = Vector(10,10,10)
+			local hull = Vector(2,2,2)
 			ply:SetHull(-hull,hull)
 			ply:SetHullDuck(-hull,hull)
 			ply:SetViewOffset(Vector(0,0,0))
@@ -655,6 +644,24 @@ net.Receive("custom name",function(len,ply)
 	ply:SetNWString("CustomName",name)
 end)
 
+IdealMassPlayer = {
+	["ValveBiped.Bip01_Pelvis"] = 12.775918006897,
+	["ValveBiped.Bip01_Spine2"] = 24.36336517334,
+	["ValveBiped.Bip01_R_UpperArm"] = 3.4941370487213,
+	["ValveBiped.Bip01_L_UpperArm"] = 3.441034078598,
+	["ValveBiped.Bip01_L_Forearm"] = 1.7655730247498,
+	["ValveBiped.Bip01_L_Hand"] = 1.0779889822006,
+	["ValveBiped.Bip01_R_Forearm"] = 1.7567429542542,
+	["ValveBiped.Bip01_R_Hand"] = 1.0214320421219,
+	["ValveBiped.Bip01_R_Thigh"] = 10.212161064148,
+	["ValveBiped.Bip01_R_Calf"] = 4.9580898284912,
+	["ValveBiped.Bip01_Head1"] = 5.169750213623,
+	["ValveBiped.Bip01_L_Thigh"] = 10.213202476501,
+	["ValveBiped.Bip01_L_Calf"] = 4.9809679985046,
+	["ValveBiped.Bip01_L_Foot"] = 2.3848159313202,
+	["ValveBiped.Bip01_R_Foot"] = 2.3848159313202
+}
+
 function PlayerMeta:CreateRagdoll(attacker,dmginfo,force)
 	local rag = self:GetNWEntity("Ragdoll")
 	rag.ExplProof = true
@@ -694,31 +701,36 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force)
 	
 	rag:AddEFlags(EFL_NO_DAMAGE_FORCES)
 
-	if IsValid(rag:GetPhysicsObject()) then
-		rag:GetPhysicsObject():SetMass(CustomWeight[rag:GetModel()] or 25)
-	end
-
 	rag:Activate()
 	rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
 	rag:SetNWEntity("RagdollOwner", self)
 
-	local vel = self:GetVelocity()/1 + (force or Vector(0,0,0))
-	for i = 0, rag:GetPhysicsObjectCount() - 1 do
-		local physobj = rag:GetPhysicsObjectNum( i )
-		local ragbonename = rag:GetBoneName(rag:TranslatePhysBoneToBone(i))
-		local bone = self:LookupBone(ragbonename)
-		if(bone)then
-			local bonemat = self:GetBoneMatrix(bone)
-			if(bonemat)then
-				local bonepos = bonemat:GetTranslation()
-				local boneang = bonemat:GetAngles()
-				physobj:SetPos( bonepos,true )
-				physobj:SetAngles( boneang )
-				if !self:Alive() then vel=vel end
-				physobj:AddVelocity( vel )
-			end
+	local vel = self:GetVelocity() + (force or vector_origin)
+
+	for physNum = 0, rag:GetPhysicsObjectCount() - 1 do
+		local phys = rag:GetPhysicsObjectNum(physNum)
+		local bone = rag:TranslatePhysBoneToBone(physNum)
+		if bone < 0 then continue end
+
+		local matrix = self:GetBoneMatrix(bone)
+
+		phys:SetMass(IdealMassPlayer[rag:GetBoneName(bone)] or 4)
+		phys:SetVelocity(vel)
+
+		phys:SetPos(matrix:GetTranslation())
+		phys:SetAngles(matrix:GetAngles())
+
+		if rag:GetBoneName(bone) == "ValveBiped.Bip01_Head1" then
+			local _,ang = LocalToWorld(vector_origin,Angle(-80,0,90),vector_origin,self:EyeAngles())
+			phys:SetAngles(ang)
 		end
+
+		phys:EnableDrag(1)
+		phys:SetDragCoefficient( -1000 )
+		phys:SetDamping(0,2)
+
+		phys:Wake()
 	end
 
 	rag:SetNWString("Nickname",self:GetNWString("CustomName",false) or self:Name())
@@ -862,9 +874,14 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 
 	ply:SetPos(head1)
 
-	local deltatime = CurTime()-(rag.ZacLastCallTime or CurTime())
+	ply.bullshithuy = ply.bullshithuy or CurTime()
+	if (ply.bullshithuy + 1) < CurTime() then
+		ply:SetRenderMode(RENDERMODE_NONE)
+	end
+
+	local deltatime = SysTime() - (rag.ZacLastCallTime or SysTime())
 	
-	rag.ZacLastCallTime=CurTime()
+	rag.ZacLastCallTime = SysTime()
 	
 	local eyeangs = ply:EyeAngles()
 	local head = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Head1" )) )
@@ -900,7 +917,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 					maxangular=90,
 					maxspeed=speed,
 					teleportdistance=0,
-					deltatime=0.01,
+					deltatime=deltatime,
 				}
 				phys:Wake()
 				phys:ComputeShadowControl(shadowparams)
@@ -937,9 +954,9 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 						maxangular=670,
 						maxangulardamp=600,
 						maxspeeddamp=50,
-						maxspeed=500,
+						maxspeed=1200,
 						teleportdistance=0,
-						deltatime=0.01,
+						deltatime=deltatime,
 					}
 					phys:Wake()
 					phys:ComputeShadowControl(shadowparams)
@@ -967,7 +984,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 							maxspeeddamp=50,
 							maxspeed=600,
 							teleportdistance=0,
-							deltatime=0.01,
+							deltatime=deltatime,
 						}
 						physa:Wake()
 						physa:ComputeShadowControl(shadowparams)
@@ -987,7 +1004,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 							maxspeeddamp=50,
 							maxspeed=500,
 							teleportdistance=0,
-							deltatime=0.01,
+							deltatime=deltatime,
 						}
 						phys:Wake()
 						phys:ComputeShadowControl(shadowparams)
@@ -1006,7 +1023,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 							maxspeeddamp=50,
 							maxspeed=600,
 							teleportdistance=0,
-							deltatime=0.01,
+							deltatime=deltatime,
 						}
 						physa:Wake()
 						physa:ComputeShadowControl(shadowparams)
@@ -1026,9 +1043,9 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 						maxangular=670,
 						maxangulardamp=100,
 						maxspeeddamp=50,
-						maxspeed=600,
+						maxspeed=1200,
 						teleportdistance=0,
-						deltatime=0.01,
+						deltatime=deltatime,
 					}
 					physa:Wake()
 					physa:ComputeShadowControl(shadowparams)
@@ -1046,7 +1063,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 					maxangulardamp=10,
 					maxspeeddamp=2, -- Previously 10
 					maxangular=370,
-					maxspeed=40, -- Doubled from 40 
+					maxspeed=40, -- Doubled from 40 e e e e e ee E
 					teleportdistance=0,
 					deltatime=deltatime,
 				}
@@ -1131,12 +1148,12 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			local lh = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
 			local angs = ply:EyeAngles()
 			angs:RotateAroundAxis(angs:Right(),30)
-			local speed = 60
+			local speed = 120
 			
 			if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000) then
 				local shadowparams = {
 					secondstoarrive=0.4,
-					pos=phys:GetPos() + angs:Forward() * 10,
+					pos=phys:GetPos() + angs:Forward() * 20,
 					angle=phys:GetAngles(),
 					maxangulardamp=10,
 					maxspeeddamp=10,
@@ -1154,12 +1171,12 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			local rh = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 			local angs = ply:EyeAngles()
 			angs:RotateAroundAxis(angs:Right(),30)
-			local speed = 60
+			local speed = 120
 			
 			if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000)then
 				local shadowparams = {
 					secondstoarrive=0.4,
-					pos=phys:GetPos() + angs:Forward() * 10,
+					pos=phys:GetPos() + angs:Forward() * 20,
 					angle=phys:GetAngles(),
 					maxangulardamp=10,
 					maxspeeddamp=10,
@@ -1262,14 +1279,17 @@ InternalBleeding = 20
 local player_GetAll = player.GetAll
 
 hook.Add("Player Think","InternalBleeding",function(ply,time)
-	for i,ply in pairs(player_GetAll()) do
+	for i,ply in ipairs(player_GetAll()) do
 		ply.OrgansNextThink = ply.OrgansNextThink or OrgansNextThink
 		if not(ply.OrgansNextThink>CurTime())then
 			ply.OrgansNextThink=CurTime() + 0.2
 			if ply.Organs and ply:Alive() then
 				if ply.Organs["brain"]==0 then
+					ply.nohook = true
 					ply.KillReason = "braindeath"
-					ply:Kill()
+					ply:TakeDamage(10000,ply.LastAttacker)
+					ply.nohook = nil
+					--ply:Kill()
 				end
 				if ply.Organs["liver"]==0 then
 					ply.InternalBleeding=ply.InternalBleeding or InternalBleeding
