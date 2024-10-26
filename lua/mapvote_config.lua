@@ -177,7 +177,7 @@ SolidMapVote[ 'Config' ][ 'RTV Delay' ] = 60
 
 -- If this is set to true, players will be able to remove their RTV
 -- by typing the RTV command again.
-SolidMapVote[ 'Config' ][ 'Enable UnVote' ] = false
+SolidMapVote[ 'Config' ][ 'Enable UnVote' ] = true
 
 -- These commands will add to rocking the vote.
 SolidMapVote[ 'Config' ][ 'Vote Commands' ] = {
