@@ -298,13 +298,13 @@ local function ToggleScoreboard(toggle)
 				local userGroupDisplay = {
 					owner = {name = "Owner", color = Color(0,242,255)},
 					servermanager = {name = "Server Manager", color = Color(255, 25, 25)}, 
-					headadmin = {name = "Head Administrator", color = Color(255,223,0)},
+					superadmin = {name = "Head Administrator", color = Color(255,223,0)},
 					admin = {name = "Administrator", color = Color(50, 255, 50)},
-					headmod = {name = "Head Moderator", color = Color(50, 255, 50)},
 					operator = {name = "Moderator", color = Color(75, 200, 75)},
 					tmod = {name = "Trial Mod", color = Color(75, 150, 70)},
-					supporter = {name = "Supporter", color = Color(0, 255, 0)},
+					supporterplus = {name = "Sponsor", color = Color(0, 255, 0)},
 					supporterplus = {name = "Supporter+", color = Color(0, 255, 0)},
+					supporter = {name = "Supporter", color = Color(0, 255, 0)},
 					regular = {name = "Regular", color = Color(0,150,220)},
 					user = {name = "User", color = Color(125, 125, 125)}
 				}
