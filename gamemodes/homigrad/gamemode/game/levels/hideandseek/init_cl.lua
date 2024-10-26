@@ -32,13 +32,13 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
 
         surface.DrawText("Вы " .. name)]]--
         draw.DrawText( "You are on team: " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Hide & Seek", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Hide & Seek", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply:Team() == 1 then
-            draw.DrawText( "Find everyone who's hiding, and kill them before Special Forces arrive.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Find everyone who's hiding, and kill them before Special Forces arrive.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "Hide until Special Forces arrive, and dash for the exit!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,155,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Hide until Special Forces arrive, and dash for the exit!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 		end
         return
     end

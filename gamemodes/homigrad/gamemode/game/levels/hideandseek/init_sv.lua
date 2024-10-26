@@ -125,11 +125,12 @@ function hideandseek.PlayerSpawn(ply,teamID)
 	-- Set the player's model to the custom model if available, otherwise use a random team model
     local customModel = GetPlayerModelBySteamID(ply:SteamID())
 
-    if customModel and ply.roleT then
+    if customModel then
         ply:SetModel(customModel)
     else
         ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
     end
+
     ply:SetPlayerColor(color:ToVector())
 
 	for i,weapon in pairs(teamTbl.weapons) do ply:Give(weapon) end
