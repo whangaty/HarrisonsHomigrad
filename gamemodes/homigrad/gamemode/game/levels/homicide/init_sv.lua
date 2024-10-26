@@ -121,6 +121,7 @@ function homicide.Spawns()
         table.insert(aviable,point)
     end
 
+    --[[
     for i,point in pairs(ReadDataMap("spawnpointst")) do
         table.insert(aviable,point)
     end
@@ -128,7 +129,7 @@ function homicide.Spawns()
     for i,point in pairs(ReadDataMap("spawnpointsct")) do
         table.insert(aviable,point)
     end
-
+    ]]
     return aviable
 end
 
