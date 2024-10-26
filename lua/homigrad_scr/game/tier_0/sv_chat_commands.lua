@@ -37,8 +37,10 @@ local validUserGroup = {
 	user = true,
 	supporter = true,
 	supporterplus = true,
+	sponsor = true,
 	regular = true,
-	operator = true
+	operator = true,
+	tmod = true
 }
 
 function COMMAND_GETASSES(ply)
