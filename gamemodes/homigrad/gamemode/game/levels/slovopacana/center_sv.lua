@@ -14,7 +14,7 @@ function slovopacana.Center()
 		if slovopacana.KCenter(ply:GetPos(),point) >= 1 then
 			if not ply.delayKill then
 				ply.delayKill = CurTime() + 10
-				ply:ChatPrint("Ты умрёшь, покинь запретную зону в течении 10 секунд.")
+				ply:ChatPrint("Ты умрёшь, покинь запретную зону в течение 10 секунд.")
 			elseif ply.delayKill < CurTime() then
 				ply:Kill()
 			end

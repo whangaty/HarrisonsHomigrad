@@ -62,6 +62,8 @@ end
 local NULLENTITY = Entity(-1)
 
 hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по разным костям регдолла
+	if ent.nohook then return end
+	if ent:IsPlayer() and IsValid(ent.FakeRagdoll) then return end
 	if IsValid(ent:GetPhysicsObject()) and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_CLUB+DMG_GENERIC+DMG_BLAST) then ent:GetPhysicsObject():ApplyForceOffset(dmginfo:GetDamageForce():GetNormalized() * math.min(dmginfo:GetDamage() * 10,3000),dmginfo:GetDamagePosition()) end
 	local ply = RagdollOwner(ent) or ent
 
@@ -118,10 +120,12 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	local att =
 		(entAtt:IsPlayer() and entAtt:Alive() and entAtt) or
 		--RagdollOwner(entAtt) or
-		(entAtt:GetClass() == "wep" and entAtt:GetOwner())-- or
+		(entAtt:GetClass() == "wep" and entAtt:GetOwner()) --or
 		--(IsValid(att) and att)
 	--att = att ~= ply and att
 	att = dmginfo:GetDamageType() ~= DMG_CRUSH and att or ply.LastAttacker
+
+	if IsValid(att) then dmginfo:SetAttacker(att) end
 
 	ply.LastAttacker = att
 	ply.LastHitGroup = hitgroup
@@ -179,17 +183,22 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	dmginfo:ScaleDamage(0.5)
 	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
 	dmginfo:ScaleDamage(0.2)
+
 	if dmginfo:IsDamageType(DMG_BLAST) then
 		dmginfo:ScaleDamage(2)
 	end
+
 	if rag then
 		if dmginfo:GetDamageType() == DMG_CRUSH then
 			dmginfo:ScaleDamage(1 / 40 / 15)
 		end
-
+		--[[
 		ply:SetHealth(ply:Health() - dmginfo:GetDamage())
 
 		if ply:Health() <= 0 then ply:Kill() end
+		--]]
+
+		ply:TakeDamageInfo(dmginfo)
 	end
 end)
 

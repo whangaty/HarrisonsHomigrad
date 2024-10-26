@@ -116,8 +116,11 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             if ply.Organs['brain']!=0 and dmginfo:IsDamageType(DMG_BULLET) and not inf.RubberBullets then
                 ply.Organs['brain']=math.max(ply.Organs['brain']-dmg,0)
                 if ply.Organs["brain"] == 0 then
-                    ply:Kill()
-                    
+                    --ply:Kill()
+                    ply.KillReason = "braindeath"
+                    ply.nohook = true
+					ply:TakeDamage(10000,ply.LastAttacker)
+                    ply.nohook = nil
                     return
                 end
             end

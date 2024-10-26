@@ -1,5 +1,6 @@
 if engine.ActiveGamemode() == "homigrad" then
 include("shared.lua")
+SWEP.Base = "medkit"
 
 local healsound1 = Sound("npc/antlion/foot4.wav")
 local healsound2 = Sound("npc/antlion/shell_impact2.wav")

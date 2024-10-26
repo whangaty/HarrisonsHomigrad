@@ -222,10 +222,10 @@ local validBone2 = {
 	["ValveBiped.Bip01_L_Hand"] = true,
 }
 
-hook.Add("PlayerDeath","Gib",function(ply)
+hook.Add("PlayerDeath","Gib",function(ply,inflictor, attacker)
 	dmgInfo = ply.LastDMGInfo
 	if not dmgInfo then return end
-
+	print(ply,attacker)
 	local hitgroup
 
 	if bonetohitgroup[ply.LastHitBoneName] then hitgroup = bonetohitgroup[ply.LastHitBoneName] end

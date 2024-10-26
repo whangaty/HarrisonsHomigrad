@@ -14,9 +14,10 @@ end)
 gameevent.Listen( "entity_killed" )
 hook.Add("entity_killed","player_deathhg",function(data) 
 	local ply = Entity(data.entindex_killed)
+    local attacker = Entity(data.entindex_attacker)
 	if not IsValid(ply) or not ply:IsPlayer() then return end
 	
-	hook.Run("Player Death", ply)
+	hook.Run("Player Death", ply, attacker)
 end)
 
 local override = {}
@@ -48,11 +49,13 @@ hook.Add("Player Activate","SetHull",function(ply)
     ply:SetMoveType(MOVETYPE_WALK)
     ply:DrawShadow(true)
     ply:SetRenderMode(RENDERMODE_NORMAL)
+
     if SERVER then
         ply:SetSolidFlags(bit.band(ply:GetSolidFlags(),bit.bnot(FSOLID_NOT_SOLID)))
         ply:SetNWEntity("ragdollWeapon", NULL)
         ply:SetNWEntity("ActiveWeapon", NULL)
     end
+
     timer.Simple(0,function()
         local ang = ply:EyeAngles()
         if ang[3] == 180 then
@@ -61,9 +64,13 @@ hook.Add("Player Activate","SetHull",function(ply)
         ang[3] = 0
         ply:SetEyeAngles(ang)
     end)
+
+    if SERVER then
+        hg.send(nil,ply,true)
+    end
 end)
 
-hook.Add("Player Death","SetHull",function(ply)
+hook.Add("Player Death","SetHull",function(ply, attacker)
     timer.Simple(0,function()
         local ang = ply:EyeAngles()
         if ang[3] == 180 then
