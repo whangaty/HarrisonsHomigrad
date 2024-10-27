@@ -302,9 +302,9 @@ local function ToggleScoreboard(toggle)
 					admin = {name = "Administrator", color = Color(50, 255, 50)},
 					operator = {name = "Moderator", color = Color(75, 200, 75)},
 					tmod = {name = "Trial Mod", color = Color(75, 150, 70)},
-					supporterplus = {name = "Sponsor", color = Color(0, 255, 0)},
-					supporterplus = {name = "Supporter+", color = Color(0, 255, 0)},
-					supporter = {name = "Supporter", color = Color(0, 255, 0)},
+					sponsor = {name = "Sponsor", color = Color(77, 201, 255)},
+					supporterplus = {name = "Supporter+", color = Color(255, 159, 62)},
+					supporter = {name = "Supporter", color = Color(241, 196, 15)},
 					regular = {name = "Regular", color = Color(0,150,220)},
 					user = {name = "User", color = Color(125, 125, 125)}
 				}
