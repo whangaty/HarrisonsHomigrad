@@ -46,7 +46,7 @@ function bahmut.GiveMimomet(ply)
 end
 
 function bahmut.GiveAidPhone(ply)
-    ply:Give("weapon_phone")
+    --ply:Give("weapon_phone")
 end
 
 function bahmut.SpawnSimfphys(list,name,func)
@@ -291,7 +291,7 @@ function bahmut.PlayerSpawn(ply,teamID)
 	if roundStarter then
 		ply:Give("weapon_gredmimomet")
 		ply:Give("weapon_gredammo")
-		ply:Give("weapon_phone")
+		--ply:Give("weapon_phone")
 		ply.allowFlashlights = true
 	end
 end

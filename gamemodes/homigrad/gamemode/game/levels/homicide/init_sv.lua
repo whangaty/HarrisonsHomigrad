@@ -109,12 +109,14 @@ end}
 function homicide.Spawns()
     local aviable = {}
 
-    for i,ent in pairs(ents.FindByClass("info_player*")) do
-        table.insert(aviable,ent:GetPos())
-    end
+    if game.GetMap() ~= "gm_freeway_spacetunnel" then
+        for i,ent in pairs(ents.FindByClass("info_player*")) do
+            table.insert(aviable,ent:GetPos())
+        end
 
-    for i,ent in pairs(ents.FindByClass("info_node*")) do
-        table.insert(aviable,ent:GetPos())
+        for i,ent in pairs(ents.FindByClass("info_node*")) do
+            table.insert(aviable,ent:GetPos())
+        end
     end
 
     for i,point in pairs(ReadDataMap("spawnpointshiders")) do
@@ -353,7 +355,7 @@ local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_mateba","wea
 function homicide.ShouldSpawnLoot()
 if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
 local chance = math.random(100)
-if chance < 3 and not homicide.roundType == 3 then
+if chance < 2 and not homicide.roundType == 3 then
     return true,rare[math.random(#rare)],"legend"
 elseif chance < 20 then
     return true,uncommon[math.random(#uncommon)],"veryrare"

@@ -76,6 +76,9 @@ function GM:PlayerSpawn(ply)
 
 		ply:Give("weapon_hands")
 		ply:Give("weapon_physgun")
+		ply:Give("weapon_toolgun")
+		ply:GodEnable()
+		ply:SetNoDraw(true)
 
 		return
 	end
