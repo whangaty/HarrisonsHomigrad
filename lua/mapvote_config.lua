@@ -80,7 +80,7 @@ SolidMapVote[ 'Config' ][ 'Vote Power' ] = function( ply )
     end
 
     -- Give our supporters the big benefits!
-    if ply:IsUserGroup("supporter") or ply:IsUserGroup("supporterplus") then
+    if ply:IsUserGroup("supporterplus") then
         return 2
     elseif ply:IsUserGroup("sponsor") then
         return 3
