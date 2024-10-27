@@ -247,13 +247,13 @@ local function donaterVoteLevelEnd(t,argv,calling_ply,args)
 		end
 	end
 
-	if winner == 2 then
-		PrintMessage(HUD_PRINTTALK,"Раунд будет закончен.")
+	if winner == 1 then
+		PrintMessage(HUD_PRINTTALK,"Round has been voted to end.")
 		EndRound()
-	elseif winner == 1 then
-		PrintMessage(HUD_PRINTTALK,"Раунд не будет закончен.")
+	elseif winner == 2 then
+		PrintMessage(HUD_PRINTTALK,"Vote Failed! The round will continue.")
 	else
-		PrintMessage(HUD_PRINTTALK,"Голосование не прошло успешно или было остановлено.")
+		PrintMessage(HUD_PRINTTALK,"Error Occured during Vote! Perhaps no-one voted?")
 	end
 
 	calling_ply.canVoteNext = CurTime() + 300
@@ -265,7 +265,7 @@ COMMANDS.levelend = {function(ply,args)
 	else
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
-			ulx.doVote( "End Round?", { "No", "Yes" }, donaterVoteLevelEnd, 15, _, _, argv, calling_ply, args)
+			ulx.doVote( "End Round?", { "Yes", "No" }, donaterVoteLevelEnd, 15, _, _, argv, calling_ply, args)
 		end
 	end
 	--print("Was Recognised!")
