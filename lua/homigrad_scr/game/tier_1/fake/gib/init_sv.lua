@@ -9,6 +9,9 @@ local function removeBone(rag,bone,phys_bone)
 	if rag.gibRemove[phys_bone] then return end
 
 	local phys_obj = rag:GetPhysicsObjectNum(phys_bone)
+	
+	if not IsValid(phys_obj) then return end
+
 	phys_obj:EnableCollisions(false)
 	phys_obj:SetMass(0.1)
 	--rag:RemoveInternalConstraint(phys_bone)
