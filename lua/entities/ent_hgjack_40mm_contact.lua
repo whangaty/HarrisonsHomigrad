@@ -38,19 +38,23 @@ if SERVER then
 		JMod.Sploom(self:GetOwner(), self:GetPos(), 175) --math.random(150, 250))
 		--JMod.Sploom(self:GetOwner(), self:GetPos(), 0)
 		self:EmitSound("dwr/explosions/indoors/distant/"..math.random(3,8)..".wav", 90, 100)
-		local plooie = EffectData()
-		plooie:SetOrigin(SelfPos)
-		plooie:SetScale(.01)
-		plooie:SetRadius(.5)
-		plooie:SetNormal(vector_up)
+
 		--ParticleEffect("pcf_jack_groundsplode_small",SelfPos,vector_up:Angle())
 		--util.ScreenShake(SelfPos, 20, 20, 1, 1000)
 
 		--local OnGround = util.QuickTrace(SelfPos + Vector(0, 0, 5), Vector(0, 0, -15), {self}).Hit
 		--local Spred = Vector(0, 0, 0)
 
-		--JMod.FragSplosion(self, SelfPos + Vector(0, 0, 20), 800, 450, 3500, self:GetOwner() or game.GetWorld())
+		JMod.FragSplosion(self, SelfPos, 800, 450, 1500, self:GetOwner() or game.GetWorld())
 		--JMod.FragSplosion(self, SelfPos + Vector(0, 0, 20), 800, 0, 0, self:GetOwner() or game.GetWorld())
+
+		local plooie = EffectData()
+		plooie:SetOrigin(SelfPos)
+		plooie:SetScale(.2)
+		plooie:SetRadius(1)
+		plooie:SetNormal(vector_up)
+		ParticleEffect("pcf_jack_airsplode_small",SelfPos,vector_up:Angle())
+
 		self:Remove()
 	end
 

@@ -79,7 +79,7 @@ function SWEP:UpdatePlayerLocations()
     -- Iterate through all players in the game
     for _, ply in ipairs(player.GetAll()) do
         -- Exclude players on Team 1002
-        if ply:Team() ~= 1002 and ply:IsPlayer() and ply:Alive() and ply ~= self:GetOwner() then
+        if ply:Team() ~= TEAM_SPECTATOR and ply:IsPlayer() and ply:Alive() and ply ~= self:GetOwner() then
             local plyPos = ply:GetPos() + Vector(0, 0, 30) -- Raise the marker slightly above ground
             table.insert(self.PlayerLocations, {pos = plyPos, ply = ply})
         end

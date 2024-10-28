@@ -33,7 +33,7 @@ SWEP.DrawCrosshair			= false
 SWEP.ViewModel				= "models/weapons/w_jmod_milkormgl.mdl"
 SWEP.WorldModel				= "models/weapons/w_jmod_milkormgl.mdl"
 
-SWEP.ShootWait = 0.333
+SWEP.ShootWait = 0.3
 
 SWEP.Automatic = false
 SWEP.vbwPos = Vector(14,5,-7)
@@ -50,7 +50,7 @@ function SWEP:PrimaryAttack()
     self.NextShot = CurTime() + self.ShootWait
     local pos,ang = self:GetTrace()
     if CLIENT then
-        self.eyeSpray:Add(Angle(-5,math.random(-2,2),0))
+        self.eyeSpray:Add(Angle(-2,math.random(-2,2),0))
     end
     if SERVER then 
         local cmm = ents.Create( "ent_hgjack_40mm_contact" )
