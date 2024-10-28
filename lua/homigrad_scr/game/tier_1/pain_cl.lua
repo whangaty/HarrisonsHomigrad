@@ -17,17 +17,26 @@ local k = 0
 local k4 = 0
 local time = 0
 
-hook.Add("HUDDrawScoreBoard","painlevel",function()
-    if pain > 250 and LocalPlayer():Alive() then
-        draw.DrawText("You are currently unconcious.", "HomigradFontNotify", ScrW() / 2, ScrH() /2.1 ,
-            Color(255, 255, 255,255), TEXT_ALIGN_CENTER)
-            
-        draw.DrawText("Assuming you're still in great shape, you'll be back up in "..math.floor(((pain - 250) / 10) + 1).." second(s)!", 
-            "HomigradFontSmall", 
-            ScrW() / 2, ScrH() / 1.8 ,
-            Color(255, 255, 255,255), TEXT_ALIGN_CENTER)
+hook.Add("HUDDrawScoreBoard", "unconsciousnessInfo", function()
+    local ply = LocalPlayer()
+    if ply:GetNWInt("unconscious") and ply:Alive() then
+        draw.DrawText("You are currently unconscious.", "HomigradFontNotify", ScrW() / 2, ScrH() / 2.1,
+            Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+
+        if pain and pain > 250 then
+            draw.DrawText("Assuming you're still in great shape, you'll be back up in " ..
+                math.floor(((pain - 250) / 10) + 1) .. " second(s)!", "HomigradFontSmall",
+                ScrW() / 2, ScrH() / 1.8,
+                Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+        elseif blood and blood < 3000 then
+            draw.DrawText("You have lost too much blood!", "HomigradFontSmall",
+                ScrW() / 2, ScrH() / 1.8,
+                Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
+        end
     end
 end)
+
+
 
 surface.CreateFont("HomigradFontBig",{
 	font = "Roboto",

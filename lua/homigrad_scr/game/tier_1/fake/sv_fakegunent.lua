@@ -13,6 +13,12 @@ function SpawnWeapon(ply)
 			ply.wep = wep
 			rag.wep = wep
 
+			rag:CallOnRemove("removeRagWeapon",function(ent)
+				if wep == ply.wep and IsValid(ply.wep) then
+					ply.wep:Remove()
+				end
+			end)
+
 			wep:SetModel(weapon.WorldModel)
 
 			wep:SetOwner(rag)
