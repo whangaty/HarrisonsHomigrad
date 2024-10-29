@@ -19,7 +19,7 @@ local time = 0
 
 hook.Add("HUDDrawScoreBoard", "unconsciousnessInfo", function()
     local ply = LocalPlayer()
-    if ply:GetNWInt("unconscious") and ply:Alive() then
+    if ply:GetNWInt("unconscious") and ply:Alive() and ply:Team() ~= 1002 then
         draw.DrawText("You are currently unconscious.", "HomigradFontNotify", ScrW() / 2, ScrH() / 2.1,
             Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
 
@@ -29,7 +29,7 @@ hook.Add("HUDDrawScoreBoard", "unconsciousnessInfo", function()
                 ScrW() / 2, ScrH() / 1.8,
                 Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
         elseif blood and blood < 3000 then
-            draw.DrawText("You have lost too much blood!", "HomigradFontSmall",
+            draw.DrawText("You have lost too much blood and have gone comatose!\nYou are slowly bleeding out, and will die unless someone can revive you.", "HomigradFontSmall",
                 ScrW() / 2, ScrH() / 1.8,
                 Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
         end
