@@ -62,3 +62,12 @@ function PlayersInGame()
     return newTbl
 end
 end
+
+local EntityMeta = FindMetaTable("Entity")
+
+oldSetModel = oldSetModel or EntityMeta.SetModel
+
+function EntityMeta:SetModel(str)
+	self:SetSubMaterial()
+	oldSetModel(self,str)
+end

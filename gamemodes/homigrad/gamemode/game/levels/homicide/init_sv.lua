@@ -309,9 +309,10 @@ function homicide.PlayerSpawn(ply,teamID)
     local customModel = GetPlayerModelBySteamID(ply:SteamID())
 
     if customModel then
+        ply:SetSubMaterial()
         ply:SetModel(customModel)
     else
-        ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+        EasyAppearance.SetAppearance( ply )
     end
     
     ply:SetPlayerColor(color:ToVector())

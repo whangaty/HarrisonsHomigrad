@@ -84,7 +84,7 @@ local sex = {
     [2] = "Female"
 }
 
-EasyAppearance.Sex = Sex
+EasyAppearance.Sex = sex
 
 // -- Functions
 
