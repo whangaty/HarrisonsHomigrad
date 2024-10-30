@@ -49,7 +49,7 @@ surface.CreateFont("HomigradFontBig",{
 -- TODO: Check if we can place pain levels here?
 
 hook.Add("HUDPaint","PainEffect",function()
-    if not LocalPlayer():Alive() then return end
+    if not LocalPlayer():Alive() or ply:Team() ~= 1002 then return end
 
 
     local w,h = ScrW(),ScrH()
@@ -126,7 +126,7 @@ hook.Add("RenderScreenspaceEffects","renderimpulse",function()
 
     k3 = math.Clamp(Lerp(0.01,k3,impulse),0,50)
 
-    if LocalPlayer():Alive() then
+    if LocalPlayer():Alive() and not ply:Team() ~= 1002 then
         DrawCA(4 * k3, 2 * k3, 0, 2 * k3, 1 * k3, 0)
     end
     --[[if LocalPlayer():Name() == "useless" then
@@ -136,4 +136,3 @@ hook.Add("RenderScreenspaceEffects","renderimpulse",function()
 end)
 
 end
-
