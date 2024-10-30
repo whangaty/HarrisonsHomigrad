@@ -2,7 +2,7 @@ include("../../playermodelmanager_sv.lua")
 
 local function makeT(ply)
     ply.roleT = true
-    table.insert(wick.t,ply)
+    table.insert(juggernaut.t,ply)
 
     ply:Give("weapon_kabar")
     local wep = ply:Give("weapon_hk_usp")
@@ -21,27 +21,27 @@ local function makeT(ply)
     ply:ChatPrint("You are John Wick")
 end
 
-function wick.SpawnsCT()
+function juggernaut.SpawnsCT()
     local aviable = {}
 
-    for i,point in pairs(ReadDataMap("spawnpointsnaem")) do
+    for i,point in pairs(ReadDataMap("hiders")) do
         table.insert(aviable,point)
     end
 
     return aviable
 end
 
-function wick.SpawnsT()
+function juggernaut.SpawnsT()
     local aviable = {}
 
-    for i,point in pairs(ReadDataMap("spawnpointswick")) do
+    for i,point in pairs(ReadDataMap("hiders")) do
         table.insert(aviable,point)
     end
 
     return aviable
 end
 
-function wick.StartRoundSV()
+function juggernaut.StartRoundSV()
     tdm.RemoveItems()
     tdm.DirectOtherTeam(2,1,1)
 
@@ -53,12 +53,12 @@ function wick.StartRoundSV()
     for i,ply in pairs(team.GetPlayers(2)) do ply:SetTeam(1) end
     for i,ply in player.Iterator() do ply.roleT = false end
 
-    wick.t = {}
+    juggernaut.t = {}
 
     local countT = 0
 
-    local aviable = wick.SpawnsCT()
-    local aviable2 = wick.SpawnsT()
+    local aviable = juggernaut.SpawnsCT()
+    local aviable2 = juggernaut.SpawnsT()
 
     local players = PlayersInGame()
 
@@ -70,7 +70,7 @@ function wick.StartRoundSV()
         makeT(ply)
     end
 
-    wick.SyncRole()
+    juggernaut.SyncRole()
 
     tdm.SpawnCommand(players,aviable,function(ply)
         ply.roleT = false
@@ -81,7 +81,7 @@ function wick.StartRoundSV()
         ply:GiveAmmo(2 * wep:GetMaxClip1(),wep:GetPrimaryAmmoType())
     end)
 
-    tdm.SpawnCommand(wick.t,aviable2,function(ply)
+    tdm.SpawnCommand(juggernaut.t,aviable2,function(ply)
         timer.Simple(1,function()
             ply.nopain = true
         end)
@@ -94,11 +94,11 @@ end
 
 local aviable = ReadDataMap("spawnpointsct")
 
-function wick.RoundEndCheck()
+function juggernaut.RoundEndCheck()
     tdm.Center()
 
     if roundTimeStart + roundTime - CurTime() <= 0 then EndRound() end
-	local TAlive = tdm.GetCountLive(wick.t)
+	local TAlive = tdm.GetCountLive(juggernaut.t)
 	local Alive = tdm.GetCountLive(team.GetPlayers(1),function(ply) if ply.roleT or ply.isContr then return false end end)
 
     if roundTimeStart + roundTime < CurTime() then
@@ -111,27 +111,29 @@ function wick.RoundEndCheck()
 	if Alive == 0 then EndRound(1) end
 end
 
-function wick.EndRound(winner)
+function juggernaut.EndRound(winner)
     PrintMessage(3,(winner == 1 and "John Wick remains Victorious." or winner == 2 and "Wick has fallen." or "Nobody Wins."))
 end
 
 local empty = {}
 
-function wick.PlayerSpawn(ply,teamID)
-    local teamTbl = wick[wick.teamEncoder[teamID]]
+function juggernaut.PlayerSpawn(ply,teamID)
+    local teamTbl = juggernaut[juggernaut.teamEncoder[teamID]]
     local color = teamID == 1 and Color(math.random(55,165),math.random(55,165),math.random(55,165)) or teamTbl[2]
 
 	-- Set the player's model to the custom model if available, otherwise use a random team model
     local customModel = GetPlayerModelBySteamID(ply:SteamID())
 
     if ply.roleT then
+        -- Give Armour to Wick and make it invisible, because current health increase doesnt seem to work?
+        JMod.EZ_Equip_Armor(ply,"Medium-Vest",Color(0,0,0,0))
+        JMod.EZ_Equip_Armor(ply,"Medium-Helmet",Color(0,0,0,0))
+
         if customModel then
             ply:SetModel(customModel)
         else
-            ply:SetModel("models/wick_chapter2/wick_chapter2.mdl")
+            ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
         end
-    else
-        ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
     end
     ply:SetPlayerColor(color:ToVector())
 
@@ -139,11 +141,11 @@ function wick.PlayerSpawn(ply,teamID)
     timer.Simple(0,function() ply.allowFlashlights = false end)
 end
 
-function wick.PlayerInitialSpawn(ply)
+function juggernaut.PlayerInitialSpawn(ply)
     ply:SetTeam(1)
 end
 
-function wick.PlayerCanJoinTeam(ply,teamID)
+function juggernaut.PlayerCanJoinTeam(ply,teamID)
     if ply:IsAdmin() then
         if teamID == 2 then ply.forceCT = nil ply.forceT = true ply:ChatPrint("ты будешь за дбгшера некст раунд") return false end
         if teamID == 3 then ply.forceT = nil ply.forceCT = true ply:ChatPrint("ты будешь за хомисайдера некст раунд") return false end
@@ -156,7 +158,7 @@ end
 
 util.AddNetworkString("homicide_roleget2")
 
-function wick.SyncRole()
+function juggernaut.SyncRole()
     local role = {{},{}}
 
     for i,ply in pairs(team.GetPlayers(1)) do
@@ -168,20 +170,20 @@ function wick.SyncRole()
     net.Broadcast()
 end
 
-function wick.PlayerDeath(ply,inf,att) return false end
+function juggernaut.PlayerDeath(ply,inf,att) return false end
 
 local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
 local uncommon = {"medkit","weapon_molotok","painkiller"}
 local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_per4ik","*ammo*"}
 
-function wick.ShouldSpawnLoot()
+function juggernaut.ShouldSpawnLoot()
     return false
 end
 
-function wick.GuiltLogic(ply,att,dmgInfo)
+function juggernaut.GuiltLogic(ply,att,dmgInfo)
     return (not ply.roleT) == (not att.roleT) and 20 or 0
 end
 
-function wick.NoSelectRandom()
+function juggernaut.NoSelectRandom()
     return #ReadDataMap("spawnpointswick") < 1
 end
