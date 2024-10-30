@@ -200,7 +200,7 @@ end
 
 -- Set this to true if you want the option to extend the map on the vote
 -- Set to false to disable
-SolidMapVote[ 'Config' ][ 'Enable Extend' ] = true
+SolidMapVote[ 'Config' ][ 'Enable Extend' ] = false
 SolidMapVote[ 'Config' ][ 'Extend Image' ] = 'http://i.imgur.com/zzBeMid.png'
 
 -- Set this to true if you want the option to choose a random map
