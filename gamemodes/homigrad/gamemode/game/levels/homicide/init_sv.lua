@@ -192,6 +192,10 @@ function homicide.StartRoundSV()
 
             makeCT(ply)
         end
+
+        if ply:IsUserGroup("sponsor") or ply:IsUserGroup("supporterplus") then
+            ply:Give("weapon_vape")
+        end
     end)
 
     local players = PlayersInGame()

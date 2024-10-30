@@ -145,6 +145,10 @@ function hideandseek.PlayerSpawn(ply,teamID)
 	if math.random(1,5) == 5 then ply:Give("med_band_big") end
 	if math.random(1,8) == 8 then ply:Give("morphine") end
 
+	if ply:IsUserGroup("sponsor") or ply:IsUserGroup("supporterplus") then
+		ply:Give("weapon_vape")
+	end
+
 	local r = math.random(1,3)
 	ply:Give(r == 1 and "food_fishcan" or r == 2 and "food_spongebob_home" or r == 3 and "food_lays")
 

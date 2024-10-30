@@ -112,8 +112,8 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_terrortrain_2020_b5",
     "hmcd_aircraft",
     "mu_smallotown_v2_snow",
-    "gm_church",
-    "gm_terminal_v1a",
+    
+    --"gm_terminal_v1a",
     "gm_wick",
     "gm_freeway_spacetunnel",
     "ttt_minecraft_b5",
@@ -121,19 +121,27 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "gm_deschool",
     "dm_steamlab",
     "ttt_airbus_b3",
-    "ttt_grovestreet_a13",
+    --"ttt_grovestreet_a13",
     "gm_abandoned_factory",
     "gm_assault_sandbox",
     "gm_grant_street",
     "gm_hmcd_rooftops",
-    "ttt_pizzeria",
+    
     "tdm_city18",
     "gm_kleinercomcenter",
-    "mu_smallotown_v2_13",
+    --"mu_smallotown_v2_13",
     "gm_freeway_spacetunnel",
 
     -- Maps that need fixing
     -- "cs_insertion2_dusk", Requires Checks for info_player spawns to be removed
+    --"gm_church", Crashes on IED Explosion
+    --"ttt_pizzeria", Buggy NPCs and Players
+
+    "gm_building",
+    "ttt_clue_2022",
+    "ttt_bank_change",
+    "gm_apartartments_hl2",
+    "ttt_ile_v4"
 
 }
 
@@ -197,7 +205,7 @@ SolidMapVote[ 'Config' ][ 'Extend Image' ] = 'http://i.imgur.com/zzBeMid.png'
 
 -- Set this to true if you want the option to choose a random map
 -- Set to false to disable
-SolidMapVote[ 'Config' ][ 'Enable Random' ] = true
+SolidMapVote[ 'Config' ][ 'Enable Random' ] = false
 -- This option controls how the random button works
 -- 1 = Random map will be selected from the maps on the vote menu
 -- 2 = Random map will be selected from the entire map pool
@@ -247,5 +255,12 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = 'cs_insertion2_dusk', displayname = 'Insertion II',image="https://i.imgur.com/KJAthSW.jpeg", width = 1920, height = 1080 },
     { filename = 'gm_kleinercomcenter', displayname = 'Communtity Center',image="https://i.imgur.com/NfqaleF.jpeg", width = 1920, height = 1080 },
     { filename = 'mu_smallotown_v2_13', displayname = 'Small Town (Day)',image="https://i.imgur.com/gYI8nD0.jpeg", width = 1920, height = 1080 },
-    { filename= 'gm_freeway_spacetunnel', displayname = 'Spaceway',image="https://i.imgur.com/ie9t8tL.jpeg", width = 1920, height = 1080}
+    { filename = 'gm_freeway_spacetunnel', displayname = 'Spaceway',image="https://i.imgur.com/ie9t8tL.jpeg", width = 1920, height = 1080},
+
+    { filename = 'gm_building', displayname = 'Office Building',image="https://i.imgur.com/DIgrELg.jpeg", width = 1920, height = 1080 },
+    { filename = 'gm_apartments_v2', displayname = 'Apartments',image="https://i.imgur.com/KPBfKDx.jpeg", width = 1920, height = 1080 },
+    { filename = 'ttt_clue_2022', displayname = 'Clue',image="https://i.imgur.com/dHWDpkI.jpeg", width = 1920, height = 1080 },
+    { filename = 'ttt_bank_change', displayname = 'Bank',image="https://i.imgur.com/aGJXyWJ.jpeg", width = 1920, height = 1080 },
+    { filename = 'ttt_ile_v4', displayname = 'Lighthouse',image="https://i.imgur.com/pcBZ56Z.jpeg", width = 1920, height = 1080 },
+
 }
