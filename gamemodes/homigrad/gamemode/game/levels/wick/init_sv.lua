@@ -4,21 +4,15 @@ local function makeT(ply)
     ply.roleT = true
     table.insert(juggernaut.t,ply)
 
-    ply:Give("weapon_kabar")
-    local wep = ply:Give("weapon_hk_usp")
-    wep:SetClip1(wep:GetMaxClip1())
-    ply:GiveAmmo(6 * wep:GetMaxClip1(),wep:GetPrimaryAmmoType())
-
     ply:Give("weapon_hg_rgd5")
+    ply:Give("weapon_hg_sleagehammer")
 
-    local wep = ply:Give("weapon_ar15")
+    local wep = ply:Give("weapon_m249")
     wep:SetClip1(wep:GetMaxClip1())
-    ply:GiveAmmo(2 * wep:GetMaxClip1(),wep:GetPrimaryAmmoType())
+    ply:GiveAmmo(3 * wep:GetMaxClip1(),wep:GetPrimaryAmmoType())
     ply.nopain = true
-    ply:SetMaxHealth(#player.GetAll() * 200)
-    ply:SetHealth(#player.GetAll() * 200)
-
-    ply:ChatPrint("You are John Wick")
+    ply:SetMaxHealth(800)
+    ply:SetHealth(800)
 end
 
 function juggernaut.SpawnsCT()
@@ -79,6 +73,12 @@ function juggernaut.StartRoundSV()
         local wep = ply:Give("weapon_hk_usp")
         wep:SetClip1(wep:GetMaxClip1())
         ply:GiveAmmo(2 * wep:GetMaxClip1(),wep:GetPrimaryAmmoType())
+
+        if math.random(1,8) == 8 then ply:Give("adrenaline") end
+        if math.random(1,7) == 7 then ply:Give("painkiller") end
+        if math.random(1,6) == 6 then ply:Give("medkit") end
+        if math.random(1,5) == 5 then ply:Give("med_band_big") end
+        if math.random(1,8) == 8 then ply:Give("morphine") end
     end)
 
     tdm.SpawnCommand(juggernaut.t,aviable2,function(ply)
@@ -112,7 +112,7 @@ function juggernaut.RoundEndCheck()
 end
 
 function juggernaut.EndRound(winner)
-    PrintMessage(3,(winner == 1 and "John Wick remains Victorious." or winner == 2 and "Wick has fallen." or "Nobody Wins."))
+    PrintMessage(3,(winner == 1 and "Juggernaut Wins!" or winner == 2 and "Mercenaries Win!" or "Nobody Wins."))
 end
 
 local empty = {}
@@ -126,8 +126,22 @@ function juggernaut.PlayerSpawn(ply,teamID)
 
     if ply.roleT then
         -- Give Armour to Wick and make it invisible, because current health increase doesnt seem to work?
-        JMod.EZ_Equip_Armor(ply,"Medium-Vest",Color(0,0,0,0))
-        JMod.EZ_Equip_Armor(ply,"Medium-Helmet",Color(0,0,0,0))
+        JMod.EZ_Equip_Armor(ply,"Heavy-Vest",Color(255,0,0,255))
+        JMod.EZ_Equip_Armor(ply,"Heavy-Riot-Helmet",Color(255,0,0,255))
+        JMod.EZ_Equip_Armor(ply,"Left-Forearm",Color(255,0,0,255))
+        JMod.EZ_Equip_Armor(ply,"Right-Forearm",Color(255,0,0,255))
+        JMod.EZ_Equip_Armor(ply,"Heavy-Right-Shoulder",Color(255,0,0,255))
+        JMod.EZ_Equip_Armor(ply,"Heavy-Left-Shoulder",Color(255,0,0,255))
+        JMod.EZ_Equip_Armor(ply,"Pelvis-Panel",Color(255,0,0,255))
+        JMod.EZ_Equip_Armor(ply,"Heavy-Right-Thigh",Color(255,0,0,255))
+        JMod.EZ_Equip_Armor(ply,"Heavy-Left-Thigh",Color(255,0,0,255))
+
+        ply:Give("morphine")
+        ply:Give("med_band_big")
+        ply:Give("medkit")
+        ply:Give("painkiller")
+        ply:Give("adrenaline")
+        ply:Give("splint")
 
         if customModel then
             ply:SetModel(customModel)
@@ -135,7 +149,9 @@ function juggernaut.PlayerSpawn(ply,teamID)
             ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
         end
     end
+
     ply:SetPlayerColor(color:ToVector())
+    
 
 	ply:Give("weapon_hands")
     timer.Simple(0,function() ply.allowFlashlights = false end)

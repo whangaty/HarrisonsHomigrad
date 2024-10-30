@@ -1,6 +1,6 @@
 table.insert(LevelList,"juggernaut")
 juggernaut = juggernaut or {}
-juggernaut.Name = "John Wick"
+juggernaut.Name = "Juggernaut"
 
 juggernaut.red = {"Mercenary",Color(125,125,125),
     models = tdm.models
@@ -45,7 +45,7 @@ if SERVER then return end
 local red,blue = Color(200,0,10),Color(75,75,255)
 local gray = Color(122,122,122,255)
 function juggernaut.GetTeamName(ply)
-    if ply.roleT then return "John Wick",red end
+    if ply.roleT then return "The Juggernaut",red end
 
     local teamID = ply:Team()
     if teamID == 1 then
@@ -91,13 +91,13 @@ function juggernaut.HUDPaint_RoundLeft(white2)
         end
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),3,0.5)
 
-        draw.DrawText( "You are " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "John Wick", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You are " .. name, "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "the Juggernaut", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply.roleT then
-            draw.DrawText( "You're surrounded by mercenaries. Take them out and remain the only one standing!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "You're surrounded by mercenaries. Take them out and remain the only one standing!", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "Work together with your friends, and eleminate John Wick.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Work together with your friends, and eleminate the Juggernaut.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         end
         return
     end
@@ -117,6 +117,6 @@ function juggernaut.HUDPaint_RoundLeft(white2)
 
         color.a = 255 * (1 - dis / 750)
 
-        draw.SimpleText(ply.roleT and "Target" or "","HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        draw.SimpleText(ply.roleT and "Juggernaut" or "","HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 end
