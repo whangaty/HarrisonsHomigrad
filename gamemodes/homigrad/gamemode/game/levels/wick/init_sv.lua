@@ -135,6 +135,8 @@ function juggernaut.PlayerSpawn(ply,teamID)
         JMod.EZ_Equip_Armor(ply,"Pelvis-Panel",Color(255,0,0,255))
         JMod.EZ_Equip_Armor(ply,"Heavy-Right-Thigh",Color(255,0,0,255))
         JMod.EZ_Equip_Armor(ply,"Heavy-Left-Thigh",Color(255,0,0,255))
+        JMod.EZ_Equip_Armor(ply,"Left-Calf",Color(255,0,0,255))
+        JMod.EZ_Equip_Armor(ply,"Right-Calf",Color(255,0,0,255))
 
         ply:Give("morphine")
         ply:Give("med_band_big")
