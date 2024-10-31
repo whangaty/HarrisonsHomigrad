@@ -52,6 +52,10 @@ function EasyAppearance.SetAppearance( ply )
         ply.tAppearance = EasyAppearance.GetRandomAppearance()
     end
     local tAppearance = ply.tAppearance
+    if not tAppearance then
+        ply.tAppearance = EasyAppearance.GetRandomAppearance()
+        tAppearance = ply.tAppearance  
+    end
     --PrintTable(tAppearance)
     if not EasyAppearance.Models[tAppearance.strModel] then
         tAppearance = DoInvalid( ply )
