@@ -229,7 +229,8 @@ local reasons = {
 	["killyourself"] = "You killed yourself.",
 	["hungry"] = "You died of hunger.",
 	["virus"] = "You died from the Zombie Virus.",
-	["poison"] = "You died from poison entering your system."
+	["poison"] = "You died from poison entering your system.",
+	["guilt"] = "You were slayed for exceeding your guilt maximum."
 }
 
 hook.Add("PlayerDeath","plymessage",function(ply,hitgroup,dmginfo)
