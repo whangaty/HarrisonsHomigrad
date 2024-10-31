@@ -11,8 +11,8 @@ local function makeT(ply)
     wep:SetClip1(wep:GetMaxClip1())
     ply:GiveAmmo(3 * wep:GetMaxClip1(),wep:GetPrimaryAmmoType())
     ply.nopain = true
-    ply:SetMaxHealth(800)
-    ply:SetHealth(800)
+    ply:SetMaxHealth(#player.GetAll() * 300)
+    ply:SetHealth(#player.GetAll() * 300)
 end
 
 function juggernaut.SpawnsCT()
@@ -28,7 +28,7 @@ end
 function juggernaut.SpawnsT()
     local aviable = {}
 
-    for i,point in pairs(ReadDataMap("hiders")) do
+    for i,point in pairs(ReadDataMap("school")) do
         table.insert(aviable,point)
     end
 
@@ -102,7 +102,7 @@ function juggernaut.RoundEndCheck()
 	local Alive = tdm.GetCountLive(team.GetPlayers(1),function(ply) if ply.roleT or ply.isContr then return false end end)
 
     if roundTimeStart + roundTime < CurTime() then
-        EndRound(1)
+        EndRound()
 	end
 
 	if TAlive == 0 and Alive == 0 then EndRound() return end
@@ -127,7 +127,7 @@ function juggernaut.PlayerSpawn(ply,teamID)
     if ply.roleT then
         -- Give Armour to Wick and make it invisible, because current health increase doesnt seem to work?
         JMod.EZ_Equip_Armor(ply,"Heavy-Vest",Color(255,0,0,255))
-        JMod.EZ_Equip_Armor(ply,"Heavy-Riot-Helmet",Color(255,0,0,255))
+        JMod.EZ_Equip_Armor(ply,"BallisticMask",Color(255,0,0,255))
         JMod.EZ_Equip_Armor(ply,"Left-Forearm",Color(255,0,0,255))
         JMod.EZ_Equip_Armor(ply,"Right-Forearm",Color(255,0,0,255))
         JMod.EZ_Equip_Armor(ply,"Heavy-Right-Shoulder",Color(255,0,0,255))
@@ -144,12 +144,12 @@ function juggernaut.PlayerSpawn(ply,teamID)
         ply:Give("splint")
 
         if customModel then
+            ply:SetSubMaterial()
             ply:SetModel(customModel)
-        else
-            ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
         end
     end
 
+    EasyAppearance.SetAppearance( ply )
     ply:SetPlayerColor(color:ToVector())
     
 
