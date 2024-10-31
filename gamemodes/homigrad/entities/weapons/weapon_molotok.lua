@@ -207,8 +207,6 @@ function SWEP:SecondaryAttack()
             ent1.IsWeld = (ent1.IsWeld or 0) + 1
             ent2.IsWeld = (ent2.IsWeld or 0) + 1
 
-            -- Stop players nailing other players
-            --[[
             local ply = RagdollOwner(ent1) or RagdollOwner(ent2) or false
             if ply then
                 local dmg = DamageInfo()
@@ -225,11 +223,8 @@ function SWEP:SecondaryAttack()
                     GuiltCheck(att)
                 end
             end
-            --]]
 
             if not IsValid(ent1:GetPhysicsObject()) or not IsValid(ent2:GetPhysicsObject()) then return end
-
-            if IsValid(ent1:IsRagdoll()) or IsValid(ent2:IsRagdoll()) then return end
 
             local weldEntity = constraint.Weld(ent1,ent2,tRes1.PhysicsBone or 0,tRes2.PhysicsBone or 0,0,false,false)
             ent1.weld = ent1.weld or {}
@@ -264,8 +259,6 @@ function SWEP:SecondaryAttack()
                
             end
 
-            -- Stop players nailing other players
-            --[[
             if ply then
                 local dmg = DamageInfo()
                 dmg:SetDamage(10)
@@ -278,7 +271,6 @@ function SWEP:SecondaryAttack()
                     att.Guilt = math.max(att.Guilt - 2,0)
                 end
             end
-            ]]
         end
 
         self:SetNextSecondaryFire(CurTime() + 1)
@@ -360,5 +352,5 @@ function SWEP:DrawHUD()
     surface.SetDrawColor(Color(255 * hitEnt, 255 * hitEnt, 255 * hitEnt, 255 * hit))
     draw.NoTexture()
     Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-    draw.DrawText((tobool(hitEnt) and tobool(hit)) and not isRag and "Nail a prop"  or "","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_white,TEXT_ALIGN_CENTER)
+    draw.DrawText(not tRes1 and "" or isRag and ("Nail the "..tostring(bonenames[traceResult.Entity:GetBoneName(traceResult.Entity:TranslatePhysBoneToBone(traceResult.PhysicsBone))])) or (tobool(hitEnt) and tobool(hit)) and "Nail a prop" or "","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_white,TEXT_ALIGN_CENTER)
 end
