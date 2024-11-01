@@ -107,7 +107,7 @@ SolidMapVote[ 'Config' ][ 'Show Map Play Count' ] = true
 -- be able to be chosen for the vote.
 SolidMapVote[ 'Config' ][ 'Manual Map Pool' ] = true
 SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
-    "ttt_freeway_rain",
+    --"ttt_freeway_rain",
     "ttt_fastfood_a6",
     "ttt_terrortrain_2020_b5",
     "hmcd_aircraft",
@@ -115,7 +115,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     
     --"gm_terminal_v1a",
     "gm_wick",
-    "gm_freeway_spacetunnel",
+    --"gm_freeway_spacetunnel",
     "ttt_minecraft_b5",
     "ttt_minecraftcity_v4",
     "gm_deschool",
@@ -130,7 +130,6 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "tdm_city18",
     "gm_kleinercomcenter",
     --"mu_smallotown_v2_13",
-    "gm_freeway_spacetunnel",
 
     -- Maps that need fixing
     -- "cs_insertion2_dusk", Requires Checks for info_player spawns to be removed

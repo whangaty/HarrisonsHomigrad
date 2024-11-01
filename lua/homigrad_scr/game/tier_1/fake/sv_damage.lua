@@ -123,7 +123,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		(entAtt:GetClass() == "wep" and entAtt:GetOwner()) --or
 		--(IsValid(att) and att)
 	--att = att ~= ply and att
-	att = dmginfo:GetDamageType() ~= DMG_CRUSH and att or ply.LastAttacker
+	att = ply.LastAttacker -- Made it so last attacker can only be a player
 
 	if IsValid(att) then dmginfo:SetAttacker(att) end
 

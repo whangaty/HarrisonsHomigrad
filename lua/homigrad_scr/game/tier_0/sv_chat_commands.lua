@@ -37,7 +37,6 @@ local validUserGroup = {
 	supporter = true,
 	supporterplus = true,
 	sponsor = true,
-	regular = true,
 	operator = true,
 	tmod = true
 }
