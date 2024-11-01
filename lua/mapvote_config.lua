@@ -140,7 +140,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "gm_building",
     "ttt_clue_2022",
     "ttt_bank_change",
-    "gm_apartartments_hl2",
+    "gm_apartments_hl2",
     "ttt_ile_v4"
 
 }
