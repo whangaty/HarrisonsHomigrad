@@ -71,7 +71,7 @@ end,1}
 function GuiltCheck(att,ply)
 	guiltVal = 100
 
-	if att.Guilt >= guiltVal then
+	if att.Guilt >= guiltVal and att:Alive() and not att == game.GetWorld() then return end
 		att.Guilt = 0
 		
 		if not att.noguilt and not att:HasGodMode() then
