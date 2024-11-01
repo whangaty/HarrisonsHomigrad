@@ -18,7 +18,7 @@ end
 function juggernaut.SpawnsCT()
     local aviable = {}
 
-    for i,point in pairs(ReadDataMap("hiders")) do
+    for i,point in pairs(ReadDataMap("spawnpointshiders")) do
         table.insert(aviable,point)
     end
 
@@ -28,7 +28,7 @@ end
 function juggernaut.SpawnsT()
     local aviable = {}
 
-    for i,point in pairs(ReadDataMap("school")) do
+    for i,point in pairs(ReadDataMap("spawnpoints_ss_school")) do
         table.insert(aviable,point)
     end
 
