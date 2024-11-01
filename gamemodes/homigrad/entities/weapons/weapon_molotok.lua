@@ -54,7 +54,6 @@ SWEP.vbwPos = Vector(-7,2,0)
 
 SWEP.dwr_reverbDisable = true
 
-
 SWEP.UseHands = true
 
 SWEP.FiresUnderwater = false

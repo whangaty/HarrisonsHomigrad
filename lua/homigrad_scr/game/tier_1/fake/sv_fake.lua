@@ -114,15 +114,28 @@ function Faking(ply,force) -- функция падения
 			rag:SetNWEntity("RagdollController", ply)
 			
 			local bull = rag.bull
+
+			local eyeatt = rag:GetAttachment(rag:LookupAttachment("eyes"))
 			local bodyphy = rag:GetPhysicsObjectNum(10)
-			
-			bull:SetPos(bodyphy:GetPos() + bodyphy:GetAngles():Right()*7)
-			bull:SetMoveType( MOVETYPE_OBSERVER )
-			bull:SetParent(rag, rag:LookupAttachment("eyes"))
-			bull:SetHealth(1000)
+			bull:SetPos(eyeatt.Pos)
+			--bull:SetPos( eyeatt.Pos + eyeatt.Ang:Up() * 3.5 )
+			bull:SetAngles( rag:GetAngles() )
+			bull:SetMoveType(MOVETYPE_OBSERVER)
+			bull:SetKeyValue( "targetname", "Bullseye" )
+			--bull:SetParent(rag, rag:LookupAttachment("eyes"))
+			bull:SetKeyValue( "health","9999" )
+			bull:SetKeyValue( "spawnflags","256" )
 			bull:Spawn()
 			bull:Activate()
 			bull:SetNotSolid(true)
+
+			for i, ent in ipairs(ents.FindByClass("npc_*")) do
+				if not IsValid(ent) or not ent.AddEntityRelationship then continue end
+				ent:AddEntityRelationship(bull, ent:Disposition(ply))
+			end
+			rag:AddFlags(FL_NOTARGET)
+			bull.rag = rag
+			bull.ply = ply
 
 			hook.Run("Fake", ply, rag)
 
@@ -869,12 +882,14 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 	local bone = rag:LookupBone("ValveBiped.Bip01_Head1")
 	if not bone then return end
 
-	if IsValid(ply.bull) then
-		ply.bull:SetPos(rag:GetPos())
-	end
-
 	local head1 = rag:GetBonePosition(bone) + dvec
 
+	local torsopos = rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_Spine"))
+
+	if IsValid(rag.bull) then
+		rag.bull:SetPos(torsopos + vector_up * 10)
+	end
+	
 	ply:SetPos(head1)
 
 	ply.bullshithuy = ply.bullshithuy or CurTime()

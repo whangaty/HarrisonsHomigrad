@@ -285,7 +285,7 @@ hook.Add("entity_killed","killedplayer",function(data)
 	local ent = Entity(data.entindex_killed)
 
 	if ent:IsPlayer() then
-		hook.Run("Player Death",ent)
+		--hook.Run("Player Death",ent)
 	end
 end)
 

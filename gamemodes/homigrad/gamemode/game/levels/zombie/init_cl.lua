@@ -32,19 +32,16 @@ function zombie.HUDPaint_RoundLeft(white2,time)
 
         surface.DrawText("Вы " .. name)]]--
         draw.DrawText( "You are on team: " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Hide & Seek", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Zombie Survival", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
-        if lply:Team() == 1 then
-            draw.DrawText( "Find everyone who's hiding, and kill them before Special Forces arrive.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        else
-            draw.DrawText( "Hide until Special Forces arrive, and dash for the exit!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-		end
+		draw.DrawText( "Survive from zombies until National Guards arrive, and dash for the exit!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+
         return
     end
 
 	if time > 0 then
-		draw.SimpleText("Time Left before Special Forces arrive: ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+		draw.SimpleText("Time Left before National Guards arrive: ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 		green.a = 0
 	else
@@ -60,9 +57,7 @@ function zombie.HUDPaint_RoundLeft(white2,time)
 	end
 	*/
 	
-
-
-	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and zombie.police and time < 0 then
+	if (lply:Team() == 1 or not lply:Alive()) and (time < 0) then
 		local list = SpawnPointsList.spawnpoints_ss_exit
 		--local list = ReadDataMap("spawnpoints_ss_exit")
 		if list then

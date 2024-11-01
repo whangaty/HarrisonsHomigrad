@@ -63,10 +63,18 @@ local NULLENTITY = Entity(-1)
 
 hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по разным костям регдолла
 	if ent.nohook then return end
+
+	if ent:GetClass() == "npc_bullseye" then
+		local rag = ent.rag
+		rag:TakeDamageInfo(dmginfo)
+		return false
+	end
+	
 	if ent:IsPlayer() and IsValid(ent.FakeRagdoll) then return end
+	if ent.overridedmg then return end
 	if IsValid(ent:GetPhysicsObject()) and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_CLUB+DMG_GENERIC+DMG_BLAST) then ent:GetPhysicsObject():ApplyForceOffset(dmginfo:GetDamageForce():GetNormalized() * math.min(dmginfo:GetDamage() * 10,3000),dmginfo:GetDamagePosition()) end
 	local ply = RagdollOwner(ent) or ent
-
+	
 	if ent:IsRagdoll() and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_BLAST+DMG_SLASH) then
 		local effdata = EffectData()
 		effdata:SetOrigin(dmginfo:GetDamagePosition())
@@ -182,9 +190,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 
 	ply.LastDMGInfo = rubatPidor
 
-	dmginfo:ScaleDamage(0.5)
+	--dmginfo:ScaleDamage(0.5)
 	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
-	dmginfo:ScaleDamage(0.2)
+	--dmginfo:ScaleDamage(0.2)
 
 	if dmginfo:IsDamageType(DMG_BLAST) then
 		dmginfo:ScaleDamage(2)
@@ -200,7 +208,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		if ply:Health() <= 0 then ply:Kill() end
 		--]]
 
+		ply.overridedmg = true
 		ply:TakeDamageInfo(dmginfo)
+		ply.overridedmg = nil
 	end
 end)
 

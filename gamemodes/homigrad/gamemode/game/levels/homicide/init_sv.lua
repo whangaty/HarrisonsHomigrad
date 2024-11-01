@@ -358,19 +358,19 @@ local uncommon = {"medkit","weapon_molotok","weapon_per4ik","painkiller"}
 local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_mateba","weapon_m590"}
 
 function homicide.ShouldSpawnLoot()
-if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
-local chance = math.random(100)
-if chance < 2 and not homicide.roundType == 3 then
-    return true,rare[math.random(#rare)],"legend"
-elseif chance < 20 then
-    return true,uncommon[math.random(#uncommon)],"veryrare"
-elseif chance < 60 then
-    return true,common[math.random(#common)],"common"
-else
-    return false
-end
---else
-    --return true
+    if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
+    local chance = math.random(100)
+    if chance < 2 and not homicide.roundType == 3 then
+        return true,rare[math.random(#rare)],"legend"
+    elseif chance < 20 then
+        return true,uncommon[math.random(#uncommon)],"veryrare"
+    elseif chance < 60 then
+        return true,common[math.random(#common)],"common"
+    else
+        return false
+    end
+    --else
+        --return true
 end
 
 function homicide.ShouldDiscordOutput(ply,text)

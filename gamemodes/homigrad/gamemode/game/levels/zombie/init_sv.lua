@@ -6,7 +6,7 @@ function zombie.StartRoundSV(data)
 	tdm.DirectOtherTeam(2,1)
 
 	roundTimeStart = CurTime()
-	roundTime = 60 * (2 + math.min(#player.GetAll() / 16,2))
+	roundTime = 60 * (2 + math.min(#player.GetAll() / 4,2))
 	roundTimeLoot = 10
 
     local players = team.GetPlayers(1)
@@ -15,19 +15,27 @@ function zombie.StartRoundSV(data)
 	local spawnsCT = ReadDataMap("spawnpointshiders")
 
 	tdm.SpawnCommand(team.GetPlayers(1),spawnsT)
-	tdm.SpawnCommand(team.GetPlayers(2),spawnsCT)
 
 	zombie.police = false
 
 	return {roundTimeLoot = roundTimeLoot}
 end
 
+local zombies = {
+	"npc_zombie",
+	"npc_fastzombie",
+	"npc_headcrab",
+	"npc_zombie_torso",
+	"npc_headcrab_fast",
+	"npc_fastzombie_torso",
+	--"npc_headcrab_black",
+}
+
 function zombie.RoundEndCheck()
     if roundTimeStart + roundTime < CurTime() then
-
 		if not zombie.police then
 			zombie.police = true
-			PrintMessage(3,"Special Forces have arrived! Hiders can now escape through select points on the map.")
+			PrintMessage(3,"National Guards have arrived! Survivors can now escape through select points on the map.")
 
 			local aviable = ReadDataMap("spawnpointsct")
 
@@ -40,7 +48,30 @@ function zombie.RoundEndCheck()
 			end
 		end
 	end
+	
+	local zombies_spawnpoints = hg.RandomSpawns()
 
+	zombie.SpawnZombieTime = zombie.SpawnZombieTime or CurTime()
+
+	if ((roundTimeStart + 10) < CurTime()) and (zombie.SpawnZombieTime < CurTime()) then
+		zombie.SpawnZombieTime = CurTime() + 0.5
+		
+		local pos = zombies_spawnpoints[math.random(#zombies_spawnpoints)]
+
+		local zombie = ents.Create(zombies[math.random(#zombies)])
+
+		local tr = {}
+		tr.start = pos
+		tr.endpos = pos
+		tr.filter = zombie
+		tr.mask = MASK_SOLID_BRUSHONLY
+
+		if not util.TraceEntityHull(tr, zombie).Hit then
+			zombie:SetPos(pos)
+			zombie:Spawn()
+		end
+	end
+	
 	local CTAlive,CTExit = 0,0
 
 	local OAlive = 0
@@ -52,7 +83,7 @@ function zombie.RoundEndCheck()
 	local list = ReadDataMap("spawnpoints_ss_exit")
 
 	if zombie.police then
-		for i,ply in pairs(team.GetPlayers(2)) do
+		for i,ply in pairs(team.GetPlayers(1)) do
 			if not ply:Alive() or ply.exit then continue end
 
 			for i,point in pairs(list) do
@@ -72,7 +103,13 @@ function zombie.RoundEndCheck()
 	if CTAlive == 0 then EndRound() return end
 end
 
-function zombie.EndRound(winner) tdm.EndRoundMessage(winner) end
+function zombie.EndRound(winner)
+	if winner == 1 then
+		PrintMessage(3,"Survivors managed to extract!")
+	else
+		PrintMessage(3,"No one survived.")
+	end
+end
 
 function zombie.PlayerSpawn(ply,teamID)
 	local teamTbl = zombie[zombie.teamEncoder[teamID]]
@@ -94,7 +131,6 @@ function zombie.PlayerSpawn(ply,teamID)
 	tdm.GiveSwep(ply,teamTbl.main_weapon,teamID == 1 and 16 or 4)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon,teamID == 1 and 8 or 2)
 
-	if math.random(1,4) == 4 then ply:Give("weapon_per4ik") end
 	if math.random(1,8) == 8 then ply:Give("adrenaline") end
 	if math.random(1,7) == 7 then ply:Give("painkiller") end
 	if math.random(1,6) == 6 then ply:Give("medkit") end
@@ -104,19 +140,11 @@ function zombie.PlayerSpawn(ply,teamID)
 	if ply:IsUserGroup("sponsor") or ply:IsUserGroup("supporterplus") then
 		ply:Give("weapon_vape")
 	end
-
-	local r = math.random(1,3)
-	ply:Give(r == 1 and "food_fishcan" or r == 2 and "food_spongebob_home" or r == 3 and "food_lays")
-
-	if math.random(1,3) == 3 then ply:Give("food_monster") end
+	
 	if math.random(1,5) == 5 then ply:Give("weapon_bat") end
 
-    if teamID == 1 then
-        JMod.EZ_Equip_Armor(ply,"Medium-Helmet",color)
-        JMod.EZ_Equip_Armor(ply,"Light-Vest",color)
-	elseif teamID == 2 then
-		ply:SetPlayerColor(Color(math.random(160),math.random(160),math.random(160)):ToVector())
-    end
+	ply:SetPlayerColor(Color(math.random(160),math.random(160),math.random(160)):ToVector())
+
 	ply.allowFlashlights = false
 end
 
@@ -154,11 +182,11 @@ function zombie.ShouldSpawnLoot()
    	if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
 
 	local chance = math.random(100)
-	if chance < 5 then
+	if chance < 25 then
 		return true,rare[math.random(#rare)]
-	elseif chance < 30 then
+	elseif chance < 60 then
 		return true,uncommon[math.random(#uncommon)]
-	elseif chance < 70 then
+	elseif chance < 100 then
 		return true,common[math.random(#common)]
 	else
 		return false

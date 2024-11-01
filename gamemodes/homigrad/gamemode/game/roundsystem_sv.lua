@@ -65,8 +65,8 @@ function StartRound()
 	for i,ply in pairs(players) do
 
 		ply:SetNWEntity("ragdollWeapon", NULL)
+		
 		if IsValid(ply.wep) then
-			print(ply.wep)
 			ply.wep:Remove()
 			ply.wep = nil
 		end

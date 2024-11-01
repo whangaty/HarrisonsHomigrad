@@ -4,7 +4,6 @@ gravdm.Name = "Gravity Gun Gambit (Free for All)"
 gravdm.LoadScreenTime = 5.5
 gravdm.CantFight = gravdm.LoadScreenTime
 
-gravdm.RoundRandomDefalut = 1
 gravdm.NoSelectRandom = true
 
 local red = Color(155, 155, 255)
