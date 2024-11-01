@@ -198,6 +198,10 @@ function tdm.PlayerSpawn(ply,teamID)
 
 	ply:SetPlayerColor(color:ToVector())
 
+	if ply:IsUserGroup("sponsor") or ply:IsUserGroup("supporterplus") then
+		ply:Give("weapon_vape")
+	end
+
 	for i,weapon in pairs(teamTbl.weapons) do ply:Give(weapon) end
 
 	tdm.GiveSwep(ply,teamTbl.main_weapon)

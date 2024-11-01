@@ -3,7 +3,7 @@ AddCSLuaFile()
 
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Small Bandage"
+SWEP.PrintName = "Large Bandage"
 SWEP.Author = "Homigrad"
 SWEP.Instructions = "Perfect for a boo-boo!\nHeals small wounds that are lightly bleeding."
 

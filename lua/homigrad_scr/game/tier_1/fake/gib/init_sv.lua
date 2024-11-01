@@ -298,6 +298,8 @@ hook.Add("Think","Gib",function()
 		ply.Blood = ply.Blood or 5000
 		ent.Blood = ply.Blood
 
+		ply.pain = ply.pain or 0
+
 		if ent.BloodGibs and ply.Blood > 0 then
 			local k = ply.Blood / 5000
 
@@ -329,6 +331,7 @@ hook.Add("Think","Gib",function()
 				parent_obj = IsValid(parent_obj) and parent_obj or phys_obj
 				if (BloodGibs[phys_bone] or 0) < time then
 					ply.Blood = max(ply.Blood - 5,0)
+					ply.pain = ply.pain + 2.5
 					
 					BloodGibs[phys_bone] = time + Rand(0.07,0.1) / max(k,0.5)
 

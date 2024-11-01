@@ -17,17 +17,26 @@ local k = 0
 local k4 = 0
 local time = 0
 
-hook.Add("HUDDrawScoreBoard","painlevel",function()
-    if pain > 250 and LocalPlayer():Alive() then
-        draw.DrawText("You are currently unconcious.", "HomigradFontNotify", ScrW() / 2, ScrH() /2.1 ,
-            Color(255, 255, 255,255), TEXT_ALIGN_CENTER)
-            
-        draw.DrawText("Assuming you're still in great shape, you'll be back up in "..math.floor(((pain - 250) / 10) + 1).." second(s)!", 
-            "HomigradFontSmall", 
-            ScrW() / 2, ScrH() / 1.8 ,
-            Color(255, 255, 255,255), TEXT_ALIGN_CENTER)
+hook.Add("HUDDrawScoreBoard", "unconsciousnessInfo", function()
+    local ply = LocalPlayer()
+    if ply:GetNWInt("unconscious") and ply:Alive() and not ply:Team() == 1002 then
+        draw.DrawText("You are currently unconscious.", "HomigradFontNotify", ScrW() / 2, ScrH() / 2.1,
+            Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+
+        if pain and pain > 250 then
+            draw.DrawText("Assuming you're still in great shape, you'll be back up in " ..
+                math.floor(((pain - 250) / 10) + 1) .. " second(s)!", "HomigradFontSmall",
+                ScrW() / 2, ScrH() / 1.8,
+                Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+        elseif blood and blood < 3000 then
+            draw.DrawText("You have lost too much blood and have gone comatose!\nYou are slowly bleeding out, and will die unless someone can revive you.", "HomigradFontSmall",
+                ScrW() / 2, ScrH() / 1.8,
+                Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
+        end
     end
 end)
+
+
 
 surface.CreateFont("HomigradFontBig",{
 	font = "Roboto",
@@ -40,7 +49,7 @@ surface.CreateFont("HomigradFontBig",{
 -- TODO: Check if we can place pain levels here?
 
 hook.Add("HUDPaint","PainEffect",function()
-    if not LocalPlayer():Alive() then return end
+    if not LocalPlayer():Alive() or ply:Team() == 1002 then return end
 
 
     local w,h = ScrW(),ScrH()
@@ -117,7 +126,7 @@ hook.Add("RenderScreenspaceEffects","renderimpulse",function()
 
     k3 = math.Clamp(Lerp(0.01,k3,impulse),0,50)
 
-    if LocalPlayer():Alive() then
+    if LocalPlayer():Alive() and not ply:Team() ~= 1002 then
         DrawCA(4 * k3, 2 * k3, 0, 2 * k3, 1 * k3, 0)
     end
     --[[if LocalPlayer():Name() == "useless" then
@@ -127,4 +136,3 @@ hook.Add("RenderScreenspaceEffects","renderimpulse",function()
 end)
 
 end
-

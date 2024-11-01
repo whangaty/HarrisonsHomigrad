@@ -196,7 +196,7 @@ JMod.ArmorTable = {
 		pos = Vector(0, 4, 0),
 		ang = Angle(100, 180, 90),
 		wgt = 5,
-		dur = 200,
+		dur = 80000*50,
 		mskmat = "mats_jack_gmod_sprites/hard_vignette.png",
 		ent = "ent_jack_gmod_ezarmor_balmask",
 		tgl = {
@@ -654,7 +654,7 @@ JMod.ArmorTable = {
 		pos = Vector(-3, 2.5, 0),
 		ang = Angle(-85, 0, 90),
 		wgt = 80,
-		dur = 900,
+		dur = 900*50,
 		ent = "ent_jack_gmod_ezarmor_htorso"
 	},
 	["Pelvis-Panel"] = {
@@ -669,7 +669,7 @@ JMod.ArmorTable = {
 		pos = Vector(6, 0, 5),
 		ang = Angle(90, -90, 0),
 		wgt = 10,
-		dur = 350,
+		dur = 350*50,
 		ent = "ent_jack_gmod_ezarmor_spelvis"
 	},
 	["Light-Left-Shoulder"] = {
@@ -684,7 +684,7 @@ JMod.ArmorTable = {
 		pos = Vector(0, 0, -.5),
 		ang = Angle(-90, -90, -90),
 		wgt = 5,
-		dur = 200,
+		dur = 200*50,
 		ent = "ent_jack_gmod_ezarmor_llshoulder"
 	},
 	["Heavy-Left-Shoulder"] = {
@@ -699,7 +699,7 @@ JMod.ArmorTable = {
 		pos = Vector(0, 4, 0),
 		ang = Angle(90, -20, 90),
 		wgt = 15,
-		dur = 300,
+		dur = 300*50,
 		ent = "ent_jack_gmod_ezarmor_hlshoulder"
 	},
 	["Light-Right-Shoulder"] = {
@@ -714,7 +714,7 @@ JMod.ArmorTable = {
 		pos = Vector(0, 0, .5),
 		ang = Angle(-90, -90, -90),
 		wgt = 5,
-		dur = 200,
+		dur = 200*50,
 		ent = "ent_jack_gmod_ezarmor_lrshoulder"
 	},
 	["Heavy-Right-Shoulder"] = {
@@ -729,7 +729,7 @@ JMod.ArmorTable = {
 		pos = Vector(0, 4, 0),
 		ang = Angle(90, 20, 90),
 		wgt = 15,
-		dur = 300,
+		dur = 300*50,
 		ent = "ent_jack_gmod_ezarmor_hrshoulder"
 	},
 	["Left-Forearm"] = {
@@ -744,7 +744,7 @@ JMod.ArmorTable = {
 		pos = Vector(0, 0, -.5),
 		ang = Angle(0, -90, -50),
 		wgt = 10,
-		dur = 250,
+		dur = 250*50,
 		ent = "ent_jack_gmod_ezarmor_slforearm",
 		gayPhysics = true
 	},
@@ -760,7 +760,7 @@ JMod.ArmorTable = {
 		pos = Vector(-.5, 0, .5),
 		ang = Angle(0, -90, 50),
 		wgt = 10,
-		dur = 250,
+		dur = 250*50,
 		ent = "ent_jack_gmod_ezarmor_srforearm",
 		gayPhysics = true
 	},
@@ -792,7 +792,7 @@ JMod.ArmorTable = {
 		pos = Vector(2, 10, 0),
 		ang = Angle(-90, 180, 0),
 		wgt = 25,
-		dur = 250,
+		dur = 250*50,
 		ent = "ent_jack_gmod_ezarmor_hlthigh"
 	},
 	["Light-Right-Thigh"] = {
@@ -823,7 +823,7 @@ JMod.ArmorTable = {
 		pos = Vector(2, 10, 0),
 		ang = Angle(-90, 180, 0),
 		wgt = 25,
-		dur = 250,
+		dur = 250*50,
 		ent = "ent_jack_gmod_ezarmor_hrthigh"
 	},
 	["Left-Calf"] = {
@@ -853,7 +853,7 @@ JMod.ArmorTable = {
 		pos = Vector(-1.5, -1, .5),
 		ang = Angle(-180, -83, -180),
 		wgt = 15,
-		dur = 300,
+		dur = 300*50,
 		ent = "ent_jack_gmod_ezarmor_srcalf"
 	},
 	["Hazmat Suit"] = {

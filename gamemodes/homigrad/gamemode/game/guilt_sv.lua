@@ -45,7 +45,9 @@ end
 local validUserGroup = {
 	superadmin = true,
 	admin = true,
-	megapenis = true
+	megapenis = true,
+	servermanager = true,
+	owner = true,
 }
 
 COMMANDS.noguilt = {function(ply,args)
@@ -67,22 +69,22 @@ COMMANDS.fake = {function(ply,args)
 end,1}
 
 function GuiltCheck(att,ply)
-	if att.Guilt >= 100 then
+	guiltVal = 100
+
+	if att.Guilt >= guiltVal then
 		att.Guilt = 0
 		
-		if not att.noguilt and not att:HasGodMode() then
-			--att:Kill()
-			return 
-			--RunConsoleCommand("ulx","asay","[AUTOMATED] "..att:Name().." has exceeded their guilt of 100%. They are "..tostring(att:Team()))
+		if not att.noguilt and not att:HasGodMode() and att:Alive() then
+			--return 
+			--RunConsoleCommand("ulx","asay","[AUTOMATED] "..att:Name().." has exceeded their guilt of 100%, and was killed They are "..tostring(att:Team()))
 			--print("[GUILT CHECK] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
-
-			--[[
 			if not validUserGroup[att:GetUserGroup()] then
-				--RunConsoleCommand("ulx","fakeban",att:Name(),"10","Kicked and Banned for RDM")
+				att:Kill()
+				RunConsoleCommand("ulx","tsay","<clr:red>[GUILT] "..att:Name().." has been slayed for exceeding their guilt of 100%.")
+				--att:ChatPrint("You were slayed for killing the wrong team! ")
 			else
-				--RunConsoleCommand("ulx","fakeban",att:Name(),"10","Kicked and Banned for RDM")
+				return
 			end
-			]]
 		end
 	end
 end
@@ -110,7 +112,7 @@ end)
 
 hook.Add("PlayerInitialSpawn","guiltasdd",function(ply)
 	ply.Guilt = ply:GetPData("Guilt") or 0
-	--ply:ChatPrint("Your guilt is currently at " .. tostring(ply.Guilt) .. "% out of 100%")
+	ply:ChatPrint("Your guilt is currently at " .. tostring(ply.Guilt) .. "% out of 100%")
 	ply.RoundGuilt = 0
 end)
 
@@ -161,4 +163,5 @@ concommand.Add("hg_getguilt",function(ply)
 	end
 
 	ply:ConsolePrint(text)
+	ply:ChatPrint(text)
 end)

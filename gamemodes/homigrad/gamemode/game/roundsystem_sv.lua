@@ -3,7 +3,7 @@ util.AddNetworkString("round_state")
 
 roundTimeStart = roundTimeStart or 0
 roundTime = roundTime or 0
-
+WEAPON_PICKUP_OVERIDE = false
 function RoundTimeSync(ply)
 	net.Start("round_time")
 	net.WriteFloat(roundTimeStart)
@@ -49,6 +49,7 @@ CountRoundRandom = CountRoundRandom or 0
 RoundRandomDefalut = 1
 
 function StartRound()
+	WEAPON_PICKUP_OVERIDE = true
 	if SERVER and pointPagesRandom then
 		SpawnPointsPage = math.random(1,GetMaxDataPages("spawnpointst"))
 
@@ -62,10 +63,22 @@ function StartRound()
 
 	local players = PlayersInGame()
 	for i,ply in pairs(players) do
+
+		ply:SetNWEntity("ragdollWeapon", NULL)
+		if IsValid(ply.wep) then
+			print(ply.wep)
+			ply.wep:Remove()
+			ply.wep = nil
+		end
+
+		ply:StripWeapons()
+
 		ply:KillSilent()
+		ply:Freeze(true)
 	end
 
 	if SERVER then
+		game.CleanUpMap()
 		if timer.Exists( "ULXVotemap") then
 			timer.Adjust("ULXVotemap",0,nil,nil)
 		end
@@ -133,6 +146,12 @@ function StartRound()
 	roundActive = true
 	RoundTimeSync()
 	RoundStateSync(nil,RoundData)
+	timer.Simple(5, function()
+		for i,ply in pairs(players) do
+			ply:Freeze(false)
+		end
+		WEAPON_PICKUP_OVERIDE = false
+	end)
 end
 
 function LevelRandom()
@@ -247,13 +266,13 @@ local function donaterVoteLevelEnd(t,argv,calling_ply,args)
 		end
 	end
 
-	if winner == 2 then
-		PrintMessage(HUD_PRINTTALK,"Раунд будет закончен.")
+	if winner == 1 then
+		PrintMessage(HUD_PRINTTALK,"Round has been voted to end.")
 		EndRound()
-	elseif winner == 1 then
-		PrintMessage(HUD_PRINTTALK,"Раунд не будет закончен.")
+	elseif winner == 2 then
+		PrintMessage(HUD_PRINTTALK,"Vote Failed! The round will continue.")
 	else
-		PrintMessage(HUD_PRINTTALK,"Голосование не прошло успешно или было остановлено.")
+		PrintMessage(HUD_PRINTTALK,"Error Occured during Vote! Perhaps no-one voted?")
 	end
 
 	calling_ply.canVoteNext = CurTime() + 300
@@ -265,7 +284,7 @@ COMMANDS.levelend = {function(ply,args)
 	else
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
-			ulx.doVote( "End Round?", { "No", "Yes" }, donaterVoteLevelEnd, 15, _, _, argv, calling_ply, args)
+			ulx.doVote( "End Round?", { "Yes", "No" }, donaterVoteLevelEnd, 15, _, _, argv, calling_ply, args)
 		end
 	end
 	--print("Was Recognised!")
@@ -324,6 +343,7 @@ end)
 
 hook.Add("WeaponEquip","PlayerManualPickup",function(wep,ply)
 	timer.Simple(0,function()
+		if WEAPON_PICKUP_OVERIDE then return end
 		if ishgweapon(wep) then
 			local isbig = ishgweapon(wep) and not wep:IsPistolHoldType()
 			local issmall = ishgweapon(wep) and wep:IsPistolHoldType()

@@ -18,7 +18,7 @@ local function CheckAndAssignGroup(ply)
     -- If the player has reached or exceeded the threshold
     if totalTime >= TIME_THRESHOLD then
         -- Assign the player to a ULX group, e.g., "veteran"
-        if not ply:IsUserGroup("regular") then
+        if ply:IsUserGroup("user") then
             RunConsoleCommand("ulx", "adduser", ply:Nick(), "regular")
             --RunConsoleCommand("ulx","playsound","package.wav")
             ply:ChatPrint("Congratulations! You have been promoted to the 'Regular' group for your time on the server.")

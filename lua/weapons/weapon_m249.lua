@@ -20,8 +20,8 @@ SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "m249/m249_fp.wav"
 SWEP.Primary.SoundFar = "m249/m249_dist.wav"
 SWEP.Primary.Force = 160/3
-SWEP.ReloadTime = 4
-SWEP.ShootWait = 0.075
+SWEP.ReloadTime = 2.5
+SWEP.ShootWait = 0.1
 SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
 SWEP.TwoHands = true
 							
