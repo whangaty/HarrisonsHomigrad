@@ -247,6 +247,4 @@ function cp.PlayerDeath(ply,inf,att)
     return false
 end
 
-function cp.NoSelectRandom()
-    return #ReadDataMap("control_point") < 1
-end
+cp.NoSelectRandom = true

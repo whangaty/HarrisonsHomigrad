@@ -1,35 +1,15 @@
 include("../../playermodelmanager_sv.lua")
 
-function hideandseek.StartRoundSV(data)
+function zombie.StartRoundSV(data)
     tdm.RemoveItems()
 
-	tdm.DirectOtherTeam(1,2)
+	tdm.DirectOtherTeam(2,1)
 
 	roundTimeStart = CurTime()
 	roundTime = 60 * (2 + math.min(#player.GetAll() / 16,2))
-	roundTimeLoot = 30
+	roundTimeLoot = 10
 
-    local players = team.GetPlayers(2)
-
-    for i,ply in pairs(players) do
-		ply.exit = false
-
-		if ply.hideandseekForceT then
-			ply.hideandseekForceT = nil
-
-			ply:SetTeam(1)
-		end
-    end
-
-	players = team.GetPlayers(2)
-
-	local count = math.min(math.floor(#players / 4,1))
-    for i = 1,count do
-        local ply,key = table.Random(players)
-		players[key] = nil
-
-        ply:SetTeam(1)
-    end
+    local players = team.GetPlayers(1)
 
 	local spawnsT = ReadDataMap("spawnpoints_ss_school")
 	local spawnsCT = ReadDataMap("spawnpointshiders")
@@ -37,28 +17,16 @@ function hideandseek.StartRoundSV(data)
 	tdm.SpawnCommand(team.GetPlayers(1),spawnsT)
 	tdm.SpawnCommand(team.GetPlayers(2),spawnsCT)
 
-	-- Find the first player in Team 1 and give them "weapon_radar"
-    local team1Players = team.GetPlayers(1)
-    if #team1Players > 0 then
-        local firstPlayer = team1Players[1]
-        if IsValid(firstPlayer) and firstPlayer:IsPlayer() then
-            firstPlayer:Give("weapon_radar")
-            --print("[Server] Gave weapon_radar to player: " .. firstPlayer:Nick())
-        end
-    end
-
-	hideandseek.police = false
-
-	tdm.CenterInit()
+	zombie.police = false
 
 	return {roundTimeLoot = roundTimeLoot}
 end
 
-function hideandseek.RoundEndCheck()
+function zombie.RoundEndCheck()
     if roundTimeStart + roundTime < CurTime() then
-		spawnsCT = tdm.SpawnsTwoCommand()
-		if not hideandseek.police then
-			hideandseek.police = true
+
+		if not zombie.police then
+			zombie.police = true
 			PrintMessage(3,"Special Forces have arrived! Hiders can now escape through select points on the map.")
 
 			local aviable = ReadDataMap("spawnpointsct")
@@ -68,28 +36,22 @@ function hideandseek.RoundEndCheck()
 
                 ply:SetPlayerClass("contr")
 
-				ply:SetTeam(3)
-				
-                --local pos,key = table.Random(aviable)
-                --if not pos then continue end
-                --if #aviable > 1 then table.remove(aviable,key) end
-
-                --ply:SetPos(pos)
+				ply:SetTeam(2)
 			end
 		end
 	end
 
-	local TAlive = tdm.GetCountLive(team.GetPlayers(1))
 	local CTAlive,CTExit = 0,0
+
 	local OAlive = 0
 
-	CTAlive = tdm.GetCountLive(team.GetPlayers(2),function(ply)
+	CTAlive = tdm.GetCountLive(team.GetPlayers(1),function(ply)
 		if ply.exit then CTExit = CTExit + 1 return false end
 	end)
 
 	local list = ReadDataMap("spawnpoints_ss_exit")
 
-	if hideandseek.police then
+	if zombie.police then
 		for i,ply in pairs(team.GetPlayers(2)) do
 			if not ply:Alive() or ply.exit then continue end
 
@@ -100,26 +62,20 @@ function hideandseek.RoundEndCheck()
 
 					CTExit = CTExit + 1
 
-					PrintMessage(3,ply:GetName().." has escaped! "..(CTAlive - 1) .. " hiders remain.")
+					PrintMessage(3,ply:GetName().." has escaped! "..(CTAlive - 1) .. " survivors remain.")
 				end
 			end
 		end
 	end
 
-	OAlive = tdm.GetCountLive(team.GetPlayers(3))
-
-	if CTExit > 0 and CTAlive == 0 then EndRound(2) return end
-	if OAlive == 0 and TAlive == 0 and CTAlive == 0 then EndRound() return end
-
-	if OAlive == 0 and TAlive == 0 then EndRound(2) return end
-	if CTAlive == 0 then EndRound(1) return end
-	if TAlive == 0 then EndRound(2) return end
+	if CTExit > 0 and CTAlive == 0 then EndRound(1) return end
+	if CTAlive == 0 then EndRound() return end
 end
 
-function hideandseek.EndRound(winner) tdm.EndRoundMessage(winner) end
+function zombie.EndRound(winner) tdm.EndRoundMessage(winner) end
 
-function hideandseek.PlayerSpawn(ply,teamID)
-	local teamTbl = hideandseek[hideandseek.teamEncoder[teamID]]
+function zombie.PlayerSpawn(ply,teamID)
+	local teamTbl = zombie[zombie.teamEncoder[teamID]]
 	local color = teamTbl[2]
 
 	-- Set the player's model to the custom model if available, otherwise use a random team model
@@ -164,14 +120,11 @@ function hideandseek.PlayerSpawn(ply,teamID)
 	ply.allowFlashlights = false
 end
 
-function hideandseek.PlayerInitialSpawn(ply) ply:SetTeam(2) end
+function zombie.PlayerInitialSpawn(ply) ply:SetTeam(2) end
 
-function hideandseek.PlayerCanJoinTeam(ply,teamID)
-	ply.hideandseekForceT = nil
-
-	if teamID == 3 then
+function zombie.PlayerCanJoinTeam(ply,teamID)
+	if teamID == 2 then
 		if ply:IsAdmin() then
-			ply:ChatPrint("I ask for mercy")
 			ply:Spawn()
 
 			return true
@@ -184,10 +137,6 @@ function hideandseek.PlayerCanJoinTeam(ply,teamID)
 
     if teamID == 1 then
 		if ply:IsAdmin() then
-			ply.hideandseekForceT = true
-
-			ply:ChatPrint("Милости прошу")
-
 			return true
 		else
 			ply:ChatPrint("Please wait until next round to join!")
@@ -195,29 +144,13 @@ function hideandseek.PlayerCanJoinTeam(ply,teamID)
 			return false
 		end
 	end
-
-	if teamID == 2 then
-		if ply:Team() == 1 then
-			if ply:IsAdmin() then
-				ply:ChatPrint("ладно.")
-
-				return true
-			else
-				ply:ChatPrint("Please wait until next round to join!")
-
-				return false
-			end
-		end
-
-		return true
-	end
 end
 
-local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
-local uncommon = {"medkit","weapon_molotok","painkiller"}
-local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_per4ik"}
+local common = {  "weapon_t", "weapon_hg_molotov", "*ammo*", "weapon_hg_sleagehammer", "weapon_hg_fireaxe", "ent_jack_gmod_ezarmor_gasmask", "ent_jack_gmod_ezarmor_mltorso" }
+local uncommon = { "weapon_m3super", "weapon_ar15", "weapon_beretta", "ent_jack_gmod_ezarmor_mtorso", "ent_jack_gmod_ezarmor_mhead" }
+local rare = { "weapon_xm1014", "weapon_m4a1", "weapon_xm8_lmg", "weapon_hk416", "weapon_civil_famas", "weapon_glock", "weapon_remington870", "weapon_akm", "weapon_rpk", "weapon_p90", "weapon_asval"}
 
-function hideandseek.ShouldSpawnLoot()
+function zombie.ShouldSpawnLoot()
    	if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
 
 	local chance = math.random(100)
@@ -232,8 +165,10 @@ function hideandseek.ShouldSpawnLoot()
 	end
 end
 
-function hideandseek.PlayerDeath(ply,inf,att) return false end
+function zombie.PlayerDeath(ply,inf,att) return false end
 
-function hideandseek.GuiltLogic(ply,att,dmgInfo)
-	if att.isContr and ply:Team() == 2 then return dmgInfo:GetDamage() * 3 end
+function zombie.GuiltLogic(ply,att,dmgInfo)
+	if att.isContr and ply:Team() == 1 then return dmgInfo:GetDamage() * 3 end
 end
+
+zombie.NoSelectRandom = true

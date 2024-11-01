@@ -16,6 +16,11 @@ local function removeBone(rag,bone,phys_bone)
 	phys_obj:SetMass(0.1)
 	--rag:RemoveInternalConstraint(phys_bone)
 
+	if rag.constraints and IsValid(rag.constraints[rag:GetBoneName(bone)]) then
+		rag.constraints[rag:GetBoneName(bone)]:Remove()
+		rag.constraints[rag:GetBoneName(bone)] = nil
+	end
+
 	constraint.RemoveAll(phys_obj)
 	rag.gibRemove[phys_bone] = phys_obj
 end
@@ -130,19 +135,6 @@ function Gib_Input(rag, bone, dmgInfo)
 			rag.BloodGibs = {}
 		--end
 	end
-	
-	--[[if hitgroup == HITGROUP_HEAD and rag.EZarmor then
-		local helmet
-		local currentArmorItems = rag.EZarmor
-
-		for id, currentArmorData in pairs(currentArmorItems) do
-			if JMod.ArmorTable[currentArmorData.name].slots["head"] ~= nil then helmet = id break end
-		end
-		print(helmet)
-		if helmet then
-			JMod.RemoveArmorByID(helmet)
-		end
-	end--]]
 
 	local phys_bone = rag:TranslateBoneToPhysBone(bone)
 

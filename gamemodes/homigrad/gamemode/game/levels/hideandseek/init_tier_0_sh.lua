@@ -44,3 +44,5 @@ function hideandseek.StartRound(data)
 end
 
 hideandseek.SupportCenter = true
+
+hideandseek.NoSelectRandom = true

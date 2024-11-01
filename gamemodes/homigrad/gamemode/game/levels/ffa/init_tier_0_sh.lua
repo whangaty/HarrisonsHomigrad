@@ -95,3 +95,5 @@ function ffa.HUDPaint_RoundLeft(white)
 
     DrawTopPlayers()
 end
+
+ffa.NoSelectRandom = false

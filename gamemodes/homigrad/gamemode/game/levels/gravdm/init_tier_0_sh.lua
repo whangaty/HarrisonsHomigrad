@@ -88,3 +88,4 @@ function gravdm.CanUseSpectateHUD()
 end
 
 gravdm.RoundRandomDefalut = 3
+gravdm.NoSelectRandom = true

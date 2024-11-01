@@ -137,7 +137,7 @@ function Faking(ply,force) -- функция падения
 
 			ply:SetMoveType(MOVETYPE_NONE)
 			ply:DrawShadow(false)
-			local hull = Vector(2,2,2)
+			local hull = Vector(1,1,1)
 			ply:SetHull(-hull,hull)
 			ply:SetHullDuck(-hull,hull)
 			ply:SetViewOffset(Vector(0,0,0))
@@ -568,8 +568,9 @@ local function CreateArmor(ragdoll,info)
 			net.Send(ply)
 		end
 	end)
+	ragdoll.constraints = ragdoll.constraints or {}
 
-	constraint.Weld(ent,ragdoll,0,ragdoll:TranslateBoneToPhysBone(Index),0,true,false)
+	ragdoll.constraints[item.bon] = constraint.Weld(ent,ragdoll,0,ragdoll:TranslateBoneToPhysBone(Index),0,true,false)
 
 	ragdoll:DeleteOnRemove(ent)
 
@@ -858,6 +859,8 @@ hook.Add("StartCommand","asdfgghh",function(ply,cmd)
 end)
 
 local dvec = Vector(0,0,0)
+local HullVec = Vector(4,4,4)
+
 hook.Add("Player Think","FakeControl",function(ply,time) --управление в фейке
 	if not ply:Alive() then return end
 	local rag = ply:GetNWEntity("Ragdoll")
@@ -1077,27 +1080,19 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 
 			if(!IsValid(rag.ZacConsLH) and (!rag.ZacNextGrLH || rag.ZacNextGrLH<=CurTime()))then
 				rag.ZacNextGrLH=CurTime()+0.1
-				for i=1,3 do
-					local offset = phys:GetAngles():Up()*-5
-					if(i==2)then
-						offset = phys:GetAngles():Right()*5
-					end
-					if(i==3)then
-						offset = phys:GetAngles():Right()*-5
-					end
-					local traceinfo={
-						start=phys:GetPos(),
-						endpos=phys:GetPos()+offset,
-						filter=rag,
-						output=trace,
-					}
-					local trace = util.TraceLine(traceinfo)
-					if(trace.Hit and !trace.HitSky)then
-						local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
-						if(IsValid(cons))then
-							rag.ZacConsLH=cons
-						end
-						break
+				local traceinfo={
+					start=phys:GetPos(),
+					endpos=phys:GetPos(),
+					mins = -HullVec,
+					maxs = HullVec,
+					filter=rag,
+				}
+
+				local trace = util.TraceHull(traceinfo)
+				if(trace.Hit and !trace.HitSky)then
+					local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
+					if(IsValid(cons))then
+						rag.ZacConsLH=cons
 					end
 				end
 			end
@@ -1112,28 +1107,21 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" ))
 			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 			if(!IsValid(rag.ZacConsRH) and (!rag.ZacNextGrRH || rag.ZacNextGrRH<=CurTime()))then
-				rag.ZacNextGrRH=CurTime()+0.1
-				for i=1,3 do
-					local offset = phys:GetAngles():Up()*5
-					if(i==2)then
-						offset = phys:GetAngles():Right()*5
-					end
-					if(i==3)then
-						offset = phys:GetAngles():Right()*-5
-					end
-					local traceinfo={
-						start=phys:GetPos(),
-						endpos=phys:GetPos()+offset,
-						filter=rag,
-						output=trace,
-					}
-					local trace = util.TraceLine(traceinfo)
-					if(trace.Hit and !trace.HitSky)then
-						local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
-						if(IsValid(cons))then
-							rag.ZacConsRH=cons
-						end
-						break
+				rag.ZacNextGrRH = CurTime()+0.1
+
+				local traceinfo={
+					start=phys:GetPos(),
+					endpos=phys:GetPos(),
+					mins = -HullVec,
+					maxs = HullVec,
+					filter=rag,
+				}
+
+				local trace = util.TraceHull(traceinfo)
+				if(trace.Hit and !trace.HitSky)then
+					local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
+					if(IsValid(cons))then
+						rag.ZacConsRH=cons
 					end
 				end
 			end
@@ -1144,11 +1132,11 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			end
 		end
 		if(ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH))then
-			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine" )) )
+			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine2" )) )
 			local lh = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
 			local angs = ply:EyeAngles()
 			angs:RotateAroundAxis(angs:Right(),30)
-			local speed = 120
+			local speed = 40
 			
 			if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000) then
 				local shadowparams = {
@@ -1167,11 +1155,11 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			end
 		end
 		if(ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsRH))then
-			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine" )) )
+			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine2" )) )
 			local rh = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 			local angs = ply:EyeAngles()
 			angs:RotateAroundAxis(angs:Right(),30)
-			local speed = 120
+			local speed = 40
 			
 			if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000)then
 				local shadowparams = {

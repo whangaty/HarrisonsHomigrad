@@ -5,7 +5,7 @@ dm.LoadScreenTime = 5.5
 dm.CantFight = dm.LoadScreenTime
 
 dm.RoundRandomDefalut = 1
-dm.NoSelectRandom = true
+dm.NoSelectRandom = false
 
 local red = Color(155,155,255)
 

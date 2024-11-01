@@ -130,10 +130,12 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	ply.LastAttacker = att
 	ply.LastHitGroup = hitgroup
 
-	local armors = JMod.LocationalDmgHandling(ply,hitgroup,dmginfo)
+	dmginfo:ScaleDamage(0.05)
+	local armors, mul = JMod.LocationalDmgHandling(ply, hitgroup, dmginfo)
+	dmginfo:ScaleDamage(20)
 	local armorMul,armorDur = 1,0
 	local haveHelmet
-
+	
 	for armorInfo,armorData in pairs(armors) do
 		local dur = armorData.dur / armorInfo.dur
 
@@ -158,7 +160,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 				sound.Emit(ent,"player/kevlar" .. math.random(1,6) .. ".wav",90)
 			end
 		end
-
+		
 		if dur >= 0.25 then
 			armorDur = (armorData.dur / 100) * dur
 			--dur = math.max(dur - 0.5,0)
@@ -168,7 +170,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 			break
 		end
 	end
-
+	
 	dmginfo:SetDamage(dmginfo:GetDamage() * armorMul)
 	local rubatPidor = DamageInfo()
 	rubatPidor:SetAttacker(dmginfo:GetAttacker())

@@ -39,4 +39,4 @@ end
 
 riot.SupportCenter = true
 
-riot.NoSelectRandom = false
+riot.NoSelectRandom = true

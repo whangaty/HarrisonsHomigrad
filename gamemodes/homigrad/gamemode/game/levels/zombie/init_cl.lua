@@ -1,21 +1,21 @@
-zombo.GetTeamName = tdm.GetTeamName
+zombie.GetTeamName = tdm.GetTeamName
 
 local colorSpec = ScoreboardSpec
-function zombo.Scoreboard_Status(ply)
+function zombie.Scoreboard_Status(ply)
 	local lply = LocalPlayer()
 	if not lply:Alive() or lply:Team() == 1002 then return true end
 
-	return "Неизвестно",colorSpec
+	return "Spectator",colorSpec
 end
 
 local green = Color(0,125,0)
 local white = Color(255,255,255)
 
-function zombo.HUDPaint_RoundLeft(white2,time)
+function zombie.HUDPaint_RoundLeft(white2,time)
 	local time = math.Round(roundTimeStart + roundTime - CurTime())
 	local acurcetime = string.FormattedTime(time,"%02i:%02i")
 	local lply = LocalPlayer()
-	local name,color = zombo.GetTeamName(lply)
+	local name,color = zombie.GetTeamName(lply)
 
 	local startRound = roundTimeStart + 7 - CurTime()
     if startRound > 0 and lply:Alive() then
@@ -31,21 +31,24 @@ function zombo.HUDPaint_RoundLeft(white2,time)
         surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
 
         surface.DrawText("Вы " .. name)]]--
-        draw.DrawText( "Вы " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "ВИРУС ЗОМБО", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You are on team: " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Hide & Seek", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply:Team() == 1 then
-            draw.DrawText( "Ваша задача это РАЗНЫМИ способами убежать от зомбо", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Find everyone who's hiding, and kill them before Special Forces arrive.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "Где-то рядом люди... ВЫ ДОЛЖНЫ ИХ СЬЕСТЬ", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,155,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Hide until Special Forces arrive, and dash for the exit!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 		end
         return
     end
 
 	if time > 0 then
-		draw.SimpleText("До ОРДЫ : ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+		draw.SimpleText("Time Left before Special Forces arrive: ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
+		green.a = 0
+	else
+		green.a = 255
 	end
 	/*
 	local time = math.Round(roundTimeStart + (roundTimeLoot or 0) - CurTime())
@@ -56,10 +59,10 @@ function zombo.HUDPaint_RoundLeft(white2,time)
 		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH() - 50,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 	end
 	*/
-	green.a = white2.a
+	
 
 
-	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and zombo.police then
+	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and zombie.police and time < 0 then
 		local list = SpawnPointsList.spawnpoints_ss_exit
 		--local list = ReadDataMap("spawnpoints_ss_exit")
 		if list then
@@ -69,14 +72,14 @@ function zombo.HUDPaint_RoundLeft(white2,time)
 				draw.SimpleText("EXIT","ChatFont",pos.x,pos.y,green,TEXT_ALIGN_CENTER)
 			end
 
-			draw.SimpleText("Нажми TAB чтобы снова увидеть это.","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
+			--draw.SimpleText("Click Tab to see it again.","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
 		else
-			draw.SimpleText("Попроси админа поставить эвакуационные точки для прячущихся...","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
+			draw.SimpleText("If you're seeing this, please ask the admins to spawn escape points!","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
 		end
 	end
 end
 
-function zombo.PlayerClientSpawn()
+function zombie.PlayerClientSpawn()
 	if LocalPlayer():Team() ~= 3 then return end
 
 	showRoundInfo = CurTime() + 10

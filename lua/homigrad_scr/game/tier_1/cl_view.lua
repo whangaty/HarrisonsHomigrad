@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() ~= "homigrad" then return end
 
 local t = {}
 local n, e, r, o
@@ -833,7 +833,7 @@ hook.Add("PostDrawTranslucentRenderables","fuck_off",function()
 		if ent then
 			local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Head1'))
 			
-			render.DrawBox( pos, ang, Vector(3,-6,-4), Vector(9,4,4), color_white )
+			render.DrawBox( pos, ang, Vector(3,-4,-2.5), Vector(7,3,2.5), color_white )
 
 			local dmgpos = ply:GetEyeTrace().HitPos
 			local penetration = ply:GetAimVector() * 10
@@ -843,4 +843,3 @@ hook.Add("PostDrawTranslucentRenderables","fuck_off",function()
 		end
 	end--]]
 end )
-end
