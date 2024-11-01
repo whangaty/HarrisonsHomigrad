@@ -19,7 +19,7 @@ local time = 0
 
 hook.Add("HUDDrawScoreBoard", "unconsciousnessInfo", function()
     local ply = LocalPlayer()
-    if ply:GetNWInt("unconscious") and ply:Alive() and ply:Team() ~= 1002 then
+    if ply:GetNWInt("unconscious") and ply:Alive() and not ply:Team() == 1002 then
         draw.DrawText("You are currently unconscious.", "HomigradFontNotify", ScrW() / 2, ScrH() / 2.1,
             Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
 
@@ -49,7 +49,7 @@ surface.CreateFont("HomigradFontBig",{
 -- TODO: Check if we can place pain levels here?
 
 hook.Add("HUDPaint","PainEffect",function()
-    if not LocalPlayer():Alive() or ply:Team() ~= 1002 then return end
+    if not LocalPlayer():Alive() or ply:Team() == 1002 then return end
 
 
     local w,h = ScrW(),ScrH()
