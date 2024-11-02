@@ -277,6 +277,7 @@ function css.GiveSwep(ply,list,mulClip1)
 	if not list then return end
 
 	local wep = ply:Give(type(list) == "table" and list[math.random(#list)] or list)
+	--wep.Spawned = true
 
 	mulClip1 = mulClip1 or 3
 

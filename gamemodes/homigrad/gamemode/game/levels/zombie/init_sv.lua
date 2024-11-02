@@ -28,7 +28,7 @@ local zombies = {
 	"npc_zombie_torso",
 	"npc_headcrab_fast",
 	"npc_fastzombie_torso",
-	--"npc_headcrab_black",
+	--"npc_headcrab_black",--racism
 }
 
 function zombie.RoundEndCheck()
@@ -55,7 +55,9 @@ function zombie.RoundEndCheck()
 
 	if ((roundTimeStart + 10) < CurTime()) and (zombie.SpawnZombieTime < CurTime()) then
 		zombie.SpawnZombieTime = CurTime() + 0.5
-		
+
+		local players = PlayersAlive()
+
 		local pos = zombies_spawnpoints[math.random(#zombies_spawnpoints)]
 
 		local zombie = ents.Create(zombies[math.random(#zombies)])
@@ -69,6 +71,9 @@ function zombie.RoundEndCheck()
 		if not util.TraceEntityHull(tr, zombie).Hit then
 			zombie:SetPos(pos)
 			zombie:Spawn()
+			local ply = players[math.random(#players)]
+			zombie:SetEnemy(ply)
+			zombie:UpdateEnemyMemory(ply, ply:GetPos())
 		end
 	end
 	
@@ -200,3 +205,51 @@ function zombie.GuiltLogic(ply,att,dmgInfo)
 end
 
 zombie.NoSelectRandom = true
+
+hook.Add( "Think", "NPCAutoSeekPlayer", function()
+	if roundActiveName ~= "zombie" then return end
+
+	if (zombie.CooldownThink or 0) > CurTime() then return end
+	zombie.CooldownThink = CurTime() + 5
+	
+	local npcs = ents.FindByClass("npc_*")
+	local plys = player.GetAll()
+	local plyCount = #plys
+
+	if ( plyCount == 0 ) then
+		return
+	end
+
+	for i = 1, #npcs do
+		local npc = npcs[ i ]
+
+		if ( npc:IsNPC() && !IsValid( npc:GetEnemy() ) ) then
+			local curPly = nil
+			local curPlyPos = nil
+			local curDist = math.huge
+			
+			local npcPos = npc:GetPos()
+
+			for i = 1, plyCount do
+				local ply = plys[ i ]
+
+				if ( npc:Disposition( ply ) == D_HT ) then
+					local plyPos = ply:GetPos()
+					
+					local dist = npcPos:DistToSqr( plyPos )
+
+					if ( dist < curDist ) then
+						curPly = ply
+						curPlyPos = plyPos
+						curDist = dist
+					end
+				end
+			end
+
+			if curPly and curPlyPos then
+				npc:SetEnemy( curPly )
+				npc:UpdateEnemyMemory( curPly, curPlyPos )
+			end
+		end
+	end
+end )

@@ -150,7 +150,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		local slots = armorInfo.slots
 		if dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) then
 			if (slots.mouthnose or slots.head) then
-				sound.Emit(ent,"player/bhit_helmet-1.wav",90)
+				sound.Emit(ent,"player/bhit_helmet-1.wav",90,1)
 
 				haveHelmet = true
 			elseif
@@ -190,10 +190,12 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 
 	ply.LastDMGInfo = rubatPidor
 
-	--dmginfo:ScaleDamage(0.5)
-	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
-	--dmginfo:ScaleDamage(0.2)
+	local att = IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker()
 
+	if att and not att:IsNPC() then dmginfo:ScaleDamage(0.5) end
+	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
+	if att and not att:IsNPC() then dmginfo:ScaleDamage(0.2) end
+	
 	if dmginfo:IsDamageType(DMG_BLAST) then
 		dmginfo:ScaleDamage(2)
 	end

@@ -5,7 +5,7 @@ hook.Add("Player Think","homigrad-hungry",function(ply,time)
 	if not ply:Alive() or ply:HasGodMode() then return end
 
 	if (ply.hungryNext or time) > time then return end
-	ply.hungryNext = time + 1
+	ply.hungryNext = time + 2
 
 	ply.hungryregen = math_Clamp((ply.hungryregen or 0) - 0.03,-0.01,50)
 	ply.hungry = math_Clamp((ply.hungry or 0) + ply.hungryregen,0,100)

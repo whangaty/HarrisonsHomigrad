@@ -343,7 +343,7 @@ end)
 
 hook.Add("WeaponEquip","PlayerManualPickup",function(wep,ply)
 	timer.Simple(0,function()
-		if WEAPON_PICKUP_OVERIDE then return end
+		--if WEAPON_PICKUP_OVERIDE then return end
 		if ishgweapon(wep) then
 			local isbig = ishgweapon(wep) and not wep:IsPistolHoldType()
 			local issmall = ishgweapon(wep) and wep:IsPistolHoldType()
@@ -364,7 +364,9 @@ hook.Add("WeaponEquip","PlayerManualPickup",function(wep,ply)
 				ply.SlotSmall = wep
 			end
 
-			ply:SelectWeapon(wep)
+			if !WEAPON_PICKUP_OVERIDE then
+				ply:SelectWeapon(wep)
+			end
 		end
 	end)
 end)
