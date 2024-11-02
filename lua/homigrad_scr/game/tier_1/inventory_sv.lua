@@ -146,7 +146,7 @@ net.Receive("ply_take_item",function(len,ply)
 	local lootEnt = net.ReadEntity()
 	if not IsValid(lootEnt) then return end
 	if lootEnt:IsPlayer() and not IsValid(lootEnt.FakeRagdoll) then return end
-	
+	if ply:GetAttachment(ply:LookupAttachment("eyes")).Pos:Distance(lootEnt:GetPos()) > 100 then return end
 	--local weapon = net.ReadEntity()
 	--local wep = weapon:GetClass()
 

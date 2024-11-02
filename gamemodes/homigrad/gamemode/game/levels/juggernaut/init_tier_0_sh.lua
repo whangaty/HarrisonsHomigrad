@@ -58,7 +58,6 @@ local black = Color(0,0,0,255)
 net.Receive("homicide_roleget2",function()
     for i,ply in player.Iterator() do ply.roleT = nil end
     local role = net.ReadTable()
-
     for i,ply in pairs(role[1]) do ply.roleT = true end
 end)
 

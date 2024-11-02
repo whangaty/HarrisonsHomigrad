@@ -220,7 +220,8 @@ local validBone2 = {
 hook.Add("PlayerDeath","Gib",function(ply,inflictor, attacker)
 	dmgInfo = ply.LastDMGInfo
 	if not dmgInfo then return end
-	
+	if ply.LastTimeAttacked and (ply.LastTimeAttacked + 1) < CurTime() then return end
+
 	local hitgroup
 
 	if bonetohitgroup[ply.LastHitBoneName] then hitgroup = bonetohitgroup[ply.LastHitBoneName] end

@@ -108,6 +108,9 @@ function Faking(ply,force) -- функция падения
 				timer.Simple(0.1,function()
 					SpawnWeapon(ply)
 				end)
+				timer.Simple(0.5,function()
+					SpawnWeapon(ply)
+				end)
 			end
 			
 			rag.bull = ents.Create("npc_bullseye")

@@ -89,6 +89,8 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		ent = ply:GetNWEntity("Ragdoll") or ply.FakeRagdoll or ply
 	end
 
+	if not IsValid(ent) then return end
+
 	if not ply or not ply:IsPlayer() or not ply:Alive() or ply:HasGodMode() then
 		return
 	end
@@ -137,6 +139,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 
 	ply.LastAttacker = att
 	ply.LastHitGroup = hitgroup
+	ply.LastTimeAttacked = CurTime()
 
 	dmginfo:ScaleDamage(0.05)
 	local armors, mul = JMod.LocationalDmgHandling(ply, hitgroup, dmginfo)
