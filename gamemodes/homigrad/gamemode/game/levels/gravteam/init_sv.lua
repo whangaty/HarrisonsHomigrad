@@ -1,4 +1,4 @@
-function gravtdm.StartRoundSV()
+function gravteam.StartRoundSV()
 	tdm.RemoveItems()
 
 	roundTimeStart = CurTime()
@@ -16,7 +16,7 @@ function gravtdm.StartRoundSV()
 	tdm.CenterInit()
 end
 
-function gravtdm.RoundEndCheck()
+function gravteam.RoundEndCheck()
 
 	if roundTimeStart + roundTime - CurTime() <= 0 then EndRound() end
 	
@@ -31,12 +31,12 @@ function gravtdm.RoundEndCheck()
 	tdm.Center()
 end
 
-function gravtdm.EndRound(winner) tdm.EndRoundMessage(winner) end
+function gravteam.EndRound(winner) tdm.EndRoundMessage(winner) end
 
-function gravtdm.PlayerInitialSpawn(ply) ply:SetTeam(math.random(1,2)) end
+function gravteam.PlayerInitialSpawn(ply) ply:SetTeam(math.random(1,2)) end
 
-function gravtdm.PlayerSpawn(ply,teamID)
-	local teamTbl = gravtdm[gravtdm.teamEncoder[teamID]]
+function gravteam.PlayerSpawn(ply,teamID)
+	local teamTbl = gravteam[gravteam.teamEncoder[teamID]]
 	local color = teamTbl[2]
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
 
@@ -66,9 +66,9 @@ function gravtdm.PlayerSpawn(ply,teamID)
 
 end
 
-function gravtdm.PlayerCanJoinTeam(ply,teamID)
+function gravteam.PlayerCanJoinTeam(ply,teamID)
     if teamID == 3 then ply:ChatPrint("Go fuck") return false end
 end
 
-function gravtdm.ShouldSpawnLoot() return false end
-function gravtdm.PlayerDeath(ply,inf,att) return false end
+function gravteam.ShouldSpawnLoot() return false end
+function gravteam.PlayerDeath(ply,inf,att) return false end

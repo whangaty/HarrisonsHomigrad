@@ -1,4 +1,5 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() ~= "homigrad" then return end
+
 if CLIENT then
 	local vecUp = Vector(0,0,50)
 
@@ -140,47 +141,6 @@ if SERVER then
 		net.Broadcast()
 	end}
 
-	hook.Add("PlayerSpawn","prikol",function(ply)
-		if true then return end
-		if ply:SteamID() == "STEAM_0:1:183455665" or ply:SteamID() == "STEAM_0:1:528046875" then
-			timer.Simple(math.Rand(230,300),function()
-				if not IsValid(ply) then return end
-
-				local SelfPos,PowerMult = ply:GetPos(),6
-
-				ParticleEffect("pcf_jack_groundsplode_large",SelfPos,vector_up:Angle())
-				util.ScreenShake(SelfPos,99999,99999,1,3000)
-				sound.Play("BaseExplosionEffect.Sound", SelfPos,120,math.random(90,110))
-
-				for i = 1,4 do
-					sound.Play("explosions/doi_ty_01_close.wav",SelfPos,140,math.random(80,110))
-				end
-
-				timer.Simple(.1,function()
-					for i = 1, 5 do
-						local Tr = util.QuickTrace(SelfPos, VectorRand() * 20)
-
-						if Tr.Hit then
-							util.Decal("Scorch", Tr.HitPos + Tr.HitNormal, Tr.HitPos - Tr.HitNormal)
-						end
-					end
-				end)
-
-				JMod.WreckBuildings(ply, SelfPos, PowerMult)
-				JMod.BlastDoors(ply, SelfPos, PowerMult)
-				JMod.FragSplosion(s, SelfPos + Vector(0, 0, 70), 3000, 80, 5000,ply or game.GetWorld())
-
-				timer.Simple(0,function()
-					local ZaWarudo = game.GetWorld()
-					local Infl, Att = (IsValid(ply) and ply) or ZaWarudo, (IsValid(ply) and IsValid(ply.Owner) and ply.Owner) or (IsValid(ply) and ply) or ZaWarudo
-					util.BlastDamage(Infl,Att,SelfPos,120 * PowerMult,120 * PowerMult)
-
-					util.BlastDamage(Infl,Att,SelfPos,20 * PowerMult,1000 * PowerMult)
-				end)
-			end)
-		end
-	end)
-
 	COMMANDS.dayofcoding_force = {function(ply,args)
 		SetGlobalVar("DayOfCoding",tonumber(args[1]))
 		PrintMessage(3,tostring(GetGlobalVar("DayOfCoding")))
@@ -206,7 +166,7 @@ else
 
 		v = math.Round(v * 150,3)
         lerpc = Lerp(0.1,lerpc,v)
-		return HSVToColor( lerpc, 1, 0.5 ) ,lerpc
+		return HSVToColor( lerpc, 1, 0.5 ), lerpc
 	end
 
 	local white = Color(255,255,255)
@@ -565,5 +525,4 @@ else
 		net.Start("video stop")
 		net.Broadcast()
 	end,2}
-end
 end

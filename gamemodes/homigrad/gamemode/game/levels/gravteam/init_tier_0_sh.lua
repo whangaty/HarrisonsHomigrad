@@ -1,11 +1,11 @@
---table.insert(LevelList,"gravtdm")
-gravtdm = {}
-gravtdm.Name = "Gravity Gun Gambit (TDM)"
+--table.insert(LevelList,"gravteam")
+gravteam = {}
+gravteam.Name = "Gravity Gun Gambit (TDM)"
 
 local models = {}
 for i = 1,9 do table.insert(models,"models/player/group03/male_0" .. i .. ".mdl") end
 
-gravtdm.red = {"Resistance",Color(125,95,60),
+gravteam.red = {"Resistance",Color(125,95,60),
 	weapons = {"weapon_hands","weapon_physcannon","weapon_hg_shovel","medkit","med_band_big"},
 	--main_weapon = {"weapon_sar2","weapon_spas12","weapon_akm","weapon_mp7"},
 	--secondary_weapon = {"weapon_hk_usp","weapon_p220"},
@@ -13,31 +13,32 @@ gravtdm.red = {"Resistance",Color(125,95,60),
 }
 
 
-gravtdm.blue = {"Combine",Color(75,75,125),
+gravteam.blue = {"Combine",Color(75,75,125),
 	weapons = {"weapon_hands","weapon_physcannon","weapon_hg_shovel","medkit","med_band_big"},
 	--main_weapon = {"weapon_sar2","weapon_spas12","weapon_mp7"},
 	--secondary_weapon = {"weapon_hk_usp"},
 	models = {"models/player/combine_soldier.mdl"}
 }
 
-gravtdm.teamEncoder = {
+gravteam.teamEncoder = {
 	[1] = "red",
 	[2] = "blue"
 }
 
-function gravtdm.StartRound()
+function gravteam.StartRound()
 	game.CleanUpMap(false)
 
-	team.SetColor(1,gravtdm.red[2])
-	team.SetColor(2,gravtdm.blue[2])
+	team.SetColor(1,gravteam.red[2])
+	team.SetColor(2,gravteam.blue[2])
 
 	if CLIENT then
 
-		gravtdm.StartRoundCL()
+		gravteam.StartRoundCL()
 		return
 	end
 
-	gravtdm.StartRoundSV()
+	gravteam.StartRoundSV()
 end
-gravtdm.RoundRandomDefalut = 2
-gravtdm.SupportCenter = true
+gravteam.RoundRandomDefalut = 2
+gravteam.SupportCenter = true
+gravteam.NoSelectRandom = true

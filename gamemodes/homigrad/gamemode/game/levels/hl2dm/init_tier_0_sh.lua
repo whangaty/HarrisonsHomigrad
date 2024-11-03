@@ -1,4 +1,4 @@
-table.insert(LevelList,"hl2dm")
+--table.insert(LevelList,"hl2dm")
 hl2dm = {}
 hl2dm.Name = "Half Life 2 Death Match"
 

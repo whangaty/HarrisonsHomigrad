@@ -128,7 +128,8 @@ function hideandseek.PlayerSpawn(ply,teamID)
     if customModel then
         ply:SetModel(customModel)
     else
-        ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+		EasyAppearance.SetAppearance( ply )
+        --ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
     end
 
     ply:SetPlayerColor(color:ToVector())
@@ -236,9 +237,4 @@ function hideandseek.PlayerDeath(ply,inf,att) return false end
 
 function hideandseek.GuiltLogic(ply,att,dmgInfo)
 	if att.isContr and ply:Team() == 2 then return dmgInfo:GetDamage() * 3 end
-end
-
-function hideandseek.NoSelectRandom()
-	local a,b,c = string.find(string.lower(game.GetMap()),"school")
-    return a ~= nil
 end

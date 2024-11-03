@@ -225,7 +225,7 @@ local function PlayerCanJoinTeam(ply,teamID)
 	local favorT,count = NeedAutoBalance(addT,addCT)
 
 	if count and ((teamID == 1 and favorT) or (teamID == 2 and not favorT)) then
-		ply:ChatPrint("Команда полная.")
+		ply:ChatPrint("Team is full.")
 
 		return false
 	end
@@ -280,7 +280,7 @@ votemap:help( "Vote for a map, no args lists available maps." )
 
 function ulx.votemap2(...)
 	if NAXYIRTV then
-		ULib.tsayError(calling_ply,"sorry, but admin ask you посасать член",true)
+		ULib.tsayError(calling_ply,"no",true)
 	else
 		ulx.hvotemap2(...)
 	end

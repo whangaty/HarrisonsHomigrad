@@ -63,10 +63,18 @@ local NULLENTITY = Entity(-1)
 
 hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по разным костям регдолла
 	if ent.nohook then return end
+
+	if ent:GetClass() == "npc_bullseye" then
+		local rag = ent.rag
+		rag:TakeDamageInfo(dmginfo)
+		return false
+	end
+	
 	if ent:IsPlayer() and IsValid(ent.FakeRagdoll) then return end
+	if ent.overridedmg then return end
 	if IsValid(ent:GetPhysicsObject()) and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_CLUB+DMG_GENERIC+DMG_BLAST) then ent:GetPhysicsObject():ApplyForceOffset(dmginfo:GetDamageForce():GetNormalized() * math.min(dmginfo:GetDamage() * 10,3000),dmginfo:GetDamagePosition()) end
 	local ply = RagdollOwner(ent) or ent
-
+	
 	if ent:IsRagdoll() and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_BLAST+DMG_SLASH) then
 		local effdata = EffectData()
 		effdata:SetOrigin(dmginfo:GetDamagePosition())
@@ -80,6 +88,8 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		ply = ent.Owner
 		ent = ply:GetNWEntity("Ragdoll") or ply.FakeRagdoll or ply
 	end
+
+	if not IsValid(ent) then return end
 
 	if not ply or not ply:IsPlayer() or not ply:Alive() or ply:HasGodMode() then
 		return
@@ -129,18 +139,21 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 
 	ply.LastAttacker = att
 	ply.LastHitGroup = hitgroup
+	ply.LastTimeAttacked = CurTime()
 
-	local armors = JMod.LocationalDmgHandling(ply,hitgroup,dmginfo)
+	dmginfo:ScaleDamage(0.05)
+	local armors, mul = JMod.LocationalDmgHandling(ply, hitgroup, dmginfo)
+	dmginfo:ScaleDamage(20)
 	local armorMul,armorDur = 1,0
 	local haveHelmet
-
+	
 	for armorInfo,armorData in pairs(armors) do
 		local dur = armorData.dur / armorInfo.dur
 
 		local slots = armorInfo.slots
 		if dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) then
 			if (slots.mouthnose or slots.head) then
-				sound.Emit(ent,"player/bhit_helmet-1.wav",90)
+				sound.Emit(ent,"player/bhit_helmet-1.wav",90,1)
 
 				haveHelmet = true
 			elseif
@@ -158,7 +171,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 				sound.Emit(ent,"player/kevlar" .. math.random(1,6) .. ".wav",90)
 			end
 		end
-
+		
 		if dur >= 0.25 then
 			armorDur = (armorData.dur / 100) * dur
 			--dur = math.max(dur - 0.5,0)
@@ -168,7 +181,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 			break
 		end
 	end
-
+	
 	dmginfo:SetDamage(dmginfo:GetDamage() * armorMul)
 	local rubatPidor = DamageInfo()
 	rubatPidor:SetAttacker(dmginfo:GetAttacker())
@@ -180,10 +193,12 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 
 	ply.LastDMGInfo = rubatPidor
 
-	dmginfo:ScaleDamage(0.5)
-	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
-	dmginfo:ScaleDamage(0.2)
+	local att = IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker()
 
+	if att and not att:IsNPC() then dmginfo:ScaleDamage(0.5) end
+	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
+	if att and not att:IsNPC() then dmginfo:ScaleDamage(0.2) end
+	
 	if dmginfo:IsDamageType(DMG_BLAST) then
 		dmginfo:ScaleDamage(2)
 	end
@@ -198,7 +213,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		if ply:Health() <= 0 then ply:Kill() end
 		--]]
 
+		ply.overridedmg = true
 		ply:TakeDamageInfo(dmginfo)
+		ply.overridedmg = nil
 	end
 end)
 

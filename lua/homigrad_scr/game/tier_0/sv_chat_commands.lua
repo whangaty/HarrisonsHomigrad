@@ -1,5 +1,7 @@
+if engine.ActiveGamemode() ~= "homigrad" then return end
+
 COMMANDS = COMMANDS or {}
-if engine.ActiveGamemode() == "homigrad" then
+
 function COMMAND_FAKEPLYCREATE()
 	local fakePly = {}
 
@@ -240,7 +242,7 @@ hook.Add("CheckPassword","sync",function(steamID)
 	--if CloseDev then return false,"dev" end
 
 	if MaxPlayers and #getNotDonaters() + 1 > MaxPlayers then
-		return false,"limit players\nСервер заполнен, но есть еще донат слоты!\nМожете их купить здесь http://80.85.241.23"
+		return false,"Player limit\nServer is full, but you can still join if you are a supporter!\n"
 	end
 
 	if Sync then return false,"xd" end
@@ -298,4 +300,3 @@ COMMANDS.submat = {function(ply,args)
 		ply:SetSubMaterial(tonumber(args[1],10),args[2])
 	end
 end}
-end

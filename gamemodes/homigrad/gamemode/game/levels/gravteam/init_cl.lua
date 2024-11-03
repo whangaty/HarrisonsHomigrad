@@ -1,13 +1,13 @@
-gravtdm.GetTeamName = tdm.GetTeamName
+gravteam.GetTeamName = tdm.GetTeamName
 
 local playsound = false
-function gravtdm.StartRoundCL()
+function gravteam.StartRoundCL()
     playsound = true
 end
 
-function gravtdm.HUDPaint_RoundLeft(white)
+function gravteam.HUDPaint_RoundLeft(white)
     local lply = LocalPlayer()
-	local name,color = gravtdm.GetTeamName(lply)
+	local name,color = gravteam.GetTeamName(lply)
 
 	local startRound = roundTimeStart + 7 - CurTime()
     if startRound > 0 and lply:Alive() then

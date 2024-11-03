@@ -16,7 +16,7 @@ if SERVER then
 		self:SpoonEffect()
 
 		
-		local time = 5
+		local time = 3
 		timer.Simple(time - 1,function()
 			player.EventPoint(self:GetPos(),"fragnade pre detonate",1024,self)
 		end)
@@ -59,11 +59,11 @@ elseif CLIENT then
 	function ENT:Think()
 		local State = self:GetState()
 		if(State==JMod.EZ_STATE_ARMED)then 
-		self.nextpip = self.nextpip or CurTime() + 1
+		self.nextpip = self.nextpip or CurTime() + 0.6
 		self.delay = self.delay or 0
 			if self.nextpip <= CurTime() then
-				self.nextpip = CurTime() + (1-self.delay)
-				self.delay = math.Clamp(self.delay + 0.15,0,0.85) or 0
+				self.nextpip = CurTime() + (0.7-self.delay)
+				self.delay = math.Clamp(self.delay + 0.2,0,0.55) or 0
 				self:EmitSound( "weapons/grenade/tick1.wav", 75, 100, 1, CHAN_WEAPON )
 			end
 		end

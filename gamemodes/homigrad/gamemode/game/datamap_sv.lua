@@ -119,7 +119,7 @@ COMMANDS.point = {function(ply,args)
 		if info[1] == args[1] then name = _name break end
 	end
 
-	if not name then ply:ChatPrint("Not allowed!") return end
+	if not name then ply:ChatPrint("No such point!") return end
 
 	local tbl = ReadDataMap(name)
 	local point = {ply:GetPos() + Vector(0,0,5),Angle(0,ply:EyeAngles()[2],0),tonumber(args[2])}

@@ -202,6 +202,4 @@ function juggernaut.GuiltLogic(ply,att,dmgInfo)
     return (not ply.roleT) == (not att.roleT) and 20 or 0
 end
 
-function juggernaut.NoSelectRandom()
-    return #ReadDataMap("spawnpointswick") < 1
-end
+juggernaut.NoSelectRandom = true

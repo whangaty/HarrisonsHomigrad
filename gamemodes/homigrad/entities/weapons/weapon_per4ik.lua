@@ -43,6 +43,8 @@ SWEP.vbwPos = Vector(-6,-3,1)
 SWEP.vbwAng = Angle(-40,-0,-90)
 SWEP.vbwModelScale = 0.9
 
+SWEP.dwr_reverbDisable = true
+
 function SWEP:PrimaryAttack()
 end
 

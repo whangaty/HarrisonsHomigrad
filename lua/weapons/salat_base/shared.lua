@@ -344,6 +344,7 @@ function SWEP:PrimaryAttack()
 		if SERVER then
 			sound.Play("snd_jack_hmcd_click.wav",self:GetPos(),65,100)
 		end
+
 		self.NextShot = CurTime() + self.ShootWait
 		self.AmmoChek = 3
 		return

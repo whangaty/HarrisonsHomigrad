@@ -106,8 +106,8 @@ if CLIENT then
 end
 
 hook.Add("Fake","faked",function(ply, rag)
-    --ply:SetHull(-Vector(0,0,0),Vector(0,0,0))
-	--ply:SetHullDuck(-Vector(0,0,0),Vector(0,0,0))
+    ply:SetHull(-Vector(1,1,1),Vector(1,1,1))
+	ply:SetHullDuck(-Vector(1,1,1),Vector(1,1,1))
     ply:SetViewOffset(Vector(0,0,0))
     ply:SetViewOffsetDucked(Vector(0,0,0))
     ply:SetMoveType(MOVETYPE_NONE)

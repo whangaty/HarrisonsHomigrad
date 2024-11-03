@@ -72,20 +72,22 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
     end
 
     local penetration = dmginfo:GetDamageForce()
+    
     if dmginfo:IsDamageType(DMG_BULLET + DMG_SLASH) then
         penetration:Mul(0.015)
     else
         penetration:Mul(0.004)
     end
-
+    
     penetration:Mul(armorMul)
-
+    
     if not rag or (rag and not dmginfo:IsDamageType(DMG_CRUSH)) then
-        local dmg = dmginfo:GetDamage() * armorMul
-
+        local dmg = dmginfo:GetDamage() * armorMul * 0.1
+        
         if
             hitgroup == HITGROUP_HEAD and
-            math.random(1,math.max(math.floor(armorDur),1)) == 1 and dmginfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_CLUB+DMG_GENERIC+DMG_BUCKSHOT)
+            math.random(1,math.max(math.floor(armorDur),1)) == 1 and dmginfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_CLUB+DMG_GENERIC+DMG_BUCKSHOT) and
+            not haveHelmet
         then
             timer.Simple(0.01,function()
                 local wep = ply:GetActiveWeapon()
@@ -93,7 +95,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             end)
         end
 
-        local dmgpos = dmginfo:GetDamagePosition()
+        local dmgpos = dmginfo:GetDamagePosition()-- - penetration:GetNormalized() * 0.5
 
         local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Spine2'))
         local huy = util.IntersectRayWithOBB(dmgpos,penetration,pos,ang,Vector(-1,0,-6),Vector(10,6,6))
@@ -110,7 +112,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         end
 
         local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Head1'))
-        local huy = util.IntersectRayWithOBB(dmgpos,penetration,pos,ang,Vector(3,-6,-4), Vector(9,4,4))
+        local huy = util.IntersectRayWithOBB(dmgpos,penetration,pos,ang,Vector(3,-4,-2.5), Vector(7,3,2.5))
 
         if huy then
             if ply.Organs['brain']!=0 and dmginfo:IsDamageType(DMG_BULLET) and not inf.RubberBullets then

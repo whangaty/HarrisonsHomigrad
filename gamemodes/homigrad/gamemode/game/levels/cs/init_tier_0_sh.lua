@@ -7,14 +7,14 @@ css.WinPoints = css.WinPoints or {}
 css.WinPoints[1] = css.WinPoints[1] or 0
 css.WinPoints[2] = css.WinPoints[2] or 0
 
-css.red = {"Террористы",Color(176,0,0),
+css.terrorists = {"Terrorists",Color(176,0,0),
 	weapons = {"megamedkit","weapon_binokle","weapon_hands","weapon_hg_hatchet","med_band_small","med_band_big","med_band_small","painkiller","weapon_handcuffs","weapon_radio"},
 	main_weapon = {"weapon_asval", "weapon_mp5", "weapon_m3super"},
 	secondary_weapon = {"weapon_beretta","weapon_p99","weapon_beretta"},
 	models = {"models/player/leet.mdl","models/player/phoenix.mdl"}
 }
 
-css.blue = {"Контр-Терористы",Color(79,59,187),
+css.counterterrorists = {"Counter-Terrorists",Color(79,59,187),
 	weapons = {"megamedkit","weapon_binokle","weapon_hg_hatchet","weapon_hands","med_band_big","med_band_small","medkit","painkiller","weapon_handcuffs","weapon_radio"},
 	main_weapon = {"weapon_m4a1","weapon_mp7","weapon_galil"},
 	secondary_weapon = {"weapon_hk_usp", "weapon_mateba"},
@@ -22,8 +22,8 @@ css.blue = {"Контр-Терористы",Color(79,59,187),
 }
 
 css.teamEncoder = {
-	[1] = "red",
-	[2] = "blue"
+	[1] = "terrorists",
+	[2] = "counterterrorists"
 }
 
 function css.StartRound()
@@ -31,8 +31,8 @@ function css.StartRound()
 	game.CleanUpMap(false)
     css.points = {}
     if !file.Read( "homigrad/maps/controlpoint/"..game.GetMap()..".txt", "DATA" ) and SERVER then
-        print("Скажите админу чтоб тот создал !point control_point или хуярьтесь без Точек Захвата.") 
-        PrintMessage(HUD_PRINTCENTER, "Скажите админу чтоб тот создал !point control_point или хуярьтесь без Точек Захвата.")
+        print("Tell the admin to add points using \"!point control_point\" or fight without control points") 
+        PrintMessage(HUD_PRINTCENTER, "Tell the admin to add points using \"!point control_point\" or fight without control points")
     end
 
     css.LastWave = CurTime()
@@ -61,22 +61,7 @@ function css.StartRound()
     css.StartRoundSV()
 end
 
---тот кто это кодил нужно убить нахуй
 css.RoundRandomDefalut = 1
 css.SupportCenter = true
 
-/*function css.StartRound()
-	game.CleanUpMap(false)
-
-	team.SetColor(1,red)
-	team.SetColor(2,blue)
-
-	if CLIENT then
-		css.StartRoundCL()
-		return
-	end
-
-	css.StartRoundSV()
-end
-css.RoundRandomDefalut = 2
-css.SupportCenter = false*/
+css.NoSelectRandom = true

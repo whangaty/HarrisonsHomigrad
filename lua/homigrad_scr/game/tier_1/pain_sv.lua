@@ -13,7 +13,7 @@ if engine.ActiveGamemode() == "homigrad" then
 
     hook.Add("HomigradDamage", "PlayerPainGrowth", function(ply, hitGroup, dmginfo, rag, armorMul)
         if dmginfo:GetAttacker():IsRagdoll() then return end
-        local dmg = dmginfo:GetDamage() * 1.3
+        local dmg = dmginfo:GetDamage() * 1.3 * armorMul
 
         local isBlast = dmginfo:IsDamageType(DMG_BLAST)
         local isSlash = dmginfo:IsDamageType(DMG_SLASH)

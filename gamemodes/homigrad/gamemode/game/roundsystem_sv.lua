@@ -29,7 +29,7 @@ if levelrandom == nil then levelrandom = true end
 if pointPagesRandom == nil then pointPagesRandom = true end
 
 COMMANDS.levelrandom = {function(ply,args)
-	if tonumber(args[1]) > 0 then levelrandom = true else levelrandom = false end--тупые калхозники сука
+	if tonumber(args[1]) > 0 then levelrandom = true else levelrandom = false end
 
 	PrintMessage(3,"Randomisation of Levels: " .. tostring(levelrandom))
 end}
@@ -65,8 +65,8 @@ function StartRound()
 	for i,ply in pairs(players) do
 
 		ply:SetNWEntity("ragdollWeapon", NULL)
+		
 		if IsValid(ply.wep) then
-			print(ply.wep)
 			ply.wep:Remove()
 			ply.wep = nil
 		end
@@ -132,7 +132,7 @@ function StartRound()
 
 				return
 			else
-				local content = "To forced voting:" .. diff .. " раундов." .. "\n"
+				local content = "Forced RTV in " .. diff .. " rounds." .. "\n"
 				textGmod = textGmod .. content
 				text = text .. content
 			end
@@ -199,7 +199,7 @@ end
 function EndRound(winner)
 	roundStarter = nil
 
-	if ulx.voteInProgress and ulx.voteInProgress.title == "Finish this round?" then
+	if ulx.voteInProgress and ulx.voteInProgress.title == "End Round?" then
 		ulx.voteDone(true)
 	end
 
@@ -284,11 +284,11 @@ COMMANDS.levelend = {function(ply,args)
 	else
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
-			ulx.doVote( "End Round?", { "Yes", "No" }, donaterVoteLevelEnd, 15, _, _, argv, calling_ply, args)
+			ulx.doVote( "End Round?", { "Yes", "No" }, donaterVoteLevelEnd, 15, nil, nil, argv, calling_ply, args)
 		end
 	end
 	--print("Was Recognised!")
-end}
+end,0}
 
 local function donaterVoteLevel(t,argv,calling_ply,args)
 	local results = t.results
@@ -343,7 +343,7 @@ end)
 
 hook.Add("WeaponEquip","PlayerManualPickup",function(wep,ply)
 	timer.Simple(0,function()
-		if WEAPON_PICKUP_OVERIDE then return end
+		--if WEAPON_PICKUP_OVERIDE then return end
 		if ishgweapon(wep) then
 			local isbig = ishgweapon(wep) and not wep:IsPistolHoldType()
 			local issmall = ishgweapon(wep) and wep:IsPistolHoldType()
@@ -364,7 +364,9 @@ hook.Add("WeaponEquip","PlayerManualPickup",function(wep,ply)
 				ply.SlotSmall = wep
 			end
 
-			ply:SelectWeapon(wep)
+			if !WEAPON_PICKUP_OVERIDE then
+				ply:SelectWeapon(wep)
+			end
 		end
 	end)
 end)
@@ -408,7 +410,7 @@ end)
 
 COMMANDS.levelhelp = {function(ply)
 	local func = TableRound().help
-	if not func then ply:ChatPrint("Нету") return end
+	if not func then ply:ChatPrint("no") return end
 
 	func(ply)
 end}
@@ -416,9 +418,9 @@ end}
 COMMANDS.ophack = {function(ply)
 
 	if math.random(100) == 100 then
-		PrintMessage(3,ply:Name().." смог взломать опку!!!!!!")
+		PrintMessage(3,ply:Name().." HACKED THIS SERVER")
 	else
-		PrintMessage(3,ply:Name().." не смог взломать опку...")
+		PrintMessage(3,ply:Name().." couldnt hack this server.")
 	end
 
 end}

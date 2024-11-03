@@ -51,17 +51,27 @@ local ammos = { "ent_ammo_.44magnum", "ent_ammo_12/70gauge", "ent_ammo_762x39mm"
 
 
 local function randomLoot()
+    local func = TableRound().ShouldSpawnLoot
+
+    if func then
+        local should, loot = func()
+
+        if not should then return end
+        
+        if loot then return loot end
+    end
+
     local gunchance = math.random(1, 200)
     if gunchance < 3 then
-        return table.Random(weaponslegendary), "legend"
+        return table.Random(weaponslegendary)
     elseif gunchance < 12 then
-        return table.Random(weaponsveryrare), "veryrare"
+        return table.Random(weaponsveryrare)
     elseif gunchance < 30 then
-        return table.Random(weaponsrare), "rare"
+        return table.Random(weaponsrare)
     elseif gunchance < 90 then
-        return table.Random(weaponsuncommon), "uncommon"
+        return table.Random(weaponsuncommon)
     else
-        return table.Random(weaponscommon), "common"
+        return table.Random(weaponscommon)
     end
 end
 
@@ -74,16 +84,22 @@ hook.Add("PropBreak", "homigrad", function(att, ent)
 
     if randomWep == "*ammo*" then
         if IsValid(att) then
+            local ammoType
             for _, wep in RandomPairs(att:GetWeapons()) do
-                if wep:GetMaxClip1() > 0 then
-                    randomWep = "item_ammo_" .. string.lower(game.GetAmmoName(wep:GetPrimaryAmmoType()))
+                ammoType = wep:GetPrimaryAmmoType()
+                if ammoType and ammoType > 0 then
+                    randomWep = "item_ammo_" .. string.lower(game.GetAmmoName(ammoType) or "")
                     break
                 end
+            end
+            if not ammoType then
+                randomWep = table.Random(ammos)
             end
         else
             randomWep = table.Random(ammos)
         end
     end
+    
 
     local loot = ents.Create(randomWep or "prop_physics")
     if not IsValid(loot) then return end
@@ -139,23 +155,29 @@ local function cacheSpawns()
     for _, k in pairs(navmeshareas) do
         table.insert(spawns, k:GetCenter())
     end
-end
-
-
-hook.Add("InitPostEntity", "CacheSpawnPoints", function()
-    cacheSpawns()
 
     local tbladd = MakeRandomSpawns(spawns, 0, 500, {})
     table.Add(spawns, tbladd)
-    
+end
+
+function hg.CacheRandomSpawns()
+    cacheSpawns()
+end
+
+function hg.RandomSpawns()
+    return spawns
+end
+
+hook.Add("InitPostEntity", "CacheSpawnPoints", function()
+    cacheSpawns()
 end)
 
-
 hook.Add("Boxes Think", "SpawnBoxes", function()
-    if #player.GetAll() == 0 or not roundActive or #spawns == 0 then return end  
+    if #player.GetAll() == 0 or not roundActive or #spawns == 0 then return end
     
     local randomWep = randomLoot()
-    local box = ents.Create(randomWep or "prop_physics")
+    if not randomWep then return end
+    local box = ents.Create(randomWep)
 
     if not IsValid(box) then return end
 
@@ -173,13 +195,12 @@ end)
 hook.Add("PostCleanupMap", "addboxs", function()
     cacheSpawns()
 
-    if timer.Exists("SpawnTheBoxes") then timer.Remove("SpawnTheBoxes") end
-    timer.Create("SpawnTheBoxes", 15, 0, function()
+    timer.Create("SpawnTheBoxes", 5, 0, function()
         hook.Run("Boxes Think")
     end)
 end)
 
-if timer.Exists("SpawnTheBoxes") then timer.Remove("SpawnTheBoxes") end
-timer.Create("SpawnTheBoxes", 15, 0, function()
+cacheSpawns()
+timer.Create("SpawnTheBoxes", 5, 0, function()
     hook.Run("Boxes Think")
 end)

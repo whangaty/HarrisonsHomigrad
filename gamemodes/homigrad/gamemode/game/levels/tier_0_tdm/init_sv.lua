@@ -160,9 +160,9 @@ function tdm.RoundEndCheck()
 	if CTAlive == 0 then EndRound(1) end
 end
 
-function tdm.EndRoundMessage(winner,textNobody)
+function tdm.EndRoundMessage(winner)
 	local tbl = TableRound()
-	PrintMessage(3,"Winning Team: " .. ((winner == 1 and tbl.red[1]) or (winner == 2 and tbl.blue[1]) or (textNobody or "Nobody!")) .. ".")
+	PrintMessage(3,"Winning Team: " .. (winner == 0 and "Nobody" or tbl[tbl.teamEncoder[winner]] and tbl[tbl.teamEncoder[winner]][1] or "Nobody") .. ".")
 end
 
 function tdm.EndRound(winner) tdm.EndRoundMessage(winner) end

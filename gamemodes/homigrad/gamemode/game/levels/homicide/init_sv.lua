@@ -14,7 +14,8 @@ local function GetFriends(play)
 end
 
 COMMANDS.homicide_get = {function(ply,args)
-    if not ply:IsAdmin() then return end
+    if not (ply:IsAdmin() or (ply:GetUserGroup() == "operator") or (ply:GetUserGroup() == "tmod")) then return end
+    if ply:Alive() then return end
 
     local role = {{},{}}
 
@@ -27,6 +28,8 @@ COMMANDS.homicide_get = {function(ply,args)
     net.WriteTable(role)
     net.Send(ply)
 end}
+
+CreateClientConVar("homicide_get",0,true,true,"show traitors and stuff while you're spectating", 0, 1)
 
 local function makeT(ply)
     ply.roleT = true --Игрока не существует. Выдаёт из-за этого ошибку в первый раз.
@@ -240,7 +243,7 @@ end
 local aviable = ReadDataMap("spawnpointsct")
 
 COMMANDS.forcepolice = {function(ply)
-    if not ply:IsAdmin() then PrintMessage(3,"Пошел нахуй, ОПку не взломал еще.") return end
+    if not ply:IsAdmin() then PrintMessage(3,"nope") return end
     homicide.police = false
 
     roundTime = 0
@@ -282,6 +285,9 @@ function homicide.RoundEndCheck()
             for _, ply in pairs(ctPlayers) do
                 ply:ChatPrint(#homicide.t > 1 and ("The traitors are: <clr:red>" .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("The traitor is: <clr:red>" .. homicide.t[1]:Name()))
                 ply:ChatPrint("<clr:red>WARNING: <clr:white>Killing friendlies will result in a punishment determined by staff.")
+                net.Start("homicide_roleget")
+                net.WriteTable({{},{}})
+                net.Send(ply)
             end
 		end
 	end
@@ -341,7 +347,7 @@ util.AddNetworkString("homicide_roleget")
 function homicide.SyncRole(ply,teamID)
     local role = {{},{}}
 
-for i,ply in pairs(team.GetPlayers(1)) do
+    for i,ply in pairs(team.GetPlayers(1)) do
         if teamID ~= 2 and ply.roleT then table.insert(role[1],ply) end
         if teamID ~= 1 and ply.roleCT then table.insert(role[2],ply) end
     end
@@ -351,26 +357,40 @@ for i,ply in pairs(team.GetPlayers(1)) do
     net.Send(ply)
 end
 
-function homicide.PlayerDeath(ply,inf,att) return false end
+function homicide.PlayerDeath(ply,inf,att)
+    if (ply:IsAdmin() or (ply:GetUserGroup() == "operator") or (ply:GetUserGroup() == "tmod")) and ply:GetInfoNum("homicide_get",0) then
+        local role = {{},{}}
+
+        for i,ply in pairs(team.GetPlayers(1)) do
+            if ply.roleT then table.insert(role[1],ply) end
+            if ply.roleCT then table.insert(role[2],ply) end
+        end
+    
+        net.Start("homicide_roleget")
+        net.WriteTable(role)
+        net.Send(ply)
+    end
+    return false
+end
 
 local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
 local uncommon = {"medkit","weapon_molotok","weapon_per4ik","painkiller"}
 local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_mateba","weapon_m590"}
 
 function homicide.ShouldSpawnLoot()
-if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
-local chance = math.random(100)
-if chance < 2 and not homicide.roundType == 3 then
-    return true,rare[math.random(#rare)],"legend"
-elseif chance < 20 then
-    return true,uncommon[math.random(#uncommon)],"veryrare"
-elseif chance < 60 then
-    return true,common[math.random(#common)],"common"
-else
-    return false
-end
---else
-    --return true
+    if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
+    local chance = math.random(100)
+    if chance < 2 and not homicide.roundType == 3 then
+        return true,rare[math.random(#rare)],"legend"
+    elseif chance < 20 then
+        return true,uncommon[math.random(#uncommon)],"veryrare"
+    elseif chance < 60 then
+        return true,common[math.random(#common)],"common"
+    else
+        return false
+    end
+    --else
+        --return true
 end
 
 function homicide.ShouldDiscordOutput(ply,text)

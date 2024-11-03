@@ -47,9 +47,19 @@ local team_GetPlayers = team.GetPlayers
 function PlayersInGame()
     local newTbl = {}
 
-    for i,ply in pairs(team_GetPlayers(1)) do newTbl[i] = ply end
-    for i,ply in pairs(team_GetPlayers(2)) do newTbl[#newTbl + 1] = ply end
-    for i,ply in pairs(team_GetPlayers(3)) do newTbl[#newTbl + 1] = ply end
+    for i,ply in pairs(team_GetPlayers(1)) do table.insert(newTbl, ply) end
+    for i,ply in pairs(team_GetPlayers(2)) do table.insert(newTbl, ply) end
+    for i,ply in pairs(team_GetPlayers(3)) do table.insert(newTbl, ply) end
 
     return newTbl
+end
+
+function PlayersAlive()
+    local newTbl = PlayersInGame()
+
+    for i,ply in pairs(newTbl) do
+		if not ply:Alive() then table.remove(newTbl, i) end
+	end
+
+	return newTbl
 end

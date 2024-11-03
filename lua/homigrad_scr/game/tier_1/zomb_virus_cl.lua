@@ -20,12 +20,12 @@ hook.Add("HUDPaint","VirusEffect",function()
         local pulse2 = math.sin(-CurTime()*2)
         if virus > 70 then
             viruslerp2 = Lerp(0.005,viruslerp2,(virus*1.5)+pulse*15)
-            surface.SetMaterial(zombueoverlay2)
+            --surface.SetMaterial(zombueoverlay2)
             surface.SetDrawColor(0,0,0,viruslerp2)
             surface.DrawTexturedRect(-50+pulse*8,-50+pulse*8,w+50+pulse2*8,h+50+pulse2*8)
         end
         viruslerp = Lerp(0.1,viruslerp,(virus*.5)+pulse)
-        surface.SetMaterial(zombieoverlay)
+        --surface.SetMaterial(zombieoverlay)
         surface.SetDrawColor(0,0,0,viruslerp*2)
         surface.DrawTexturedRect(-150,-150,w+150,h+150)
     else

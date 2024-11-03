@@ -140,7 +140,8 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_clue_2022",
     "ttt_bank_change",
     "gm_apartments_hl2",
-    "ttt_ile_v4"
+    "ttt_ile_v4",
+    "freeway_thicc_v2"
 
 }
 
@@ -254,12 +255,12 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = 'cs_insertion2_dusk', displayname = 'Insertion II',image="https://i.imgur.com/KJAthSW.jpeg", width = 1920, height = 1080 },
     { filename = 'gm_kleinercomcenter', displayname = 'Communtity Center',image="https://i.imgur.com/NfqaleF.jpeg", width = 1920, height = 1080 },
     { filename = 'mu_smallotown_v2_13', displayname = 'Small Town (Day)',image="https://i.imgur.com/gYI8nD0.jpeg", width = 1920, height = 1080 },
-    { filename = 'gm_freeway_spacetunnel', displayname = 'Spaceway',image="https://i.imgur.com/ie9t8tL.jpeg", width = 1920, height = 1080},
 
     { filename = 'gm_building', displayname = 'Office Building',image="https://i.imgur.com/DIgrELg.jpeg", width = 1920, height = 1080 },
     { filename = 'gm_apartments_v2', displayname = 'Apartments',image="https://i.imgur.com/KPBfKDx.jpeg", width = 1920, height = 1080 },
     { filename = 'ttt_clue_2022', displayname = 'Clue',image="https://i.imgur.com/dHWDpkI.jpeg", width = 1920, height = 1080 },
     { filename = 'ttt_bank_change', displayname = 'Bank',image="https://i.imgur.com/aGJXyWJ.jpeg", width = 1920, height = 1080 },
     { filename = 'ttt_ile_v4', displayname = 'Lighthouse',image="https://i.imgur.com/pcBZ56Z.jpeg", width = 1920, height = 1080 },
+    { filename = "freeway_thicc_v2", displayname = 'Freeway',image="https://i.imgur.com/pcBZ56Z.jpeg", width = 1920, height = 1080 },
 
 }

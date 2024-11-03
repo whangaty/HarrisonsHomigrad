@@ -95,22 +95,25 @@ hook.Add("DoPlayerDeath","huyhuy",function(ply)
 			local rag = ply:GetNWEntity("Ragdoll",ply.FakeRagdoll)
 			rag = IsValid(rag) and rag or ply.FakeRagdoll
 			if not IsValid(rag) then return end
+			if not IsValid(ent) then return end
 			ent:SetClip1(clip1)
 			ent:SetTable(tbl)
 			--ent:SetOwner(rag)
 			ent:SetParent(rag, 0)
 			--ent:SetSubMaterial(-1,"null")
 			ent:SetMaterial("null")
+			ent.Spawned = true
 			--timer.Simple(0,function() ent:SetRenderMode(RENDERMODE_NONE) end)
 		end)
 
 		ent:Spawn()
 		ent:SetMaterial("null")
+		ent.Spawned = true
 		--ent:SetRenderMode(RENDERMODE_NONE)
 		--ent:SetMaterial("")
 		--ent:SetNoDraw(true)
 		ent:DrawShadow(false)
-		ent:SetSolidFlags(FSOLID_NOT_SOLID)
+		ent:AddSolidFlags(FSOLID_NOT_SOLID)
 
 		if IsValid(wep) then wep:Remove() end
 		ply.weps[class] = ent
@@ -143,7 +146,7 @@ net.Receive("ply_take_item",function(len,ply)
 	local lootEnt = net.ReadEntity()
 	if not IsValid(lootEnt) then return end
 	if lootEnt:IsPlayer() and not IsValid(lootEnt.FakeRagdoll) then return end
-	
+	if ply:GetAttachment(ply:LookupAttachment("eyes")).Pos:Distance(lootEnt:GetPos()) > 100 then return end
 	--local weapon = net.ReadEntity()
 	--local wep = weapon:GetClass()
 
@@ -152,7 +155,7 @@ net.Receive("ply_take_item",function(len,ply)
 	local wep = net.ReadString()
 	local weapon = lootInfo.Weapons[wep]
 
-	if not weapon then return end
+	if not IsValid(weapon) then return end 
 	
 	if prekol[wep] and not ply:IsAdmin() then ply:Kick(trollmsgs[math.random(#trollmsgs)]) return end
 
@@ -172,7 +175,8 @@ net.Receive("ply_take_item",function(len,ply)
 
 		weapon:SetRenderMode(RENDERMODE_NORMAL)
 		weapon:DrawShadow(true)
-		--weapon:SetSolidFlags(FSOLID_)
+		--weapon:RemoveSolidFlags(FSOLID_NOT_SOLID)
+		weapon:SetMaterial("")
 
 		lootInfo.Weapons[wep] = nil
 		
