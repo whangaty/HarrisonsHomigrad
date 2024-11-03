@@ -48,6 +48,14 @@ RTV_CountRoundMessage = 5
 CountRoundRandom = CountRoundRandom or 0
 RoundRandomDefalut = 1
 
+local validUserGroup = {
+	supporter = true,
+	supporterplus = true,
+	sponsor = true,
+	operator = true,
+	tmod = true
+}
+
 function StartRound()
 	WEAPON_PICKUP_OVERIDE = true
 	if SERVER and pointPagesRandom then
@@ -283,7 +291,7 @@ COMMANDS.levelend = {function(ply,args)
 		EndRound()
 	else
 		local calling_ply = ply
-		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
+		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and ply:GetUserGroup() == validUserGroup[group] then
 			ulx.doVote( "End Round?", { "Yes", "No" }, donaterVoteLevelEnd, 15, nil, nil, argv, calling_ply, args)
 		end
 	end
