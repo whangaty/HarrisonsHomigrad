@@ -327,7 +327,7 @@ COMMANDS.levelnext = {function(ply,args)
 		if not SetActiveNextRound(args[1]) then ply:ChatPrint("Error has occured!") return end
 	else
 		local calling_ply = ply
-		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and table.HasValue(LevelList,args[1]) then
+		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and table.HasValue(LevelList,args[1]) and (calling_ply:GetUserGroup() == "supporter" or calling_ply:GetUserGroup() == "supporterplus" or calling_ply:GetUserGroup() == "sponsor" or calling_ply:GetUserGroup() == "tmod" or calling_ply:GetUserGroup() == "operator") then
 			ulx.doVote( "Change the Gamemode next level to: " .. tostring(args[1]) .. "?", { "Yes","No" }, donaterVoteLevel, 15, _, _, argv, calling_ply, args)
 		end
 	end
