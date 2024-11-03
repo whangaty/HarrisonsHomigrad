@@ -291,7 +291,7 @@ COMMANDS.levelend = {function(ply,args)
 		EndRound()
 	else
 		local calling_ply = ply
-		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and ply:GetUserGroup() == validUserGroup[group] then
+		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and (calling_ply:GetUserGroup() == "supporter" or calling_ply:GetUserGroup() == "supporterplus" or calling_ply:GetUserGroup() == "sponsor" or calling_ply:GetUserGroup() == "tmod" or calling_ply:GetUserGroup() == "operator") then
 			ulx.doVote( "End Round?", { "Yes", "No" }, donaterVoteLevelEnd, 15, nil, nil, argv, calling_ply, args)
 		end
 	end
