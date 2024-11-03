@@ -128,7 +128,8 @@ function hideandseek.PlayerSpawn(ply,teamID)
     if customModel then
         ply:SetModel(customModel)
     else
-        ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+		EasyAppearance.SetAppearance( ply )
+        --ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
     end
 
     ply:SetPlayerColor(color:ToVector())

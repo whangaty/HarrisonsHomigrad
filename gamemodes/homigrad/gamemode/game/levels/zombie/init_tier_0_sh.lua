@@ -1,3 +1,12 @@
+-- Doesn't do anything just yet.
+local blacklist = {
+    "ttt_minecraft_b5",
+    "ttt_minecraftcity_v4",
+    "freeway_thicc_v2",
+    "ttt_airbus_b3",
+    "gm_wick",
+}
+
 table.insert(LevelList,"zombie")
 zombie = {}
 zombie.Name = "Zombie Survival"

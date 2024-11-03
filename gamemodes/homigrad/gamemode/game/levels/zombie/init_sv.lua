@@ -11,7 +11,7 @@ function zombie.StartRoundSV(data)
 
     local players = team.GetPlayers(1)
 
-	local spawnsT = ReadDataMap("spawnpoints_ss_school")
+	local spawnsT = ReadDataMap("spawnpointshiders")
 	local spawnsCT = ReadDataMap("spawnpointshiders")
 
 	tdm.SpawnCommand(team.GetPlayers(1),spawnsT)
@@ -35,7 +35,7 @@ function zombie.RoundEndCheck()
     if roundTimeStart + roundTime < CurTime() then
 		if not zombie.police then
 			zombie.police = true
-			PrintMessage(3,"National Guards have arrived! Survivors can now escape through select points on the map.")
+			PrintMessage(3,"Survivors can now escape through select points on the map.")
 
 			local aviable = ReadDataMap("spawnpointsct")
 
@@ -126,7 +126,7 @@ function zombie.PlayerSpawn(ply,teamID)
     if customModel then
         ply:SetModel(customModel)
     else
-        ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+        EasyAppearance.SetAppearance( ply )
     end
 
     ply:SetPlayerColor(color:ToVector())
