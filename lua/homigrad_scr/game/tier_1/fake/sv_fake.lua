@@ -732,7 +732,7 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force)
 
 		local matrix = self:GetBoneMatrix(bone)
 
-		phys:SetMass(IdealMassPlayer[rag:GetBoneName(bone)] or CustomWeight[rag:GetModel()] or 4)
+		phys:SetMass(CustomWeight[rag:GetModel()] or IdealMassPlayer[rag:GetBoneName(bone)] or 20)
 		phys:SetVelocity(vel)
 
 		phys:SetPos(matrix:GetTranslation())
