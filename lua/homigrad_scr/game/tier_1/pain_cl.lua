@@ -18,10 +18,10 @@ local k4 = 0
 local time = 0
 
 -- FIXME: Unconcious Text may not appear at times.
-hook.Add("HUDDrawScoreBoard", "unconsciousnessInfo", function()
+hook.Add("HUDPaintBackground", "unconsciousnessInfo", function()
     local ply = LocalPlayer()
 
-    if ply:GetNWInt("unconscious") and ply:Alive() and not ply:Team() == TEAM_SPECTATOR then
+    if ply:GetNWInt("unconscious") and ply:Alive() and ply:Team() ~= TEAM_SPECTATOR then
         draw.DrawText("You are currently unconscious.", "HomigradFontNotify", ScrW() / 2, ScrH() / 2.1,
             Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
 
