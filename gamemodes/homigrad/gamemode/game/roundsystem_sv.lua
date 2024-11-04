@@ -48,14 +48,6 @@ RTV_CountRoundMessage = 5
 CountRoundRandom = CountRoundRandom or 0
 RoundRandomDefalut = 1
 
-local validUserGroup = {
-	supporter = true,
-	supporterplus = true,
-	sponsor = true,
-	operator = true,
-	tmod = true
-}
-
 function StartRound()
 	WEAPON_PICKUP_OVERIDE = true
 	if SERVER and pointPagesRandom then
@@ -291,7 +283,7 @@ COMMANDS.levelend = {function(ply,args)
 		EndRound()
 	else
 		local calling_ply = ply
-		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and (calling_ply:GetUserGroup() == "supporter" or calling_ply:GetUserGroup() == "supporterplus" or calling_ply:GetUserGroup() == "sponsor" or calling_ply:GetUserGroup() == "tmod" or calling_ply:GetUserGroup() == "operator") then
+		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
 			ulx.doVote( "End Round?", { "Yes", "No" }, donaterVoteLevelEnd, 15, nil, nil, argv, calling_ply, args)
 		end
 	end
@@ -327,7 +319,7 @@ COMMANDS.levelnext = {function(ply,args)
 		if not SetActiveNextRound(args[1]) then ply:ChatPrint("Error has occured!") return end
 	else
 		local calling_ply = ply
-		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and table.HasValue(LevelList,args[1]) and (calling_ply:GetUserGroup() == "supporter" or calling_ply:GetUserGroup() == "supporterplus" or calling_ply:GetUserGroup() == "sponsor" or calling_ply:GetUserGroup() == "tmod" or calling_ply:GetUserGroup() == "operator") then
+		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and table.HasValue(LevelList,args[1]) then
 			ulx.doVote( "Change the Gamemode next level to: " .. tostring(args[1]) .. "?", { "Yes","No" }, donaterVoteLevel, 15, _, _, argv, calling_ply, args)
 		end
 	end
