@@ -17,6 +17,7 @@ local k = 0
 local k4 = 0
 local time = 0
 
+-- FIXME: Unconcious Text may not appear at times.
 hook.Add("HUDDrawScoreBoard", "unconsciousnessInfo", function()
     local ply = LocalPlayer()
 
@@ -46,9 +47,6 @@ surface.CreateFont("HomigradFontBig",{
 	outline = false,
 	shadow = true
 })
-
--- TODO: Check if we can place pain levels here?
-
 hook.Add("HUDPaint","PainEffect",function()
     if not LocalPlayer():Alive() or ply:Team() == 1002 then return end
 
