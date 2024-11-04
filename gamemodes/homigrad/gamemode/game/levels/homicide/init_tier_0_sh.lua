@@ -30,6 +30,7 @@ end
 }--]]
 
 local homicide_setmode = CreateConVar("homicide_setmode","",FCVAR_LUA_SERVER,"")
+CreateClientConVar("homicide_get",0,true,true,"show traitors and stuff while you're spectating", 0, 1)
 
 function homicide.IsMapBig()
     local mins,maxs = game.GetWorld():GetModelBounds()
