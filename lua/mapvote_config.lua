@@ -118,7 +118,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     --"gm_freeway_spacetunnel",
     "ttt_minecraft_b5",
     "ttt_minecraftcity_v4",
-    "gm_deschool",
+    --"gm_deschool",
     "dm_steamlab",
     "ttt_airbus_b3",
     --"ttt_grovestreet_a13",

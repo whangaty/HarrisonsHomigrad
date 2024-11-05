@@ -29,8 +29,6 @@ COMMANDS.homicide_get = {function(ply,args)
     net.Send(ply)
 end}
 
-CreateClientConVar("homicide_get",0,true,true,"show traitors and stuff while you're spectating", 0, 1)
-
 local function makeT(ply)
     ply.roleT = true --Игрока не существует. Выдаёт из-за этого ошибку в первый раз.
     table.insert(homicide.t,ply)
