@@ -278,19 +278,21 @@ local function donaterVoteLevelEnd(t,argv,calling_ply,args)
 	calling_ply.canVoteNext = CurTime() + 300
 end
 
+
+--[[I'm losing my fucking mind over this damn command. I fucking despise it and everything it fucking stands for.
 COMMANDS.levelend = {function(ply,args)
 	if ply:IsAdmin() or ply:GetUserGroup("operator") then
 		EndRound()
-		--[[]
 	else
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
 			ulx.doVote( "End Round?", { "Yes", "No" }, donaterVoteLevelEnd, 15, nil, nil, argv, calling_ply, args)
 		end
-		]]
+	
 	end
 	--print("Was Recognised!")
 end,0}
+--]]
 
 local function donaterVoteLevel(t,argv,calling_ply,args)
 	local results = t.results
