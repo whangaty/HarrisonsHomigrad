@@ -1,6 +1,6 @@
 util.AddNetworkString("afk")
 
 net.Receive("afk",function(len,ply)
-	ply:SetTeam(1002)
 	ply:KillSilent()
+	ply:Kick("You have been kicked for idling for 5 minutes.")
 end)
