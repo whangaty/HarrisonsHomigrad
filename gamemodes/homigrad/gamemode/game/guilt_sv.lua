@@ -82,6 +82,7 @@ function GuiltCheck(att,ply)
 				--att:Kill()
 				--RunConsoleCommand("ulx","tsay","<clr:red>[GUILT] "..att:Name().." has been slayed for exceeding their guilt of 100%.")
 				--att:ChatPrint("You were slayed for killing the wrong team! ")
+				return
 			else
 				return
 			end
