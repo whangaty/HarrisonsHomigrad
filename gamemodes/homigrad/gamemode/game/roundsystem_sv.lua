@@ -279,13 +279,15 @@ local function donaterVoteLevelEnd(t,argv,calling_ply,args)
 end
 
 COMMANDS.levelend = {function(ply,args)
-	if ply:IsAdmin() then
+	if ply:IsAdmin() or ply:GetUserGroup("operator") then
 		EndRound()
+		--[[]
 	else
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
 			ulx.doVote( "End Round?", { "Yes", "No" }, donaterVoteLevelEnd, 15, nil, nil, argv, calling_ply, args)
 		end
+		]]
 	end
 	--print("Was Recognised!")
 end,0}
