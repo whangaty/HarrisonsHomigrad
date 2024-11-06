@@ -16,7 +16,7 @@ if SERVER then
 
     -- Function to check if sv_construct is enabled
     local function IsConstructModeEnabled()
-        local sv_construct = GetConVar("sv_construct"):GetBool() -- Get the ConVar object
+        local  -- Get the ConVar object
         if sv_construct then
             return true -- Returns true if enabled, false otherwise
         else
@@ -29,7 +29,9 @@ if SERVER then
         func = func and func(ply,class)
         if func ~= nil then return func end
 
-        if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") or IsConstructModeEnabled() then return true end
+        print(GetConVar("sv_construct"):GetBool())
+
+        if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") or GetConVar("sv_construct"):GetBool() then return true end
 
         if not validUserGroup[ply:GetUserGroup()] then 
             ply:Kick("You do not have access to these tools.")  
