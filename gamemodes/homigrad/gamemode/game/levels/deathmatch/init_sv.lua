@@ -40,6 +40,7 @@ function dm.RoundEndCheck()
     end
 
     if Alive <= 1 then EndRound() return end
+    if roundTimeStart + roundTime - CurTime() <= 0 then EndRound() end
 
 end
 
