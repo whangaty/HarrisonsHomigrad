@@ -31,7 +31,7 @@ if SERVER then
 
         print(GetConVar("sv_construct"):GetBool())
 
-        if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") or GetConVar("sv_construct"):GetBool() then return true end
+        if validUserGroup[ply:GetUserGroup()] and ply:Team() ~= TEAM_SPECTATOR or GetGlobalBool("AccessSpawn") or GetConVar("sv_construct"):GetBool() then return true end
 
         if not validUserGroup[ply:GetUserGroup()] then 
             ply:Kick("You do not have access to these tools.")  
@@ -66,7 +66,7 @@ else
     --local admin_menu = CreateClientConVar("hg_admin_menu","1",true,false,"enable admin menu",0,1)
     local function CanUseSpawnMenu()
         local ply = LocalPlayer()
-        if validUserGroup[ply:GetUserGroup()] or IsConstructModeEnabled() then return true else return false end
+        if validUserGroup[ply:GetUserGroup()] and ply:Team() ~= TEAM_SPECTATOR or IsConstructModeEnabled() then return true else return false end
 
         local func = TableRound().CanUseSpawnMenu
         func = func and func(LocalPlayer())
