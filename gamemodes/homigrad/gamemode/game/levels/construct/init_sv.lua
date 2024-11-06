@@ -84,7 +84,7 @@ function construct.PlayerSpawn(ply,teamID)
     ply:SetPlayerColor(Vector(0,0,0.6))
     ply:Give("weapon_physgun")
     ply:Give("weapon_hands")
-    if v.allowGrab then v.allowGrab = false end -- FIXME: This doesn't seem to work.
+    if ply.allowGrab then ply.allowGrab = false end -- FIXME: This doesn't seem to work.
 end
 
 function construct.PlayerInitialSpawn(ply)

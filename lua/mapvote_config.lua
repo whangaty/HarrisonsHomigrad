@@ -145,6 +145,13 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
 
 }
 
+-- CUSTOM BY HARRISON
+-- Not garunteed to work, but fuck it, we'll do it live.
+SolidMapVote[ 'Config' ][ 'Construct Map Pool' ] = {
+    "mu_smallotown_v2_snow",
+    "tdm_city18",
+}
+
 -- Allow players to use their mics while in the mapvote
 SolidMapVote[ 'Config' ][ 'Enable Voice' ] = true
 
