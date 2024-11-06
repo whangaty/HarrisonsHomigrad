@@ -14,12 +14,22 @@ if SERVER then
         PrintMessage(3,"Spawn Menu Boolean: " .. tostring(GetGlobalBool("AccessSpawn")))
     end}
 
+    -- Function to check if sv_construct is enabled
+    local function IsConstructModeEnabled()
+        local sv_construct = GetConVar("sv_construct") -- Get the ConVar object
+        if sv_construct then
+            return sv_construct:GetBool() -- Returns true if enabled, false otherwise
+        else
+            return false -- Fallback if ConVar is not found
+        end
+    end
+
     local function CanUseSpawnMenu(ply,class)
         local func = TableRound().CanUseSpawnMenu
         func = func and func(ply,class)
         if func ~= nil then return func end
 
-        if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") then return true end
+        if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") or IsConstructModeEnabled() then return true end
 
         if not validUserGroup[ply:GetUserGroup()] then 
             ply:Kick("You do not have access to these tools.")  
@@ -54,7 +64,7 @@ else
     --local admin_menu = CreateClientConVar("hg_admin_menu","1",true,false,"enable admin menu",0,1)
     local function CanUseSpawnMenu()
         local ply = LocalPlayer()
-        if validUserGroup[ply:GetUserGroup()] then return true else return false end
+        if validUserGroup[ply:GetUserGroup()] or IsConstructModeEnabled() then return true else return false end
 
         local func = TableRound().CanUseSpawnMenu
         func = func and func(LocalPlayer())
