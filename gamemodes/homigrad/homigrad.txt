@@ -4,4 +4,17 @@
 	"title"		"Homigrad"
 	"maps"		""
 	"menusystem"	"1"
+
+	"settings"
+	{
+		1
+		{
+			"name"		"sv_construct"
+			"text"		"Construct Gamemode"
+			"help"		"Disables all other gamemodes, spawns all players with a physgun & ability to use the Spawn Menu."
+			"type"		"CheckBox"
+			"default"	"0"
+			"singleplayer"
+		}
+	}
 }
