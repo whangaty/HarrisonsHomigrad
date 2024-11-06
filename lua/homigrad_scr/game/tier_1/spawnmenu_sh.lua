@@ -16,9 +16,9 @@ if SERVER then
 
     -- Function to check if sv_construct is enabled
     local function IsConstructModeEnabled()
-        local sv_construct = GetConVar("sv_construct") -- Get the ConVar object
+        local sv_construct = GetConVar("sv_construct"):GetBool() -- Get the ConVar object
         if sv_construct then
-            return sv_construct:GetBool() -- Returns true if enabled, false otherwise
+            return true -- Returns true if enabled, false otherwise
         else
             return false -- Fallback if ConVar is not found
         end
