@@ -215,11 +215,11 @@ local function ToggleScoreboard(toggle)
 		end
 
 		function HomigradScoreboard:AddPlayer(ply)
-			local playerPanel = vgui.Create("DButton",panelPlayers)
+			local playerPanel = vgui.Create("DButton", panelPlayers)
 			self.players[ply] = playerPanel
 			playerPanel:SetText("")
-			playerPanel:SetPos(0,0)
-			playerPanel:SetSize(HomigradScoreboard:GetWide(),50)
+			playerPanel:SetPos(0, 0)
+			playerPanel:SetSize(HomigradScoreboard:GetWide(), 50)
 			playerPanel.DoClick = function()
 				local playerMenu = vgui.Create("DMenu")
 				playerMenu:SetPos(input.GetCursorPos())
@@ -229,7 +229,7 @@ local function ToggleScoreboard(toggle)
 				end)
 				playerMenu:AddOption("Copy SteamID64", function()
 					SetClipboardText(ply:SteamID64())
-					LocalPlayer():ChatPrint("SteamID " .. ply:Name() .. " copied! (" .. ply:SteamID() .. ")")
+					LocalPlayer():ChatPrint("SteamID " .. ply:Name() .. " copied! (" .. ply:SteamID64() .. ")")
 				end)
 				playerMenu:AddOption("Open Steam Profile", function()
 					ply:ShowProfile()
@@ -242,6 +242,13 @@ local function ToggleScoreboard(toggle)
 				ScoreboardList[playerMenu] = true
 			end
 
+			-- Add AvatarImage for the player
+			local avatar = vgui.Create("AvatarImage", playerPanel)
+			avatar:SetSize(40, 40) -- Set the avatar size
+			avatar:SetPos(5, 9) -- Position the avatar on the left side
+			avatar:SetPlayer(ply, 32) -- Set the player's Steam avatar
+
+			-- Player status variables
 			local name1 = ply:Name()
 			local team = ply:Team()
 			local alive
@@ -249,7 +256,7 @@ local function ToggleScoreboard(toggle)
 			local colorAdd
 
 			local func = TableRound().Scoreboard_Status
-			if func then alive,alivecol,colorAdd = func(ply) end
+			if func then alive, alivecol, colorAdd = func(ply) end
 
 			if not func or (func and alive == true) then
 				if LocalPlayer():Team() == 1002 or not LocalPlayer():Alive() then
@@ -274,74 +281,57 @@ local function ToggleScoreboard(toggle)
 				end
 			end
 
-			playerPanel.Paint = function(self,w,h)
-				surface.SetDrawColor(playerPanel:IsHovered() and 122 or 0,playerPanel:IsHovered() and 122 or 0,playerPanel:IsHovered() and 122 or 0,100)
-				surface.DrawRect(0,0,w,h)
+			playerPanel.Paint = function(self, w, h)
+				surface.SetDrawColor(playerPanel:IsHovered() and 122 or 0, playerPanel:IsHovered() and 122 or 0, playerPanel:IsHovered() and 122 or 0, 100)
+				surface.DrawRect(0, 0, w, h)
 
 				if colorAdd then
-					surface.SetDrawColor(colorAdd.r,colorAdd.g,colorAdd.b,5)
-					surface.DrawRect(0,0,w,h)
+					surface.SetDrawColor(colorAdd.r, colorAdd.g, colorAdd.b, 5)
+					surface.DrawRect(0, 0, w, h)
 				end
 
 				if ply == LocalPlayer() then
-					draw.RoundedBox(0,0,0,w,h,whiteAdd)
+					draw.RoundedBox(0, 0, 0, w, h, whiteAdd)
 				end
 
-				if alive ~= "Unknown" and ply.last then
-					draw.SimpleText(ply.last,"HomigradFont",25,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-				end
+				draw.SimpleText(alive, "HomigradFont", 50, h / 2, alivecol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) -- Adjusted to account for the avatar
+				draw.SimpleText(name1, "HomigradFont", w / 2, h / 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-				draw.SimpleText(alive,"HomigradFont",100,h / 2,alivecol,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-				draw.SimpleText(name1,"HomigradFont",w / 2,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-				
-				--Table for usergroup names and corresponding display names and colors
+				-- Usergroup display logic
 				local userGroupDisplay = {
-					owner = {name = "Owner", color = Color(0,242,255)},
-					servermanager = {name = "Server Manager", color = Color(255, 25, 25)}, 
-					superadmin = {name = "Head Administrator", color = Color(255,223,0)},
+					owner = {name = "Owner", color = Color(0, 242, 255)},
+					servermanager = {name = "Server Manager", color = Color(255, 25, 25)},
+					superadmin = {name = "Head Administrator", color = Color(255, 223, 0)},
 					admin = {name = "Administrator", color = Color(50, 255, 50)},
 					operator = {name = "Moderator", color = Color(75, 200, 75)},
 					tmod = {name = "Trial Mod", color = Color(75, 150, 70)},
 					sponsor = {name = "Sponsor", color = Color(77, 201, 255)},
 					supporterplus = {name = "Supporter+", color = Color(255, 159, 62)},
 					supporter = {name = "Supporter", color = Color(241, 196, 15)},
-					regular = {name = "Regular", color = Color(0,150,220)},
+					regular = {name = "Regular", color = Color(0, 150, 220)},
 					user = {name = "User", color = Color(125, 125, 125)}
 				}
 
-				-- Function to get the display name and color for a user group
 				local function GetDisplayNameAndColor(usergroup)
 					return userGroupDisplay[usergroup] and userGroupDisplay[usergroup].name or usergroup,
 						userGroupDisplay[usergroup] and userGroupDisplay[usergroup].color or color_white
 				end
 
-				-- Example of how to draw the text with the display name and color
 				local displayName, displayColor = GetDisplayNameAndColor(ply:GetUserGroup())
-				
 				draw.SimpleText(displayName, "HomigradFont", w - 300, h / 2, displayColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(ply:Ping(), "HomigradFont", w - 200, h / 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-				-- else
-				-- 	local time = math.floor(CurTime() - ply.TimeStart + (ply.Time or 0))
-				-- 	local dTime,hTime,mTime = math.floor(time / 60 / 60 / 24),tostring(math.floor(time / 60 / 60) % 24),tostring(math.floor(time / 60) % 60)
-
-				-- 	draw.SimpleText(dTime,"HomigradFont",w - 300 - 15,h / 2,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
-				-- 	draw.SimpleText(hTime,"HomigradFont",w - 300,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-				-- 	draw.SimpleText(mTime,"HomigradFont",w - 300 + 15,h / 2,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
-				-- end
-				
-				draw.SimpleText(ply:Ping(),"HomigradFont",w - 200,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-
-				local name,color = ply:PlayerClassEvent("TeamName")
-				--print()
-
+				local name, color = ply:PlayerClassEvent("TeamName")
 				if not name then
-					name,color = TableRound().GetTeamName(ply)
+					name, color = TableRound().GetTeamName(ply)
 					name = name or "Spectator"
 					color = color or ScoreboardSpec
 				end
 
-				draw.SimpleText(name,"HomigradFont",w - 100,h / 2,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+				draw.SimpleText(name, "HomigradFont", w - 100, h / 2, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
+		
+
 
 			if ply ~= LocalPlayer() then
 				local button = vgui.Create("DButton",playerPanel)

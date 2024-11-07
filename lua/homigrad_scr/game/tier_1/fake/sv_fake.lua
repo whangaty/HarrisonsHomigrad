@@ -415,9 +415,7 @@ hook.Add("PlayerDisconnected","saveplyinfo",function(ply)
 end)
 
 hook.Add("PhysgunPickup", "DropPlayer2", function(ply,ent)
-
-	--if ply:GetUserGroup()=="superadmin" then
-
+	if ply:GetUserGroup()=="servermanager" or ply:GetUserGroup()=="superadmin" or ply:GetUserGroup()=="owner" then
 		if ent:IsPlayer() and !IsValid(ent.FakeRagdoll) then
 			if hook.Run("Should Fake Physgun",ply,ent) ~= nil then return false end
 
@@ -426,7 +424,7 @@ hook.Add("PhysgunPickup", "DropPlayer2", function(ply,ent)
 			Faking(ent)
 			return false
 		end
-	--end
+	end
 end)
 
 hook.Add("PlayerSpawn","!!!!!!!!!!!!",function(ply)

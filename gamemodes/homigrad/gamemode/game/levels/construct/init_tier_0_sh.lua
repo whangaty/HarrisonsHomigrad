@@ -46,7 +46,7 @@ function construct.HUDPaint_RoundLeft(white)
         if playsound then
             playsound = false
         end
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,126),0.5,0.5)
+        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,7)
         return
     end
 end
