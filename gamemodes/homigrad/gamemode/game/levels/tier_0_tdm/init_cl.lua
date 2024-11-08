@@ -16,7 +16,7 @@ function tdm.HUDPaint_RoundLeft(white)
             playsound = false
             surface.PlaySound("snd_jack_hmcd_deathmatch.mp3")
         end
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,7)
+        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,4)
 
 
         --[[surface.SetFont("HomigradRoundFont")
