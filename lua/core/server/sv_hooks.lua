@@ -142,7 +142,7 @@ hook.Add( 'Think', 'SolidMapVote.ServerLoop', function()
     -- Time is up, start figuring out the winning map
     SolidMapVote.checkForVoteEnd()
 
-    if stupidFuckingCode ~= true
+    if not stupidFuckingCode then
         -- Post map vote time is up, change the map
         SolidMapVote.postMapVoteChange()
         stupidFuckingCode = true
