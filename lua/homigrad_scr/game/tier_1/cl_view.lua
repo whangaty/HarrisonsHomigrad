@@ -377,7 +377,7 @@ net.Receive("nodraw_helmet",function()
 	helmEnt = net.ReadEntity()
 end)
 
-local oldangles = LocalPlayer():EyeAngles()
+local oldangles = Angle(0,0,0)
 
 function CalcView(ply,vec,ang,fov,znear,zfar)
 	if STOPRENDER then return end
