@@ -88,7 +88,7 @@ function juggernaut.HUDPaint_RoundLeft(white2)
             playsound = false
             surface.PlaySound(roundSound)
         end
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,4)
+        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,2)
 
         draw.DrawText( "You are " .. name, "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "Juggernaut", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )

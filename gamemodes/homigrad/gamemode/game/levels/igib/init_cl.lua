@@ -15,7 +15,7 @@ function igib.HUDPaint_RoundLeft(white)
             playsound = false
             surface.PlaySound("snd_jack_hmcd_deathmatch.mp3")
         end
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,4)
+        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,2)
 
         --draw.SimpleText("Время до респавна: " .. timerr,"HomigradFont",ScrW()/2,ScrH()-55,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 

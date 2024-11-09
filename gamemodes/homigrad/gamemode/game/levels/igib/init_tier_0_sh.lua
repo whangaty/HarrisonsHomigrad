@@ -47,7 +47,7 @@ function igib.HUDPaint_RoundLeft(white)
             playsound = false
             surface.PlaySound("snd_jack_hmcd_deathmatch.mp3")
         end
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,4)
+        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,2)
         draw.DrawText( "SHOOT & RUN", "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( 155,155,255,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "InstaGib", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,155,255,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "УБИВАТЬ УБИВАТЬ УБИВАТЬ УБИВАТЬ УБИВАТЬ УБИВАТЬ УБИВАТЬ УБИВАТЬ УБИВАТЬ", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
