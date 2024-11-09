@@ -205,6 +205,9 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
         worldModel:SetPos(Offset)
         worldModel:SetAngles(Ang)
         worldModel:DrawModel()
+        if wep.DrawWorldModelAdd then
+            wep:DrawWorldModelAdd(worldModel)
+        end
     end
 end)
 

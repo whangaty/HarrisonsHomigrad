@@ -30,11 +30,6 @@ local Lerp, LerpVector, LerpAngle = Lerp, LerpVector, LerpAngle
 local math_min = math.min
 local math_Clamp = math.Clamp
 
-hook.Add("Think", "Mul lerp", function()
-	local ft = FrameTime()
-	ftlerped = math_Clamp(ft,0.001,0.1)
-end)
-
 function hg.FrameTimeClamped(ft)
 	return math_Clamp(1 - math.exp(-0.5 * (ft or ftlerped)), 0.001, 0.01)
 end

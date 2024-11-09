@@ -55,6 +55,18 @@ function dm.EndRound(winner)
     PrintMessage(3,"Deathmatch Over! GG WP!")
 end
 
+local function GetTeamSpawns(ply)
+	local spawnsT,spawnsCT = bahmut.SpawnsTwoCommand()
+
+    if ply:Team() == 1 then
+        return spawnsT
+    elseif ply:Team() == 2 then
+        return spawnsCT
+    else
+        return false
+    end
+end
+
 function dm.Think()
     construct.LastWave = construct.LastWave or CurTime() + 15
 

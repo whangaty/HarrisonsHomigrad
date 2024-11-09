@@ -54,6 +54,7 @@ hook.Add("Think", "Mul lerp", function()
 	ftlerped = math_Clamp(ft,0.001,0.1)
 end)
 
+
 function hg.FrameTimeClamped(ft)
 	return math_Clamp(1 - math.exp(-0.5 * (ft or ftlerped)), 0.001, 0.01)
 end
@@ -135,7 +136,11 @@ hook.Add("HUDPaint","admin_hitpos",function()
 	end
 end)
 
+function SWEP:DrawHUDAdd()
+end
+
 function SWEP:DrawHUD()
+	self:DrawHUDAdd()
 	show = math.Clamp(self.AmmoChek or 0,0,1)
 	self.AmmoChek = Lerp(2*FrameTime(),self.AmmoChek or 0,0)
 	color_gray = Color(225,215,125,190*show)
@@ -310,6 +315,9 @@ function AddHomigradWeapon(self)
 	end--]]
 end
 
+function SWEP:InitAdd()
+end
+
 function SWEP:Initialize()
 	AddHomigradWeapon(self)
 
@@ -318,6 +326,8 @@ function SWEP:Initialize()
 	end
 
 	self.lerpClose = 0
+
+	self:InitAdd()
 end
 
 function SWEP:PrePrimaryAttack()
@@ -468,6 +478,17 @@ function SWEP:GetSAttachment(obj)
 	local pos, ang = LocalToWorld(lpos, lang, bonepos, boneang)
 	
 	return {Pos = pos, Ang = ang, Bone = bon}
+end
+
+function SWEP:GetHitTrace()
+	local pos, ang = self:GetTrace()
+
+	local tr = {}
+	tr.start = pos
+	tr.endpos = pos + ang:Forward() * 50000
+	tr.filter = {self, self:GetOwner()}
+
+	return util.TraceLine(tr), pos, ang
 end
 
 function SWEP:GetTrace(nomodify)
@@ -793,7 +814,7 @@ function SWEP:ApplyAnim(ply)
 	end
 
 	t.endpos = t.start + Angle(0,ply:GetAngles().y,ply:GetAngles().z):Forward() * 100
-	t.filter = player.GetAll(),ply:GetNWEntity("Armor")
+	t.filter = player.GetAll()
 	local tr = util.TraceLine(t)
 	self.dist = (tr.HitPos - t.start):Length()
 
@@ -878,7 +899,7 @@ function SWEP:ApplyAnim(ply)
 	
 	local lpos,lang = ply:SetBoneMatrix2(hand_index,matrix,false)
 
-	if not ply:GetNWBool("Suiciding") and not ply:IsSprinting() then
+	if not ply:GetNWBool("Suiciding") and not ply:IsSprinting() and not self.isClose then
 		hand = lang
 	end
 
@@ -886,7 +907,7 @@ function SWEP:ApplyAnim(ply)
 	localAng:RotateAroundAxis(localAng:Forward(),0)
 
 	if not ply:GetNWBool("Suiciding") and not ply:IsSprinting() then
-		self.localAng = Lerp(0.2, self.localAng or angle_zero, localAng)
+		self.localAng = LerpFT(0.2, self.localAng or angle_zero, localAng)
 	end
 	
 	ply:ManipulateBoneAngles(forearm_index,forearm,false)
@@ -1012,6 +1033,9 @@ function SWEP:WorldModelTransform()
     --model:DrawModel()
 end
 
+function SWEP:DrawWorldModelAdd()
+end
+
 function SWEP:DrawWorldModel()
 	--self:DrawModel()
 	self:WorldModelTransform()
@@ -1019,6 +1043,8 @@ function SWEP:DrawWorldModel()
 	if IsValid(self.worldModel) then
 		self.worldModel:DrawModel()
 	end
+
+	self:DrawWorldModelAdd()
 end
 
 SWEP.localpos = Vector(0,0,0)
@@ -1099,8 +1125,10 @@ if CLIENT then
 	SWEP.SightPos = Vector(-30, 2.3, -0.28)
 	SWEP.SightAng = Angle(0, 0, 0)--unused (D)
 
+	local addfov = 0
+
 	local lerpaim = 0
-	function SWEP:Camera(ply, origin, angles)
+	function SWEP:Camera(ply, origin, angles, fov)
 		local pos, ang = self:GetTrace(true)
 		local _, anglef = self:GetTrace()
 		
@@ -1114,8 +1142,14 @@ if CLIENT then
 		origin = origin + anglef:Forward() * animpos --+ angles:Up() * animpos / 20
 		
 		origin = origin + anglef:Right() * math.random(-0.1,0.1) * (animpos/200) + anglef:Up() * math.random(-0.1,0.1) * (animpos/200)
+		
+		addfov = LerpFT(0.1, addfov, self:IsSighted() and -(self.addfov or 20) or 0)
 
-		return origin, angles
+		return origin, angles, fov + addfov
 	end
 
+end
+
+function SWEP:AdjustMouseSensitivity()
+    return self:IsSighted() and 0.75 or 1
 end

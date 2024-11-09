@@ -721,6 +721,8 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force)
 
 	rag:SetNWEntity("RagdollOwner", self)
 
+	print(force)
+
 	local vel = self:GetVelocity() + (force or vector_origin)
 
 	for physNum = 0, rag:GetPhysicsObjectCount() - 1 do

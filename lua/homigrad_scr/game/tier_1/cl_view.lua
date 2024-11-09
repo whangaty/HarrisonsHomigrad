@@ -170,6 +170,7 @@ local CalcView--fuck
 local vel = 0
 local diffang = Vector(0,0,0)
 local diffpos = Vector(0,0,0)
+diffang2 = Angle(0,0,0)
 
 hook.Add("RenderScene","octoweapons",function(pos,angle,fov)
 	local focus = HasFocus()
@@ -376,6 +377,8 @@ net.Receive("nodraw_helmet",function()
 	helmEnt = net.ReadEntity()
 end)
 
+local oldangles = LocalPlayer():EyeAngles()
+
 function CalcView(ply,vec,ang,fov,znear,zfar)
 	if STOPRENDER then return end
 	local fov = CameraSetFOV + ADDFOV
@@ -514,8 +517,10 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local output_pos = vecEye
 
 	if wep and wep.Camera then
-		output_pos, output_ang = wep:Camera(ply, output_pos, output_ang)
+		output_pos, output_ang, fov = wep:Camera(ply, output_pos, output_ang, fov)
 	end
+
+	view.fov = fov
 
 	if wep and hand then
 		local posRecoil = Vector(recoil * 8,0,recoil * 1.5)
@@ -548,6 +553,11 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	
 	diffpos = LerpFT(0.1,diffpos,(output_pos - (oldview.origin or output_pos)) / 6)
 	diffang = LerpFT(0.1,diffang,(output_ang:Forward() - (oldview.angles or output_ang):Forward()) * 50 + (lply:EyeAngles() + (lply:GetActiveWeapon().eyeSpray or angZero) * 1000):Forward() * anim_pos * 1)
+	
+	local _, lang = WorldToLocal(vector_origin, lply:EyeAngles(), vector_origin, (oldangles or lply:EyeAngles()))
+	oldangles = lply:EyeAngles()
+
+	diffang2 = LerpFT(0.05, diffang2, lang * val)
 
 	if RENDERSCENE then
 		if hg_cool_camera:GetBool() then 
