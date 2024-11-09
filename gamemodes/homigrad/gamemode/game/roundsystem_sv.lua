@@ -279,7 +279,6 @@ local function donaterVoteLevelEnd(t,argv,calling_ply,args)
 end
 
 
---[[I'm losing my fucking mind over this damn command. I fucking despise it and everything it fucking stands for.
 COMMANDS.levelend = {function(ply,args)
 	if ply:IsAdmin() or ply:GetUserGroup("operator") then
 		EndRound()
@@ -291,8 +290,8 @@ COMMANDS.levelend = {function(ply,args)
 	
 	end
 	--print("Was Recognised!")
-end,0}
---]]
+end,1}
+
 
 local function donaterVoteLevel(t,argv,calling_ply,args)
 	local results = t.results
