@@ -153,7 +153,7 @@ function Faking(ply,force) -- функция падения
 
 			ply:SetMoveType(MOVETYPE_NONE)
 			ply:DrawShadow(false)
-			local hull = Vector(1,1,1)
+			local hull = Vector(01,01,01)
 			ply:SetHull(-hull,hull)
 			ply:SetHullDuck(-hull,hull)
 			ply:SetViewOffset(Vector(0,0,0))
@@ -1106,14 +1106,29 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 
 				local trace = util.TraceHull(traceinfo)
 				if(trace.Hit and !trace.HitSky)then
-					local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
-					if(IsValid(cons))then
-						rag.ZacConsLH=cons
+					if !trace.Entity:IsWeapon() then					
+						local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
+						if(IsValid(cons))then
+							rag.ZacConsLH=cons
+
+							ply:SetNWBool("lhon", true)
+
+							rag:EmitSound("physics/body/body_medium_impact_soft" .. math.random(1, 7) .. ".wav", 50, math.random(95, 105))
+
+							rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger1"), Angle(0,-30,0), true)
+							rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger2"), Angle(0,-30,0), true)			
+						end
+					else
+						ply:PickupWeapon(trace.Entity)
 					end
 				end
 			end
 		else
 			if(IsValid(rag.ZacConsLH))then
+				ply:SetNWBool("lhon", false)
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger1"), Angle(0,0,0), true)
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger2"), Angle(0,0,0), true)
+
 				rag.ZacConsLH:Remove()
 				rag.ZacConsLH=nil
 			end
@@ -1135,14 +1150,29 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 
 				local trace = util.TraceHull(traceinfo)
 				if(trace.Hit and !trace.HitSky)then
-					local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
-					if(IsValid(cons))then
-						rag.ZacConsRH=cons
+					if !trace.Entity:IsWeapon() then					
+						local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
+						if(IsValid(cons))then
+							ply:SetNWBool("rhon", true)
+							
+							rag:EmitSound("physics/body/body_medium_impact_soft" .. math.random(1, 7) .. ".wav", 50, math.random(95, 105))
+
+							rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger1"), Angle(0,-30,0), true)
+							rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger2"), Angle(0,-30,0), true)
+			
+							rag.ZacConsRH=cons
+						end
+					else
+						ply:PickupWeapon(trace.Entity)
 					end
 				end
 			end
 		else
 			if(IsValid(rag.ZacConsRH))then
+				ply:SetNWBool("rhon", false)
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger1"), Angle(0,0,0), true)
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger2"), Angle(0,0,0), true)
+
 				rag.ZacConsRH:Remove()
 				rag.ZacConsRH=nil
 			end

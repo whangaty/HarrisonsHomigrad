@@ -129,9 +129,9 @@ if SERVER then
                 if ent:Alive() and ent.poisoned then
                     ent.KillReason = "poison"
                     --ent:Kill()
-                    ply.nohook = true
-                    ply:TakeDamage(10000,ent.poisonbro)
-                    ply.nohook = nil
+                    ent.nohook = true
+                    ent:TakeDamage(10000,ent.poisonbro)
+                    ent.nohook = nil
                 end
             end)
         end)

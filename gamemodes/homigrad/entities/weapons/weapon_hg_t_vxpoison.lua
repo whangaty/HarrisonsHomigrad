@@ -1,8 +1,8 @@
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Poisonious Powder"
+SWEP.PrintName = "Poisonous Powder"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Sprinkle over a ragdolled player to poison them."
+SWEP.Instructions = "Sprinkle this on any item, or a ragdolled player."
 
 SWEP.Spawnable = true
 SWEP.Category = "Traitor Tools"
@@ -62,6 +62,7 @@ function SWEP:SecondaryAttack() end
 if SERVER then
 
     function SWEP:Poison(ent)
+        ent.poisoned_item = true
         ent.poisoned = true
         ent.poisonbro = self:GetOwner()
         self:GetOwner():EmitSound("snd_jack_hmcd_needleprick.wav",30)
@@ -71,24 +72,25 @@ if SERVER then
         return false
     end
 
-    hook.Add("PlayerUse","poisoneditem",function(ply,ent)
-        if not ent.poisoned then return end -- TODO: Add a check to see if player is ragdolled.
-
-        ent.poisoned2 = true
-        timer.Create("Cyanid"..ent:EntIndex().."12", 30, 1, function()
-            if ent:Alive() and ent.poisoned2 then
-                ent:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
+    function CheckForPoison(ply, ent)
+        if not IsValid(ply) or not IsValid(ent) then return end
+        if not ent.poisoned_item then return end
+        
+        ply.poisoned2 = true
+        timer.Create("Cyanid"..ply:EntIndex().."12", 30, 1, function()
+            if ply:Alive() and ply.poisoned2 then
+                ply:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
             end
 
-            timer.Create( "Cyanid"..ent:EntIndex().."22", 10, 1, function()
-                if ent:Alive() and ent.poisoned2 then
-                    ent:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
+            timer.Create( "Cyanid"..ply:EntIndex().."22", 10, 1, function()
+                if ply:Alive() and ply.poisoned2 then
+                    ply:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
                 end
             end)
 
-            timer.Create( "Cyanid"..ent:EntIndex().."32", 15, 1, function()
-                if ent:Alive() and ent.poisoned2 then
-                    ent.KillReason = "poison"
+            timer.Create( "Cyanid"..ply:EntIndex().."32", 15, 1, function()
+                if ply:Alive() and ply.poisoned2 then
+                    ply.KillReason = "poison"
                     --ent:Kill()
                     ply.nohook = true
                     ply:TakeDamage(10000,ent.poisonbro)
@@ -97,7 +99,11 @@ if SERVER then
             end)
         end)
 
-        ent.poisoned = false
+        ent.poisoned_item = false
+    end
+
+    hook.Add("PlayerUse","poisoneditem",function(ply,ent)
+        CheckForPoison(ply, ent)
     end)
 
     function SWEP:Think()

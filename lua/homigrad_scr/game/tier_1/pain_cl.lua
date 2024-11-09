@@ -48,7 +48,7 @@ surface.CreateFont("HomigradFontBig",{
 	shadow = true
 })
 hook.Add("HUDPaint","PainEffect",function()
-    if not LocalPlayer():Alive() or ply:Team() == 1002 then return end
+    if not LocalPlayer():Alive() or LocalPlayer():Team() == 1002 then return end
 
 
     local w,h = ScrW(),ScrH()
@@ -125,13 +125,9 @@ hook.Add("RenderScreenspaceEffects","renderimpulse",function()
 
     k3 = math.Clamp(Lerp(0.01,k3,impulse),0,50)
 
-    if LocalPlayer():Alive() and not ply:Team() ~= 1002 then
+    if LocalPlayer():Alive() and not LocalPlayer():Team() ~= 1002 then
         DrawCA(4 * k3, 2 * k3, 0, 2 * k3, 1 * k3, 0)
     end
-    --[[if LocalPlayer():Name() == "useless" then
-        local offset = 40
-        DrawCA(4 * offset, 2 * offset, 0, 2 * offset, 1 * offset, 0)
-    end--]]
 end)
 
 end

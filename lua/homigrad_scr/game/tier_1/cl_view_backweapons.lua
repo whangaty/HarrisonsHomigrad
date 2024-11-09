@@ -87,9 +87,10 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
     local worldModel = VBWModel
     if not IsValid(worldModel) then
         worldModel = ClientsideModel("models/hunter/plates/plate.mdl",RENDER_GROUP_OPAQUE_ENTITY)
-        worldModel:SetNoDraw(true)
         VBWModel = worldModel
     end
+    
+    worldModel:SetNoDraw(true)
 
     local cameraPos = EyePos()
     local dis = hg_vbw_dis:GetInt()

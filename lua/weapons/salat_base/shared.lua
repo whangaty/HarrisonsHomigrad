@@ -352,7 +352,7 @@ function SWEP:PrimaryAttack()
 
 	self:PrePrimaryAttack()
 
-	if self.isClose or not self:GetOwner():IsNPC() and self:GetOwner():IsSprinting() then return end
+	if not (self:GetOwner():IsNPC() or IsValid(self:GetOwner().FakeRagdoll)) and (self.isClose and self:GetOwner():IsSprinting()) then return end
 
 	local ply = self:GetOwner() -- а ну да
 	self.NextShot = CurTime() + self.ShootWait
