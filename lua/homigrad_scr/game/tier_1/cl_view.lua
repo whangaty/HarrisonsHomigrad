@@ -714,7 +714,7 @@ hook.Add("HUDPaint","fakethings",function()
 
 				local pos = vec:ToScreen()
 
-				last_hold_rh = ply:GetNWBool("rhon", false) and 255 or LerpFT(0.01, last_hold_rh, 0)
+				last_hold_rh = LocalPlayer():GetNWBool("rhon", false) and 255 or LerpFT(0.01, last_hold_rh, 0)
 
 				--[[surface.SetFont("HomigradFont")
 				local txt = "You're "..(ply:GetNWBool("rhon", false) and "currently holding " or "about to hold ")..(tr.Entity:IsWorld() and "a solid object" or (tr.Entity:IsPlayer() and "player "..tr.Entity:Name()) or tr.Entity.PrintName or (string.find(tr.Entity:GetClass(),"prop") and "a prop") or tr.Entity:GetClass()).." with your right hand."
@@ -727,7 +727,7 @@ hook.Add("HUDPaint","fakethings",function()
 				--uncomment if needed
 
 				cam.Start3D()
-					render.SetMaterial(ply:GetNWBool("rhon", false) and hand_material_on or hand_material)
+					render.SetMaterial(LocalPlayer():GetNWBool("rhon", false) and hand_material_on or hand_material)
 					--render.DrawSprite(vec, 1, 1, color_black)
 					--render.DrawSprite(vec1, 1, 1, Color(255,0,0))
 					--render.DrawSprite(vec2, 1, 1, color_white)
@@ -760,7 +760,7 @@ hook.Add("HUDPaint","fakethings",function()
 
 				local pos = vec:ToScreen()
 
-				last_hold_lh = ply:GetNWBool("lhon", false) and 255 or LerpFT(0.01, last_hold_lh, 0)
+				last_hold_lh = LocalPlayer():GetNWBool("lhon", false) and 255 or LerpFT(0.01, last_hold_lh, 0)
 
 				--[[surface.SetFont("HomigradFont")
 				local txt = "You're "..(ply:GetNWBool("rhon", false) and "currently holding " or "about to hold ")..(tr.Entity:IsWorld() and "a solid object" or (tr.Entity:IsPlayer() and "player "..tr.Entity:Name()) or tr.Entity.PrintName or (string.find(tr.Entity:GetClass(),"prop") and "a prop") or tr.Entity:GetClass()).." with your left hand."
@@ -773,7 +773,7 @@ hook.Add("HUDPaint","fakethings",function()
 				--uncomment if needed
 
 				cam.Start3D()
-					render.SetMaterial(ply:GetNWBool("lhon", false) and hand_material_on or hand_material)
+					render.SetMaterial(LocalPlayer():GetNWBool("lhon", false) and hand_material_on or hand_material)
 					--render.DrawSprite(vec, 1, 1, color_black)
 					--render.DrawSprite(vec1, 1, 1, Color(255,0,0))
 					--render.DrawSprite(vec2, 1, 1, color_white)
