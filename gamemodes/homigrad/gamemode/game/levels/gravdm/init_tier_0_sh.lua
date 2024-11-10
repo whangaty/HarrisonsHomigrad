@@ -34,7 +34,7 @@ end
 
 if SERVER then return end
 
-local nigger = Color(0, 0, 0)
+local black = Color(0, 0, 0)
 local red = Color(255, 0, 0)
 
 local kill = 4

@@ -23,12 +23,12 @@ end)
 local SetDrawColor = surface.SetDrawColor
 local DrawRect = surface.DrawRect
 
-local nigger = Color(0,0,0)
+local black = Color(0,0,0)
 
 PANEL:Event_Add("Draw","Main",function(self,w,h,color)
     local topHeight = self.TopHeight
 
-    SetDrawColor(nigger)
+    SetDrawColor(black)
     DrawRect(0,0,w,h)
 
     SetDrawColor(color.main)
@@ -42,7 +42,7 @@ PANEL:Event_Add("Draw","Main",function(self,w,h,color)
 
     SetDrawColor(color.top)
     draw.GradientLeft(1,1,w,topHeight)
-    SetDrawColor(nigger)
+    SetDrawColor(black)
 
     draw.SimpleText(self.Title,self.TitleFont,5,(topHeight + 1) / 2,color.text,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 
