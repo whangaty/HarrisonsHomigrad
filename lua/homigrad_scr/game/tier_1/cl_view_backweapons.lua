@@ -117,8 +117,8 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
 
         if cameraPos:Distance(ent:GetPos()) > dis then continue end
         if activeWep == wep then continue end
-        
-        if gameVBWHide and gameVBWHide(ply, wep) and GetConVar("sv_construct"):GetBool() ~= true then continue end
+        --print(gameVBWHide(ply, wep))
+        if (gameVBWHide and gameVBWHide(ply, wep)) or ((( GetConVar("sv_construct") and GetConVar("sv_construct"):GetBool() ) or true) ~= true) then continue end
 
         local matrix = ent:LookupBone("ValveBiped.Bip01_Spine1")
         matrix = matrix and ent:GetBoneMatrix(matrix)

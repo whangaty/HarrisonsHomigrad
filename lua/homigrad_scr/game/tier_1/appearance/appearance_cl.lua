@@ -8,7 +8,6 @@ EasyAppearance = EasyAppearance or {}
 
 EasyAppearance.OpenedMenu = EasyAppearance.OpenedMenu or nil
 
-
 --[[
     local Models = {
     // Male
@@ -74,13 +73,15 @@ function EasyAppearance.Menu( ply )
     local tModel = EasyAppearance.Models[ Appearance.strModel ]
     local sex = "Male"
     ModelView:SetModel( tModel and tModel.strPatch or table.Random( table.GetKeys(Models) ) )
+
     function ModelView:LayoutEntity(ent) 
         ent:SetSubMaterial()
 
         sex = EasyAppearance.Sex[ ent:GetModelSex() ]
 
+        ent:SetupBones()
         ent:SetSubMaterial( Models[ ent:GetModel() ][2], Appearance.strColthesStyle and EasyAppearance.Appearances[ sex ][ Appearance.strColthesStyle ] or "" )
-
+        EasyAppearance.DrawAttachment(ent,Appearance.strAttachmets)
         return 
     end
 
@@ -121,6 +122,19 @@ function EasyAppearance.Menu( ply )
 
     function CombApperBox:OnSelect( index, text, data )
         Appearance.strColthesStyle = text
+    end
+
+    DPanel.CombAttBox = vgui.Create("DComboBox",DPanel)
+    local CombAttBox = DPanel.CombAttBox
+    CombAttBox:Dock(TOP)
+    CombAttBox:DockMargin(15,10,15,0)
+
+    for k,v in pairs( EasyAppearance.Attachmets ) do
+        CombAttBox:AddChoice( k, k )
+    end
+
+    function CombAttBox:OnSelect( index, text, data )
+        Appearance.strAttachmets = text
     end
 
     DPanel.ApplyButton = vgui.Create( "DButton", DPanel )
@@ -178,4 +192,90 @@ net.Receive( "EasyAppearance_SendReqData", function()
     --print(tAppearanceData)
     EasyAppearance.SendNet( bRandom, tAppearanceData or {} )
     --PrintTable(tAppearanceData)
+end)
+
+--self:SetNWEntity("Ragdoll", rag )
+
+local hg_appearance_dis = CreateClientConVar("hg_appearance_dis","6000",true,false)
+
+--[[
+    ["HatExample"] = {
+        strModel = strModel,
+        strMaterial = strMaterial,
+        strBone = strBone,
+        vPos = vPos or Vector( 0, 0, 0 ),
+        vFPos = vFPos or Vector( 0, 0, 0 ),
+        aAng = aAng or Angle( 0, 0, 0 ),
+        aFAng = aFAng or Angle( 0, 0, 0 ),
+        iSkin = iSkin or 0,
+        strBodyGroups = strBodyGroups or "0000000"
+    }
+--]]
+
+function EasyAppearance.DrawAttachment( eEnt, strAtt, ply )
+
+    local att = EasyAppearance.Attachmets[strAtt]
+    local firstPerson = DRAWMODEL
+
+    if not IsValid(eEnt) or not att then return end
+
+    local iBone = eEnt:LookupBone( att.strBone )
+    if not iBone then return end
+
+    local matrix = eEnt:GetBoneMatrix( iBone )
+    if not matrix then return end
+    local pos = matrix:GetTranslation()
+    local ang = matrix:GetAngles()
+
+    local modelSex = eEnt:GetModelSex()
+
+    if not IsValid(eEnt.AttachModel) then
+        eEnt.AttachModel = ClientsideModel( att.strModel )
+        eEnt:CallOnRemove("RemoveAttach",function()
+            eEnt.AttachModel:Remove()
+        end)
+
+        eEnt.AttachModel:SetNoDraw( true )
+        if att.strMaterial then
+            eEnt.AttachModel:SetMaterial( att.strMaterial )
+        end
+        if att.iSkin then
+            eEnt.AttachModel:SetSkin( att.iSkin )
+        end
+
+        eEnt.AttachModel:AddEffects( EF_BONEMERGE )
+        --eEnt.AttachModel:AddEffects( EF_FOLLOWBONE )  
+    elseif IsValid(eEnt.AttachModel) then
+        --if not IsValid(eEnt.AttachModel) then eEnt.AttachModel = nil return end
+        if IsValid(eEnt.AttachModel) and eEnt.AttachModel:GetModel() ~= att.strModel then
+            eEnt.AttachModel:SetModel(att.strModel)
+        end
+        
+        if att.bDrawOnLocal or GetViewEntity() != ply then
+            local lPos,lAng = LocalToWorld( modelSex > 1 and att.vFPos or att.vPos, modelSex > 1 and att.aFAng or att.aAng, pos, ang)
+            --eEnt.AttachModel:SetPos( lPos )
+            eEnt.AttachModel:SetParent( eEnt, iBone )
+
+            eEnt.AttachModel:SetRenderOrigin( lPos )
+            eEnt.AttachModel:SetRenderAngles( lAng )
+            eEnt.AttachModel:SetupBones()
+            eEnt.AttachModel:DrawModel()
+            
+        end
+    end 
+
+end
+
+hook.Add( "HG_PostPlayerDraw", "EA_AttachmentsRender", function( ent, ply ) 
+    local lply = LocalPlayer()
+    local firstPerson = DRAWMODEL
+
+    local cameraPos = EyePos()
+    local dis = hg_appearance_dis:GetInt()
+
+    local Attachmets = ent:GetNWString("EA_Attachments",nil)
+    if Attachmets == nil then return end
+    ent:SetupBones()
+    EasyAppearance.DrawAttachment(ent,Attachmets,ply)
+    --print(ent,ply)
 end)

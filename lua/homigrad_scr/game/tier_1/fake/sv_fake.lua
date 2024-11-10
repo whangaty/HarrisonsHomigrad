@@ -720,6 +720,7 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force)
 	rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
 	rag:SetNWEntity("RagdollOwner", self)
+	rag:SetNWString("EA_Attachments", self:GetNWString("EA_Attachments", nil))
 
 	print(force)
 
