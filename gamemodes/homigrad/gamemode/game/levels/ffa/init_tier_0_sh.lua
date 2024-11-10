@@ -1,4 +1,4 @@
---table.insert(LevelList, "ffa")
+table.insert(LevelList, "ffa")
 ffa = {}
 ffa.Name = "Free For All"
 ffa.LoadScreenTime = 5.5
@@ -66,7 +66,7 @@ function ffa.HUDPaint_RoundLeft(white)
     local lply = LocalPlayer()
 
     local timeLeft = roundTimeStart + roundTime - CurTime()
-    local startRound = roundTimeStart + 7 - CurTime()  
+    local startRound = roundTimeStart + 5 - CurTime()  
     
     if startRound > 0 and lply:Alive() then
         if playsound then
@@ -76,20 +76,20 @@ function ffa.HUDPaint_RoundLeft(white)
 
         lply:ScreenFade(SCREENFADE.IN, Color(0, 0, 0, 255), 0.5, 0.5)  
 
-        draw.DrawText("Prepare yourself!", "HomigradFontBig", ScrW() / 2, ScrH() / 2,
+        draw.DrawText("Prepare yourself!", "HomigradRoundFont", ScrW() / 2, ScrH() / 2,
             Color(155, 155, 255, math.Clamp(startRound - 0.5, 0, 1) * 255), TEXT_ALIGN_CENTER)
-        draw.DrawText("Free For All Mode (Respawns Allowed)", "HomigradFontBig", ScrW() / 2, ScrH() / 8,
+        draw.DrawText("Free For All Mode (Respawns Allowed)", "HomigradRoundFont", ScrW() / 2, ScrH() / 8,
             Color(155, 155, 255, math.Clamp(startRound - 0.5, 0, 1) * 255), TEXT_ALIGN_CENTER)
-        draw.DrawText("Kill everyone to win!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2,
+        draw.DrawText("Kill everyone to win!", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2,
             Color(55, 55, 55, math.Clamp(startRound - 0.5, 0, 1) * 255), TEXT_ALIGN_CENTER)
         return
     end
 
     if timeLeft > 0 then
-        draw.DrawText("Time Left: " .. string.ToMinutesSeconds(timeLeft), "HomigradFontBig", ScrW() / 2, ScrH() / 10, 
+        draw.DrawText("Time Left: " .. string.ToMinutesSeconds(timeLeft), "HomigradRoundFont", ScrW() / 2, ScrH() / 10, 
             Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
     else
-        draw.DrawText("Round Over", "HomigradFontBig", ScrW() / 2, ScrH() / 10, 
+        draw.DrawText("Round Over", "HomigradRoundFont", ScrW() / 2, ScrH() / 10, 
             Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
     end
 

@@ -40,13 +40,13 @@ end
 
 function construct.HUDPaint_RoundLeft(white)
     local lply = LocalPlayer()
-	local startRound = roundTimeStart + 3 - CurTime()
+	local startRound = roundTimeStart + 5 - CurTime()
 
     if startRound > 0 and lply:Alive() then
         if playsound then
             playsound = false
         end
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,2)
+        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),0.5,4)
         return
     end
 end

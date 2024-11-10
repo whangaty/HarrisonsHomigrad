@@ -52,7 +52,7 @@ end
 function gravdm.HUDPaint_RoundLeft(white)
     local lply = LocalPlayer()
 
-    local startRound = roundTimeStart + 7 - CurTime()
+    local startRound = roundTimeStart + 5 - CurTime()
     if startRound > 0 and lply:Alive() then
         if playsound then
             playsound = false
@@ -70,7 +70,7 @@ function gravdm.HUDPaint_RoundLeft(white)
             Color(155, 155, 255, math.Clamp(startRound - 0.5, 0, 1) * 255), TEXT_ALIGN_CENTER)
         draw.DrawText("Gravity Gun Gambit (Free for All)", "HomigradFontBig", ScrW() / 2, ScrH() / 8,
             Color(155, 155, 255, math.Clamp(startRound - 0.5, 0, 1) * 255), TEXT_ALIGN_CENTER)
-        --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         draw.DrawText("Fight everyone else to the death!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2,
             Color(55, 55, 55, math.Clamp(startRound - 0.5, 0, 1) * 255), TEXT_ALIGN_CENTER)

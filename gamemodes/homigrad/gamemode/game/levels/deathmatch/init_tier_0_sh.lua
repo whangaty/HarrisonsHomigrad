@@ -52,13 +52,14 @@ end
 function dm.HUDPaint_RoundLeft(white)
     local lply = LocalPlayer()
 
-	local startRound = roundTimeStart + 7 - CurTime()
+	local startRound = roundTimeStart + 5 - CurTime()
     if startRound > 0 and lply:Alive() then
         if playsound then
             playsound = false
             surface.PlaySound("snd_jack_hmcd_deathmatch.mp3")
+            lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),0.5,4)
         end
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,2)
+        
 
 
         --[[surface.SetFont("HomigradFontBig")
@@ -66,11 +67,11 @@ function dm.HUDPaint_RoundLeft(white)
         surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
 
         surface.DrawText("Вы " .. name)]]--
-        draw.DrawText( "It's Only You.", "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( 155,155,255,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Fight everyone else to the death.", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,155,255,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "It's Only You.", "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( 155,155,255,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Fight everyone else to the death.", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,155,255,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
-        draw.DrawText( "Good luck soldier!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Good luck soldier!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         return
     end
 end

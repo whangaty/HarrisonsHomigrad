@@ -17,13 +17,13 @@ function jailbreak.HUDPaint_RoundLeft(white2,time)
 	local lply = LocalPlayer()
 	local name,color = jailbreak.GetTeamName(lply)
 
-	local startRound = roundTimeStart + 7 - CurTime()
+	local startRound = roundTimeStart + 5 - CurTime()
     if startRound > 0 and lply:Alive() then
         --[[if playsound then
             playsound = false
             surface.PlaySound("snd_jack_hmcd_disaster.mp3")
         end]]--
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),1,2)
+        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),0.5,4)
 
 
         --[[surface.SetFont("HomigradFontBig")
@@ -31,14 +31,14 @@ function jailbreak.HUDPaint_RoundLeft(white2,time)
         surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
 
         surface.DrawText("Вы " .. name)]]--
-        draw.DrawText( "Вы " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "ДжейлБрейк", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Вы " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "ДжейлБрейк", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,55,55,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply:Team() == 2 then
-            draw.DrawText( "Ваша задача не дать заключенным сбежать", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Ваша задача не дать заключенным сбежать", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "Ваша задача выбраться из камеры,найти оружие и убить ФСИН", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,155,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Ваша задача выбраться из камеры,найти оружие и убить ФСИН", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,155,55,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
 		end
         return
     end
