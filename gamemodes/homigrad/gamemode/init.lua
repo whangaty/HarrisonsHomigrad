@@ -115,7 +115,7 @@ function GM:PlayerInitialSpawn(ply)
 	RoundStateSync(ply,RoundData)
 
 	RoundActiveSync(ply)
-	RoundActiveNextSync(ply)
+	RoundActiveNextSync(ply)	
 
 	SendSpawnPoint(ply)
 end
