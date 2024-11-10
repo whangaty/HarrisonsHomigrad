@@ -1,4 +1,4 @@
-table.insert(LevelList, "ffa")
+--table.insert(LevelList, "ffa")
 ffa = {}
 ffa.Name = "Free For All"
 ffa.LoadScreenTime = 5.5
