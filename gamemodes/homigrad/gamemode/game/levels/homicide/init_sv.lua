@@ -16,6 +16,7 @@ end
 COMMANDS.homicide_get = {function(ply,args)
     if not (ply:IsAdmin() or (ply:GetUserGroup() == "operator") or (ply:GetUserGroup() == "tmod")) then return end
     if ply:Alive() then return end
+    if not ply:Team() == TEAM_SPECTATOR then return end
 
     local role = {{},{}}
 
