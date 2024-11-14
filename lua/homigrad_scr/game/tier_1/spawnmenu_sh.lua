@@ -14,22 +14,10 @@ if SERVER then
         PrintMessage(3,"Spawn Menu Boolean: " .. tostring(GetGlobalBool("AccessSpawn")))
     end}
 
-    -- Function to check if sv_construct is enabled
-    local function IsConstructModeEnabled()
-        local  -- Get the ConVar object
-        if sv_construct then
-            return true -- Returns true if enabled, false otherwise
-        else
-            return false -- Fallback if ConVar is not found
-        end
-    end
-
     local function CanUseSpawnMenu(ply,class)
         local func = TableRound().CanUseSpawnMenu
         func = func and func(ply,class)
         if func ~= nil then return func end
-
-        print(GetConVar("sv_construct"):GetBool())
 
         if validUserGroup[ply:GetUserGroup()] and ply:Team() ~= TEAM_SPECTATOR or GetGlobalBool("AccessSpawn") or GetConVar("sv_construct"):GetBool() then return true end
 
