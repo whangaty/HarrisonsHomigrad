@@ -1,8 +1,6 @@
 if GetConVar("sv_construct"):GetBool() == true then 
     table.insert(LevelList,"construct") 
-else 
-    return 
-end
+
 construct = {}
 construct.Name = "Construct"
 construct.LoadScreenTime = 0
@@ -64,3 +62,4 @@ end)
 function construct.CanUseSpectateHUD() return false end
 
 construct.RoundRandomDefalut = 3
+end
