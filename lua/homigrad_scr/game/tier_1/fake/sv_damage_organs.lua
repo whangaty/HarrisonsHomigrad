@@ -82,7 +82,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
     penetration:Mul(armorMul)
     
     if not rag or (rag and not dmginfo:IsDamageType(DMG_CRUSH)) then
-        local dmg = dmginfo:GetDamage() * armorMul * 0.1
+        local dmg = dmginfo:GetDamage() * armorMul * 1
         
         if
             hitgroup == HITGROUP_HEAD and

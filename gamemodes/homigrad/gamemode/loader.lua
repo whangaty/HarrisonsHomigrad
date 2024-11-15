@@ -147,7 +147,7 @@ hg_includeDir = GM.includeDir
 
 hg.modesHooks = {}
 
-local function LoadModes()   
+local function LoadModes()
 	for i, name in pairs(LevelList) do
 		local mode = _G[name]
 		for k, v2 in pairs(mode) do
@@ -159,7 +159,7 @@ local function LoadModes()
 	end
 end
 
-LoadModes()
+hg.LoadModes = LoadModes
 
 local oldHook = oldHook or hook.Call
 
@@ -167,7 +167,7 @@ function hook.Call(name, gm, ...)
     local Current = roundActiveName
 
     if hg.modesHooks[Current] and hg.modesHooks[Current][name] then
-        local a, b, c, d, e, f = hg.modesHooks[Current][name](_G[name], name, ...)
+        local a, b, c, d, e, f = hg.modesHooks[Current][name](...)
 
         if (a != nil) then
             return a, b, c, d, e, f

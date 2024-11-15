@@ -46,6 +46,20 @@ local function timeSort(a,b)
 	return time1 > time2
 end
 
+hook.Add("Player Death","mutedead",function(ply)
+	if muteAlldead and (not LocalPlayer():Alive() or ply:Team() == 1002) then
+		ply:SetMuted(true)
+	end
+end)
+
+hook.Add("Player Spawn","unmutealive",function(ply)
+	if muteall then return end
+
+	if muteAlldead then
+		ply:SetMuted(MutePlayers[ply:SteamID()])
+	end
+end)
+
 local function ToggleScoreboard(toggle)
 	if toggle then
         if IsValid(HomigradScoreboard) then return end--shut the fuck up

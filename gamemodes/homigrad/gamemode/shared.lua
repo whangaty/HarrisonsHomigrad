@@ -6,14 +6,14 @@ GM.Email = "N/A"
 GM.Website = "N/A"
 GM.TeamBased = true
 
---hg.includeDir("gamemodes/homigrad/game/")ебланы
-
 include("loader.lua")
 
 local start = SysTime()
 print("	start homigrad gamemode.")
 
-GM.includeDir("homigrad/gamemode/game/")--все файлы запускает, когда обновляем один.. можно из этого даже чо-то сделать.нахуй
+GM.includeDir("homigrad/gamemode/game/")
+
+hg.LoadModes()
 
 print("	end homigrad gamemode for " .. math.Round(SysTime() - start,4) .. "s")
 

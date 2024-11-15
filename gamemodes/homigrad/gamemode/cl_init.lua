@@ -470,14 +470,14 @@ end)
 
 gameevent.Listen("player_spawn")
 hook.Add("player_spawn","gg",function(data)
-	local ply = Player(data.userid)
+	--[[local ply = Player(data.userid)
 
 	if ply.SetHull then
 		ply:SetHull(ply:GetNWVector("HullMin"),ply:GetNWVector("Hull"))
 		ply:SetHullDuck(ply:GetNWVector("HullMin"),ply:GetNWVector("HullDuck"))
 	end
 
-	hook.Run("Player Spawn",ply)
+	hook.Run("Player Spawn",ply)--]]
 end)
 
 hook.Add("DrawDeathNotice","no",function() return false end)

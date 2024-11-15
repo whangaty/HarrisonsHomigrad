@@ -105,12 +105,13 @@ function Faking(ply,force) -- функция падения
 
 			if IsValid(wep) and ishgweapon(wep) then
 				ply.ActiveWeapon = wep
-				timer.Simple(0.1,function()
+				SpawnWeapon(ply)
+				--[[timer.Simple(0.1,function()
 					SpawnWeapon(ply)
 				end)
 				timer.Simple(0.5,function()
 					SpawnWeapon(ply)
-				end)
+				end)--]]
 			end
 			
 			rag.bull = ents.Create("npc_bullseye")
@@ -775,6 +776,10 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force)
 	rag.armors = armors
 	rag:CallOnRemove("Armors",RemoveRag)
 	self:SetNWEntity("Ragdoll", rag )
+
+	rag:AddCallback("PhysicsCollide", function(phys, data)
+		hook.Run("Ragdoll Collide", rag, data)
+	end)
 
 	if not self:Alive() then
 		local wep = self:GetActiveWeapon()

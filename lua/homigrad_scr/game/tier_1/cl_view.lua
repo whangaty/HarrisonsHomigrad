@@ -943,7 +943,7 @@ hook.Add("RenderScreenspaceEffects","BloomEffect-homigrad",function()
 	
 end)
 
-
+local colred = Color(255,0,0)
 hook.Add("PostDrawTranslucentRenderables","fuck_off",function()
 	--[[local lply = LocalPlayer()
 	if lply == Entity(1) then
@@ -952,13 +952,14 @@ hook.Add("PostDrawTranslucentRenderables","fuck_off",function()
 		if ent then
 			local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Head1'))
 			
-			render.DrawBox( pos, ang, Vector(3,-4,-2.5), Vector(7,3,2.5), color_white )
+			local vec1 = Vector(3,-4,-2.5)
+			local vec2 = Vector(7,3,2.5)
 
 			local dmgpos = ply:GetEyeTrace().HitPos
-			local penetration = ply:GetAimVector() * 10
-			local huy = util.IntersectRayWithOBB(dmgpos,penetration,pos,ang,Vector(2,-4,-3), Vector(7,4,3))
-
-			print(huy)
+			local penetration = ply:GetAimVector() * 100
+			local huy = util.IntersectRayWithOBB(dmgpos,penetration,pos,ang,vec1,vec2)
+			
+			render.DrawBox( pos, ang, vec1, vec2, huy and colred or color_white )
 		end
 	end--]]
 end )

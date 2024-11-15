@@ -9,6 +9,11 @@ function SpawnWeapon(ply)
 		local rag = ply:GetNWEntity("Ragdoll")
 		
 		if IsValid(rag) then
+			local lh = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand")))
+			local rh = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
+			
+			if not IsValid(rh) then return end
+
 			local wep = ents.Create("wep")
 			ply.wep = wep
 			rag.wep = wep
@@ -27,7 +32,7 @@ function SpawnWeapon(ply)
 			local pos, ang = weapon:GetTransform(wep, true)
 			wep:SetPos(pos)
 			wep:SetAngles(ang)
-			
+
 			wep:Spawn()
 			
 			ply:SetNWEntity("ragdollWeapon", wep)
@@ -41,14 +46,13 @@ function SpawnWeapon(ply)
 			if IsValid(ply.WepCons) then ply.WepCons:Remove() ply.WepCons = nil end
 			
 			local cons = constraint.Weld(wep,rag,0,rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )),0,true)
+			--rh:EnableMotion(false)
+			
 			if IsValid(cons) then
 				ply.WepCons=cons
 			end
 
 			if not (weapon.IsPistolHoldType and weapon:IsPistolHoldType()) then
-				local lh = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand")))
-				local rh = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
-
 				if IsValid(lh) then
 					local rhang = rh:GetAngles()
 					lh:SetPos(rh:GetPos() + rhang:Forward() * 4 + rhang:Up() * -3 + rhang:Right() * 2)

@@ -9,7 +9,7 @@ function ffa.StartRoundSV()
     for i, ply in ipairs(players) do
         ply:SetTeam(1)
         ply:SetNWInt("KillCount", 0)
-        ffa.PlayerSpawn(ply)
+        ffa.PlayerSpawn2(ply)
     end
 
     local aviable = ReadDataMap("dm")
@@ -55,7 +55,7 @@ local extraItems = {
     ["radio"] = "weapon_radio"
 }
 
-function ffa.PlayerSpawn(ply)
+function ffa.PlayerSpawn2(ply)
     ply:SetModel(tdm.models[math.random(#tdm.models)])
     ply:SetPlayerColor(Vector(0, 1, 0.051))
 
@@ -174,7 +174,7 @@ function ffa.HandlePlayerDeath(victim)
 
     timer.Simple(10, function()
         if IsValid(victim) then
-            ffa.PlayerSpawn(victim)
+            ffa.PlayerSpawn2(victim)
         end
     end)
 end

@@ -204,7 +204,6 @@ hook.Add("PostCleanupMap", "addboxs", function()
     end)
 end)
 
-cacheSpawns()
 timer.Create("SpawnTheBoxes", 5, 0, function()
     hook.Run("Boxes Think")
 end)

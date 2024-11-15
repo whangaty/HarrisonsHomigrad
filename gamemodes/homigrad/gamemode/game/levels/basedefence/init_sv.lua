@@ -139,7 +139,7 @@ local wepeno = {
     "weapon_sar2"
 }
 
-function basedefence.PlayerSpawn(ply,teamID)
+function basedefence.PlayerSpawn2(ply,teamID)
     if teamID == 2 then return end
 
 	ply:SetModel(basedefence.models[math.random(#basedefence.models)])

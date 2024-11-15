@@ -85,7 +85,7 @@ function GM:PlayerSpawn(ply)
 
 	ply:PlayerClassEvent("On")
 	
-	TableRound().PlayerSpawn(ply,ply:Team())
+	TableRound().PlayerSpawn2(ply,ply:Team())
 end
 
 function GM:PlayerDeath(ply,inf,att)

@@ -31,6 +31,7 @@ COMMANDS.homicide_get = {function(ply,args)
 end}
 
 local function makeT(ply)
+    if not IsValid(ply) then return end
     ply.roleT = true --Игрока не существует. Выдаёт из-за этого ошибку в первый раз.
     table.insert(homicide.t,ply)
 
@@ -74,6 +75,7 @@ local function makeT(ply)
 end
 
 local function makeCT(ply)
+    if not IsValid(ply) then return end
     ply.roleCT = true
     table.insert(homicide.ct,ply)
     if homicide.roundType == 1 then
@@ -177,6 +179,9 @@ function homicide.StartRoundSV()
     local countCT = 0
 
     local aviable = homicide.Spawns()
+    
+    if not aviable or table.IsEmpty(aviable) then return end
+
     tdm.SpawnCommand(PlayersInGame(),aviable,function(ply)
         ply.roleT = false
         ply.roleCT = false
@@ -306,7 +311,7 @@ end
 
 local empty = {}
 
-function homicide.PlayerSpawn(ply,teamID)
+function homicide.PlayerSpawn2(ply,teamID)
     local teamTbl = homicide[homicide.teamEncoder[teamID]]
     local color = teamID == 1 and Color(math.random(55,165),math.random(55,165),math.random(55,165)) or teamTbl[2]
 

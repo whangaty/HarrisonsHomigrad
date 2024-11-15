@@ -224,6 +224,9 @@ function EasyAppearance.DrawAttachment( eEnt, strAtt, ply )
 
     local matrix = eEnt:GetBoneMatrix( iBone )
     if not matrix then return end
+    
+    if eEnt:GetManipulateBoneScale( iBone ):IsZero() then return end
+
     local pos = matrix:GetTranslation()
     local ang = matrix:GetAngles()
 

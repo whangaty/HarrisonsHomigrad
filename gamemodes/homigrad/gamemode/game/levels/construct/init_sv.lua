@@ -79,7 +79,7 @@ end
 --]]
 local red = Color(255,0,0)
 
-function construct.PlayerSpawn(ply,teamID)
+function construct.PlayerSpawn2(ply,teamID)
 	ply:SetModel(tdm.models[math.random(#tdm.models)])
     ply:SetPlayerColor(Vector(0,0,0.6))
     ply:Give("weapon_physgun")

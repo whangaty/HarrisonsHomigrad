@@ -102,7 +102,7 @@ end
 
 local red = Color(255,0,0)
 
-function dm.PlayerSpawn(ply,teamID)
+function dm.PlayerSpawn2(ply,teamID)
 	ply:SetModel(tdm.models[math.random(#tdm.models)])
     ply:SetPlayerColor(Vector(0,0,0.6))
 

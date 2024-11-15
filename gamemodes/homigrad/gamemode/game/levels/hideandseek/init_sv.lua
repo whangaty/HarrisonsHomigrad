@@ -118,7 +118,7 @@ end
 
 function hideandseek.EndRound(winner) tdm.EndRoundMessage(winner) end
 
-function hideandseek.PlayerSpawn(ply,teamID)
+function hideandseek.PlayerSpawn2(ply,teamID)
 	local teamTbl = hideandseek[hideandseek.teamEncoder[teamID]]
 	local color = teamTbl[2]
 

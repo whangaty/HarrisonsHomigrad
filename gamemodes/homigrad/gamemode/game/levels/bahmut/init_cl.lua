@@ -4,8 +4,11 @@ local red, blue, gray = Color(255,75,75), Color(75,75,255), Color(200, 200, 200)
 local upvector = Vector(0, 0, 128)
 local playsound = false
 
+bahmut.WinPoints = bahmut.WinPoints or {}
+
 gameevent.Listen("player_activate")
 hook.Add("player_activate","Bamhut_SendData",function(data)
+    if roundActiveName ~= "bahmut" then return end
     bahmut.points = {}
 
     bahmut.WinPoints = {}

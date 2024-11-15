@@ -116,7 +116,7 @@ function zombie.EndRound(winner)
 	end
 end
 
-function zombie.PlayerSpawn(ply,teamID)
+function zombie.PlayerSpawn2(ply,teamID)
 	local teamTbl = zombie[zombie.teamEncoder[teamID]]
 	local color = teamTbl[2]
 

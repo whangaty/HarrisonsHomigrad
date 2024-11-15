@@ -1077,6 +1077,14 @@ function SWEP:GetTransform(model, force)
 
 	local rh = owner:GetBoneMatrix(bon)
 
+	if owner:IsRagdoll() then--fuck source engine
+		rh = Matrix()
+		local phys = owner:GetPhysicsObjectNum(owner:TranslateBoneToPhysBone(bon))
+		local pos, ang = phys:GetPos(), phys:GetAngles()
+		rh:SetTranslation(pos)
+		rh:SetAngles(ang)
+	end
+
 	if not rh then return self:GetPos(),self:GetAngles() end
 
 	local pos,ang = rh:GetTranslation(),rh:GetAngles()

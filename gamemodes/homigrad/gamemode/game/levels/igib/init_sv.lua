@@ -71,7 +71,7 @@ end
 
 local red = Color(255,0,0)
 
-function igib.PlayerSpawn(ply,teamID)
+function igib.PlayerSpawn2(ply,teamID)
 	ply:SetModel(tdm.models[math.random(#tdm.models)])
     ply:SetPlayerColor(Vector(0,0,0.6))
     ply:Give("weapon_igib")

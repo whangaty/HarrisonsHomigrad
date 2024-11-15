@@ -1,6 +1,6 @@
 local CLASS = player.RegClass("police")
 
-CLASS.weapons = {"weapon_radio","med_band_big","medkit","painkiller","weapon_handcuffs","weapon_taser",,"weapon_police_bat"}
+CLASS.weapons = {"weapon_radio","med_band_big","medkit","painkiller","weapon_handcuffs","weapon_taser","weapon_police_bat"}
 CLASS.secondary_weapon = {"weapon_glock"}
 CLASS.models = {}
 
