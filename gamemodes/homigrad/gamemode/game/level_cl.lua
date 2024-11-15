@@ -30,8 +30,8 @@ if GetConVar("sv_construct"):GetBool() == true then
 	roundActiveName = "construct"
 	roundActiveNameNext = "construct"
 else
-	roundActiveName = roundActiveName or "tdm"
-	roundActiveNameNext = roundActiveNameNext or "tdm"
+	roundActiveName = roundActiveName or "homicide"
+	roundActiveNameNext = roundActiveNameNext or "homicide"
 end
 
 net.Receive("round",function()
@@ -73,7 +73,7 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 
 	local k = showRoundInfo - CurTime()
 
-	if k > 0 and GetConVar("sv_construct"):GetBool() == true then
+	if k > 0 and GetConVar("sv_construct"):GetBool() == false then
 		k = math.min(k,1)
 
 		showRoundInfoColor.a = k * 255
