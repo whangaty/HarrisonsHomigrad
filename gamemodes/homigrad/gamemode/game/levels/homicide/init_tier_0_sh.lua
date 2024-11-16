@@ -15,10 +15,25 @@ homicide.RoundRandomDefalut = 6
 local playsound = false
 if SERVER then
     util.AddNetworkString("roundType")
+    util.AddNetworkString("homicide_support_arrival")
 else
     net.Receive("roundType",function(len)
         homicide.roundType = net.ReadInt(4)
         playsound = true
+    end)
+
+    local supportArrivalTime = 0
+
+    net.Receive("homicide_support_arrival", function()
+        supportArrivalTime = net.ReadFloat()
+    end)
+
+    hook.Add("HUDPaint", "DrawSupportArrivalTime", function()
+        local lply = LocalPlayer()
+        if supportArrivalTime > 0 and not lply:Alive() then
+            local timeLeft = math.max(0, supportArrivalTime - CurTime())
+            draw.DrawText("You will arrive as support in " .. math.ceil(timeLeft) .. " seconds", "HomigradFontBig", 10, ScrH() - 50, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT)
+        end
     end)
 end
 
@@ -36,15 +51,15 @@ function homicide.IsMapBig()
     local mins,maxs = game.GetWorld():GetModelBounds()
     local skybox = 0
     for i,ent in pairs(ents.FindByClass("sky_camera")) do
-        --local skyboxang = ent:GetPos():GetNormalized():Dot(maxs:GetNormalized())
+
         
-        skybox = 0--skyboxang > 0 and ent:GetPos():Distance(-mins) or ent:GetPos():Distance(-maxs)
-        --maxs:Sub(skybox)
+        skybox = 0
+
     end
     
-    --PrintMessage(3,tostring(mins:Distance(maxs) - skybox))
+
     return (mins:Distance(maxs) - skybox) > 5000
-    --Vector(-10000, -2000, -2500) Vector(5000, 10000, 800)
+    
 end
 
 function homicide.StartRound(data)
@@ -55,9 +70,6 @@ function homicide.StartRound(data)
     if SERVER then
         local roundType = homicide_setmode:GetInt() == math.random(1,4) or (homicide.IsMapBig() and 1) or false
         homicide.roundType = math.random(1,4)
-        --homicide.roundType = roundType or math.random(2,4)
-        --soe, standard, gun-free-zone, wild west
-        --print(homicide_setmode:GetString(),homicide.roundType)
         net.Start("roundType")
         net.WriteInt(homicide.roundType,4)
         net.Broadcast()
@@ -150,11 +162,7 @@ function homicide.HUDPaint_RoundLeft(white2)
             lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),0.5,4)
         end
         
-        --[[surface.SetFont("HomigradFontBig")
-        surface.SetTextColor(color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255)
-        surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
 
-        surface.DrawText("Вы " .. name)]]--
         draw.DrawText( "You are a " .. name, "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "Homicide", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( roundTypes[roundType], "HomigradRoundFont", ScrW() / 2, ScrH() / 5, Color( color.r,color.g,color.b ,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
@@ -169,7 +177,7 @@ function homicide.HUDPaint_RoundLeft(white2)
             else --emergency/base
                 draw.DrawText( "Kill everyone before the police arrive.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
             end
-        elseif lply.roleCT then --Innocent with a gun
+        elseif lply.roleCT then 
             draw.DrawText( DescCT[homicide.roundType] or "...", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
             draw.DrawText( "Find the traitor. Tie or Kill him to win.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
@@ -177,15 +185,6 @@ function homicide.HUDPaint_RoundLeft(white2)
         return
     end
 
-    --[[Not Needed
-    local time = math.Round(roundTimeStart + roundTimeLoot - CurTime())
-    if time > 0 then
-        local acurcetime = string.FormattedTime(time,"%02i:%02i")
-        acurcetime = "Police Arrive In: " .. acurcetime -- Нахуя? Это же не видно.
-
-        draw.SimpleText(acurcetime,"HomigradFont",ScrW()/2,ScrH()-25,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-    end
-    ]]
     
     local lply_pos = lply:GetPos()
 
@@ -201,8 +200,6 @@ function homicide.HUDPaint_RoundLeft(white2)
         if not pos.visible then continue end
 
         color.a = 255 * (1 - dis / 1024)
-        --draw.SimpleText(roundTimeStart, "HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-        --print(roundTimeStart)
         draw.SimpleText("Buddy: "..ply:Nick(),"HomigradFontBig",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 end
@@ -218,3 +215,5 @@ function homicide.Scoreboard_DrawLast(ply)
 end
 
 homicide.SupportCenter = true
+
+
