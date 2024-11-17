@@ -134,14 +134,6 @@ local red,blue = Color(200,0,10),Color(75,75,255)
 local roundTypes = {"Shotgun", "Regular Round", "No Firearms Permitted Zone", "Wild West"}
 local roundSound = {"snd_jack_hmcd_disaster.mp3","snd_jack_hmcd_shining.mp3","snd_jack_hmcd_panic.mp3","snd_jack_hmcd_wildwest.mp3"}
 
-surface.CreateFont("HomigradRoundFont",{
-    font = "Arial", -- On Windows/macOS, use the font-name which is shown to you by your operating system Font Viewer. On Linux, use the file name
-	extended = false,
-	size = ScreenScale(15),
-	weight = 500,
-	antialias = true,
-})
-
 local DescCT = {
     [1] = "You have been given a shotgun. Kill the traitor before he kills you.", --emergency
     [2] = "You have been given a M9 Beretta with one magazine. Kill the traitor.", --base
