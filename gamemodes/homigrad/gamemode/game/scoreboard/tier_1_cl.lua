@@ -46,6 +46,20 @@ local function timeSort(a,b)
 	return time1 > time2
 end
 
+hook.Add("Player Death","mutedead",function(ply)
+	if muteAlldead and (not LocalPlayer():Alive() or ply:Team() == 1002) then
+		ply:SetMuted(true)
+	end
+end)
+
+hook.Add("Player Spawn","unmutealive",function(ply)
+	if muteall then return end
+
+	if muteAlldead then
+		ply:SetMuted(MutePlayers[ply:SteamID()])
+	end
+end)
+
 local function ToggleScoreboard(toggle)
 	if toggle then
         if IsValid(HomigradScoreboard) then return end--shut the fuck up
@@ -234,8 +248,11 @@ local function ToggleScoreboard(toggle)
 				playerMenu:AddOption("Open Steam Profile", function()
 					ply:ShowProfile()
 				end)
-				playerMenu:AddOption("GoTo", function()
+				playerMenu:AddOption("Go To", function()
 					LocalPlayer():ConCommand("ulx goto $" .. ply:UserID())
+				end)
+				playerMenu:AddOption("Bring", function()
+					LocalPlayer():ConCommand("ulx bring $" .. ply:UserID())
 				end)
 				playerMenu:MakePopup()
 

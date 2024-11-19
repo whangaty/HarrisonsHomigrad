@@ -117,7 +117,7 @@ end
 
 local empty = {}
 
-function juggernaut.PlayerSpawn(ply,teamID)
+function juggernaut.PlayerSpawn2(ply,teamID)
     local teamTbl = juggernaut[juggernaut.teamEncoder[teamID]]
     local color = teamID == 1 and Color(math.random(55,165),math.random(55,165),math.random(55,165)) or teamTbl[2]
 

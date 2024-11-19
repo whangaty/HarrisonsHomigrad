@@ -156,5 +156,5 @@ SWEP.vbwPos = Vector(6.2,4.5,-4)
 SWEP.addPos = Vector(0,-1,-0.5)
 SWEP.addAng = Angle(0,0,0)
 
-SWEP.SightPos = Vector(-20,-0.75,-0.6)
+SWEP.SightPos = Vector(-25,-0.75,-0.6)
 end

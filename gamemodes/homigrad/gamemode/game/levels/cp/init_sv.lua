@@ -121,7 +121,7 @@ function cp.Think()
     end
 end
 
-function cp.PlayerSpawn(ply,teamID)
+function cp.PlayerSpawn2(ply,teamID)
     local teamTbl = cp[cp.teamEncoder[teamID]]
 	local color = teamTbl[2]
 

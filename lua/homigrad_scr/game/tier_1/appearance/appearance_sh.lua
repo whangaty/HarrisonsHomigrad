@@ -91,6 +91,9 @@ local Models = {
     ["Female 06"] = {strPatch = "models/player/group01/female_06.mdl", intSubMat = 4 },
 }
 
+local Attachmets = {}
+
+EasyAppearance.Attachmets = Attachmets
 EasyAppearance.Models = Models
 EasyAppearance.Appearances = Appearances
 
@@ -142,3 +145,124 @@ function EasyAppearance.AddAppearances( intSex, strMame, strTexturePatch )
     return true
 
 end
+
+--[[
+    ["HatExample"] = {
+        strModel = "",
+        strMaterial = "",
+        strBone = "",
+        vPos = Vector( 0, 0, 0 ),
+        aAng = Angle( 0, 0, 0 ),
+        iSkin = 0,
+        strBodyGroups = "0000000"
+    }
+--]]
+
+function EasyAppearance.AddAttachmet( strName, strModel, strMaterial, strBone, bDrawOnLocal, vPos, vFPos, aAng, aFAng, iSkin, strBodyGroups )
+
+    EasyAppearance.Attachmets[strName] = {
+        strModel = strModel,
+        strMaterial = strMaterial,
+        strBone = strBone,
+        vPos = vPos or Vector( 0, 0, 0 ),
+        vFPos = vFPos or vPos or Vector( 0, 0, 0 ),
+        aAng = aAng or Angle( 0, 0, 0 ),
+        aFAng = aFAng or aAng or Angle( 0, 0, 0 ),
+        bDrawOnLocal = (bDrawOnLocal ~= nil and bDrawOnLocal) or bDrawOnLocal == nil and true,
+        iSkin = iSkin or 0,
+        strBodyGroups = strBodyGroups or "0000000"
+    }
+
+    return true
+
+end
+
+local AddAttach = EasyAppearance.AddAttachmet
+// Attachments
+// AddAttach( "Hat", "ModelPath", "MaterialPath" or nil, Vector(0,0,0), Vector(0,0,0), Angle(0,0,0), Angle(0,0,0), 0, "00000" )
+
+--[[
+    /\_/\
+    |*_*| -- this is pluv cat or slugcat idk LOL
+    |   |____
+    /_|_\____\
+--]]
+
+AddAttach( 
+    "Gray Cap", // uniName
+    "models/modified/hat07.mdl", nil, // modelPath and materialPath 
+    "ValveBiped.Bip01_Head1", // Bone
+    false, // ShoulDraw in localPlayer
+    Vector(5,0,0), Vector(4,0.1,0), // PosMale PosFemale
+    Angle(0,-80,-90), Angle(0,-80,-90), // AngMale AngFemale
+    0, // Skin
+    "00000" // Ermmm Bodygroups
+)
+
+AddAttach( 
+    "Red Headphones", // uniName
+    "models/modified/headphones.mdl", nil, // modelPath and materialPath 
+    "ValveBiped.Bip01_Head1", // Bone
+    false, // ShoulDraw in localPlayer
+    Vector(2.8,-.2,0), Vector(1.3,-1,0), // PosMale PosFemale
+    Angle(0,-80,-90), Angle(0,-80,-90), // AngMale AngFemale
+    0, // Skin
+    "00000" // Ermmm Bodygroups
+)
+
+AddAttach( 
+    "Pinkman Hat", // uniName
+    "models/modified/hat03.mdl", nil, // modelPath and materialPath 
+    "ValveBiped.Bip01_Head1", // Bone
+    false, // ShoulDraw in localPlayer
+    Vector(5,0,0), Vector(4,0.1,0), // PosMale PosFemale
+    Angle(0,-80,-90), Angle(0,-80,-90), // AngMale AngFemale
+    0, // Skin
+    "00000" // Ermmm Bodygroups
+)
+
+AddAttach( 
+    "Gray Hat", // uniName
+    "models/modified/hat01_fix.mdl", nil, // modelPath and materialPath 
+    "ValveBiped.Bip01_Head1", // Bone
+    false, // ShoulDraw in localPlayer
+    Vector(5,0,0), Vector(4,0.1,0), // PosMale PosFemale
+    Angle(0,-80,-90), Angle(0,-80,-90), // AngMale AngFemale
+    0, // Skin
+    "00000" // Ermmm Bodygroups
+)
+
+AddAttach( 
+    "Bandana", // uniName
+    "models/modified/bandana.mdl", nil, // modelPath and materialPath 
+    "ValveBiped.Bip01_Head1", // Bone
+    false, // ShoulDraw in localPlayer
+    Vector(-1,-1,0), Vector(-2,-.9,0), // PosMale PosFemale
+    Angle(0,-80,-90), Angle(0,-80,-90), // AngMale AngFemale
+    0, // Skin
+    "00000" // Ermmm Bodygroups
+)
+
+AddAttach( 
+    "Small Backpack", // uniName
+    "models/modified/backpack_3.mdl", nil, // modelPath and materialPath 
+    "ValveBiped.Bip01_Spine4", // Bone
+    false, // ShoulDraw in localPlayer
+    Vector(-7.5,4,0), Vector(-9,3,0), // PosMale PosFemale
+    Angle(180,-100,-90), Angle(180,-90,-90), // AngMale AngFemale
+    0, // Skin
+    "00000" // Ermmm Bodygroups
+)
+
+AddAttach( 
+    "Big Backpack", // uniName
+    "models/modified/backpack_1.mdl", nil, // modelPath and materialPath 
+    "ValveBiped.Bip01_Spine2", // Bone
+    false, // ShoulDraw in localPlayer
+    Vector(0.4,3.6,0), Vector(-1.5,3.6,0), // PosMale PosFemale
+    Angle(180,-90,-90), Angle(180,-90,-90), // AngMale AngFemale
+    0, // Skin
+    "00000" // Ermmm Bodygroups
+)
+
+

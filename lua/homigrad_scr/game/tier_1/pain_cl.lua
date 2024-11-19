@@ -16,24 +16,25 @@ local math_Clamp = math.Clamp
 local k = 0
 local k4 = 0
 local time = 0
-
+local colwhite = Color(255, 255, 255, 255)
+local colred = Color(255, 0, 0, 255)
 -- FIXME: Unconcious Text may not appear at times.
 hook.Add("HUDPaintBackground", "unconsciousnessInfo", function()
     local ply = LocalPlayer()
 
     if ply:GetNWInt("unconscious") and ply:Alive() and ply:Team() ~= TEAM_SPECTATOR then
         draw.DrawText("You are currently unconscious.", "HomigradFontNotify", ScrW() / 2, ScrH() / 2.1,
-            Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+            colwhite, TEXT_ALIGN_CENTER)
 
         if pain and pain > 250 then
             draw.DrawText("Assuming you're still in great shape, you'll be back up in " ..
                 math.floor(((pain - 250) / 10) + 1) .. " second(s)!", "HomigradFontSmall",
                 ScrW() / 2, ScrH() / 1.8,
-                Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+                colwhite, TEXT_ALIGN_CENTER)
         elseif blood and blood < 3000 then
             draw.DrawText("You have lost too much blood and have gone comatose!\nYou are slowly bleeding out, and will die unless someone can revive you.", "HomigradFontSmall",
                 ScrW() / 2, ScrH() / 1.8,
-                Color(255, 0, 0, 255), TEXT_ALIGN_CENTER)
+                colred, TEXT_ALIGN_CENTER)
         end
     end
 end)
@@ -47,31 +48,12 @@ surface.CreateFont("HomigradFontBig",{
 	outline = false,
 	shadow = true
 })
-hook.Add("HUDPaint","PainEffect",function()
-    if not LocalPlayer():Alive() or ply:Team() == 1002 then return end
 
+hook.Add("HUDPaint","PainEffect",function()
+    if not LocalPlayer():Alive() or LocalPlayer():Team() == 1002 then return end
 
     local w,h = ScrW(),ScrH()
-    k = Lerp(0.1,k,math_Clamp(pain / 250,0,15))
-
-
---[[
-    surface.SetMaterial(grtodown)
-    surface.SetDrawColor(0,0,0,255)
-    surface.DrawTexturedRect(0,0,w,h * k)
-
-    surface.SetMaterial(grtoup)
-    surface.SetDrawColor(0, 0, 0, 255 )
-    surface.DrawTexturedRect(0,h - h * k,w,h * k + 1)
-
-    surface.SetMaterial(grtoright)
-    surface.SetDrawColor(0,0,0,255)
-    surface.DrawTexturedRect(0,0,w * k,h)
-
-    surface.SetMaterial(grtoleft)
-    surface.SetDrawColor(0,0,0,255)
-    surface.DrawTexturedRect(w - w * k,0,w * k + 1,h)
---]]
+    k = LerpFT(0.1,k,math_Clamp(pain / 250,0,15))
     
     local k2 = painlosing >= 5 and (painlosing / 5 - 1) or 0
    
@@ -125,13 +107,9 @@ hook.Add("RenderScreenspaceEffects","renderimpulse",function()
 
     k3 = math.Clamp(Lerp(0.01,k3,impulse),0,50)
 
-    if LocalPlayer():Alive() and not ply:Team() ~= 1002 then
+    if LocalPlayer():Alive() and not LocalPlayer():Team() ~= 1002 then
         DrawCA(4 * k3, 2 * k3, 0, 2 * k3, 1 * k3, 0)
     end
-    --[[if LocalPlayer():Name() == "useless" then
-        local offset = 40
-        DrawCA(4 * offset, 2 * offset, 0, 2 * offset, 1 * offset, 0)
-    end--]]
 end)
 
 end

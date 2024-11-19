@@ -1,7 +1,7 @@
 SWEP.Base = "medkit"
 SWEP.PrintName = "Taser"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "Drops a target to the ground immediately, or gets them right back up if they're already down.\n(mostly) Non-lethal."
+SWEP.Instructions = "Drops a target to the ground immediately. \n(mostly) Non-lethal."
 SWEP.Slot = 2
 SWEP.SlotPos = 4
 SWEP.Spawnable = true

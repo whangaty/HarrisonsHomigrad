@@ -35,7 +35,7 @@ function gravteam.EndRound(winner) tdm.EndRoundMessage(winner) end
 
 function gravteam.PlayerInitialSpawn(ply) ply:SetTeam(math.random(1,2)) end
 
-function gravteam.PlayerSpawn(ply,teamID)
+function gravteam.PlayerSpawn2(ply,teamID)
 	local teamTbl = gravteam[gravteam.teamEncoder[teamID]]
 	local color = teamTbl[2]
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])

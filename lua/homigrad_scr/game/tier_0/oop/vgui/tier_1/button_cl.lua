@@ -22,14 +22,14 @@ end)
 local SetDrawColor = surface.SetDrawColor
 local DrawRect = surface.DrawRect
 
-local nigger = Color(0,0,0)
+local black = Color(0,0,0)
 
 local LerpFT = LerpFT
 
 PANEL:Event_Add("Draw","Main",function(self,w,h,color)
     local topHeight = self.TopHeight
 
-    SetDrawColor(nigger)
+    SetDrawColor(black)
     DrawRect(0,0,w,h)
 
     SetDrawColor(color.main)

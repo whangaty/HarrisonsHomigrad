@@ -1,6 +1,6 @@
 local CLASS = player.RegClass("police")
 
-CLASS.weapons = {"weapon_radio","med_band_big","medkit","painkiller","weapon_handcuffs","weapon_taser","weapon_hg_flashbang","weapon_police_bat"}
+CLASS.weapons = {"weapon_radio","med_band_big","medkit","painkiller","weapon_handcuffs","weapon_taser","weapon_police_bat"}
 CLASS.secondary_weapon = {"weapon_glock"}
 CLASS.models = {}
 
@@ -281,7 +281,7 @@ function CLASS:TeamName()
 	return "Police",CLASS.color
 end
 
-local nigger = Color(0,0,0,200)
+local black = Color(0,0,0,200)
 local white = Color(255,255,255,25)
 local white2 = Color(255,255,255)
 
@@ -323,7 +323,7 @@ function CLASS:OpenMenu()
 			button:SetPos(100 * x,50 * y)
 
 			function button:Paint(w,h)
-				draw.RoundedBox(0,0,0,w,h,nigger)
+				draw.RoundedBox(0,0,0,w,h,black)
 
 				if self:IsHovered() then
 					Selected = snd[1]

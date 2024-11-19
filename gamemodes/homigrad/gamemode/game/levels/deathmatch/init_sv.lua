@@ -2,12 +2,12 @@ function dm.StartRoundSV()
     tdm.RemoveItems()
 
 	roundTimeStart = CurTime()
-	roundTime = 60 * (1 + math.min(#player.GetAll() / 8,2))
+	roundTime = 240 -- 60 * (1 + math.min(#player.GetAll() / 8,2))
 
     local players = PlayersInGame()
     for i,ply in pairs(players) do ply:SetTeam(1) end
 
-    local aviable = ReadDataMap("dm")
+    local aviable = ReadDataMap("spawnpointshiders")
     aviable = #aviable ~= 0 and aviable or homicide.Spawns()
     tdm.SpawnCommand(team.GetPlayers(1),aviable,function(ply)
         ply:Freeze(true)
@@ -40,20 +40,69 @@ function dm.RoundEndCheck()
     end
 
     if Alive <= 1 then EndRound() return end
+    if roundTimeStart + roundTime - CurTime() <= 0 then EndRound() end
 
 end
 
 function dm.EndRound(winner)
+    --[[
     for i, ply in ipairs( player.GetAll() ) do
 	    if ply:Alive() then
             PrintMessage(3,ply:GetName() .. " remains. They are victorious!")
         end
     end
+    ]]
+    PrintMessage(3,"Deathmatch Over! GG WP!")
+end
+
+local function GetTeamSpawns(ply)
+	local spawnsT,spawnsCT = bahmut.SpawnsTwoCommand()
+
+    if ply:Team() == 1 then
+        return spawnsT
+    elseif ply:Team() == 2 then
+        return spawnsCT
+    else
+        return false
+    end
+end
+
+function dm.Think()
+    construct.LastWave = construct.LastWave or CurTime() + 15
+
+    if CurTime() >= construct.LastWave then
+        SetGlobalInt("construct_respawntime", CurTime())
+    
+        for _, v in player.Iterator() do
+
+            local players = {}
+            if !v:Alive() and v:Team() != 1002 then
+                v:Spawn()
+                local teamspawn = GetTeamSpawns(v)
+    
+                local point,key = table.Random(teamspawn)
+                point = ReadPoint(point)
+                if not point then continue end
+    
+                v:SetPos(point[1])
+                players[v:Team()] = players[v:Team()] or {}
+                players[v:Team()][v] = true
+            end
+        end
+    
+        for ent in pairs(construct.ragdolls) do
+            if IsValid(ent) then ent:Remove() end
+    
+            construct.ragdolls[ent] = nil
+        end
+
+        construct.LastWave = CurTime() + 10
+    end
 end
 
 local red = Color(255,0,0)
 
-function dm.PlayerSpawn(ply,teamID)
+function dm.PlayerSpawn2(ply,teamID)
 	ply:SetModel(tdm.models[math.random(#tdm.models)])
     ply:SetPlayerColor(Vector(0,0,0.6))
 

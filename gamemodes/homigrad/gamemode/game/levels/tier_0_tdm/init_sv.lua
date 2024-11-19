@@ -141,6 +141,7 @@ function tdm.GetCountLive(list,func)
 		if not IsValid(ply) then continue end
 
 		result = func and func(ply)
+		if (ply.Blood < 2500 or ply.heartstop) and ply.unconscious then continue end
 		if result == true then count = count + 1 continue elseif result == false then continue end
 		if not PlayerIsCuffs(ply) and ply:Alive() then count = count + 1 end
 	end
@@ -182,7 +183,7 @@ function tdm.GiveSwep(ply,list,mulClip1)
     end
 end
 
-function tdm.PlayerSpawn(ply,teamID)
+function tdm.PlayerSpawn2(ply,teamID)
 	local teamTbl = tdm[tdm.teamEncoder[teamID]]
 	local color = teamTbl[2]
 

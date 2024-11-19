@@ -35,7 +35,7 @@ function hl2dm.EndRound(winner) tdm.EndRoundMessage(winner) end
 
 function hl2dm.PlayerInitialSpawn(ply) ply:SetTeam(math.random(1,2)) end
 
-function hl2dm.PlayerSpawn(ply,teamID)
+function hl2dm.PlayerSpawn2(ply,teamID)
 	local teamTbl = hl2dm[hl2dm.teamEncoder[teamID]]
 	local color = teamTbl[2]
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])

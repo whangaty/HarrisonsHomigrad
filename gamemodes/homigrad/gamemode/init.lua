@@ -85,7 +85,7 @@ function GM:PlayerSpawn(ply)
 
 	ply:PlayerClassEvent("On")
 	
-	TableRound().PlayerSpawn(ply,ply:Team())
+	TableRound().PlayerSpawn2(ply,ply:Team())
 end
 
 function GM:PlayerDeath(ply,inf,att)
@@ -115,7 +115,7 @@ function GM:PlayerInitialSpawn(ply)
 	RoundStateSync(ply,RoundData)
 
 	RoundActiveSync(ply)
-	RoundActiveNextSync(ply)
+	RoundActiveNextSync(ply)	
 
 	SendSpawnPoint(ply)
 end
@@ -199,15 +199,6 @@ end
 function GM:PlayerDisconnected(ply) end
 
 function GM:PlayerDeathSound() return true end
-
---
-
-COMMANDS.afk = {function(ply,args)
-	local ent = ply:GetEyeTrace().Entity
-	local ply = RagdollOwner(ent) or ent or false
-
-	if ply then ply:SetTeam(1002) ply:KillSilent() end
-end}
 
 COMMANDS.teamforce = {function(ply,args)
 	local teamID = tonumber(args[2])

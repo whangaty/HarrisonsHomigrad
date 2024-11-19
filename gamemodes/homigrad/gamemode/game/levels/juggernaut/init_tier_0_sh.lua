@@ -82,21 +82,22 @@ function juggernaut.HUDPaint_RoundLeft(white2)
     local lply = LocalPlayer()
     local name,color = juggernaut.GetTeamName(lply)
 
-    local startRound = roundTimeStart + 7 - CurTime()
+    local startRound = roundTimeStart + 5 - CurTime()
     if startRound > 0 and lply:Alive() then
         if playsound then
             playsound = false
             surface.PlaySound(roundSound)
+            lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),0.5,4)
         end
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),3,0.5)
+        
 
-        draw.DrawText( "You are " .. name, "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Juggernaut", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You are " .. name, "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Juggernaut", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply.roleT then
-            draw.DrawText( "You're surrounded by mercenaries. Take them out and remain the only one standing!", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "You're surrounded by mercenaries. Take them out and remain the only one standing!", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "Work together with your friends, and eliminate the Juggernaut.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Work together with your friends, and eliminate the Juggernaut.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         end
         return
     end

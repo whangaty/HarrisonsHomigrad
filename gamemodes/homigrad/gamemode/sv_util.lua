@@ -69,5 +69,6 @@ oldSetModel = oldSetModel or EntityMeta.SetModel
 
 function EntityMeta:SetModel(str)
 	self:SetSubMaterial()
+	self:SetNWString("EA_Attachments",nil)
 	oldSetModel(self,str)
 end

@@ -170,6 +170,7 @@ local CalcView--fuck
 local vel = 0
 local diffang = Vector(0,0,0)
 local diffpos = Vector(0,0,0)
+diffang2 = Angle(0,0,0)
 
 hook.Add("RenderScene","octoweapons",function(pos,angle,fov)
 	local focus = HasFocus()
@@ -376,6 +377,8 @@ net.Receive("nodraw_helmet",function()
 	helmEnt = net.ReadEntity()
 end)
 
+local oldangles = Angle(0,0,0)
+
 function CalcView(ply,vec,ang,fov,znear,zfar)
 	if STOPRENDER then return end
 	local fov = CameraSetFOV + ADDFOV
@@ -514,8 +517,10 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local output_pos = vecEye
 
 	if wep and wep.Camera then
-		output_pos, output_ang = wep:Camera(ply, output_pos, output_ang)
+		output_pos, output_ang, fov = wep:Camera(ply, output_pos, output_ang, fov)
 	end
+
+	view.fov = fov
 
 	if wep and hand then
 		local posRecoil = Vector(recoil * 8,0,recoil * 1.5)
@@ -548,6 +553,11 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	
 	diffpos = LerpFT(0.1,diffpos,(output_pos - (oldview.origin or output_pos)) / 6)
 	diffang = LerpFT(0.1,diffang,(output_ang:Forward() - (oldview.angles or output_ang):Forward()) * 50 + (lply:EyeAngles() + (lply:GetActiveWeapon().eyeSpray or angZero) * 1000):Forward() * anim_pos * 1)
+	
+	local _, lang = WorldToLocal(vector_origin, lply:EyeAngles(), vector_origin, (oldangles or lply:EyeAngles()))
+	oldangles = lply:EyeAngles()
+
+	diffang2 = LerpFT(0.05, diffang2, lang * val)
 
 	if RENDERSCENE then
 		if hg_cool_camera:GetBool() then 
@@ -664,6 +674,115 @@ hook.Add("InputMouseApply", "asdasd2", function(cmd, x, y, angle)
 
 	cmd:SetViewAngles(angle)
 	return true
+end)
+
+local HullVec = Vector(4,4,4)
+local hand_material = Material("vgui/hud/hmcd_hand")
+local hand_material_on = Material("vgui/hud/hmcd_closedhand")
+
+local show_hands = CreateClientConVar("hg_showhands", 1, true, false, "Show hints on whether your hand will stick and what object you're currently about to hold.")
+
+local last_hold_lh = 0
+local last_hold_rh = 0
+
+hook.Add("HUDPaint","fakethings",function()
+	local ragdoll = follow
+
+	if not show_hands:GetBool() then return end
+
+	if IsValid(ragdoll) then
+		local rh = ragdoll:LookupBone("ValveBiped.Bip01_R_Hand")
+		local mat = ragdoll:GetBoneMatrix(rh)
+
+		if mat then
+			local position = mat:GetTranslation()
+			local traceinfo = {
+				start = position,
+				endpos = position,
+				mins = -HullVec,
+				maxs = HullVec,
+				filter = ragdoll,
+			}
+			
+			local tr = util.TraceHull(traceinfo)
+			if tr.Hit and not tr.HitSky then
+				local vec = tr.HitPos + mat:GetAngles():Forward() * 3 + mat:GetAngles():Right() * 1 + mat:GetAngles():Up() * -1
+				
+				local vec1 = vec + mat:GetAngles():Up() * 2
+				local vec2 = vec + mat:GetAngles():Forward() * -2 + mat:GetAngles():Up() * 2 + mat:GetAngles():Right() * 0.5
+				local vec3 = vec + mat:GetAngles():Forward() * -2 + mat:GetAngles():Right() * 0.5
+
+				local pos = vec:ToScreen()
+
+				last_hold_rh = LocalPlayer():GetNWBool("rhon", false) and 255 or LerpFT(0.01, last_hold_rh, 0)
+
+				--[[surface.SetFont("HomigradFont")
+				local txt = "You're "..(ply:GetNWBool("rhon", false) and "currently holding " or "about to hold ")..(tr.Entity:IsWorld() and "a solid object" or (tr.Entity:IsPlayer() and "player "..tr.Entity:Name()) or tr.Entity.PrintName or (string.find(tr.Entity:GetClass(),"prop") and "a prop") or tr.Entity:GetClass()).." with your right hand."
+				local x, y = surface.GetTextSize(txt)
+				local posx = math.Clamp(Lerp(0.1, ScrW() * 2 / 3, pos.x), x / 2, ScrW() - x / 2)
+				local posy = math.Clamp(Lerp(0.1, ScrH() * 9 / 10, pos.y), y, ScrH() - y)
+				surface.SetTextPos(posx - x / 2, posy - y)
+				surface.SetTextColor(255, 255, 255, last_hold_rh)
+				surface.DrawText(txt)--]]
+				--uncomment if needed
+
+				cam.Start3D()
+					render.SetMaterial(LocalPlayer():GetNWBool("rhon", false) and hand_material_on or hand_material)
+					--render.DrawSprite(vec, 1, 1, color_black)
+					--render.DrawSprite(vec1, 1, 1, Color(255,0,0))
+					--render.DrawSprite(vec2, 1, 1, color_white)
+					--render.DrawSprite(vec3, 1, 1, color_white)
+					render.DrawQuad(vec, vec1, vec2, vec3, color_white)
+				cam.End3D()
+			end
+		end
+
+		local lh = ragdoll:LookupBone("ValveBiped.Bip01_L_Hand")
+		local mat = ragdoll:GetBoneMatrix(lh)
+
+		if mat then
+			local position = mat:GetTranslation()
+			local traceinfo = {
+				start = position,
+				endpos = position,
+				mins = -HullVec,
+				maxs = HullVec,
+				filter = ragdoll,
+			}
+			
+			local tr = util.TraceHull(traceinfo)
+			if tr.Hit and not tr.HitSky then
+				local vec = tr.HitPos + mat:GetAngles():Forward() * 3 + mat:GetAngles():Right() * 1 + mat:GetAngles():Up() * -1
+				
+				local vec1 = vec + mat:GetAngles():Up() * 2
+				local vec2 = vec + mat:GetAngles():Forward() * -2 + mat:GetAngles():Up() * 2 + mat:GetAngles():Right() * 0.5
+				local vec3 = vec + mat:GetAngles():Forward() * -2 + mat:GetAngles():Right() * 0.5
+
+				local pos = vec:ToScreen()
+
+				last_hold_lh = LocalPlayer():GetNWBool("lhon", false) and 255 or LerpFT(0.01, last_hold_lh, 0)
+
+				--[[surface.SetFont("HomigradFont")
+				local txt = "You're "..(ply:GetNWBool("rhon", false) and "currently holding " or "about to hold ")..(tr.Entity:IsWorld() and "a solid object" or (tr.Entity:IsPlayer() and "player "..tr.Entity:Name()) or tr.Entity.PrintName or (string.find(tr.Entity:GetClass(),"prop") and "a prop") or tr.Entity:GetClass()).." with your left hand."
+				local x, y = surface.GetTextSize(txt)
+				local posx = math.Clamp(Lerp(0.1, ScrW() / 3, pos.x), x / 2, ScrW() - x / 2)
+				local posy = math.Clamp(Lerp(0.1, ScrH() * 9 / 10, pos.y), y, ScrH() - y)
+				surface.SetTextPos(posx - x / 2, posy - y)
+				surface.SetTextColor(255, 255, 255, last_hold_lh)
+				surface.DrawText(txt)--]]
+				--uncomment if needed
+
+				cam.Start3D()
+					render.SetMaterial(LocalPlayer():GetNWBool("lhon", false) and hand_material_on or hand_material)
+					--render.DrawSprite(vec, 1, 1, color_black)
+					--render.DrawSprite(vec1, 1, 1, Color(255,0,0))
+					--render.DrawSprite(vec2, 1, 1, color_white)
+					--render.DrawSprite(vec3, 1, 1, color_white)
+					render.DrawQuad(vec, vec1, vec2, vec3, color_white)
+				cam.End3D()
+			end
+		end
+	end
 end)
 
 hook.Add("Think","mouthanim",function()
@@ -824,7 +943,7 @@ hook.Add("RenderScreenspaceEffects","BloomEffect-homigrad",function()
 	
 end)
 
-
+local colred = Color(255,0,0)
 hook.Add("PostDrawTranslucentRenderables","fuck_off",function()
 	--[[local lply = LocalPlayer()
 	if lply == Entity(1) then
@@ -833,13 +952,14 @@ hook.Add("PostDrawTranslucentRenderables","fuck_off",function()
 		if ent then
 			local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Head1'))
 			
-			render.DrawBox( pos, ang, Vector(3,-4,-2.5), Vector(7,3,2.5), color_white )
+			local vec1 = Vector(3,-4,-2.5)
+			local vec2 = Vector(7,3,2.5)
 
 			local dmgpos = ply:GetEyeTrace().HitPos
-			local penetration = ply:GetAimVector() * 10
-			local huy = util.IntersectRayWithOBB(dmgpos,penetration,pos,ang,Vector(2,-4,-3), Vector(7,4,3))
-
-			print(huy)
+			local penetration = ply:GetAimVector() * 100
+			local huy = util.IntersectRayWithOBB(dmgpos,penetration,pos,ang,vec1,vec2)
+			
+			render.DrawBox( pos, ang, vec1, vec2, huy and colred or color_white )
 		end
 	end--]]
 end )

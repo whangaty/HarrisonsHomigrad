@@ -261,6 +261,7 @@ function SWEP:SecondaryAttack()
 			if Dist < self.ReachDistance then
 				sound.Play("Flesh.ImpactSoft", self:GetOwner():GetShootPos(), 65, math.random(90, 110))
 				self:SetCarrying(tr.Entity, tr.PhysicsBone, tr.HitPos, Dist)
+				CheckForPoison(ply, tr.Entity)
 				tr.Entity.Touched = true
 				self:ApplyForce()
 			end

@@ -131,7 +131,9 @@ hook.Add( 'PlayerSay', 'SolidMapVote.PlayerCommands', function( ply, text, tChat
     end
 end )
 
+
 hook.Add( 'Think', 'SolidMapVote.ServerLoop', function()
+    
     -- Players called the vote through RTV
     SolidMapVote.checkForRTV()
 

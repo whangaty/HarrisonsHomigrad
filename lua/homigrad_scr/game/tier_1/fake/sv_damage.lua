@@ -63,7 +63,9 @@ local NULLENTITY = Entity(-1)
 
 hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по разным костям регдолла
 	if ent.nohook then return end
-
+	
+	if dmginfo:IsDamageType(DMG_CRUSH) and not ent.dodamage then ent.dodamage = nil return end
+	
 	if ent:GetClass() == "npc_bullseye" then
 		local rag = ent.rag
 		rag:TakeDamageInfo(dmginfo)
@@ -74,8 +76,17 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	if ent.overridedmg then return end
 	if IsValid(ent:GetPhysicsObject()) and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_CLUB+DMG_GENERIC+DMG_BLAST) then ent:GetPhysicsObject():ApplyForceOffset(dmginfo:GetDamageForce():GetNormalized() * math.min(dmginfo:GetDamage() * 10,3000),dmginfo:GetDamagePosition()) end
 	local ply = RagdollOwner(ent) or ent
-	
-	if ent:IsRagdoll() and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_BLAST+DMG_SLASH) then
+
+	local hitarmor = false
+	if ent.IsArmor then
+		hitarmor = true
+		ply = ent.Owner
+		ent = ply:GetNWEntity("Ragdoll") or ply.FakeRagdoll or ply
+	end
+
+	if not IsValid(ent) then return end
+
+	if not hitarmor and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_BLAST+DMG_SLASH) then
 		local effdata = EffectData()
 		effdata:SetOrigin(dmginfo:GetDamagePosition())
 		effdata:SetRadius(1)
@@ -83,13 +94,6 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		effdata:SetScale(1)
 		util.Effect("BloodImpact",effdata)
 	end
-
-	if ent.IsArmor then
-		ply = ent.Owner
-		ent = ply:GetNWEntity("Ragdoll") or ply.FakeRagdoll or ply
-	end
-
-	if not IsValid(ent) then return end
 
 	if not ply or not ply:IsPlayer() or not ply:Alive() or ply:HasGodMode() then
 		return
@@ -132,8 +136,8 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		--RagdollOwner(entAtt) or
 		(entAtt:GetClass() == "wep" and entAtt:GetOwner()) --or
 		--(IsValid(att) and att)
-	--att = att ~= ply and att
-	att = ply.LastAttacker -- Made it so last attacker can only be a player
+	att = att ~= ply and att
+	--att = ply.LastAttacker -- Made it so last attacker can only be a player
 
 	if IsValid(att) then dmginfo:SetAttacker(att) end
 
@@ -217,6 +221,41 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		ply:TakeDamageInfo(dmginfo)
 		ply.overridedmg = nil
 	end
+end)
+
+local function velocityDamage(ent,data)
+	local speed = (data.OurOldVelocity - data.TheirOldVelocity):Length()
+	--if speed < 350 then return end
+	local dmg = speed / 5350 * data.DeltaTime
+	dmg = dmg * math.abs(data.OurOldVelocity:GetNormalized():Dot(data.HitNormal))
+	--if dmg * 20 * 2 < 0.2 then return end
+	local bone
+	for i = 0,ent:GetPhysicsObjectCount() do
+		local phys = ent:GetPhysicsObjectNum(i)
+		if phys == data.PhysObject then
+			bone = i
+		end
+	end
+
+	local dmgInfo = DamageInfo()
+	dmgInfo:SetDamage(dmg * 50)
+	dmgInfo:SetDamageType(DMG_CRUSH)
+	dmgInfo:SetAttacker(data.HitEntity)
+	dmgInfo:SetDamagePosition(data.HitPos)
+	dmgInfo:SetDamageForce(data.TheirOldVelocity:GetNormalized() * dmg)
+
+	ent.dodamage = true
+	ent:TakeDamageInfo(dmgInfo)
+	--ent.dodamage = nil
+end
+
+hook.Add("Ragdoll Collide", "organismhuy", function(ragdoll, data)
+	if ragdoll == data.HitEntity then return end
+	if data.DeltaTime > 0.25 then return end
+	if not ragdoll:IsRagdoll() then return end
+	if data.HitEntity:IsPlayerHolding() then return end
+	
+	velocityDamage(ragdoll,data)
 end)
 
 local bonenames = {

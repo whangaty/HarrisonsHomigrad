@@ -24,8 +24,8 @@ net.Receive("round_time",function()
 end)
 
 showRoundInfo = CurTime() + 3
-roundActiveName = roundActiveName or "tdm"
-roundActiveNameNext = roundActiveNameNext or "tdm"
+roundActiveName = roundActiveName or "homicide"
+roundActiveNameNext = roundActiveNameNext or "homicide"
 
 net.Receive("round",function()
 	roundActiveName = net.ReadString()
@@ -40,7 +40,7 @@ net.Receive("round_next",function()
 	roundActiveNameNext = net.ReadString()
 	showRoundInfo = CurTime() + 10
 
-	chat.AddText("Next Gamemde: " .. TableRound(roundActiveNameNext).Name)
+	chat.AddText("Next Gamemode: " .. TableRound(roundActiveNameNext).Name)
 end)
 
 local white = Color(255,255,255)

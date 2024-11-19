@@ -287,7 +287,7 @@ function css.GiveSwep(ply,list,mulClip1)
     end
 end
 
-function css.PlayerSpawn(ply,teamID)
+function css.PlayerSpawn2(ply,teamID)
 	local teamTbl = css[css.teamEncoder[teamID]]
 	local color = teamTbl[2]
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])

@@ -87,9 +87,10 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
     local worldModel = VBWModel
     if not IsValid(worldModel) then
         worldModel = ClientsideModel("models/hunter/plates/plate.mdl",RENDER_GROUP_OPAQUE_ENTITY)
-        worldModel:SetNoDraw(true)
         VBWModel = worldModel
     end
+    
+    worldModel:SetNoDraw(true)
 
     local cameraPos = EyePos()
     local dis = hg_vbw_dis:GetInt()
@@ -116,7 +117,10 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
 
         if cameraPos:Distance(ent:GetPos()) > dis then continue end
         if activeWep == wep then continue end
+        --print(gameVBWHide(ply, wep))
         
+        
+        --if (gameVBWHide and gameVBWHide(ply, wep)) or ((( GetConVar("sv_construct") and GetConVar("sv_construct"):GetBool() ) or true) ~= true) then continue end
         if gameVBWHide and gameVBWHide(ply, wep) then continue end
 
         local matrix = ent:LookupBone("ValveBiped.Bip01_Spine1")
@@ -204,6 +208,9 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
         worldModel:SetPos(Offset)
         worldModel:SetAngles(Ang)
         worldModel:DrawModel()
+        if wep.DrawWorldModelAdd then
+            wep:DrawWorldModelAdd(worldModel)
+        end
     end
 end)
 

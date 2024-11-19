@@ -11,34 +11,36 @@ end
 local green = Color(0,125,0)
 local white = Color(255,255,255)
 
+local playsound = true
+
 function hideandseek.HUDPaint_RoundLeft(white2,time)
 	local time = math.Round(roundTimeStart + roundTime - CurTime())
 	local acurcetime = string.FormattedTime(time,"%02i:%02i")
 	local lply = LocalPlayer()
 	local name,color = hideandseek.GetTeamName(lply)
 
-	local startRound = roundTimeStart + 7 - CurTime()
+	local startRound = roundTimeStart + 5 - CurTime()
     if startRound > 0 and lply:Alive() then
-        --[[if playsound then
+        if playsound then
             playsound = false
-            surface.PlaySound("snd_jack_hmcd_disaster.mp3")
-        end]]--
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),0.5,0.5)
+            -- surface.PlaySound("snd_jack_hmcd_disaster.mp3") -- loool
+			lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),0.5,4)
+        end
 
 
-        --[[surface.SetFont("HomigradFontBig")
+        --[[surface.SetFont("HomigradRoundFont")
         surface.SetTextColor(color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255)
         surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
 
         surface.DrawText("Вы " .. name)]]--
-        draw.DrawText( "You are on team: " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Hide & Seek", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You are on team: " .. name, "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Hide & Seek", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        --draw.DrawText( roundTypes[roundType], "HomigradRoundFont", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply:Team() == 1 then
-            draw.DrawText( "Find everyone who's hiding, and kill them before Special Forces arrive.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Find everyone who's hiding, and kill them before Special Forces arrive.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "Hide until Special Forces arrive, and dash for the exit!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Hide until Special Forces arrive, and dash for the exit!", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
 		end
         return
     end

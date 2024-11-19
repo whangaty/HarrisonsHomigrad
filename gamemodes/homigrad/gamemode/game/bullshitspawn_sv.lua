@@ -77,35 +77,39 @@ end
 
 
 hook.Add("PropBreak", "homigrad", function(att, ent)
-    if not KOROBKA_HUYNYI_LOOKUP[ent:GetModel()] then return end
+    if GetConVar("sv_construct"):GetBool() == false then
+        if not KOROBKA_HUYNYI_LOOKUP[ent:GetModel()] then return end
 
-    local posSpawn = ent:GetPos() + ent:OBBCenter()
-    local randomWep, type1 = randomLoot()
+        local posSpawn = ent:GetPos() + ent:OBBCenter()
+        local randomWep, type1 = randomLoot()
 
-    if randomWep == "*ammo*" then
-        if IsValid(att) then
-            local ammoType
-            for _, wep in RandomPairs(att:GetWeapons()) do
-                ammoType = wep:GetPrimaryAmmoType()
-                if ammoType and ammoType > 0 then
-                    randomWep = "item_ammo_" .. string.lower(game.GetAmmoName(ammoType) or "")
-                    break
+        if randomWep == "*ammo*" then
+            if IsValid(att) then
+                local ammoType
+                for _, wep in RandomPairs(att:GetWeapons()) do
+                    ammoType = wep:GetPrimaryAmmoType()
+                    if ammoType and ammoType > 0 then
+                        randomWep = "item_ammo_" .. string.lower(game.GetAmmoName(ammoType) or "")
+                        break
+                    end
                 end
-            end
-            if not ammoType then
+                if not ammoType then
+                    randomWep = table.Random(ammos)
+                end
+            else
                 randomWep = table.Random(ammos)
             end
-        else
-            randomWep = table.Random(ammos)
         end
-    end
-    
+        
 
-    local loot = ents.Create(randomWep or "prop_physics")
-    if not IsValid(loot) then return end
-    loot:SetPos(posSpawn)
-    loot:Spawn()
-    loot.Spawned = true
+        local loot = ents.Create(randomWep or "prop_physics")
+        if not IsValid(loot) then return end
+        loot:SetPos(posSpawn)
+        loot:Spawn()
+        loot.Spawned = true
+    else
+        return
+    end
 end)
 
 
@@ -200,7 +204,6 @@ hook.Add("PostCleanupMap", "addboxs", function()
     end)
 end)
 
-cacheSpawns()
 timer.Create("SpawnTheBoxes", 5, 0, function()
     hook.Run("Boxes Think")
 end)

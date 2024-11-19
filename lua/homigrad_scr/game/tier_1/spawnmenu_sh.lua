@@ -19,7 +19,7 @@ if SERVER then
         func = func and func(ply,class)
         if func ~= nil then return func end
 
-        if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") then return true end
+        if validUserGroup[ply:GetUserGroup()] and ply:Team() ~= TEAM_SPECTATOR or GetGlobalBool("AccessSpawn") or GetConVar("sv_construct"):GetBool() then return true end
 
         if not validUserGroup[ply:GetUserGroup()] then 
             ply:Kick("You do not have access to these tools.")  
@@ -27,13 +27,15 @@ if SERVER then
         end
     end
 
+    hook.Add("PlayerSpawnProp","Cantspawnbullshit",function(ply) return CanUseSpawnMenu(ply,"prop") end)
+    hook.Add("PlayerSpawnedProp","sv_round",function(ply,model,ent) spawn(ply,"prop",ent) end)
+    
+
     hook.Add("PlayerSpawnVehicle","Cantspawnbullshit",function(ply) return CanUseSpawnMenu(ply,"vehicle") end)
     hook.Add("PlayerSpawnRagdoll","Cantspawnbullshit",function(ply) return CanUseSpawnMenu(ply,"ragdoll") end)
-    hook.Add("PlayerSpawnEffect","Cantspawnbullshit",function(ply) return CanUseSpawnMenu(ply,"effect") end)
-    hook.Add("PlayerSpawnProp","Cantspawnbullshit",function(ply) return CanUseSpawnMenu(ply,"prop") end)
+    hook.Add("PlayerSpawnEffect","Cantspawnbullshit",function(ply) return CanUseSpawnMenu(ply,"effect") end) 
     hook.Add("PlayerSpawnSENT","Cantspawnbullshit",function(ply) return CanUseSpawnMenu(ply,"sent") end)
     hook.Add("PlayerSpawnNPC","Cantspawnbullshit",function(ply) return CanUseSpawnMenu(ply,"npc") end)
-
     hook.Add("PlayerSpawnSWEP","SpawnBlockSWEP",function(ply) return CanUseSpawnMenu(ply,"swep") end)
     hook.Add("PlayerGiveSWEP","SpawnBlockSWEP",function(ply) return CanUseSpawnMenu(ply,"swep") end)
 
@@ -45,7 +47,6 @@ if SERVER then
     hook.Add("PlayerSpawnedVehicle","sv_round",function(ply,model,ent) spawn(ply,"vehicle",ent) end)
     hook.Add("PlayerSpawnedRagdoll","sv_round",function(ply,model,ent) spawn(ply,"ragdoll",ent) end)
     hook.Add("PlayerSpawnedEffect","sv_round",function(ply,model,ent) spawn(ply,"effect",ent) end)
-    hook.Add("PlayerSpawnedProp","sv_round",function(ply,model,ent) spawn(ply,"prop",ent) end)
     hook.Add("PlayerSpawnedSENT","sv_round",function(ply,model,ent) spawn(ply,"sent",ent) end)
     hook.Add("PlayerSpawnedNPC","sv_round",function(ply,model,ent) spawn(ply,"npc",ent) end)
 
@@ -54,7 +55,7 @@ else
     --local admin_menu = CreateClientConVar("hg_admin_menu","1",true,false,"enable admin menu",0,1)
     local function CanUseSpawnMenu()
         local ply = LocalPlayer()
-        if validUserGroup[ply:GetUserGroup()] then return true else return false end
+        if validUserGroup[ply:GetUserGroup()] and ply:Team() ~= TEAM_SPECTATOR or GetConVar("sv_construct"):GetBool() == false then return true else return false end
 
         local func = TableRound().CanUseSpawnMenu
         func = func and func(LocalPlayer())

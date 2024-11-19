@@ -1,4 +1,7 @@
-igib.ragdolls = {}
+-- Include the player model manager script (adjust the path as necessary)
+include("../../playermodelmanager_sv.lua")
+
+construct.ragdolls = {}
 
 local function GetTeamSpawns(ply)
 	local spawnsT = tdm.SpawnsTwoCommand()
@@ -9,14 +12,14 @@ local function GetTeamSpawns(ply)
     end
 end
 
-function igib.StartRoundSV()
+function construct.StartRoundSV()
 local players = PlayersInGame()
 local spawnsT,spawnsCT = tdm.SpawnsTwoCommand()
 
     tdm.RemoveItems()
 	roundTimeStart = CurTime()
     roundTimeRespawn = CurTime() + 15
-	roundTime = 300
+	roundTime = 604800 -- Seven days in seconds.
 
     tdm.SpawnCommand(team.GetPlayers(1),spawnsT)
 
@@ -24,13 +27,14 @@ local spawnsT,spawnsCT = tdm.SpawnsTwoCommand()
     return {roundTimeStart,roundTime}   
 end
 
-function igib.Think()
-    igib.LastWave = igib.LastWave or CurTime() + 15
+function construct.Think()
+    construct.LastWave = construct.LastWave or CurTime() + 15
 
-    if CurTime() >= igib.LastWave then
-        SetGlobalInt("igib_respawntime", CurTime())
+    if CurTime() >= construct.LastWave then
+        SetGlobalInt("construct_respawntime", CurTime())
     
         for _, v in player.Iterator() do
+
             local players = {}
             if !v:Alive() and v:Team() != 1002 then
                 v:Spawn()
@@ -46,53 +50,56 @@ function igib.Think()
             end
         end
     
-        for ent in pairs(igib.ragdolls) do
+        for ent in pairs(construct.ragdolls) do
             if IsValid(ent) then ent:Remove() end
     
-            igib.ragdolls[ent] = nil
+            construct.ragdolls[ent] = nil
         end
 
-        igib.LastWave = CurTime() + 15
+        construct.LastWave = CurTime() + 10
     end
 end
 
-
-function igib.RoundEndCheck()
+-- Not needed :)
+--[[]
+function construct.RoundEndCheck()
     if roundTimeStart + roundTime < CurTime() then EndRound() end
 end
+]]
 
-function igib.EndRound(winner)
+-- Not needed :)
+--[[
+function construct.EndRound(winner)
     for i, ply in ipairs( player.GetAll() ) do
 	    if ply:Alive() then
             PrintMessage(3,"Раунд окончен.")
         end
     end
 end
-
+--]]
 local red = Color(255,0,0)
 
-function igib.PlayerSpawn2(ply,teamID)
+function construct.PlayerSpawn2(ply,teamID)
 	ply:SetModel(tdm.models[math.random(#tdm.models)])
     ply:SetPlayerColor(Vector(0,0,0.6))
-    ply:Give("weapon_igib")
-    ply:SetLadderClimbSpeed(100)
-    ply:SetWalkSpeed(350)
-    ply:SetRunSpeed(700)
+    ply:Give("weapon_physgun")
+    ply:Give("weapon_hands")
+    if ply.allowGrab then ply.allowGrab = false end -- FIXME: This doesn't seem to work.
 end
 
-function igib.PlayerInitialSpawn(ply)
+function construct.PlayerInitialSpawn(ply)
     ply:SetTeam(1)
 end
 
-function igib.PlayerCanJoinTeam(ply,teamID)
+function construct.PlayerCanJoinTeam(ply,teamID)
 	if teamID == 2 or teamID == 3 then return false end
     return true
 end
 
-function igib.GuiltLogic() return false end
+function construct.GuiltLogic() return false end
 
-util.AddNetworkString("dm die")
-function igib.PlayerDeath()
-    net.Start("dm die")
+util.AddNetworkString("construct_die")
+function construct.PlayerDeath()
+    net.Start("construct_die")
     net.Broadcast()
 end
