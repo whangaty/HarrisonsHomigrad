@@ -55,7 +55,7 @@ end
 
 
 -- For construct, this is probably fine because I assume that it will just force respawn the player.
-net.Receive("dm die",function()
+net.Receive("construct_die",function()
     timeStartAnyDeath = CurTime()
 end)
 

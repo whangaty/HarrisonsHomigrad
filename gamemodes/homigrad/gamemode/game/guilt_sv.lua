@@ -75,16 +75,15 @@ function GuiltCheck(att,ply)
 		att.Guilt = 0
 		
 		if not att.noguilt and not att:HasGodMode() and att:Alive() then
-			return 
 			--RunConsoleCommand("ulx","asay","[AUTOMATED] "..att:Name().." has exceeded their guilt of 100%, and was killed They are "..tostring(att:Team()))
 			--print("[GUILT CHECK] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
-			--if not validUserGroup[att:GetUserGroup()] then
-				--att:Kill()
-				--RunConsoleCommand("ulx","tsay","<clr:red>[GUILT] "..att:Name().." has been slayed for exceeding their guilt of 100%.")
+			if not validUserGroup[att:GetUserGroup()] then
+				att:Kill()
+				RunConsoleCommand("ulx","tsay","<clr:red>[GUILT] "..att:Name().." has been slayed for exceeding their guilt of 100%.")
 				--att:ChatPrint("You were slayed for killing the wrong team! ")
-			--else
-				--return
-			--end
+			else
+				return
+			end
 		end
 	end
 end
