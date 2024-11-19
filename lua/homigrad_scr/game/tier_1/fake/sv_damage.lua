@@ -136,8 +136,8 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		--RagdollOwner(entAtt) or
 		(entAtt:GetClass() == "wep" and entAtt:GetOwner()) --or
 		--(IsValid(att) and att)
-	--att = att ~= ply and att
-	att = ply.LastAttacker -- Made it so last attacker can only be a player
+	att = att ~= ply and att
+	--att = ply.LastAttacker -- Made it so last attacker can only be a player
 
 	if IsValid(att) then dmginfo:SetAttacker(att) end
 
