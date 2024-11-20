@@ -113,7 +113,7 @@ end}
 function homicide.Spawns()
     local aviable = {}
 
-    if game.GetMap() ~= "gm_freeway_spacetunnel" then
+    if game.GetMap() ~= "gm_freeway_spacetunnel" or game.GetMap("cs_insertion2_dusk")then
         for i,ent in pairs(ents.FindByClass("info_player*")) do
             table.insert(aviable,ent:GetPos())
         end

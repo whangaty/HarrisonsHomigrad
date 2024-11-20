@@ -2,15 +2,18 @@ function tdm.SpawnsTwoCommand()
 	local spawnsT = ReadDataMap("spawnpointst")
 	local spawnsCT = ReadDataMap("spawnpointsct")
 
-	if #spawnsT == 0 then
-		for i, ent in RandomPairs(ents.FindByClass("info_player_terrorist")) do
-			table.insert(spawnsT,ent:GetPos())
-		end
-	end
 
-	if #spawnsCT == 0 then
-		for i, ent in RandomPairs(ents.FindByClass("info_player_counterterrorist")) do
-			table.insert(spawnsCT,ent:GetPos())
+	if not game.GetMap("cs_insertion2_dusk") then
+		if #spawnsT == 0 then
+			for i, ent in RandomPairs(ents.FindByClass("info_player_terrorist")) do
+				table.insert(spawnsT,ent:GetPos())
+			end
+		end
+
+		if #spawnsCT == 0 then
+			for i, ent in RandomPairs(ents.FindByClass("info_player_counterterrorist")) do
+				table.insert(spawnsCT,ent:GetPos())
+			end
 		end
 	end
 
