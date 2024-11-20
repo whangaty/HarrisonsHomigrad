@@ -24,15 +24,8 @@ net.Receive("round_time",function()
 end)
 
 showRoundInfo = CurTime() + 3
-
--- FIXME: I understand that this is a really dogshit way of doing this, but it's 10:36 PM on a weekday, I'm buzzed, and I couldn't care less.
-if GetConVar("sv_construct"):GetBool() == true then 
-	roundActiveName = "construct"
-	roundActiveNameNext = "construct"
-else
-	roundActiveName = roundActiveName or "homicide"
-	roundActiveNameNext = roundActiveNameNext or "homicide"
-end
+roundActiveName = roundActiveName or "homicide"
+roundActiveNameNext = roundActiveNameNext or "homicide"
 
 net.Receive("round",function()
 	roundActiveName = net.ReadString()
@@ -73,7 +66,7 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 
 	local k = showRoundInfo - CurTime()
 
-	if k > 0 and GetConVar("sv_construct"):GetBool() == false then
+	if k > 0 then
 		k = math.min(k,1)
 
 		showRoundInfoColor.a = k * 255

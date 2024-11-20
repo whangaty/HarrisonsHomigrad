@@ -141,15 +141,8 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_bank_change",
     "gm_apartments_hl2",
     "ttt_ile_v4",
-    "freeway_thicc_v2"
+    "freeway_thicc_v3"
 
-}
-
--- CUSTOM BY HARRISON
--- Not garunteed to work, but fuck it, we'll do it live.
-SolidMapVote[ 'Config' ][ 'Construct Map Pool' ] = {
-    "mu_smallotown_v2_snow",
-    "tdm_city18",
 }
 
 -- Allow players to use their mics while in the mapvote
@@ -268,6 +261,6 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = 'ttt_clue_2022', displayname = 'Clue',image="https://i.imgur.com/dHWDpkI.jpeg", width = 1920, height = 1080 },
     { filename = 'ttt_bank_change', displayname = 'Bank',image="https://i.imgur.com/aGJXyWJ.jpeg", width = 1920, height = 1080 },
     { filename = 'ttt_ile_v4', displayname = 'Lighthouse',image="https://i.imgur.com/pcBZ56Z.jpeg", width = 1920, height = 1080 },
-    { filename = "freeway_thicc_v2", displayname = 'Freeway',image="https://i.imgur.com/pcBZ56Z.jpeg", width = 1920, height = 1080 },
+    { filename = "freeway_thicc_v3", displayname = 'Freeway',image="https://i.imgur.com/w9wUmsm.jpeg", width = 1920, height = 1080 },
 
 }

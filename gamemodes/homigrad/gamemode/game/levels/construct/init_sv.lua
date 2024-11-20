@@ -98,8 +98,8 @@ end
 
 function construct.GuiltLogic() return false end
 
-util.AddNetworkString("dm die")
+util.AddNetworkString("construct_die")
 function construct.PlayerDeath()
-    net.Start("dm die")
+    net.Start("construct_die")
     net.Broadcast()
 end

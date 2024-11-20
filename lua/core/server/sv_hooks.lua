@@ -3,7 +3,6 @@ hook.Add( 'InitPostEntity', 'SolidMapVote.Init', function()
     SolidMapVote.votes = {}
     SolidMapVote.isOpen = false
     SolidMapVote.finished = false
-    SolidMapVote.stupidFuckingCode = false
     SolidMapVote.RTVs = {}
     SolidMapVote.RTVDelayEnd = RealTime() + SolidMapVote[ 'Config' ][ 'RTV Delay' ]
 
@@ -132,7 +131,6 @@ hook.Add( 'PlayerSay', 'SolidMapVote.PlayerCommands', function( ply, text, tChat
     end
 end )
 
-local stupidFuckingCode = false
 
 hook.Add( 'Think', 'SolidMapVote.ServerLoop', function()
     
@@ -142,11 +140,8 @@ hook.Add( 'Think', 'SolidMapVote.ServerLoop', function()
     -- Time is up, start figuring out the winning map
     SolidMapVote.checkForVoteEnd()
 
-    if not stupidFuckingCode then
-        -- Post map vote time is up, change the map
-        SolidMapVote.postMapVoteChange()
-        stupidFuckingCode = true
-    end
+    -- Post map vote time is up, change the map
+    SolidMapVote.postMapVoteChange()
 
     -- Check to see if it is time to autostart the map vote
     SolidMapVote.checkForAutostart()
