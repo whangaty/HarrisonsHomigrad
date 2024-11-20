@@ -688,6 +688,7 @@ local last_hold_rh = 0
 hook.Add("HUDPaint","fakethings",function()
 	local ragdoll = follow
 
+	if not LocalPlayer():Alive() then return end
 	if not show_hands:GetBool() then return end
 
 	if IsValid(ragdoll) then

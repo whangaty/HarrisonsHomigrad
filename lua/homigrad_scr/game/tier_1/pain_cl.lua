@@ -19,27 +19,6 @@ local time = 0
 local colwhite = Color(255, 255, 255, 255)
 local colred = Color(255, 0, 0, 255)
 -- FIXME: Unconcious Text may not appear at times.
-hook.Add("HUDPaintBackground", "unconsciousnessInfo", function()
-    local ply = LocalPlayer()
-
-    if ply:GetNWInt("unconscious") and ply:Alive() and ply:Team() ~= TEAM_SPECTATOR then
-        draw.DrawText("You are currently unconscious.", "HomigradFontNotify", ScrW() / 2, ScrH() / 2.1,
-            colwhite, TEXT_ALIGN_CENTER)
-
-        if pain and pain > 250 then
-            draw.DrawText("Assuming you're still in great shape, you'll be back up in " ..
-                math.floor(((pain - 250) / 10) + 1) .. " second(s)!", "HomigradFontSmall",
-                ScrW() / 2, ScrH() / 1.8,
-                colwhite, TEXT_ALIGN_CENTER)
-        elseif blood and blood < 3000 then
-            draw.DrawText("You have lost too much blood and have gone comatose!\nYou are slowly bleeding out, and will die unless someone can revive you.", "HomigradFontSmall",
-                ScrW() / 2, ScrH() / 1.8,
-                colred, TEXT_ALIGN_CENTER)
-        end
-    end
-end)
-
-
 
 surface.CreateFont("HomigradFontBig",{
 	font = "Roboto",
@@ -76,6 +55,24 @@ hook.Add("HUDPaint","PainEffect",function()
     surface.DrawTexturedRect(w - w * k,0,w,h)
 
     DrawMotionBlur(0.2,k * 0.7,k * 0.03)
+
+    local ply = LocalPlayer()
+
+    if ply:GetNWInt("unconscious") and ply:Alive() and ply:Team() ~= TEAM_SPECTATOR then
+        draw.DrawText("You are currently unconscious.", "HomigradFontNotify", ScrW() / 2, ScrH() / 2.1,
+            colwhite, TEXT_ALIGN_CENTER)
+
+        if pain and pain > 250 then
+            draw.DrawText("Assuming you're still in great shape, you'll be back up in " ..
+                math.floor(((pain - 250) / 10) + 1) .. " second(s)!", "HomigradFontSmall",
+                ScrW() / 2, ScrH() / 1.8,
+                colwhite, TEXT_ALIGN_CENTER)
+        elseif blood and blood < 3000 then
+            draw.DrawText("You have lost too much blood and have gone comatose!\nYou are slowly bleeding out, and will die unless someone can revive you.", "HomigradFontSmall",
+                ScrW() / 2, ScrH() / 1.8,
+                colred, TEXT_ALIGN_CENTER)
+        end
+    end
 end)
 
 local addmat_r = Material("CA/add_r")

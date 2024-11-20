@@ -1,6 +1,6 @@
 if engine.ActiveGamemode() ~= "homigrad" then return end
 local vecZero = Vector(0,0,0)
-local vecInf = Vector(0,0,0) / 0
+local vecInf = Vector(1,1,1) / 0
 
 local function removeBone(rag,bone,phys_bone)
 	rag:ManipulateBoneScale(bone,vecZero)
