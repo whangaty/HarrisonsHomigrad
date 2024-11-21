@@ -160,7 +160,7 @@ end)
 -- PewPaws!!!
 game.AddParticles("particles/muzzleflashes_test.pcf")
 game.AddParticles("particles/muzzleflashes_test_b.pcf")
-game.AddParticles("particles/pcfs_jack_muzzelflashes.pcf")
+game.AddParticles("particles/pcfs_jack_muzzleflashes.pcf")
 game.AddParticles("particles/ar2_muzzle.pcf")
 
 local huyprecahche = {
@@ -191,8 +191,6 @@ local huyprecahche = {
 for k,v in ipairs(huyprecahche) do
     PrecacheParticleSystem(v)
 end
-
-
 -- CAAABOOOOMS!
 
 game.AddParticles("particles/pcfs_jack_explosions_large.pcf")
@@ -204,7 +202,7 @@ game.AddParticles("particles/gb5_large_explosion.pcf")
 game.AddParticles("particles/gb5_500lb.pcf")
 game.AddParticles("particles/gb5_100lb.pcf")
 game.AddParticles("particles/gb5_50lb.pcf")
-game.AddParticles("particles/pcfs_jack_muzzelflashes.pcf")
+game.AddParticles("particles/pcfs_jack_muzzleflashes.pcf")
 game.AddParticles("particles/pcfs_jack_explosions_incendiary2.pcf")
 game.AddParticles("particles/lighter.pcf")
 
