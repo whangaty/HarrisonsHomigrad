@@ -54,12 +54,29 @@ function PlayersInGame()
     return newTbl
 end
 
-function PlayersAlive()
+function PlayersDead(noTraitors)
     local newTbl = PlayersInGame()
+	local tbl2 = {}
 
-    for i,ply in pairs(newTbl) do
-		if not ply:Alive() then table.remove(newTbl, i) end
+    for i, ply in pairs(newTbl) do
+		if noTraitors and ply.roleT then continue end
+		if ply:Alive() then continue end
+
+		table.insert(tbl2, ply)
 	end
 
-	return newTbl
+	return tbl2
+end
+
+function PlayersAlive()
+    local newTbl = PlayersInGame()
+	local tbl2 = {}
+
+    for i, ply in pairs(newTbl) do
+		if not ply:Alive() then continue end
+
+		table.insert(tbl2, ply)
+	end
+
+	return tbl2
 end

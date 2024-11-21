@@ -199,7 +199,7 @@ function homicide.HUDPaint_RoundLeft(white2)
 end
 
 function homicide.VBWHide(ply,wep)
-    if (not ply:IsRagdoll() and ply:Team() == 1002) then return end -- t weps hide
+    if (not ply:IsRagdoll() and ply:Team() == 1002) then return end
 
     return (wep.IsPistolHoldType and wep:IsPistolHoldType())
 end
