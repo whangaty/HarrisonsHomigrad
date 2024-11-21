@@ -32,7 +32,7 @@ end}
 
 local function makeT(ply)
     if not IsValid(ply) then return end
-    ply.roleT = true
+    ply.roleT = true --Игрока не существует. Выдаёт из-за этого ошибку в первый раз.
     table.insert(homicide.t,ply)
 
     if homicide.roundType == 1 or homicide.roundType == 2 then
@@ -46,6 +46,16 @@ local function makeT(ply)
     elseif homicide.roundType == 3 then
         local wep = ply:Give("weapon_hg_crossbow")
         ply:GiveAmmo(8, "XBowBolt", true) -- slots = bolts.
+        wep:SetClip1(wep:GetMaxClip1())
+        ply:Give("weapon_kabar")
+        ply:Give("weapon_hg_rgd5")
+        ply:Give("weapon_hidebomb")
+        ply:Give("weapon_hg_t_vxpoison")
+        ply:Give("weapon_radar")
+        print(player.GetCount())
+    elseif homicide.roundType == 5 then
+        local wep = ply:Give("weapon_barret")
+        ply:GiveAmmo(20, "XBowBolt", true) -- slots = bolts.
         wep:SetClip1(wep:GetMaxClip1())
         ply:Give("weapon_kabar")
         ply:Give("weapon_hg_rgd5")
@@ -78,7 +88,7 @@ local function makeCT(ply)
     if not IsValid(ply) then return end
     ply.roleCT = true
     table.insert(homicide.ct,ply)
-    if homicide.roundType == 1 then
+    if homicide.roundType == 1 or homicide.roundType == 5 then
         local wep = ply:Give("weapon_remington870")
         wep:SetClip1(wep:GetMaxClip1())
         AddNotificate( ply,"You have been given a shotgun. Be careful, the traitor will be likely to target you.")
@@ -97,7 +107,6 @@ local function makeCT(ply)
         AddNotificate( ply,"You & the traitor have been given identical revolvers. Find them and kill them.")
     else
     end
-
 end
 
 COMMANDS.russian_roulette = {function(ply,args)
@@ -185,7 +194,7 @@ function SpawnPolicePlayers()
 
     timer.Simple(0, function()
         if homicide.roundType == 1 then
-            PrintMessage(3, "SWAT team has arrived.")
+            PrintMessage(3, "A SWAT Team has arrived.")
         else
             PrintMessage(3, "The Police have arrived.")
         end
@@ -285,7 +294,7 @@ function homicide.StartRoundSV()
         local ply = table.Random(players)
         table.RemoveByValue(players,ply)
 
-        if homicide.roundType <= 4 then
+        if homicide.roundType <= 5 then
             makeCT(ply)
         end
     end

@@ -323,7 +323,7 @@ COMMANDS.levelnext = {function(ply,args)
 			ulx.doVote( "Change the Gamemode next level to: " .. tostring(args[1]) .. "?", { "Yes","No" }, donaterVoteLevel, 15, _, _, argv, calling_ply, args)
 		end
 	end
-end}
+end,1}
 
 COMMANDS.levels = {function(ply,args)
 	local text = ""
@@ -335,7 +335,7 @@ COMMANDS.levels = {function(ply,args)
 
 	ply:ChatPrint(text)
 	--print("Was Recognised!")
-end}
+end,0}
 
 concommand.Add("hg_roundinfoget",function(ply)
 	RoundStateSync(ply,RoundData)
