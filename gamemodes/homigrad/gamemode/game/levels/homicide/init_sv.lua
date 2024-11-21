@@ -185,7 +185,7 @@ function SpawnPolicePlayers()
     local playsound = true
 
     local prePolicePlayers = PlayersDead(true)
-    PrintTable(prePolicePlayers)
+    
     if not prePolicePlayers or table.IsEmpty(prePolicePlayers) then return end
 
     local ply = prePolicePlayers[1]
