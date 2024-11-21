@@ -92,9 +92,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		effdata:SetRadius(1)
 		effdata:SetMagnitude(1)
 		effdata:SetScale(1)
-		util.Effect("BloodImpact",effdata)
+		util.Effect("BloodImpact",effdata,nil,true)
 	end
-
+	
 	if not ply or not ply:IsPlayer() or not ply:Alive() or ply:HasGodMode() then
 		return
 	end
@@ -201,7 +201,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 
 	if att and not att:IsNPC() then dmginfo:ScaleDamage(0.5) end
 	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
-	if att and not att:IsNPC() then dmginfo:ScaleDamage(0.2) end
+	if att and not att:IsNPC() then dmginfo:ScaleDamage(0.3) end
 	
 	if dmginfo:IsDamageType(DMG_BLAST) then
 		dmginfo:ScaleDamage(2)

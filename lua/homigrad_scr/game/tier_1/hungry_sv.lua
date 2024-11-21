@@ -36,6 +36,9 @@ hook.Add("Player Think","homigrad-hungry",function(ply,time)
 		end
 	end
 
+	if (ply.regenNext or time) > time then return end
+	ply.regenNext = time + 5
+
 	ply:SetHealth(not ply.heartstop and (math.min(ply:Health() + math.max(math.ceil(ply.hungryregen),1),150)) or ply:Health())
 end)
 
