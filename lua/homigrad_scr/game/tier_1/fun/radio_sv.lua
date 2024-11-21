@@ -63,6 +63,8 @@ net.Receive("radio_set",function(len,ply)
 	local link = net.ReadString()
 	local play = net.ReadBool()
 
+	if not IsValid(radio) or not radio.radio then return end
+
 	radio.station = {link,play}
 
 	if link~=nil and play~=nil then
