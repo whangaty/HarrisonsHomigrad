@@ -214,9 +214,9 @@ function cp.EndRound(winner)
 	print("End round, win '" .. tostring(winner) .. "'")
 
 	for _, ply in ipairs(player.GetAll()) do
-		if !winner then ply:ChatPrint("Победила дружба") continue end
-		if winner == ply:Team() then ply:ChatPrint("Победа") end
-		if winner ~= ply:Team() then ply:ChatPrint("Поражение") end
+		if !winner then ply:ChatPrint("Nobody Wins") continue end
+		if winner == ply:Team() then ply:ChatPrint("Victory!") end
+		if winner ~= ply:Team() then ply:ChatPrint("Defeat") end
 	end
 
     timer.Remove("CP_NewWave")

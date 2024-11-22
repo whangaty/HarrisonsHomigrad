@@ -45,13 +45,12 @@ function dm.RoundEndCheck()
 end
 
 function dm.EndRound(winner)
-    --[[
     for i, ply in ipairs( player.GetAll() ) do
 	    if ply:Alive() then
             PrintMessage(3,ply:GetName() .. " remains. They are victorious!")
         end
     end
-    ]]
+
     PrintMessage(3,"Deathmatch Over! GG WP!")
 end
 
@@ -67,6 +66,7 @@ local function GetTeamSpawns(ply)
     end
 end
 
+--[[]
 function dm.Think()
     construct.LastWave = construct.LastWave or CurTime() + 15
 
@@ -98,7 +98,7 @@ function dm.Think()
 
         construct.LastWave = CurTime() + 10
     end
-end
+end]]
 
 local red = Color(255,0,0)
 

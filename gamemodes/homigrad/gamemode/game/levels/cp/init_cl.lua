@@ -42,10 +42,10 @@ function cp.HUDPaint_RoundLeft(white2) --позиции точек и счёт
 
 	local startRound = roundTimeStart + 5 - CurTime()
     if startRound > 0 and lply:Alive() then
-        --[[if playsound then
+        if playsound then
             playsound = false
-            surface.PlaySound("snd_jack_hmcd_disaster.mp3")
-        end]]--
+            --surface.PlaySound("snd_jack_hmcd_disaster.mp3")
+        end
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),0.5,4)
 
 
@@ -55,10 +55,10 @@ function cp.HUDPaint_RoundLeft(white2) --позиции точек и счёт
 
         surface.DrawText("Вы " .. name)]]--
         draw.DrawText( "You Are On Team: " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Захват точек", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,55,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Capture The Point", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,55,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
-        draw.DrawText( "Захватите точки, наберайте очки для победы", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,155,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Hold points to gain points.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,155,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         return
     end
 

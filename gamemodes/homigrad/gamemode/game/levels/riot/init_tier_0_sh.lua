@@ -1,8 +1,8 @@
---table.insert(LevelList,"riot")
+table.insert(LevelList,"riot")
 riot = {}
-riot.Name = "RIOT"
+riot.Name = "Riot"
 
-riot.red = {"Полиция",Color(55,55,150),
+riot.red = {"Police",Color(55,55,150),
 	weapons = {"weapon_hands","weapon_police_bat","med_band_big","med_band_small","weapon_taser","weapon_handcuffs","weapon_radio"},
 	main_weapon = {"weapon_per4ik","medkit","painkiller","weapon_per4ik","medkit","painkiller","weapon_beanbag"},
 	secondary_weapon = {""},
@@ -10,7 +10,7 @@ riot.red = {"Полиция",Color(55,55,150),
 }
 
 
-riot.blue = {"Бунтующие",Color(75,45,45),
+riot.blue = {"Rioters",Color(75,45,45),
 	weapons = {"weapon_hands","med_band_small"},
 	main_weapon = {"weapon_molotok","med_band_big","med_band_small","weapon_hg_molotov","weapon_per4ik","weapon_molotok","med_band_big","med_band_small","weapon_per4ik"},
 	secondary_weapon = {"weapon_hg_metalbat", "weapon_bat","weapon_pipe"},
