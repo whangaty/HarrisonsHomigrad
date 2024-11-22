@@ -1,7 +1,7 @@
 
-table.insert(LevelList,"cp")
+--table.insert(LevelList,"cp")
 cp = {}
-cp.Name = "Захват точек"
+cp.Name = "Capture The Point"
 cp.points = {}
 
 cp.WinPoints = cp.WinPoints or {}
@@ -12,14 +12,14 @@ local red, blue, gray = Color(255,75,75), Color(75,75,255), Color(200, 200, 200)
 
 cp.red = {"Blue",Color(255,75,75),
     weapons = {"weapon_binokle","weapon_radio","weapon_gurkha","weapon_hands","med_band_big","med_band_small","medkit","painkiller"},
-    main_weapon = {"weapon_ak74u","weapon_akm","weapon_remington870","weapon_galil","weapon_rpk","weapon_asval","weapon_p90"},
+    main_weapon = {"weapon_ak74u","weapon_akm","weapon_remington870","weapon_galil","weapon_rpk","weapon_asval","weapon_p90","weapon_scout","weapon_barret"},
     secondary_weapon = {"weapon_p220","weapon_mateba","weapon_glock"},
     models = tdm.models
 }
 
 cp.blue = {"Red",Color(75,75,255),
     weapons = {"weapon_binokle","weapon_radio","weapon_hands","weapon_kabar","med_band_big","med_band_small","medkit","painkiller","weapon_handcuffs","weapon_taser"},
-    main_weapon = {"weapon_hk416","weapon_m4a1","weapon_m3super","weapon_mp7","weapon_xm1014","weapon_fal","weapon_asval","weapon_m249","weapon_p90"},
+    main_weapon = {"weapon_hk416","weapon_m4a1","weapon_m3super","weapon_mp7","weapon_xm1014","weapon_fal","weapon_asval","weapon_m249","weapon_p90","weapon_scout","weapon_barret"},
     secondary_weapon = {"weapon_beretta","weapon_p99","weapon_hk_usp"},
     models = tdm.models
 }
@@ -36,8 +36,8 @@ function cp.StartRound()
 	game.CleanUpMap(false)
     cp.points = {}
     if !file.Read( "homigrad/maps/"..game.GetMap()..".txt", "DATA" ) and SERVER then
-        print("Скажите админу чтоб тот создал !point control_point или хуярьтесь без Точек Захвата.") 
-        PrintMessage(HUD_PRINTCENTER, "Скажите админу чтоб тот создал !point control_point или хуярьтесь без Точек Захвата.")
+        print("No points are available on this map! This is either by design, or by laziness.") 
+        PrintMessage(HUD_PRINTCENTER, "No points are available on this map! This is either by design, or by laziness.")
     end
 
     cp.LastWave = CurTime()

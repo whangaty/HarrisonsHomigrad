@@ -1,6 +1,6 @@
 table.insert(LevelList,"dm")
 dm = {}
-dm.Name = "DeathMatch"
+dm.Name = "Deathmatch"
 dm.LoadScreenTime = 5.5
 dm.CantFight = dm.LoadScreenTime
 
@@ -67,18 +67,18 @@ function dm.HUDPaint_RoundLeft(white)
         surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
 
         surface.DrawText("Вы " .. name)]]--
-        draw.DrawText( "It's Only You. Respawns are enabled.", "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( 155,155,255,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "It's Only You.", "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( 155,155,255,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "Deathmatch.", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( 155,155,255,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         --draw.DrawText( roundTypes[roundType], "HomigradRoundFont", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
-        draw.DrawText( "GLHF!", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( 155,155,255,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Kill everyone!", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( 155,155,255,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         return
     end
 end
-
+--[[
 net.Receive("dm die",function()
     timeStartAnyDeath = CurTime()
-end)
+end)]]
 
 function dm.CanUseSpectateHUD()
     return false

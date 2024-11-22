@@ -321,13 +321,10 @@ COMMANDS.levelnext = {function(ply,args)
 	if ply:IsAdmin() then
 		if not SetActiveNextRound(args[1]) then ply:ChatPrint("Error has occured!") return end
 	else
-	    ply:ChatPrint("You do not have permission to use this command.")
-        return
-		--[[local calling_ply = ply
+		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and table.HasValue(LevelList,args[1]) then
 			ulx.doVote( "Change the Gamemode next level to: " .. tostring(args[1]) .. "?", { "Yes","No" }, donaterVoteLevel, 15, _, _, argv, calling_ply, args)
 		end
-		]]
 	end
 end,1}
 
