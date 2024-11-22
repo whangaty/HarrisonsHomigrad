@@ -966,9 +966,11 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 							ply:ChatPrint("Ropes Left: "..RopeCount - 1)
 						end
 						if (rag.IsWeld or 0) > 0 then
-							ply:ChatPrint("Nails Left: "..tostring(math.ceil(rag.IsWeld)))
+							ply:ChatPrint("You attempt to break free, but fail.")
 							ply.Bloodlosing = ply.Bloodlosing + 10
 							ply.pain = ply.pain + 20
+						elseif (not rag.IsWeld or 0) == 0 then
+							ply:ChatPrint("You have broken free.")
 						end
 					else
 						ply:ChatPrint("You've managed to break free.")
