@@ -34,7 +34,7 @@ hook.Add("HUDPaint","PainEffect",function()
     k = LerpFT(0.1,k,math_Clamp(pain / 250,0,15))
     
     local k2 = painlosing >= 5 and (painlosing / 5 - 1) or 0
-   
+      
     local ply = LocalPlayer()
 
     if ply:GetNWInt("unconscious") and ply:Alive() and ply:Team() ~= TEAM_SPECTATOR then
@@ -52,26 +52,6 @@ hook.Add("HUDPaint","PainEffect",function()
                 colred, TEXT_ALIGN_CENTER)
         end
     end
-
-    DrawMotionBlur(0.2,k2 * 0.9,k2 * 0.06)
-
-    surface.SetMaterial(grtodown)
-    surface.SetDrawColor(0,0,0,255)
-    surface.DrawTexturedRect(0,h * k - h,w,h * 2)
-
-    surface.SetMaterial(grtoup)
-    surface.SetDrawColor(0, 0, 0, 255 )
-    surface.DrawTexturedRect(0,h - h * k,w,h)
-
-    surface.SetMaterial(grtoright)
-    surface.SetDrawColor(0,0,0,255)
-    surface.DrawTexturedRect(-w + w * k,0,w,h)
-
-    surface.SetMaterial(grtoleft)
-    surface.SetDrawColor(0,0,0,255)
-    surface.DrawTexturedRect(w - w * k,0,w,h)
-
-    DrawMotionBlur(0.2,k * 0.7,k * 0.03)
 end)
 
 local addmat_r = Material("CA/add_r")

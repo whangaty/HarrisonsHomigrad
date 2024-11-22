@@ -154,7 +154,7 @@ function Faking(ply,force) -- функция падения
 
 			ply:SetMoveType(MOVETYPE_NONE)
 			ply:DrawShadow(false)
-			local hull = Vector(01,01,01)
+			local hull = Vector(0,0,0)
 			ply:SetHull(-hull,hull)
 			ply:SetHullDuck(-hull,hull)
 			ply:SetViewOffset(Vector(0,0,0))
@@ -467,6 +467,8 @@ end)
 util.AddNetworkString("Unload")
 net.Receive("Unload",function(len,ply)
 	local wep = net.ReadEntity()
+	if not IsValid(wep) then return end
+	if wep:GetOwner() ~= ply then return end
 	local oldclip = wep:Clip1()
 	local ammo = wep:GetPrimaryAmmoType()
 	wep:EmitSound("snd_jack_hmcd_ammotake.wav")

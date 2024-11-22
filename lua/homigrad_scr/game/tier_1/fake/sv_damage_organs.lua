@@ -74,7 +74,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
     local penetration = dmginfo:GetDamageForce()
     
     if dmginfo:IsDamageType(DMG_BULLET + DMG_SLASH) then
-        penetration:Mul(0.015)
+        penetration:Mul(0.024)
     else
         penetration:Mul(0.004)
     end

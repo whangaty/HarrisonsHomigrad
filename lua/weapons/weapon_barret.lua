@@ -44,6 +44,7 @@ end
 
 SWEP.vbwPos = Vector(-3,-5,-5)
 SWEP.vbwAng = Vector(-80,-20,0)
+SWEP.vbw = false
 
 SWEP.CLR_Scope = 0.05
 SWEP.CLR = 0.025

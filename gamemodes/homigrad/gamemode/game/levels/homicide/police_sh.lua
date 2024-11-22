@@ -180,7 +180,7 @@ function CLASS:GuiltLogic(ply,dmgInfo)
 end
 
 local function live(self,hpOld,hpNew)
-	return IsValid(self) and self.isContr and not self.Outrub and hpOld == hpNew
+	return IsValid(self) and self.isContr and not self.unconscious and hpOld == hpNew
 end
 
 local function ebal(name,max)

@@ -18,7 +18,7 @@ if SERVER then
     util.AddNetworkString("homicide_support_arrival")
 else
     net.Receive("roundType",function(len)
-        homicide.roundType = net.ReadInt(4)
+        homicide.roundType = net.ReadInt(5)
         playsound = true
     end)
 
@@ -69,9 +69,9 @@ function homicide.StartRound(data)
 
     if SERVER then
         local roundType = homicide_setmode:GetInt() == math.random(1,4) or (homicide.IsMapBig() and 1) or false
-        homicide.roundType = math.random(1,4)
+        homicide.roundType = math.random(1,5)
         net.Start("roundType")
-        net.WriteInt(homicide.roundType,4)
+        net.WriteInt(homicide.roundType,5)
         net.Broadcast()
     end
 
@@ -131,8 +131,8 @@ function homicide.Scoreboard_Status(ply)
 end
 
 local red,blue = Color(200,0,10),Color(75,75,255)
-local roundTypes = {"Shotgun", "Regular Round", "No Firearms Permitted Zone", "Wild West"}
-local roundSound = {"snd_jack_hmcd_disaster.mp3","snd_jack_hmcd_shining.mp3","snd_jack_hmcd_panic.mp3","snd_jack_hmcd_wildwest.mp3"}
+local roundTypes = {"Shotgun", "Regular Round", "No Firearms Permitted Zone", "Wild West","Hitman"}
+local roundSound = {"snd_jack_hmcd_disaster.mp3","snd_jack_hmcd_shining.mp3","snd_jack_hmcd_panic.mp3","snd_jack_hmcd_wildwest.mp3","snd_jack_hmcd_disaster.mp3"}
 
 local DescCT = {
     [1] = "You have been given a shotgun. Kill the traitor before he kills you.", --emergency
@@ -166,6 +166,8 @@ function homicide.HUDPaint_RoundLeft(white2)
                 --"", "HomigradFontBig", ScrW() / 2, ScrH() / 1.1, Color( 155,55,55,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
             elseif homicide.roundType == 4 then --wildwest
                 draw.DrawText( "You have been given a revolver to take everyone else out.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.1, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            elseif homicide.roundType == 5 then --wildwest
+                draw.DrawText( "You have a sniper rifle.\nDespite its large size, it is hidden from your character.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
             else --emergency/base
                 draw.DrawText( "Kill everyone before the police arrive.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
             end
@@ -197,7 +199,7 @@ function homicide.HUDPaint_RoundLeft(white2)
 end
 
 function homicide.VBWHide(ply,wep)
-    if (not ply:IsRagdoll() and ply:Team() == 1002) then return end -- t weps hide
+    if (not ply:IsRagdoll() and ply:Team() == 1002) then return end
 
     return (wep.IsPistolHoldType and wep:IsPistolHoldType())
 end

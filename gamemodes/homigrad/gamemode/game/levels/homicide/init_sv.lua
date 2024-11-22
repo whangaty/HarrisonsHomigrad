@@ -53,6 +53,16 @@ local function makeT(ply)
         ply:Give("weapon_hg_t_vxpoison")
         ply:Give("weapon_radar")
         print(player.GetCount())
+    elseif homicide.roundType == 5 then
+        local wep = ply:Give("weapon_barret")
+        ply:GiveAmmo(20, "XBowBolt", true) -- slots = bolts.
+        wep:SetClip1(wep:GetMaxClip1())
+        ply:Give("weapon_kabar")
+        ply:Give("weapon_hg_rgd5")
+        ply:Give("weapon_hidebomb")
+        ply:Give("weapon_hg_t_vxpoison")
+        ply:Give("weapon_radar")
+        print(player.GetCount())
     else
         local wep = ply:Give("weapon_mateba")
         ply:GiveAmmo(3*8, ".44 Remington Magnum", true) -- slots = bullets.
@@ -78,7 +88,7 @@ local function makeCT(ply)
     if not IsValid(ply) then return end
     ply.roleCT = true
     table.insert(homicide.ct,ply)
-    if homicide.roundType == 1 then
+    if homicide.roundType == 1 or homicide.roundType == 5 then
         local wep = ply:Give("weapon_remington870")
         wep:SetClip1(wep:GetMaxClip1())
         AddNotificate( ply,"You have been given a shotgun. Be careful, the traitor will be likely to target you.")
@@ -97,7 +107,6 @@ local function makeCT(ply)
         AddNotificate( ply,"You & the traitor have been given identical revolvers. Find them and kill them.")
     else
     end
-
 end
 
 COMMANDS.russian_roulette = {function(ply,args)
@@ -174,25 +183,42 @@ end
 function SpawnPolicePlayers()
     local aviable = ReadDataMap("spawnpointsct")
     local playsound = true
+
+    local prePolicePlayers = PlayersDead(true)
+    
+    if not prePolicePlayers or table.IsEmpty(prePolicePlayers) then return end
+
+    local ply = prePolicePlayers[1]
+
+    homicide.police = true
+
+    timer.Simple(0, function()
+        if homicide.roundType == 1 then
+            PrintMessage(3, "A SWAT Team has arrived.")
+        else
+            PrintMessage(3, "The Police have arrived.")
+        end
+        if playsound then
+            ply:EmitSound("police_arrive")
+            playsound = false
+        end
+    end)
+
     tdm.SpawnCommand(prePolicePlayers, aviable, function(ply)
         timer.Simple(0, function()
             if homicide.roundType == 1 then
                 ply:SetPlayerClass("contr")
-                PrintMessage(3, "SWAT team has arrived.")
             else
                 ply:SetPlayerClass("police")
-                PrintMessage(3, "The Police have arrived.")
             end
-            if playsound then
-                ply:EmitSound("police_arrive")
-                playsound = false
-            end
+
+            ply:ChatPrint(#homicide.t > 1 and ("The traitors are: <clr:red>" .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("The traitor is: <clr:red>" .. homicide.t[1]:Name()))
+            ply:ChatPrint("<clr:red>WARNING: <clr:white>Killing friendlies will result in a punishment determined by staff.")
+            
+            net.Start("homicide_roleget")
+            net.WriteTable({{}, {}})
+            net.Send(ply)
         end)
-        ply:ChatPrint(#homicide.t > 1 and ("The traitors are: <clr:red>" .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("The traitor is: <clr:red>" .. homicide.t[1]:Name()))
-        ply:ChatPrint("<clr:red>WARNING: <clr:white>Killing friendlies will result in a punishment determined by staff.")
-        net.Start("homicide_roleget")
-        net.WriteTable({{}, {}})
-        net.Send(ply)
     end)
 end
 
@@ -268,7 +294,7 @@ function homicide.StartRoundSV()
         local ply = table.Random(players)
         table.RemoveByValue(players,ply)
 
-        if homicide.roundType <= 4 then
+        if homicide.roundType <= 5 then
             makeCT(ply)
         end
     end
@@ -302,9 +328,10 @@ function homicide.RoundEndCheck()
 
     if roundTimeStart + roundTime < CurTime() then
 		if not homicide.police then
-			homicide.police = true
             SpawnPolicePlayers()
 		end
+    else if (roundTimeStart + 180) + roundTime < CurTime() then
+        EndRound()
 	end
 
 	if TAlive == 0 and Alive == 0 then EndRound(1) return end
@@ -315,7 +342,7 @@ end
 
 function homicide.PlayerInitialSpawn(ply)
     ply:SetTeam(1)
-    TryAssignPolice(ply)
+    --TryAssignPolice(ply)
 end
 
 local aviable = ReadDataMap("spawnpointsct")
@@ -325,9 +352,9 @@ COMMANDS.forcepolice = {function(ply)
     homicide.police = false
     prePolicePlayers = {}
 
-    for i, ply in pairs(player.GetAll()) do
-        TryAssignPolice(ply)
-    end
+    --for i, ply in pairs(player.GetAll()) do
+        --TryAssignPolice(ply)
+    --end
 
     roundTime = 0
 end}
@@ -388,7 +415,7 @@ function homicide.SyncRole(ply,teamID)
 end
 
 function homicide.PlayerDeath(ply,inf,att)
-    TryAssignPolice(ply)
+    --TryAssignPolice(ply)
     if (ply:IsAdmin() or (ply:GetUserGroup() == "operator") or (ply:GetUserGroup() == "tmod")) and ply:GetInfoNum("homicide_get",0) then
         local role = {{},{}}
 
