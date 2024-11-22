@@ -927,9 +927,16 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 
 	if ply:Alive() then
 		if !ply.unconscious then
+			
+			-- Remember to not swim 30 minutes after eating
+			if (table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))>0 or ((rag.IsWeld or 0) > 0)) and ply.firstTimeNotifiedRestrained then
+				ply.ChatPrint("You've been restrained.\nYou use 'Jump' to try to escape, at the cost of losing health.")
+				ply.firstTimeNotifiedRestrained = false
+			end
+			
 			if ply:KeyDown( IN_JUMP ) and (table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))>0 or ((rag.IsWeld or 0) > 0)) and ply.stamina>45 and (ply.lastuntietry or 0) < CurTime() then
 				ply.lastuntietry = CurTime() + 2
-				
+
 				rag.IsWeld = math.max((rag.IsWeld or 0) - 0.1,0)
 
 				local RopeCount = table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))
@@ -954,15 +961,15 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 				if Try > (7*RopeCount) or ((rag.IsWeld or 0) > 0) then
 					if RopeCount>1 or (rag.IsWeld or 0 > 0) then
 						if RopeCount > 1 then
-							ply:ChatPrint("Осталось: "..RopeCount - 1)
+							ply:ChatPrint("Ropes Left: "..RopeCount - 1)
 						end
 						if (rag.IsWeld or 0) > 0 then
-							ply:ChatPrint("Осталось отбить гвоздей: "..tostring(math.ceil(rag.IsWeld)))
+							ply:ChatPrint("Nails Left: "..tostring(math.ceil(rag.IsWeld)))
 							ply.Bloodlosing = ply.Bloodlosing + 10
 							ply.pain = ply.pain + 20
 						end
 					else
-						ply:ChatPrint("Ты развязался")
+						ply:ChatPrint("You've managed to break free.")
 					end
 					Ropes[1].Constraint:Remove()
 					rag:EmitSound("snd_jack_hmcd_ducttape.wav",90,50,0.5,CHAN_AUTO)

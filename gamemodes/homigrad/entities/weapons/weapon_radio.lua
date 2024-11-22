@@ -106,7 +106,7 @@ if SERVER then
                     end
                 elseif not lisens[input] then
                     lisens[input] = true
-                    input:ChatPrint("Вещает : " .. output:Nick())
+                    --input:ChatPrint("Вещает : " .. output:Nick())
                     self:BippSound(input,100)
                 end
             end

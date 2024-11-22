@@ -23,6 +23,8 @@ function GM:PlayerSpawn(ply)
 	ply.firstTimeNotifiedLeftLeg = true
 	ply.firstTimeNotifiedRightLeg = true
 
+	ply.firstTimeNotifiedRestrained = true
+
 	ply.attackees = {}
 	ply:SetCanZoom(false)
 	ply.Blood = 5000
