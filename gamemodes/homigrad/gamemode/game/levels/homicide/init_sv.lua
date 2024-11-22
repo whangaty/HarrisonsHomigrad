@@ -330,7 +330,7 @@ function homicide.RoundEndCheck()
 		if not homicide.police then
             SpawnPolicePlayers()
 		end
-    else if (roundTimeStart + 180) + roundTime < CurTime() then
+    elseif (roundTimeStart + 180) + roundTime < CurTime() then
         EndRound()
 	end
 
