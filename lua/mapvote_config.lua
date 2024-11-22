@@ -110,29 +110,32 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     --"ttt_freeway_rain",
     "ttt_fastfood_a6",
     "ttt_terrortrain_2020_b5",
-    "hmcd_aircraft",
+    "cs_insertion2_dusk",
     "mu_smallotown_v2_snow",
-    
-    --"gm_terminal_v1a",
     "gm_wick",
-    --"gm_freeway_spacetunnel",
     "ttt_minecraft_b5",
     "ttt_minecraftcity_v4",
-    --"gm_deschool",
     "dm_steamlab",
     "ttt_airbus_b3",
-    --"ttt_grovestreet_a13",
     "gm_abandoned_factory",
     "gm_assault_sandbox",
     "gm_grant_street",
     "gm_hmcd_rooftops",
+
+    "ttt_grovestreet_a13",
+    "zs_adrift_v4",
+    "ttt_amsterville_open",
+    "zavod",
+    "ttt_blackmesa_bahpu",
+    "ttt_mc_island_2013",
+
     
     "tdm_city18",
     "gm_kleinercomcenter",
     --"mu_smallotown_v2_13",
 
     -- Maps that need fixing
-    -- "cs_insertion2_dusk", Requires Checks for info_player spawns to be removed
+     --Requires Checks for info_player spawns to be removed
     --"gm_church", Crashes on IED Explosion
     --"ttt_pizzeria", Buggy NPCs and Players
 
@@ -141,8 +144,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_bank_change",
     "gm_apartments_hl2",
     "ttt_ile_v4",
-    "freeway_thicc_v3"
-
+    "freeway_thicc_v3",
 }
 
 -- Allow players to use their mics while in the mapvote
@@ -263,4 +265,9 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = 'ttt_ile_v4', displayname = 'Lighthouse',image="https://i.imgur.com/pcBZ56Z.jpeg", width = 1920, height = 1080 },
     { filename = "freeway_thicc_v3", displayname = 'Freeway',image="https://i.imgur.com/w9wUmsm.jpeg", width = 1920, height = 1080 },
 
+    { filename = "zavod", displayname = 'EFT Factory',image="https://i.imgur.com/0o19pTl.jpeg", width = 1920, height = 1080 },
+    { filename = "ttt_amsterville_open", displayname = 'Amsterville',image="https://i.imgur.com/i64MVDT.jpeg", width = 1920, height = 1080 },
+    { filename = "zs_adrift_v4", displayname = 'Adrift',image="https://i.imgur.com/D1UWlcz.jpeg", width = 1920, height = 1080 },
+    { filename = "ttt_blackmesa_bahpu", displayname = 'Black Mesa',image="https://i.imgur.com/v0zYPia.jpeg", width = 1920, height = 1080 },
+    { filename = "ttt_mc_island_2013", displayname = 'Minecraft Island',image="https://i.imgur.com/FBkaQTn.jpeg", width = 1920, height = 1080 },
 }

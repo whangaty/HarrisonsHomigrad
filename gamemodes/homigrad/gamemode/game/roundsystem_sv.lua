@@ -278,17 +278,20 @@ local function donaterVoteLevelEnd(t,argv,calling_ply,args)
 	calling_ply.canVoteNext = CurTime() + 300
 end
 
+
 COMMANDS.levelend = {function(ply,args)
-	if ply:IsAdmin() then
+	if ply:IsAdmin() or ply:GetUserGroup("operator") then
 		EndRound()
 	else
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
 			ulx.doVote( "End Round?", { "Yes", "No" }, donaterVoteLevelEnd, 15, nil, nil, argv, calling_ply, args)
 		end
+	
 	end
 	--print("Was Recognised!")
-end,0}
+end,1}
+
 
 local function donaterVoteLevel(t,argv,calling_ply,args)
 	local results = t.results
@@ -318,10 +321,13 @@ COMMANDS.levelnext = {function(ply,args)
 	if ply:IsAdmin() then
 		if not SetActiveNextRound(args[1]) then ply:ChatPrint("Error has occured!") return end
 	else
-		local calling_ply = ply
+	    ply:ChatPrint("You do not have permission to use this command.")
+        return
+		--[[local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and table.HasValue(LevelList,args[1]) then
 			ulx.doVote( "Change the Gamemode next level to: " .. tostring(args[1]) .. "?", { "Yes","No" }, donaterVoteLevel, 15, _, _, argv, calling_ply, args)
 		end
+		]]
 	end
 end,1}
 

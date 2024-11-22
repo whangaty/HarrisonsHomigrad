@@ -151,7 +151,13 @@ function EasyAppearance.Menu( ply )
 end
 
 concommand.Add("hg_appearance_menu",function()
-    EasyAppearance.Menu( LocalPlayer() )
+    local ply = LocalPlayer()
+
+    if ply:IsUserGroup() ~= "user" and ply:IsUserGroup() ~= "regular" then
+        EasyAppearance.Menu( LocalPlayer() )
+    else
+        ply:ChatPrint("The appearence menu is donator only!")
+    end
 end)
 
 function EasyAppearance.SendNet( bRandom, tAppearanceData )

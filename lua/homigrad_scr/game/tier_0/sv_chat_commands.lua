@@ -41,15 +41,17 @@ local validUserGroup = {
 	tmod = true
 }
 
+
+-- 
 function COMMAND_GETASSES(ply)
 	local group = ply:GetUserGroup()
 	if validUserGroup[group] then
-		return 1
+		return 1 -- Donator & Admin Permissions
 	elseif validUserGroupSuperAdmin[group] then
-		return 2
+		return 2 -- Superadmin only
 	end
 
-	return 0
+	return 0 -- Everyone
 end
 
 function COMMAND_ASSES(ply,cmd)
