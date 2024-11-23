@@ -38,7 +38,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.LeftArm = math.min(0.6,ply.LeftArm - sub)
             if ply.msgLeftArm < CurTime() then
                 ply.msgLeftArm = CurTime() + 1
-                ply:ChatPrint("You feel your left arm break.")
+                ply:ChatPrint("#chat.health.brokenLArm")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -47,7 +47,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.RightArm = math.max(0.6,ply.RightArm - sub)
             if ply.msgRightArm < CurTime() then
                 ply.msgRightArm = CurTime() + 1
-                ply:ChatPrint("You feel your right arm break.")
+                ply:ChatPrint("#chat.health.brokenRArm")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -56,7 +56,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.LeftLeg = math.max(0.6,ply.LeftLeg - sub)
             if ply.msgLeftLeg < CurTime() then
                 ply.msgLeftLeg = CurTime() + 1
-                ply:ChatPrint("You feel your left leg break.")
+                ply:ChatPrint("#chat.health.brokenLLeg")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -65,7 +65,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.RightLeg = math.max(0.6,ply.RightLeg - sub)
             if ply.msgRightLeg < CurTime() then
                 ply.msgRightLeg = CurTime() + 1
-                ply:ChatPrint("You feel your right leg break.")
+                ply:ChatPrint("#chat.health.brokenRLeg")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -105,7 +105,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
                 ply.Organs['lungs'] = math.max(ply.Organs['lungs'] - dmg,0)
                 if ply.Organs['lungs'] == 0 then
                     timer.Simple(3,function()
-                        if ply:Alive() then ply:ChatPrint("You feel your lungs collapse. ") end
+                        if ply:Alive() then ply:ChatPrint("#chat.health.lungDamage") end
                     end)
                 end
             end
@@ -202,7 +202,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
                         end
                     end)
                     ply.brokenspine=true 
-                    ply:ChatPrint("You feel your spine shatter.\nYou can no longer walk.")
+                    ply:ChatPrint("#chat.health.brokenSpine")
                     ent:EmitSound("NPC_Barnacle.BreakNeck",70,125,0.7,CHAN_ITEM)
                 end
             end
