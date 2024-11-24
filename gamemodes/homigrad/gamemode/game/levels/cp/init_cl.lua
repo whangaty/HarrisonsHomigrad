@@ -1,33 +1,33 @@
-cp.GetTeamName = tdm.GetTeamName
+ctp.GetTeamName = tdm.GetTeamName
 
 local red, blue, gray = Color(255,75,75), Color(75,75,255), Color(200, 200, 200)
 
 gameevent.Listen("player_activate")
 hook.Add("player_activate","CP_SendData",function(data)
-    cp.points = {}
+    ctp.points = {}
 
-    cp.WinPoints = {}
+    ctp.WinPoints = {}
 
     for i = 1, 2 do
-        cp.WinPoints[i] = GetGlobalInt("CP_Winpoints" .. i)
+        ctp.WinPoints[i] = GetGlobalInt("CP_Winpoints" .. i)
     end
 
     timer.Create("CP_ThinkAboutPoints", 1, 0, function() --подумай о точках... засунул в таймер для оптимизации, ибо там каждый тик игроки в сфере подглядываются, ну и в целом для удобства
-        cp.PointsThink()
+        ctp.PointsThink()
     end)
 
-    for k, v in pairs(cp.points) do
+    for k, v in pairs(ctp.points) do
         v.CaptureProgress = GetGlobalInt(k .. "PointProgress", 0)
         v.CaptureTeam = GetGlobalInt(k .. "PointCapture", nil)
     end
 end)
 
-function cp.PointsThink()
+function ctp.PointsThink()
     for i = 1, 3 do
-        cp.WinPoints[i] = GetGlobalInt("CP_Winpoints" .. i, 0)
+        ctp.WinPoints[i] = GetGlobalInt("CP_Winpoints" .. i, 0)
     end
 
-    for k, v in pairs(cp.points) do
+    for k, v in pairs(ctp.points) do
         v.CaptureProgress = GetGlobalInt(k .. "PointProgress", 0)
         v.CaptureTeam = GetGlobalInt(k .. "PointCapture", nil)
     end
@@ -36,9 +36,9 @@ end
 local upvector = Vector(0, 0, 128) --в отдельную переменную ибо создание векторов в пэинт хуке так себе дело...
 
 
-function cp.HUDPaint_RoundLeft(white2) --позиции точек и счёт
+function ctp.HUDPaint_RoundLeft(white2) --позиции точек и счёт
     local lply = LocalPlayer()
-	local name,color = cp.GetTeamName(lply)
+	local name,color = ctp.GetTeamName(lply)
 
 	local startRound = roundTimeStart + 5 - CurTime()
     if startRound > 0 and lply:Alive() then
@@ -62,7 +62,7 @@ function cp.HUDPaint_RoundLeft(white2) --позиции точек и счёт
         return
     end
 
-    local cp_points = cp.points
+    local cp_points = ctp.points
     for i, point in pairs(SpawnPointsList.controlpoint[3]) do
         local pos = (point[1] + upvector):ToScreen()
         local v = cp_points[i]
@@ -85,9 +85,9 @@ function cp.HUDPaint_RoundLeft(white2) --позиции точек и счёт
 
 
     surface.SetDrawColor(red)
-    surface.DrawRect(ScrW() * 0.39 + ((1000 - cp.WinPoints[1]) / 1000 * ScrW() * 0.1), ScrH() * 0.97, cp.WinPoints[1] / 1000 * ScrW() * 0.1, ScrH() * 0.01)
+    surface.DrawRect(ScrW() * 0.39 + ((1000 - ctp.WinPoints[1]) / 1000 * ScrW() * 0.1), ScrH() * 0.97, ctp.WinPoints[1] / 1000 * ScrW() * 0.1, ScrH() * 0.01)
     surface.SetDrawColor(blue)
-    surface.DrawRect(ScrW() * 0.51, ScrH() * 0.97, cp.WinPoints[2] / 1000 * ScrW() * 0.1, ScrH() * 0.01)
+    surface.DrawRect(ScrW() * 0.51, ScrH() * 0.97, ctp.WinPoints[2] / 1000 * ScrW() * 0.1, ScrH() * 0.01)
 
     --время раунда
     local time = math.Round(roundTimeStart + roundTime - CurTime())

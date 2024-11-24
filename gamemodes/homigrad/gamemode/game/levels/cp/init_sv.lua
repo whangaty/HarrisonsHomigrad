@@ -10,7 +10,7 @@ local function GetTeamSpawns(ply)
     end
 end
 
-function cp.SpawnVehicle()
+function ctp.SpawnVehicle()
     for k, v in pairs(ReadDataMap("swo_carsct")) do
         local v2 = ReadPoint(v)
         local contradiction = false
@@ -40,7 +40,7 @@ function cp.SpawnVehicle()
     end
 end
 
-function cp.SpawnGred()
+function ctp.SpawnGred()
 	for i,point in pairs(ReadDataMap("gred_emp_dshk")) do
 		local ent = ents.Create("gred_emp_dshk")
 		ent:SetPos(point[1])
@@ -55,7 +55,7 @@ function cp.SpawnGred()
     end
 end
 
-function cp.StartRoundSV()
+function ctp.StartRoundSV()
     tdm.RemoveItems()
 
 	roundTimeStart = CurTime()
@@ -70,24 +70,24 @@ function cp.StartRoundSV()
 	tdm.SpawnCommand(team.GetPlayers(1),spawnsT)
 	tdm.SpawnCommand(team.GetPlayers(2),spawnsCT)
 
-    cp.SpawnVehicle()
-	cp.SpawnGred()
+    ctp.SpawnVehicle()
+	ctp.SpawnGred()
 
     bahmut.SelectRandomPlayers(team.GetPlayers(1),4,bahmut.GiveAidPhone)
     bahmut.SelectRandomPlayers(team.GetPlayers(2),4,bahmut.GiveAidPhone)
 
     tdm.CenterInit()
 
-    cp.ragdolls = {}
+    ctp.ragdolls = {}
 end
 
-function cp.Think()
-    cp.LastWave = cp.LastWave or CurTime() + 60
+function ctp.Think()
+    ctp.LastWave = ctp.LastWave or CurTime() + 60
 
-    if CurTime() >= cp.LastWave then
+    if CurTime() >= ctp.LastWave then
         SetGlobalInt("CP_respawntime", CurTime())
     
-        cp.SpawnVehicle()
+        ctp.SpawnVehicle()
     
         for _, v in player.Iterator() do
             local players = {}
@@ -111,18 +111,18 @@ function cp.Think()
     
         end
     
-        for ent in pairs(cp.ragdolls) do
+        for ent in pairs(ctp.ragdolls) do
             if IsValid(ent) then ent:Remove() end
     
-            cp.ragdolls[ent] = nil
+            ctp.ragdolls[ent] = nil
         end
 
-        cp.LastWave = CurTime() + 60
+        ctp.LastWave = CurTime() + 60
     end
 end
 
-function cp.PlayerSpawn2(ply,teamID)
-    local teamTbl = cp[cp.teamEncoder[teamID]]
+function ctp.PlayerSpawn2(ply,teamID)
+    local teamTbl = cp[ctp.teamEncoder[teamID]]
 	local color = teamTbl[2]
 
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
@@ -148,8 +148,8 @@ function cp.PlayerSpawn2(ply,teamID)
 	JMod.EZ_Equip_Armor(ply,(r == 1 and "Medium-Vest") or (r == 2 and "Light-Vest"),color)
 end
 
-function cp.PointsThink() --обработка точек, сколько людей из каждой команды и процесс захвата
-    local cp_points = cp.points
+function ctp.PointsThink() --обработка точек, сколько людей из каждой команды и процесс захвата
+    local cp_points = ctp.points
     for i, point in pairs(SpawnPointsList.controlpoint[3]) do
         local v = cp_points[i]
         if not v then
@@ -187,7 +187,7 @@ function cp.PointsThink() --обработка точек, сколько люд
         end
 
         if v.CaptureTeam and v.CaptureTeam != 0 then
-            cp.WinPoints[v.CaptureTeam] = cp.WinPoints[v.CaptureTeam] + 7.5 / #SpawnPointsList.controlpoint[3]
+            ctp.WinPoints[v.CaptureTeam] = ctp.WinPoints[v.CaptureTeam] + 7.5 / #SpawnPointsList.controlpoint[3]
         end
 
         SetGlobalInt(i .. "PointProgress", v.CaptureProgress)
@@ -195,22 +195,22 @@ function cp.PointsThink() --обработка точек, сколько люд
     end
 
     for i = 1, 2 do
-        SetGlobalInt("CP_Winpoints" .. i, cp.WinPoints[i])
+        SetGlobalInt("CP_Winpoints" .. i, ctp.WinPoints[i])
     end
 end
 
-function cp.RoundEndCheck()
+function ctp.RoundEndCheck()
     tdm.Center()
 
     for i = 1, 2 do
-        if cp.WinPoints[i] >= 1000 then
+        if ctp.WinPoints[i] >= 1000 then
             EndRound(i)
         end
     end
     if roundTimeStart + roundTime < CurTime() then EndRound() end
 end
 
-function cp.EndRound(winner)
+function ctp.EndRound(winner)
 	print("End round, win '" .. tostring(winner) .. "'")
 
 	for _, ply in ipairs(player.GetAll()) do
@@ -223,9 +223,9 @@ function cp.EndRound(winner)
     timer.Remove("CP_ThinkAboutPoints")
 end
 
-function cp.PlayerInitialSpawn(ply) ply:SetTeam(math.random(2)) end
+function ctp.PlayerInitialSpawn(ply) ply:SetTeam(math.random(2)) end
 
-function cp.PlayerCanJoinTeam(ply, teamID)
+function ctp.PlayerCanJoinTeam(ply, teamID)
     if teamID == 3 then ply:ChatPrint("Иди нахуй") return false end
 end
 
@@ -240,11 +240,11 @@ local function max(a)
     return values[#values]
 end
 
-cp.ragdolls = {}
-function cp.PlayerDeath(ply,inf,att)
-    cp.ragdolls[ply:GetNWEntity("Ragdoll")] = true
+ctp.ragdolls = {}
+function ctp.PlayerDeath(ply,inf,att)
+    ctp.ragdolls[ply:GetNWEntity("Ragdoll")] = true
 
     return false
 end
 
-cp.NoSelectRandom = true
+ctp.NoSelectRandom = true
