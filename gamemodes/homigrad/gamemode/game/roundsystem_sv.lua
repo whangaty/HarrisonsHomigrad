@@ -25,13 +25,13 @@ function RoundStateSync(ply,data)
 	if ply then net.Send(ply) else net.Broadcast() end
 end
 
-if levelrandom == nil or not GetConVar("sv_homicideonly").GetBool() then levelrandom = true else levelrandom = false end
+if levelrandom == nil then levelrandom = true else levelrandom = false end
 if pointPagesRandom == nil then pointPagesRandom = true end
 
 COMMANDS.levelrandom = {function(ply,args)
 	if tonumber(args[1]) > 0 then levelrandom = true else levelrandom = false end
 
-	if GetConVar("sv_homicideonly").GetBool() then levelrandom = false end
+	if GetConVar("sv_homicideonly"):GetBool() or GetConVar("sv_construct"):GetBool() then levelrandom = false end
 
 	PrintMessage(3,"Randomisation of Levels: " .. tostring(levelrandom))
 end}
