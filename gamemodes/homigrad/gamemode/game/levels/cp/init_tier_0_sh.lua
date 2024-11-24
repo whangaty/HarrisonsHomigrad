@@ -1,5 +1,5 @@
 
-table.insert(LevelList,"cp")
+table.insert(LevelList,"ctp")
 cp = {}
 cp.Name = "Capture The Point"
 cp.points = {}
