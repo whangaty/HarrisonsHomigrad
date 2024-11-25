@@ -122,7 +122,7 @@ function ctp.Think()
 end
 
 function ctp.PlayerSpawn2(ply,teamID)
-    local teamTbl = cp[ctp.teamEncoder[teamID]]
+    local teamTbl = ctp[ctp.teamEncoder[teamID]]
 	local color = teamTbl[2]
 
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
