@@ -31,7 +31,7 @@ if pointPagesRandom == nil then pointPagesRandom = true end
 COMMANDS.levelrandom = {function(ply,args)
 	if tonumber(args[1]) > 0 then levelrandom = true else levelrandom = false end
 
-	if GetConVar("sv_homicideonly"):GetBool() or GetConVar("sv_construct"):GetBool() then levelrandom = false end
+	--if GetConVar("sv_homicideonly"):GetBool() or GetConVar("sv_construct"):GetBool() then levelrandom = false end
 
 	PrintMessage(3,"Randomisation of Levels: " .. tostring(levelrandom))
 end}
