@@ -96,7 +96,7 @@ end
 -- Enabling this option will give greater a chance to maps
 -- that are played less often to be selected in the vote.
 -- Disabling it will let the map vote randomly choose maps for the vote.
-SolidMapVote[ 'Config' ][ 'Fair Map Recycling' ] = false
+SolidMapVote[ 'Config' ][ 'Fair Map Recycling' ] = true
 
 -- Setting this to true will display on the map vote button how many
 -- times the map was played in the past.
@@ -141,7 +141,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
 
     "gm_building",
     "ttt_clue_2022",
-    "ttt_bank_change",
+    --"ttt_bank_change",
     "gm_apartments_hl2",
     "ttt_ile_v4",
     "freeway_thicc_v3",

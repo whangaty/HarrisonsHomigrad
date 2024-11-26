@@ -1,50 +1,49 @@
+table.insert(LevelList,"ctp")
+ctp = {}
+ctp.Name = "Capture The Point"
+ctp.points = {}
 
-table.insert(LevelList,"cp")
-cp = {}
-cp.Name = "Capture The Point"
-cp.points = {}
-
-cp.WinPoints = cp.WinPoints or {}
-cp.WinPoints[1] = cp.WinPoints[1] or 0
-cp.WinPoints[2] = cp.WinPoints[2] or 0
+ctp.WinPoints = ctp.WinPoints or {}
+ctp.WinPoints[1] = ctp.WinPoints[1] or 0
+ctp.WinPoints[2] = ctp.WinPoints[2] or 0
 
 local red, blue, gray = Color(255,75,75), Color(75,75,255), Color(200, 200, 200)
 
-cp.red = {"Blue",Color(255,75,75),
+ctp.red = {"Blue",Color(255,75,75),
     weapons = {"weapon_binokle","weapon_radio","weapon_gurkha","weapon_hands","med_band_big","med_band_small","medkit","painkiller"},
     main_weapon = {"weapon_ak74u","weapon_akm","weapon_remington870","weapon_galil","weapon_rpk","weapon_asval","weapon_p90","weapon_scout","weapon_barret"},
     secondary_weapon = {"weapon_p220","weapon_mateba","weapon_glock"},
     models = tdm.models
 }
 
-cp.blue = {"Red",Color(75,75,255),
+ctp.blue = {"Red",Color(75,75,255),
     weapons = {"weapon_binokle","weapon_radio","weapon_hands","weapon_kabar","med_band_big","med_band_small","medkit","painkiller","weapon_handcuffs","weapon_taser"},
     main_weapon = {"weapon_hk416","weapon_m4a1","weapon_m3super","weapon_mp7","weapon_xm1014","weapon_fal","weapon_asval","weapon_m249","weapon_p90","weapon_scout","weapon_barret"},
     secondary_weapon = {"weapon_beretta","weapon_p99","weapon_hk_usp"},
     models = tdm.models
 }
 
-cp.teamEncoder = {
+ctp.teamEncoder = {
     [1] = "red",
     [2] = "blue"
 }
 
-cp.RoundRandomDefalut = 1
+ctp.RoundRandomDefalut = 1
 
-function cp.StartRound()
+function ctp.StartRound()
     local ply = player.GetAll()
 	game.CleanUpMap(false)
-    cp.points = {}
+    ctp.points = {}
     if !file.Read( "homigrad/maps/"..game.GetMap()..".txt", "DATA" ) and SERVER then
         print("No points are available on this map! This is either by design, or by laziness.") 
         PrintMessage(HUD_PRINTCENTER, "No points are available on this map! This is either by design, or by laziness.")
     end
 
-    cp.LastWave = CurTime()
+    ctp.LastWave = CurTime()
 
-    cp.WinPoints = {}
-    cp.WinPoints[1] = 0
-    cp.WinPoints[2] = 0
+    ctp.WinPoints = {}
+    ctp.WinPoints[1] = 0
+    ctp.WinPoints[2] = 0
 
 	team.SetColor(1,red)
 	team.SetColor(2,blue)
@@ -52,7 +51,7 @@ function cp.StartRound()
     for i, point in pairs(SpawnPointsList.controlpoint[3]) do
         SetGlobalInt(i .. "PointProgress", 0)
         SetGlobalInt(i .. "PointCapture", 0)
-        cp.points[i] = {}
+        ctp.points[i] = {}
     end
 
     SetGlobalInt("CP_respawntime", CurTime())
@@ -60,12 +59,12 @@ function cp.StartRound()
 	if CLIENT then return end
 
     timer.Create("CP_ThinkAboutPoints", 1, 0, function() --подумай о точках... засунул в таймер для оптимизации, ибо там каждый тик игроки в сфере подглядываются, ну и в целом для удобства
-        cp.PointsThink()
+        ctp.PointsThink()
     end)
 
-    cp.StartRoundSV()
+    ctp.StartRoundSV()
 end
 
 --тот кто это кодил нужно убить нахуй
 
-cp.SupportCenter = true
+ctp.SupportCenter = true

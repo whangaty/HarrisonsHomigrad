@@ -85,11 +85,12 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 			if roundActiveName == "homicide" or roundActiveName == "hideandseek" then
 				draw.SimpleText("Police Arrive In: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 			--elseif roundActiveName == "scp" then
-				--draw.SimpleText("До прибытия МОГ: " .. math.Round(scp.spawnMOG),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
+				--draw.SimpleText("До прибытия МОГ: " .. math.Round(sctp.spawnMOG),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 			else
 				draw.SimpleText("Round Ends in: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT) 
 			end
-			else draw.SimpleText("Time Passed: ","HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
+		else 
+			draw.SimpleText("Time Passed: ","HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 		end
 		draw.SimpleText("Next Gamemode: " .. nextName,"HomigradFont",ScrW() - 15, ScrH() - 20,name ~= nextName and yellow or showRoundInfoColor, TEXT_ALIGN_RIGHT)
 	end

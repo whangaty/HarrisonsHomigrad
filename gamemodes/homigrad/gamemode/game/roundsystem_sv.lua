@@ -31,6 +31,8 @@ if pointPagesRandom == nil then pointPagesRandom = true end
 COMMANDS.levelrandom = {function(ply,args)
 	if tonumber(args[1]) > 0 then levelrandom = true else levelrandom = false end
 
+	if GetConVar("sv_homicideonly"):GetBool() or GetConVar("sv_construct"):GetBool() then levelrandom = false end
+
 	PrintMessage(3,"Randomisation of Levels: " .. tostring(levelrandom))
 end}
 
@@ -107,7 +109,10 @@ function StartRound()
 		if func and diff <= 0 then
 			local name = LevelRandom()
 
-			SetActiveNextRound(name)
+			
+			if GetConVar("sv_homicideonly"):GetBool() then SetActiveNextRound("homicide") else SetActiveNextRound(name) end -- tragic code tbh
+			
+			
 			text = text .. "Next Gamemode: " .. tostring(TableRound(roundActiveNameNext).Name).. "\n"
 	
 			CountRoundRandom = 0

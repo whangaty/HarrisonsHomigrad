@@ -32,7 +32,7 @@ hook.Add("Player Think","homigrad-hungry",function(ply,time)
 		if ply.hungry > 40 and ply.hungry < 65 and ply.hungryMessage ~= 2 then
 			ply.hungryMessage = 2
 
-			ply:ChatPrint("You feel your stomach rumbling.")
+			ply:ChatPrint("#chat.health.hungry")
 		end
 	end
 

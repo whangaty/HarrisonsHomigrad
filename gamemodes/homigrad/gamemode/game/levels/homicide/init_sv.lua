@@ -122,16 +122,6 @@ end}
 function homicide.Spawns()
     local aviable = {}
 
-    if game.GetMap() ~= "gm_freeway_spacetunnel" or game.GetMap() ~= "cs_insertion2_dusk" then
-        for i,ent in pairs(ents.FindByClass("info_player*")) do
-            table.insert(aviable,ent:GetPos())
-        end
-
-        for i,ent in pairs(ents.FindByClass("info_node*")) do
-            table.insert(aviable,ent:GetPos())
-        end
-    end
-
     for i,point in pairs(ReadDataMap("spawnpointshiders")) do
         table.insert(aviable,point)
     end
