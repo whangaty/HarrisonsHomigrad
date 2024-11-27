@@ -616,10 +616,6 @@ end
 local CustomWeight = {
 	["models/player/police_fem.mdl"] = 50,
 	["models/player/police.mdl"] = 60,
-	["models/player/combine_soldier.mdl"] = 70,
-	["models/player/combine_super_soldier.mdl"] = 80,
-	["models/player/combine_soldier_prisonguard.mdl"] = 70,
-	["models/player/azov.mdl"] = 10,
 	["models/player/Rusty/NatGuard/male_01.mdl"] = 90,
 	["models/player/Rusty/NatGuard/male_02.mdl"] = 90,
 	["models/player/Rusty/NatGuard/male_03.mdl"] = 90,
