@@ -1,4 +1,4 @@
-table.insert(LevelList,"riot")
+--table.insert(LevelList,"riot")
 riot = {}
 riot.Name = "Riot"
 

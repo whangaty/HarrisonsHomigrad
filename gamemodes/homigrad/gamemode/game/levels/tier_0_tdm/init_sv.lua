@@ -151,7 +151,7 @@ end
 
 function tdm.EndRoundMessage(winner)
 	local tbl = TableRound()
-	PrintMessage(3,"Winning Team: " .. (winner == 0 and "Nobody" or tbl[tbl.teamEncoder[winner]] and tbl[tbl.teamEncoder[winner]][1] or "Nobody") .. ".")
+	PrintMessage(3,language.GetPhrase("chat.rounds.tdmWinner") .. " ".. (winner == 0 and "Nobody" or tbl[tbl.teamEncoder[winner]] and tbl[tbl.teamEncoder[winner]][1] or "#team.nobody") .. "!")
 end
 
 function tdm.EndRound(winner) tdm.EndRoundMessage(winner) end
