@@ -417,8 +417,8 @@ end)
 
 hook.Add("PhysgunPickup", "DropPlayer2", function(ply,ent)
 		--if ply:GetUserGroup()=="servermanager" or ply:GetUserGroup()=="superadmin" or ply:GetUserGroup()=="owner" or ply:GetUserGroup()=="admin" or ply:GetUserGroup()=="operator" then
-	if GetConVar("sv_construct"):GetBool() == true then 
-		return false
+	if GetConVar("sv_construct"):GetBool() == true then
+		if ent:IsPlayer() and !IsValid(ent.FakeRagdoll) or ent:IsRagdoll() then return false else return true end
 	else
 		if ent:IsPlayer() and !IsValid(ent.FakeRagdoll) then
 			if hook.Run("Should Fake Physgun",ply,ent) ~= nil then return false end

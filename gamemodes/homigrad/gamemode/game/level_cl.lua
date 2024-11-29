@@ -66,7 +66,7 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 
 	local k = showRoundInfo - CurTime()
 
-	if k > 0 then
+	if k > 0 and GetConVar("sv_construct"):GetBool() ~= true then
 		k = math.min(k,1)
 
 		showRoundInfoColor.a = k * 255
