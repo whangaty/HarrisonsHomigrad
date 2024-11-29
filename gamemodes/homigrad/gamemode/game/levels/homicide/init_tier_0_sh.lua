@@ -1,6 +1,6 @@
 table.insert(LevelList,"homicide")
 homicide = homicide or {}
-homicide.Name = "#rounds.homicide"
+homicide.Name = language.GetPhrase( "rounds.homicide" )
 
 homicide.red = {"#team.innocent",Color(255,255,255),
     models = tdm.models
@@ -138,7 +138,7 @@ local DescCT = {
     [1] = "#rounds.innocentShotgun", --emergency
     [2] = "#rounds.innocentBerreta", --base
     [3] = "#rounds.innocentTaser", --gunfree
-    [4] = "#rounds.innocentWildWest" --wildwest
+    [4] = "#rounds.innocentWildWest", --wildwest
     [5] = "#rounds.innocentShotgun" --wildwest
 }
 
