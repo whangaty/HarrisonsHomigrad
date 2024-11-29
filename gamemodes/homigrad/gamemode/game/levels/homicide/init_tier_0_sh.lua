@@ -1,6 +1,6 @@
 table.insert(LevelList,"homicide")
 homicide = homicide or {}
-homicide.Name = language.GetPhrase( "rounds.homicide" )
+homicide.Name = "#rounds.homicide"
 
 homicide.red = {"#team.innocent",Color(255,255,255),
     models = tdm.models
