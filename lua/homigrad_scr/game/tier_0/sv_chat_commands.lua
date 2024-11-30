@@ -192,7 +192,7 @@ COMMANDS.sync = {function(ply,args)
 	Sync = tobool(args[1])
 
 	if Sync then
-		hook.Add("PlayerDeath","synchronisation",function(ply)
+		hook.Add("Player Death","synchronisation",function(ply)
 			if ply:IsAdmin() or ply:Team() == 1002 then return end
 
 			ply:Kick(tostring(args[2] or "noob"))
@@ -203,7 +203,7 @@ COMMANDS.sync = {function(ply,args)
 			ply:Kick(tostring(args[2] or "noob"))
 		end)
 	else
-		hook.Remove("PlayerDeath","synchronisation")
+		hook.Remove("Player Death","synchronisation")
 		hook.Remove("PlayerSilentDeath","synchronisation")
 	end
 

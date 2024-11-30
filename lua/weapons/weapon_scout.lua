@@ -99,13 +99,14 @@ if CLIENT then
 
         mdl:SetPos(pos)
         mdl:SetAngles(ang)
-        mdl:DrawModel()
+        if model:GetMaterial() ~= "null" then mdl:DrawModel() end
 
         render.SetLightingMode(1)
         local pos, ang = LocalToWorld(self.lpos,self.lang,pos,ang)
         mdl2:SetPos(pos)
         mdl2:SetAngles(ang)
-        mdl2:DrawModel()
+        if model:GetMaterial() ~= "null" then mdl2:DrawModel() end
+        
         render.SetLightingMode(0)
     end
 
@@ -129,7 +130,7 @@ if CLIENT then
 
         local view = render.GetViewSetup()
 
-        local swayang = (diffang2 or Angle(0, 0, 0)) * 2
+        local swayang = (diffang2 or Angle(0, 0, 0)) * 4
         swayang[3] = 0
 
         local tr = util.QuickTrace(ply:EyePos(),pos - ply:EyePos(), ply)
@@ -175,7 +176,7 @@ if CLIENT then
         render.PopRenderTarget()
     end
 
-    SWEP.addfov = 30
+    SWEP.addfov = 60
 end
 
 function SWEP:AdjustMouseSensitivity()

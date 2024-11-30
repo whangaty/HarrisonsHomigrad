@@ -244,8 +244,6 @@ function homicide.StartRoundSV()
 
     local aviable = homicide.Spawns()
     
-    if not aviable or table.IsEmpty(aviable) then return end
-
     tdm.SpawnCommand(PlayersInGame(),aviable,function(ply)
         ply.roleT = false
         ply.roleCT = false
@@ -339,20 +337,21 @@ local aviable = ReadDataMap("spawnpointsct")
 
 COMMANDS.forcepolice = {function(ply)
     if not ply:IsAdmin() then PrintMessage(3,"nope") return end
+
     homicide.police = false
-    prePolicePlayers = {}
-
-    --for i, ply in pairs(player.GetAll()) do
-        --TryAssignPolice(ply)
-    --end
-
     roundTime = 0
 end}
 
 function homicide.EndRound(winner)
     PrintMessage(3,(winner == 1 and "#chat.rounds.traitorWin" or winner == 2 and "#chat.rounds.innocentWin" or "#chat.rounds.nobodyWin"))
     if homicide.t and #homicide.t > 0 then
-        PrintMessage(3,#homicide.t > 1 and (language.GetPhrase( "chat.rounds.traitorWere" ) .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or (language.GetPhrase( "chat.rounds.traitorWas" ) .. homicide.t[1]:Name()))
+        if #homicide.t > 1 then
+            PrintMessage(3,"#chat.rounds.traitorWere")
+            PrintMessage(3,(homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
+        else
+            PrintMessage(3, "#chat.rounds.traitorWas")
+            PrintMessage(3, homicide.t[1]:Name())
+        end
     end
 end
 

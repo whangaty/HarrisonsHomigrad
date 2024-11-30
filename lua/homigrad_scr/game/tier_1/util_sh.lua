@@ -7,14 +7,14 @@ hook.Add("player_spawn","player_activatehg",function(data)
 	hook.Run("Player Activate", ply)
 
     ply.RenderOverride = function(self)
-        local ent = IsValid( self:GetNWEntity("Ragdoll", NULL ) ) and self:GetNWEntity("Ragdoll", NULL ) or self
-        local ply = IsValid( self:GetNWEntity("RagdollOwner", NULL)) and self:GetNWEntity("RagdollOwner", NULL) or self
-        if ent ~= self then return end
-        hook.Run( "HG_PrePlayerDraw", ent, ply )
-        hook.Run( "HG_PlayerDraw", ent, ply )
-        hook.Run( "HG_PostPlayerDraw", ent, ply )
-
-        self:DrawModel()
+        local ply = self:IsPlayer() and self or IsValid(self:GetNWEntity("RagdollOwner", NULL)) and self:GetNWEntity("RagdollOwner", NULL)
+        local ent = ply and IsValid(ply:GetNWEntity("Ragdoll", NULL)) and ply:GetNWEntity("Ragdoll", NULL) or ply or self
+        
+        if ent then
+            hook.Run( "HG_PostPlayerDraw", ent, ply )
+    
+            ent:DrawModel()
+        end
     end
 
     if not PLYSPAWN_OVERRIDE then
@@ -25,14 +25,14 @@ end)
 hook.Add( "OnEntityCreated", "RagdollRender", function( ent )
     if ent:GetClass() == "prop_ragdoll" then
         ent.RenderOverride = function(self)
-            local ent = IsValid( self:GetNWEntity("Ragdoll", NULL ) ) and self:GetNWEntity("Ragdoll", NULL ) or self
-            local ply = IsValid( self:GetNWEntity("RagdollOwner", NULL)) and self:GetNWEntity("RagdollOwner", NULL) or self
-            if ent ~= self then return end
-            hook.Run( "HG_PrePlayerDraw", ent, ply )
-            hook.Run( "HG_PlayerDraw", ent, ply )
-            hook.Run( "HG_PostPlayerDraw", ent, ply )
-
-            self:DrawModel()
+            local ply = self:IsPlayer() and self or IsValid(self:GetNWEntity("RagdollOwner", NULL)) and self:GetNWEntity("RagdollOwner", NULL)
+            local ent = ply and IsValid(ply:GetNWEntity("Ragdoll", NULL)) and ply:GetNWEntity("Ragdoll", NULL) or ply or self
+            
+            if ent then
+                hook.Run( "HG_PostPlayerDraw", ent, ply )
+        
+                ent:DrawModel()
+            end
         end
     end
 end)
@@ -43,14 +43,14 @@ hook.Add("HomigradRun", "RunShit", function()
 
     for k, ply in ipairs(entitis) do
         ply.RenderOverride = function(self)
-            local ent = IsValid( self:GetNWEntity("Ragdoll", NULL ) ) and self:GetNWEntity("Ragdoll", NULL ) or self
-            local ply = IsValid( self:GetNWEntity("RagdollOwner", NULL)) and self:GetNWEntity("RagdollOwner", NULL) or self
-            if ent ~= self then return end
-            hook.Run( "HG_PrePlayerDraw", ent, ply )
-            hook.Run( "HG_PlayerDraw", ent, ply )
-            hook.Run( "HG_PostPlayerDraw", ent, ply )
-
-            self:DrawModel()
+            local ply = self:IsPlayer() and self or IsValid(self:GetNWEntity("RagdollOwner", NULL)) and self:GetNWEntity("RagdollOwner", NULL)
+            local ent = ply and IsValid(ply:GetNWEntity("Ragdoll", NULL)) and ply:GetNWEntity("Ragdoll", NULL) or ply or self
+            
+            if ent then
+                hook.Run( "HG_PostPlayerDraw", ent, ply )
+        
+                ent:DrawModel()
+            end
         end
     end
 end)

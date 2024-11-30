@@ -43,7 +43,7 @@ util.AddNetworkString("info_blood")
 
 function homigradPulse(ply)
 	local heartstop = (ply.Blood + (ply.CPR or 0) + (math.min(ply.adrenaline * 500,1000) or 0)) < 2000
-	heartstop = ply.Organs["heart"] == 0 or heartstop
+	heartstop = ply.organs["heart"] == 0 or heartstop
 	heartstop = ply.o2 <= 0 and true or heartstop
 	local pulse = math.min(5000 / ply.Blood,5) - math.min(ply.adrenaline / 5,0.6) - math.min(100 / ply.stamina - 1,0.5)
 
@@ -52,7 +52,7 @@ end
 
 hook.Add("Player Think","homigrad-blood",function(ply,time)
 	if not ply:Alive() or ply:HasGodMode() then return end
-	ply.Organs = ply.Organs or {}
+	ply.organs = ply.organs or {}
 	local nextPulse,heartstop = homigradPulse(ply)
 
 	ply.heartstop = heartstop
@@ -72,17 +72,12 @@ hook.Add("Player Think","homigrad-blood",function(ply,time)
 		
 		if neck then
 			neck = neck:GetTranslation()
-			if ply.Organs["artery"] == 0 and (ply.arteriaThink or 0) < time and ply.Blood > 0 then
+			if ply.organs["artery"] == 0 and (ply.arteriaThink or 0) < time and ply.Blood > 0 then
 				ply.arteriaThink = time + 0.1
 				ply.Blood = math.max(ply.Blood - 10,0)
 				BloodParticle(neck,ent:GetAttachment(ent:LookupAttachment("eyes")).Ang:Forward() * 200)
 			end
 		end
-	end
-
-	if ply.heartstop and (ply.brainDeathThink or 0) < time then
-		ply.Organs["brain"] = math.max(ply.Organs["brain"] - 0.1,0)
-		ply.brainDeathThink = time + 1
 	end
 
 	if ply.pulseStart + ply.nextPulse > time then return end
@@ -154,7 +149,7 @@ hook.Add("PlayerSpawn","homigrad-blood",function(ply)
 	ply.heartstop = false
 	ply.nextPulse = nil
 	ply.Bloodlosing = 0
-	ply.bloodtype = math.random(1,8)
+	ply.bloodtype = 1--math.random(1,8)
 
 	ply.Speed = 0
 	ply.arterybloodlosing = 0
@@ -166,7 +161,7 @@ hook.Add("PlayerSpawn","homigrad-blood",function(ply)
 	ply.bloodNext = 0
 end)
 
-hook.Add("PlayerDeath","deathblood",function(ply)
+hook.Add("Player Death","deathblood",function(ply)
 	ply.Blood = 5000
 	ply.Bloodlosing = 0
 	ply.stamina = 100
@@ -208,7 +203,7 @@ concommand.Add("hg_organisminfo",function(ply,cmd,args)
 	local huyply = args[1] and player.GetListByName(args[1])[1] or ply
 
 	net.Start("organism_info")
-	net.WriteTable(huyply.Organs)
+	net.WriteTable(huyply.organs)
 	net.WriteString(
 	"Blood (ml): "..tostring(huyply.Blood).."\n"..
 	"Bleeding (ml/pump): "..tostring(huyply.Bloodlosing).."\n"..
@@ -227,5 +222,5 @@ concommand.Add("hg_organism_setvalue",function(ply,cmd,args)
 	
 	local huyply = args[3] and player.GetListByName(args[3])[1] or ply
 	
-	huyply.Organs[args[1]] = args[2]
+	huyply.organs[args[1]] = args[2]
 end)

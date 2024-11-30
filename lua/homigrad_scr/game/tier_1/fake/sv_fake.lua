@@ -1,50 +1,7 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() ~= "homigrad" then return end
+
 local PlayerMeta = FindMetaTable("Player")
 local EntityMeta = FindMetaTable("Entity")
-
-Organs = {
-	['brain']=5,
-	['lungs']=40,
-	['liver']=10,
-	['stomach']=30,
-	['intestines']=30,
-	['heart']=20,
-	['artery']=1,
-	['spine']=5
-}
-
-RagdollDamageBoneMul={
-	[HITGROUP_LEFTLEG]=0.5,
-	[HITGROUP_RIGHTLEG]=0.5,
-
-	[HITGROUP_GENERIC]=1,
-
-	[HITGROUP_LEFTARM]=0.5,
-	[HITGROUP_RIGHTARM]=0.5,
-
-	[HITGROUP_CHEST]=1,
-	[HITGROUP_STOMACH]=1,
-
-	[HITGROUP_HEAD]=2,
-}
-
-bonetohitgroup={
-    ["ValveBiped.Bip01_Head1"]=1,
-    ["ValveBiped.Bip01_R_UpperArm"]=5,
-    ["ValveBiped.Bip01_R_Forearm"]=5,
-    ["ValveBiped.Bip01_R_Hand"]=5,
-    ["ValveBiped.Bip01_L_UpperArm"]=4,
-    ["ValveBiped.Bip01_L_Forearm"]=4,
-    ["ValveBiped.Bip01_L_Hand"]=4,
-    ["ValveBiped.Bip01_Pelvis"]=3,
-    ["ValveBiped.Bip01_Spine2"]=2,
-    ["ValveBiped.Bip01_L_Thigh"]=6,
-    ["ValveBiped.Bip01_L_Calf"]=6,
-    ["ValveBiped.Bip01_L_Foot"]=6,
-    ["ValveBiped.Bip01_R_Thigh"]=7,
-    ["ValveBiped.Bip01_R_Calf"]=7,
-    ["ValveBiped.Bip01_R_Foot"]=7
-}
 
 function SavePlyInfo(ply)
 	if not ply:IsPlayer() and not ply:IsRagdoll() then return end
@@ -75,7 +32,7 @@ function hg.OverrideSpawn(ply)
 	net.Broadcast()
 end
 
-function Faking(ply,force) -- функция падения
+function Faking(ply,force)
 	if not ply:Alive() then return end
 
 	if not IsValid(ply.FakeRagdoll) then
@@ -92,7 +49,14 @@ function Faking(ply,force) -- функция падения
 			ply:ExitVehicle()
 		end
 
-		local rag = ply:CreateRagdoll(nil,nil,force)
+		local dmgInfo = nil
+		local attacker = nil
+		if ply.LastDMGInfo and ply.LastTimeAttacked and (ply.LastTimeAttacked + 1) > CurTime() then
+			dmgInfo = ply.LastDMGInfo
+			attacker = dmgInfo:GetAttacker()
+		end
+		
+		local rag = ply:CreateRagdoll(attacker,dmgInfo,force)
 
 		if IsValid(veh) then
 			rag:GetPhysicsObject():SetVelocity(veh:GetPhysicsObject():GetVelocity() * 5)
@@ -197,6 +161,9 @@ function Faking(ply,force) -- функция падения
 			JMod.Иди_Нахуй = true
 			ply:Spawn()
 			JMod.Иди_Нахуй = nil
+
+			ply:DrawShadow(true)
+			ply:SetRenderMode(RENDERMODE_NORMAL)
 
 			ply:SetHealth(health)
 			ply:SetVelocity(vel)
@@ -679,7 +646,7 @@ IdealMassPlayer = {
 	["ValveBiped.Bip01_R_Foot"] = 2.3848159313202
 }
 
-function PlayerMeta:CreateRagdoll(attacker,dmginfo,force)
+function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 	local rag = self:GetNWEntity("Ragdoll")
 	rag.ExplProof = true
 
@@ -724,10 +691,14 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force)
 	rag:SetNWEntity("RagdollOwner", self)
 	rag:SetNWString("EA_Attachments", self:GetNWString("EA_Attachments", nil))
 
-	print(force)
+	local vel = self:GetVelocity() --+ (force or vector_origin) * 10
 
-	local vel = self:GetVelocity() + (force or vector_origin)
-
+	local phys_bone = nil
+	
+	if dmginfo then
+		phys_bone = GetPhysicsBoneDamageInfo(self, dmginfo) or 0
+	end
+	
 	for physNum = 0, rag:GetPhysicsObjectCount() - 1 do
 		local phys = rag:GetPhysicsObjectNum(physNum)
 		local bone = rag:TranslatePhysBoneToBone(physNum)
@@ -737,6 +708,10 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force)
 
 		phys:SetMass(CustomWeight[rag:GetModel()] or IdealMassPlayer[rag:GetBoneName(bone)] or 20)
 		phys:SetVelocity(vel)
+
+		if phys_bone and phys_bone == physNum then
+			phys:ApplyForceOffset(dmginfo:GetDamageForce() * 10, dmginfo:GetDamagePosition())
+		end
 
 		phys:SetPos(matrix:GetTranslation())
 		phys:SetAngles(matrix:GetAngles())
@@ -1326,56 +1301,23 @@ hook.Add("PlayerSwitchWeapon","fakewep",function(ply,oldwep,newwep)
 	end
 end)
 
-OrgansNextThink = 0
+OrgansNextThink = 0.2
 InternalBleeding = 20
 local player_GetAll = player.GetAll
-
+local organthink = 0
 hook.Add("Player Think","InternalBleeding",function(ply,time)
+	if organthink > CurTime() then return end
+	organthink = CurTime() + OrgansNextThink
 	for i,ply in ipairs(player_GetAll()) do
-		ply.OrgansNextThink = ply.OrgansNextThink or OrgansNextThink
-		if not(ply.OrgansNextThink>CurTime())then
-			ply.OrgansNextThink=CurTime() + 0.2
-			if ply.Organs and ply:Alive() then
-				if ply.Organs["brain"]==0 then
-					ply.nohook = true
-					ply.KillReason = "braindeath"
-					ply:TakeDamage(10000,ply.LastAttacker)
-					ply.nohook = nil
-					--ply:Kill()
-				end
-				if ply.Organs["liver"]==0 then
-					ply.InternalBleeding=ply.InternalBleeding or InternalBleeding
-					ply.InternalBleeding=math.max(ply.InternalBleeding-0.1,0)
-					ply.Blood=ply.Blood-ply.InternalBleeding / 10
-				end
-				if ply.Organs["stomach"]==0 then
-					ply.InternalBleeding2=ply.InternalBleeding2 or InternalBleeding
-					ply.InternalBleeding2=math.max(ply.InternalBleeding2-0.1,0)
-					ply.Blood=ply.Blood-ply.InternalBleeding2 / 10
-				end
-				if ply.Organs["intestines"]==0 then
-					ply.InternalBleeding3=ply.InternalBleeding3 or InternalBleeding
-					ply.InternalBleeding3=math.max(ply.InternalBleeding3-0.1,0)
-					ply.Blood=ply.Blood-ply.InternalBleeding3 / 10
-				end
-				if ply.Organs["heart"]==0 then
-					ply.InternalBleeding4=ply.InternalBleeding4 or InternalBleeding
-					ply.InternalBleeding4=math.max(ply.InternalBleeding4*10-0.1,0)
-					ply.Blood=ply.Blood-ply.InternalBleeding4*3 / 10
-				end
-				if ply.Organs["lungs"]==0 then
-					ply.InternalBleeding5=ply.InternalBleeding5 or InternalBleeding
-					ply.InternalBleeding5=math.max(ply.InternalBleeding5-0.1,0)
-					ply.Blood=ply.Blood-ply.InternalBleeding5 / 10
-				end
-				ply.InternalBleeding6 = ply.InternalBleeding6 or 0
-				ply.InternalBleeding6 = math.max(ply.InternalBleeding6-0.1,0)
-				ply.Blood = ply.Blood - ply.InternalBleeding6 / 10
+		if ply.organs and ply:Alive() then
 
-				if ply.Organs["spine"]==0 then
-					ply.brokenspine=true
-					if !IsValid(ply.FakeRagdoll) then Faking(ply) end
-				end
+			if ply.organs.heart == 0 then
+				ply.Blood = ply.Blood - 10
+			end
+			
+			if ply.organs.spine == 0 then
+				ply.brokenspine = true
+				if !IsValid(ply.FakeRagdoll) then Faking(ply) end
 			end
 		end
 	end
@@ -1431,5 +1373,3 @@ hook.Add("Player Think","holdentity",function(ply,time)
 
 	end--]]
 end)
-
-end

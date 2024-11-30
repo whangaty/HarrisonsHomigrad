@@ -43,11 +43,11 @@ hook.Add("HUDPaint","PainEffect",function()
 
         if pain and pain > 250 then
             draw.DrawText("Assuming you're still in great shape, you'll be back up in " ..
-                math.floor(((pain - 250) / 10) + 1) .. " second(s)!", "HomigradFontSmall",
+                math.floor(((pain - 250) / 20) + 1) .. " second(s)!", "HomigradFontSmall",
                 ScrW() / 2, ScrH() / 1.8,
                 colwhite, TEXT_ALIGN_CENTER)
         elseif blood and blood < 3000 then
-            draw.DrawText("You have lost too much blood and have gone comatose!\nYou are slowly bleeding out, and will die unless someone can revive you.", "HomigradFontSmall",
+            draw.DrawText("You have lost too much blood and have gone comatose!\nIf you are bleeding, your only hope is another person's help.", "HomigradFontSmall",
                 ScrW() / 2, ScrH() / 1.8,
                 colred, TEXT_ALIGN_CENTER)
         end

@@ -41,7 +41,7 @@ net.Receive("blood particle more",function()
 	local pos,vel = net.ReadVector(),net.ReadVector()
 
 	for i = 1,random(10,15) do
-		addBloodPart2(pos,VectorRand(-100,100),cloudmat,50,50,1)
+		addBloodPart2(pos,VectorRand(-50,50),cloudmat,50,50,math.Rand(2,4))
 		addBloodPart(pos,vel + Vector(Rand(-15,15),Rand(-15,15)),mats[random(1,#mats)],random(10,15),random(10,15))
 	end
 end)
@@ -51,7 +51,7 @@ local function explode(pos)
 	local w,h = 360 / xx,360 / yy
 
 	for x = 1,xx do
-		addBloodPart2(pos + VectorRand(-20,20),VectorRand(-100,100),cloudmat,100,100,1)
+		addBloodPart2(pos + VectorRand(-20,20),VectorRand(-50,50),cloudmat,100,100,math.Rand(2,4))
 		
 		for y = 1,yy do
 			local dir = Vector(0,0,-1)
@@ -85,7 +85,7 @@ net.Receive("blood particle headshoot",function()
 		local vel = Vector(vel[1],vel[2],vel[3])
 		vel:Rotate(Angle(Rand(-15,15) * Rand(0.9,1.1),Rand(-15,15) * Rand(0.9,1.1)))
 		
-		addBloodPart2(pos,VectorRand(-100,100),cloudmat,50,50,1)
+		addBloodPart2(pos,VectorRand(-50,50),cloudmat,50,50,math.Rand(2,4))
 
 		addBloodPart(Lerp(i / r * Rand(0.9,1.1),l1,l2),vel,mats[random(1,#mats)],random(10,15),random(10,15))
 	end

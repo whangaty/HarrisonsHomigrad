@@ -149,7 +149,7 @@ net.Receive("ply_take_item",function(len,ply)
 	if ply:GetAttachment(ply:LookupAttachment("eyes")).Pos:Distance(lootEnt:GetPos()) > 100 then return end
 	--local weapon = net.ReadEntity()
 	--local wep = weapon:GetClass()
-
+	
 	local lootInfo = lootEnt.Info
 
 	local wep = net.ReadString()

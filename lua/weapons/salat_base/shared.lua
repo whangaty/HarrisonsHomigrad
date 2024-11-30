@@ -720,7 +720,7 @@ if SERVER then
 	end)
 end
 
-hook.Add("PlayerDeath","suciding",function(ply)
+hook.Add("Player Death","suciding",function(ply)
 	ply.suiciding = false
 	ply:SetNWBool("Suiciding",false)
 end)
@@ -948,7 +948,7 @@ function SWEP:Holster( wep )
 	return true
 end
 
-hook.Add("PlayerDeath","weapons",function(ply)
+hook.Add("Player Death","weapons",function(ply)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),angZero,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),angZero,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),angZero,false)

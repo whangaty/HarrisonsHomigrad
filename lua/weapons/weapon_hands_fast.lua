@@ -331,7 +331,6 @@ function SWEP:ApplyForce()
 
 		if SERVER then
 			local ply = RagdollOwner(self.CarryEnt)
-			--self:GetOwner():ChatPrint(tostring(ply.CPR).." "..tostring(ply.Blood).." "..tostring(ply.Organs["brain"]).." "..tostring(ply.heartstop))
 			if self:GetOwner():KeyDown(IN_ATTACK) then
 				if ply and ply.heartstop then
 					if self.firstTimePrint then 

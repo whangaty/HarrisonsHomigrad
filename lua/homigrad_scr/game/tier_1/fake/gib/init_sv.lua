@@ -87,33 +87,76 @@ local validBone = {
 	["ValveBiped.Bip01_R_Foot"] = true
 }
 
-function SpawnGore(ent, pos, headpos)
+local bone_integrity = {
+	["ValveBiped.Bip01_R_UpperArm"] = 0.65,
+	["ValveBiped.Bip01_R_Forearm"] = 0.5,
+	["ValveBiped.Bip01_R_Hand"] = 0.4,
+	["ValveBiped.Bip01_L_UpperArm"] = 0.65,
+	["ValveBiped.Bip01_L_Forearm"] = 0.5,
+	["ValveBiped.Bip01_L_Hand"] = 0.4,
+
+	["ValveBiped.Bip01_L_Thigh"] = 0.85,
+	["ValveBiped.Bip01_L_Calf"] = 0.75,
+	["ValveBiped.Bip01_L_Foot"] = 0.45,
+	["ValveBiped.Bip01_R_Thigh"] = 0.85,
+	["ValveBiped.Bip01_R_Calf"] = 0.75,
+	["ValveBiped.Bip01_R_Foot"] = 0.45,
+
+	["ValveBiped.Bip01_Pelvis"] = 1.65,
+	["ValveBiped.Bip01_Spine"] = 1.65,
+	["ValveBiped.Bip01_Spine1"] = 1.45,
+	["ValveBiped.Bip01_Spine2"] = 1.4,
+	["ValveBiped.Bip01_Head1"] = 1,
+}
+
+function SpawnGore(ent, pos, headpos, force)
+	force = force * 5
 	if ent.gibRemove and not ent.gibRemove[ent:TranslateBoneToPhysBone(ent:LookupBone("ValveBiped.Bip01_Head1"))] then
 		local ent = ents.Create("prop_physics")
 		ent:SetModel("models/Gibs/HGIBS.mdl")
 		ent:SetPos(headpos or pos)
-		ent:SetVelocity(VectorRand(-100,100))
+		ent:SetVelocity(VectorRand(-50,50))
 		ent:Spawn()
+
+		local phys = ent:GetPhysicsObject()
+		if IsValid(phys) then
+			phys:ApplyForceCenter(force)
+		end
 	end
 
 	for i = 1, 2 do
-		local ent = ents.Create("prop_physics")
-		ent:SetModel("models/Gibs/HGIBS_spine.mdl")
-		ent:SetPos(pos)
-		ent:SetVelocity(VectorRand(-100,100))
-		ent:Spawn()
+		local entg = ents.Create("prop_physics")
+		entg:SetModel("models/Gibs/HGIBS_spine.mdl")
+		entg:SetPos(pos)
+		entg:SetVelocity(VectorRand(-50,50))
+		entg:Spawn()
 		
-		local ent = ents.Create("prop_physics")
-		ent:SetModel("models/Gibs/HGIBS_scapula.mdl")
-		ent:SetPos(pos)
-		ent:SetVelocity(VectorRand(-100,100))
-		ent:Spawn()
+		local phys = entg:GetPhysicsObject()
+		if IsValid(phys) then
+			phys:ApplyForceCenter(force)
+		end
 
-		local ent = ents.Create("prop_physics")
-		ent:SetModel("models/Gibs/HGIBS_rib.mdl")
-		ent:SetPos(pos)
-		ent:SetVelocity(VectorRand(-100,100))
-		ent:Spawn()
+		local entg = ents.Create("prop_physics")
+		entg:SetModel("models/Gibs/HGIBS_scapula.mdl")
+		entg:SetPos(pos)
+		entg:SetVelocity(VectorRand(-50,50))
+		entg:Spawn()
+
+		local phys = entg:GetPhysicsObject()
+		if IsValid(phys) then
+			phys:ApplyForceCenter(force)
+		end
+
+		local entg = ents.Create("prop_physics")
+		entg:SetModel("models/Gibs/HGIBS_rib.mdl")
+		entg:SetPos(pos)
+		entg:SetVelocity(VectorRand(-50,50))
+		entg:Spawn()
+
+		local phys = entg:GetPhysicsObject()
+		if IsValid(phys) then
+			phys:ApplyForceCenter(force)
+		end
 	end
 end
 
@@ -157,7 +200,7 @@ function Gib_Input(rag, bone, dmgInfo)
 		else
 			gibRemove[phys_bone] = true
 			BloodParticleExplode(rag:GetPhysicsObjectNum(phys_bone):GetPos())
-			SpawnGore(rag, rag:GetPhysicsObjectNum(phys_bone):GetPos(),rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos())
+			SpawnGore(rag, rag:GetPhysicsObjectNum(phys_bone):GetPos(), rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos(), dmgInfo:GetDamageForce())
 			rag:Remove()
 		end
 
@@ -187,7 +230,7 @@ function Gib_Input(rag, bone, dmgInfo)
 				else
 					gibRemove[phys_bone] = true
 					BloodParticleExplode(rag:GetPhysicsObjectNum(phys_bone):GetPos())
-					SpawnGore(rag, rag:GetPhysicsObjectNum(phys_bone):GetPos(),rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos())
+					SpawnGore(rag, rag:GetPhysicsObjectNum(phys_bone):GetPos(), rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Head1"))):GetPos(), dmgInfo:GetDamageForce())
 					rag:Remove()
 				end
 
@@ -217,18 +260,12 @@ local validBone2 = {
 	["ValveBiped.Bip01_L_Hand"] = true,
 }
 
-hook.Add("PlayerDeath","Gib",function(ply,inflictor, attacker)
+hook.Add("Player Death","Gib",function(ply, inflictor, attacker)
 	dmgInfo = ply.LastDMGInfo
 	if not dmgInfo then return end
 	if ply.LastTimeAttacked and (ply.LastTimeAttacked + 1) < CurTime() then return end
-
-	local hitgroup
-
-	if bonetohitgroup[ply.LastHitBoneName] then hitgroup = bonetohitgroup[ply.LastHitBoneName] end
-
-	local mul = RagdollDamageBoneMul[hitgroup] or 1
 	
-	if dmgInfo:GetDamage() * mul < 350 then return end
+	if dmgInfo:GetDamage() < 500 * (bone_integrity[ply.LastHitBoneName] or 1) then return end
 
 	timer.Simple(0,function()
 		local rag = ply:GetNWEntity("Ragdoll")
@@ -237,38 +274,62 @@ hook.Add("PlayerDeath","Gib",function(ply,inflictor, attacker)
 		
 		--bone = bone ~= 0 and bone or 1
 
-		if not IsValid(rag) or not bone then return end--not fucking fucking fuck
+		if not IsValid(rag) or not bone then return end
 
 		Gib_Input(rag,bone,dmgInfo)
 	end)
 end)
 
 hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
-	if not ent:IsRagdoll() then return end
-	
+	hook.Run("HomigradGib", ent, dmgInfo)
+end)
+
+hook.Add("HomigradGib","Gib",function(ent,dmgInfo,phys_bone)
+	if not ent:IsRagdoll() then
+		if not ent.onecallonly then
+			ent.onecallonly = true
+			local newdmginfo = DamageInfo()
+			newdmginfo:SetAttacker(dmgInfo:GetAttacker())
+			newdmginfo:SetDamage(dmgInfo:GetDamage())
+			newdmginfo:SetDamagePosition(dmgInfo:GetDamagePosition())
+			newdmginfo:SetDamageForce(dmgInfo:GetDamageForce())
+			local phys_bone = GetPhysicsBoneDamageInfo(ent,dmgInfo)
+
+			timer.Simple(0.1,function()
+				local rag = ent.FakeRagdoll
+
+				if IsValid(rag) then
+					hook.Run("HomigradGib", rag, newdmginfo, phys_bone)
+				end
+
+				ent.onecallonly = nil
+			end)
+		end
+		return
+	end
+
+	local phys_bone = phys_bone or GetPhysicsBoneDamageInfo(ent,dmgInfo)
+
+	if dmgInfo:GetAttacker():IsRagdoll() then return end--maybe we can win this
+
 	local ply = RagdollOwner(ent)
 	ply = ply and ply:Alive() and ply
-	--if ply then return end
+	ent.dmgstack = ent.dmgstack or {}
+	ent.dmgstack[phys_bone] = (ent.dmgstack[phys_bone] or 0) + dmgInfo:GetDamage() * (dmgInfo:IsDamageType(DMG_CRUSH) and 0.15 or 1)
 	
-	local phys_bone = GetPhysicsBoneDamageInfo(ent,dmgInfo)
-
-	--phys_bone = phys_bone == 0 and 1 or phys_bone
-	--if phys_bone == 0 then return end--lol
-	if dmgInfo:GetDamage() < 350 then return end
-	--print(dmgInfo:GetDamage())
-	if dmgInfo:GetAttacker():IsRagdoll() then return end--maybe this will get a return
-
-	local hitgroup
-
+	timer.Create("removedmgstack"..ent:EntIndex()..phys_bone, 0.3, 1, function()
+		if IsValid(ent) then
+			ent.dmgstack[phys_bone] = 0
+		end
+	end)
+	
 	local bonename = ent:GetBoneName(ent:TranslatePhysBoneToBone(phys_bone))
 
-	--if ply and bonename == "ValveBiped.Bip01_Head1" then ply:Kill() end
 	if ply and not validBone2[bonename] then return end
 
-	if bonetohitgroup[bonename] then hitgroup = bonetohitgroup[bonename] end
-
-	local mul = RagdollDamageBoneMul[hitgroup] or 1
-		
+	if ent.dmgstack[phys_bone] < 500 * (bone_integrity[bonename] or 1) then return end
+	ent.dmgstack[phys_bone] = 0
+	
 	Gib_Input(ent,ent:TranslatePhysBoneToBone(phys_bone),dmgInfo)
 end)
 

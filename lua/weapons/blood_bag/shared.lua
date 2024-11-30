@@ -5,7 +5,7 @@ SWEP.Base = "medkit"
 
 SWEP.PrintName = "Blood Transfusion Kit"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "500mL of blood. Left Click to extract blood from a target, and right click to deposit blood into a target."
+SWEP.Instructions = "500mL of blood. Hold Left Click to extract blood from a target, and right click to deposit blood into a target."
 
 SWEP.Spawnable = true
 SWEP.Category = "Medical"
@@ -36,14 +36,10 @@ if CLIENT then
         local wep = net.ReadEntity()
         wep.bloodinside = not net.ReadBool()
 
-        wep.PrintName = wep.bloodinside and "Пакет крови" or "Пустой пакет крови"
+        wep.PrintName = wep.bloodinside and "Blood Transfusion Kit" or "Empty Blood Transfusion Kit"
     end)
 
-    local model = GDrawWorldModel or ClientsideModel(SWEP.WorldModel,RENDER_GROUP_OPAQUE_ENTITY)
-    GDrawWorldModel = model
-    model:SetNoDraw(true)
-
-    SWEP.dwmModeScale = 0.5
+    SWEP.dwmModeScale = 1
     SWEP.dwmForward = 5
     SWEP.dwmRight = 5
     SWEP.dwmUp = -1
@@ -51,34 +47,6 @@ if CLIENT then
     SWEP.dwmAUp = 30
     SWEP.dwmARight = 90
     SWEP.dwmAForward = 0
-    function SWEP:DrawWorldModel()
-        local owner = self:GetOwner()
-        if not IsValid(owner) then
-            self:DrawModel()
 
-            return
-        end
-
-        local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
-        if not Pos then return end
-
-        model:SetModel(self.WorldModel)
-        model:SetSkin(not self.bloodinside and 1 or 0)
-
-        Pos:Add(Ang:Forward() * self.dwmForward)
-        Pos:Add(Ang:Right() * self.dwmRight)
-        Pos:Add(Ang:Up() * self.dwmUp)
-
-        model:SetPos(Pos)
-
-        Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
-        Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
-        Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
-        model:SetAngles(Ang)
-
-        model:SetModelScale(1)
-
-        model:DrawModel()
-    end
 end
 end
