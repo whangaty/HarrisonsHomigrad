@@ -35,8 +35,8 @@ function ctp.StartRound()
 	game.CleanUpMap(false)
     ctp.points = {}
     if !file.Read( "homigrad/maps/"..game.GetMap()..".txt", "DATA" ) and SERVER then
-        print("No points are available on this map! This is either by design, or by laziness.") 
-        PrintMessage(HUD_PRINTCENTER, "No points are available on this map! This is either by design, or by laziness.")
+        print("No points are available on this map! Admins have to place them with: !point control_point") 
+        PrintMessage(HUD_PRINTCENTER, "No points are available on this map! Admins have to place them with: !point control_point")
     end
 
     ctp.LastWave = CurTime()
