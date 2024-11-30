@@ -331,14 +331,15 @@ function SWEP:ApplyForce()
 		if SERVER then
 			local ply = RagdollOwner(self.CarryEnt)
 			if self:GetOwner():KeyDown(IN_ATTACK) then
-				if ply and ply.heartstop then
+				if ply then
 					if self.firstTimePrint then 
-						self:GetOwner():ChatPrint("You start to perform CPR (Hold Left Mouse down to keep performing CPR until the target is alive)") 
+						self:GetOwner():ChatPrint("You start to perform CPR (Hold Left Mouse down to keep the target alive)") 
 					end
+
 					self.firstTimePrint = false
 		
 					if (self.CPRThink or 0) < CurTime() then
-						self.CPRThink = CurTime() + 1
+						self.CPRThink = CurTime() + (60 / 120)
 						ply.CPR = math.max(ply.CPR + 50, 0)
 						
 						ply.o2 = math.min(ply.o2 + 0.5, 1)
@@ -346,24 +347,25 @@ function SWEP:ApplyForce()
 						
 						ply.pain = math.max(ply.pain - 3, 0) 
 						
+						--self:GetOwner():ChatPrint(ply.pain)
+						--self:GetOwner():ChatPrint(ply.Blood)
+						--self:GetOwner():ChatPrint(ply.o2)
+
 						self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft" .. tostring(math.random(7)) .. ".wav")
 					end
 				else
 					if not ply and self.CarryEnt:GetClass() == "prop_ragdoll" then
 						if self.firstTimePrint then 
-							self:GetOwner():ChatPrint("You start to perform CPR (Hold Left Mouse down to keep performing CPR until the target is alive)") 
+							self:GetOwner():ChatPrint("This person can't be saved. CPR is pointless.") 
 						end
 						self.firstTimePrint = false
-						if (self.CPRThink or 0) < CurTime() then
-							self.CPRThink = CurTime() + 1
-							self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft" .. tostring(math.random(7)) .. ".wav")
-						end
 					end
 				end
 			else
 				self.firstTimePrint = true
 			end
-		end		
+		end
+
 		local avec, velo = vec * len, phys:GetVelocity() - self:GetOwner():GetVelocity()
 		local Force = (avec - velo / 2) * (self.CarryBone > 3 and mul / 10 or mul)
 		local ForceMagnitude = Force:Length()

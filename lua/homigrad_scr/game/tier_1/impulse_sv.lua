@@ -26,7 +26,7 @@ hook.Add("HomigradDamage","ImpulseShock",function(ply,hitGroup,dmginfo)
 	dmg = ply.nopain and 0.01 or dmg
 
 	ply.dmgimpulse = ply.dmgimpulse or 0
-	ply.dmgimpulse = ply.dmgimpulse + dmg * 1.5
+	ply.dmgimpulse = ply.dmgimpulse + dmg * 3
 
 	net.Start("info_impulse")
 	net.WriteFloat(ply.dmgimpulse)

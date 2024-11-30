@@ -73,13 +73,13 @@ bonetohitgroup = {
 }
 
 RagdollDamageBoneMul = {
-	[HITGROUP_LEFTLEG] = 0.5,
-	[HITGROUP_RIGHTLEG] = 0.5,
+	[HITGROUP_LEFTLEG] = 0.25,
+	[HITGROUP_RIGHTLEG] = 0.25,
 
 	[HITGROUP_GENERIC] = 1,
 
-	[HITGROUP_LEFTARM] = 0.5,
-	[HITGROUP_RIGHTARM] = 0.5,
+	[HITGROUP_LEFTARM] = 0.25,
+	[HITGROUP_RIGHTARM] = 0.25,
 
 	[HITGROUP_CHEST] = 1,
 	[HITGROUP_STOMACH] = 1,
@@ -171,6 +171,16 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 
 	local mul = RagdollDamageBoneMul[hitgroup]
 
+	local rubatPidor = DamageInfo()
+	rubatPidor:SetAttacker(dmginfo:GetAttacker())
+	--rubatPidor:SetInflictor(dmginfo:GetInflictor())
+	rubatPidor:SetDamage(dmginfo:GetDamage() * (not rag and (1 / mul) or 1))
+	rubatPidor:SetDamageType(dmginfo:GetDamageType())
+	rubatPidor:SetDamagePosition(dmginfo:GetDamagePosition())
+	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
+	
+	ply.LastDMGInfo = rubatPidor
+
 	if rag and mul then dmginfo:ScaleDamage(mul) end
 	if DamageBoneMul[hitgroup] then dmginfo:ScaleDamage(DamageBoneMul[hitgroup]) end
 
@@ -189,9 +199,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	ply.LastHitGroup = hitgroup
 	ply.LastTimeAttacked = CurTime()
 
-	dmginfo:ScaleDamage(0.05)
+	dmginfo:ScaleDamage(0.01)
 	local armors, mul = JMod.LocationalDmgHandling(ply, hitgroup, dmginfo)
-	dmginfo:ScaleDamage(20)
+	dmginfo:ScaleDamage(100)
 	local armorMul,armorDur = 1,0
 	local haveHelmet
 	
@@ -231,15 +241,6 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	end
 	
 	dmginfo:SetDamage(dmginfo:GetDamage() * armorMul)
-	local rubatPidor = DamageInfo()
-	rubatPidor:SetAttacker(dmginfo:GetAttacker())
-	--rubatPidor:SetInflictor(dmginfo:GetInflictor())
-	rubatPidor:SetDamage(dmginfo:GetDamage())
-	rubatPidor:SetDamageType(dmginfo:GetDamageType())
-	rubatPidor:SetDamagePosition(dmginfo:GetDamagePosition())
-	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
-
-	ply.LastDMGInfo = rubatPidor
 
 	local att = IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker()
 

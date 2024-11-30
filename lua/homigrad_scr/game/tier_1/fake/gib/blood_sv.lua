@@ -18,9 +18,10 @@ function BloodParticleMore(pos,vel)
 	net.Broadcast()
 end
 
-function BloodParticleExplode(pos)
+function BloodParticleExplode(pos, vel)
 	net.Start("blood particle explode")
 	net.WriteVector(pos)
+	net.WriteVector(vel or vector_origin)
 	net.Broadcast()
 end
 

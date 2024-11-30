@@ -46,7 +46,7 @@ net.Receive("blood particle more",function()
 	end
 end)
 
-local function explode(pos)
+local function explode(pos, vel)
 	local xx,yy = 12,12
 	local w,h = 360 / xx,360 / yy
 
@@ -58,6 +58,7 @@ local function explode(pos)
 			dir:Rotate(Angle(h * y * Rand(0.9,1.1),w * x * Rand(0.9,1.1),0))
 			dir[3] = dir[3] + Rand(0.5,1.5)
 			dir:Mul(250)
+			dir = dir + vel
 
 			addBloodPart(pos,dir,mats[random(1,#mats)],random(7,19),random(7,10))
 		end
@@ -65,7 +66,7 @@ local function explode(pos)
 end
 
 net.Receive("blood particle explode",function()
-	explode(net.ReadVector())
+	explode(net.ReadVector(), net.ReadVector())
 end)
 
 local vecR = Vector(10,10,10)

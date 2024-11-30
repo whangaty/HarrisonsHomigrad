@@ -78,8 +78,8 @@ if engine.ActiveGamemode() == "homigrad" then
             pain = pain + 5
         end
 
-        ply.pain = math.max(pain - painlosing + ply.adrenalineNeed * k, 0)
-        ply.painlosing = math.max(painlosing - 0.01, 2)
+        ply.pain = math.max(pain - painlosing * 2 + ply.adrenalineNeed * k, 0)
+        ply.painlosing = math.max(painlosing - 0.01, 1)
 
         if ply.painNextNet <= time then
             ply.painNextNet = time + 0.25
