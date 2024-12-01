@@ -147,6 +147,12 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "freeway_thicc_v3",
 }
 
+SolidMapVote[ 'Config' ][ 'Construct Map Pool' ] = {
+    "gm_construct",
+    "gm_flatgrass",
+    "gm_bigcity_winter_day",
+}
+
 -- Allow players to use their mics while in the mapvote
 SolidMapVote[ 'Config' ][ 'Enable Voice' ] = true
 

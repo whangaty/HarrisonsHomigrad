@@ -5,7 +5,7 @@ if SERVER then
 	SWEP.AutoSwitchTo = false
 	SWEP.AutoSwitchFrom = false
 else
-	SWEP.PrintName = "Hands But Fast"
+	SWEP.PrintName = "Hands (One Hit KO)"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
@@ -548,7 +548,7 @@ function SWEP:PrimaryAttack()
 		end)
 	end
 
-	self:SetNextPrimaryFire(CurTime() + 0.01)
+	self:SetNextPrimaryFire(CurTime() + 0.02)
 	self:SetNextSecondaryFire(CurTime() + 0.02)
 end
 
@@ -577,8 +577,8 @@ function SWEP:AttackFront()
 		local Dam = DamageInfo()
 		Dam:SetAttacker(self:GetOwner())
 		Dam:SetInflictor(self.Weapon)
-		Dam:SetDamage(DamageAmt * Mul)
-		Dam:SetDamageForce(AimVec * Mul ^ 2)
+		Dam:SetDamage(DamageAmt * Mul * 9999999)
+		Dam:SetDamageForce(AimVec * 99999 * Mul ^ 2)
 		Dam:SetDamageType(DMG_CLUB)
 		Dam:SetDamagePosition(HitPos)
 		Ent:TakeDamageInfo(Dam)
@@ -586,7 +586,8 @@ function SWEP:AttackFront()
 
 		if IsValid(Phys) then
 			if Ent:IsPlayer() then
-				Ent:SetVelocity(AimVec * SelfForce * 1) -- This would actually be so fucking good if we made a sonic boom and made it mach 10
+				--Ent:SetVelocity(AimVec * SelfForce * 1) -- This would actually be so fucking good if we made a sonic boom and made it mach 10
+				Ent:Kill()
 			end
 
 			Phys:ApplyForceOffset(AimVec * 50000 * Mul, HitPos)
