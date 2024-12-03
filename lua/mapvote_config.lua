@@ -144,6 +144,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     --"ttt_bank_change",
     "gm_apartments_hl2",
     "ttt_ile_v4",
+    "cs_office-unlimited",
     "freeway_thicc_v3",
 }
 
@@ -276,4 +277,5 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = "zs_adrift_v4", displayname = 'Adrift',image="https://i.imgur.com/D1UWlcz.jpeg", width = 1920, height = 1080 },
     { filename = "ttt_blackmesa_bahpu", displayname = 'Black Mesa',image="https://i.imgur.com/v0zYPia.jpeg", width = 1920, height = 1080 },
     { filename = "ttt_mc_island_2013", displayname = 'Minecraft Island',image="https://i.imgur.com/FBkaQTn.jpeg", width = 1920, height = 1080 },
+    { filename = "cs_office-unlimited", displayname = 'Office',image="", width = 1920, height = 1080 },
 }

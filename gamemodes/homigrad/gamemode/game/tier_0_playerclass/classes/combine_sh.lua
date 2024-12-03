@@ -97,7 +97,7 @@ function CLASS.PlayerEndVoice(self)
 end
 
 function CLASS.CanLisenOutput(output,input,isChat)
-    if input.isCombine then return true end
+    if not output:Alive() then return false end
 end
 
 function CLASS.CanLisenInput(input,output,isChat)
