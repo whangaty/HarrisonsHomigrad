@@ -85,9 +85,16 @@ end,1}
 
 
 hook.Add("InitPostEntity","changeperfsettings",function()
-    local perf = physenv.GetPerformanceSettings()
-    if perf then
-        perf.MaxVelocity = 100000 --default 2000
-        physenv.SetPerformanceSettings(perf)
-    end
+	local phys_settings = physenv.GetPerformanceSettings()
+
+	phys_settings.LookAheadTimeObjectsVsObject = 0 -- 0.5
+	phys_settings.LookAheadTimeObjectsVsWorld = 0.1 -- 1
+	phys_settings.MaxAngularVelocity = 3600 -- 7272.7275390625
+	phys_settings.MaxCollisionChecksPerTimestep = 100 -- 50000
+	phys_settings.MaxCollisionsPerObjectPerTimestep = 4 -- 10
+	phys_settings.MaxFrictionMass = 2500 -- 2500
+	phys_settings.MaxVelocity = 4000 -- 4000
+	phys_settings.MinFrictionMass = 100 -- 10
+
+	physenv.SetPerformanceSettings(phys_settings)
 end)

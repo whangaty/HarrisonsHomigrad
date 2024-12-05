@@ -115,7 +115,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "gm_wick",
     "ttt_minecraft_b5",
     "ttt_minecraftcity_v4",
-    "dm_steamlab",
+    --"dm_steamlab",
     "ttt_airbus_b3",
     "gm_abandoned_factory",
     "gm_assault_sandbox",
@@ -146,6 +146,8 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_ile_v4",
     "cs_office-unlimited",
     "freeway_thicc_v3",
+    "gm_lilys_bedroom",
+
 }
 
 SolidMapVote[ 'Config' ][ 'Construct Map Pool' ] = {
@@ -278,4 +280,6 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = "ttt_blackmesa_bahpu", displayname = 'Black Mesa',image="https://i.imgur.com/v0zYPia.jpeg", width = 1920, height = 1080 },
     { filename = "ttt_mc_island_2013", displayname = 'Minecraft Island',image="https://i.imgur.com/FBkaQTn.jpeg", width = 1920, height = 1080 },
     { filename = "cs_office-unlimited", displayname = 'Office',image="", width = 1920, height = 1080 },
+    { filename = "sm_manhattanmegamallnightv1", displayname = 'New York Mall',image="", width = 1920, height = 1080 },
+    { filename = "gm_lilys_bedroom", displayname = 'Bedroom',image="", width = 1920, height = 1080 },
 }
