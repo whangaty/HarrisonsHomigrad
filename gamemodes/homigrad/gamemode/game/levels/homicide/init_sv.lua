@@ -54,7 +54,8 @@ local function makeT(ply)
         ply:Give("weapon_radar")
         print(player.GetCount())
     elseif homicide.roundType == 5 then
-        local wep = ply:Give("weapon_barret")
+        local wep
+        if math.random(1,2) == 1 then wep = ply:Give("weapon_scout") else wep = ply:Give("weapon_barret") end
         ply:GiveAmmo(20, "XBowBolt", true) -- slots = bolts.
         wep:SetClip1(wep:GetMaxClip1())
         ply:Give("weapon_kabar")

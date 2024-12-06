@@ -117,7 +117,7 @@ if CLIENT then
 
     SWEP.spos = Vector(-15, 0, 1)
     SWEP.sang = Angle(0, 0, 0)
-    SWEP.zoomfov = 3
+    SWEP.zoomfov = 7
 
     function SWEP:DrawHUDAdd()
         local ply = self:GetOwner()
@@ -180,11 +180,12 @@ if CLIENT then
 end
 
 function SWEP:AdjustMouseSensitivity()
-    return self:IsSighted() and 0.1 or 1
+    return self:IsSighted() and GetConVar("hg_scopespeed"):GetFloat() / 10 or 1 
 end
 
 SWEP.vbwPos = Vector(-3,-5,-5)
 SWEP.vbwAng = Vector(-80,-20,0)
+SWEP.vbw = false
 
 SWEP.CLR_Scope = 0.05
 SWEP.CLR = 0.025

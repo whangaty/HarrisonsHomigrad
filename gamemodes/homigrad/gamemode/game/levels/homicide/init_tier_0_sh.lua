@@ -139,7 +139,7 @@ local DescCT = {
     [2] = "#rounds.innocentBerreta", --base
     [3] = "#rounds.innocentTaser", --gunfree
     [4] = "#rounds.innocentWildWest", --wildwest
-    [5] = "#rounds.innocentShotgun" --wildwest
+    [5] = "#rounds.innocentShotgun" -- hitman
 }
 
 function homicide.HUDPaint_RoundLeft(white2)
