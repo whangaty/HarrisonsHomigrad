@@ -68,12 +68,23 @@ local prekol = {
 	gmod_tool = true
 }
 
-net.Receive("inventory",function(len,ply)
-	local lootEnt = net.ReadEntity()
-	if not IsValid(lootEnt) then return end
+net.Receive("inventory", function(len, ply)
+    local lootEnt = net.ReadEntity()
+    
+    -- Validate the entity
+    if not IsValid(lootEnt) then 
+        ply:ChatPrint("Invalid inventory entity!")
+        return 
+    end
 
-	lootEnt.UsersInventory[ply] = nil
-	player.Event(ply,"inventory close",lootEnt)
+    -- Initialize UsersInventory if it's nil
+    lootEnt.UsersInventory = lootEnt.UsersInventory or {}
+
+    -- Safely remove the player from the inventory
+    if lootEnt.UsersInventory[ply] then
+        lootEnt.UsersInventory[ply] = nil
+        player.Event(ply, "inventory close", lootEnt)
+    end
 end)
 
 hook.Add("DoPlayerDeath","huyhuy",function(ply)
