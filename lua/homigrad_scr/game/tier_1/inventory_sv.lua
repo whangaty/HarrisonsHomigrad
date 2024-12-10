@@ -73,7 +73,6 @@ net.Receive("inventory", function(len, ply)
     
     -- Validate the entity
     if not IsValid(lootEnt) then 
-        ply:ChatPrint("Invalid inventory entity!")
         return 
     end
 
