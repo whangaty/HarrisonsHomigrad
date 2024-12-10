@@ -264,7 +264,7 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
 
 
     { filename = 'tdm_city18', displayname = 'City 18',image="https://i.imgur.com/FAFS23T.jpeg", width = 1920, height = 1080 },
-    { filename = 'cs_insertion2_dusk', displayname = 'Insertion II',image="https://i.imgur.com/KJAthSW.jpeg", width = 1920, height = 1080 },
+    { filename = 'cs_insertion2_dusk', displayname = 'Insertion II (Fixed)',image="https://i.imgur.com/KJAthSW.jpeg", width = 1920, height = 1080 },
     { filename = 'gm_kleinercomcenter', displayname = 'Communtity Center',image="https://i.imgur.com/NfqaleF.jpeg", width = 1920, height = 1080 },
     { filename = 'mu_smallotown_v2_13', displayname = 'Small Town (Day)',image="https://i.imgur.com/gYI8nD0.jpeg", width = 1920, height = 1080 },
 
