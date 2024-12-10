@@ -224,6 +224,7 @@ function CLASS:Event(name,a1)
 		end)
 	end
 
+	--[[ Not used
 	if name == "inventory close" then
 		if a1.roleT then
 			local r = math.random(1,3)
@@ -236,6 +237,7 @@ function CLASS:Event(name,a1)
 			end
 		end
 	end
+	]]
 end
 
 local sounds = {
