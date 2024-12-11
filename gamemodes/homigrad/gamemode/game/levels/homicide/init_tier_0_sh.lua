@@ -96,8 +96,8 @@ local red,blue = Color(200,0,10),Color(75,75,255)
 local gray = Color(122,122,122,255)
 local white = Color(255,255,255,255)
 function homicide.GetTeamName(ply)
-    if ply.roleT then return "#team.traitor",red end
-    if ply.roleCT then return "#team.innocent",blue end
+    if ply.roleT then return language.GetPhrase("team.traitor"),red end
+    if ply.roleCT then return language.GetPhrase("team.innocent"),blue end
 
     local teamID = ply:Team()
     if teamID == 1 then
