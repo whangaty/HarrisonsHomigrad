@@ -102,7 +102,7 @@ local function CheckPlayerDetails(ply)
 
     -- Check if the player owns the game
     if steamID64 ~= ply:OwnerSteamID64() then
-        ply:Kick("[Harrison's Homigrad] You cannot join this server because you do not own Garry's Mod.\nTo become whitelisted, you can appeal at https://harrisonshomigrad.noclip.me.")
+        ply:Kick("[Harrison's Homigrad] You cannot join this server because you do not own Garry's Mod, and are playing via a Family Share account.\nTo become whitelisted, you can appeal at https://harrisonshomigrad.noclip.me")
         return
     end
 
