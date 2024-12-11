@@ -137,7 +137,13 @@ function SolidMapVote.poolMaps()
     local maps = file.Find( 'maps/*.bsp', 'GAME' )
 
     if SolidMapVote[ 'Config' ][ 'Manual Map Pool' ] then
-        SolidMapVote.mapPool = SolidMapVote[ 'Config' ][ 'Map Pool' ]
+        
+        if GetConVar("sv_construct"):GetBool() == false then
+            SolidMapVote.mapPool = SolidMapVote[ 'Config' ][ 'Map Pool' ]
+        else
+            SolidMapVote.mapPool = SolidMapVote[ 'Config' ][ 'Construct Map Pool' ]
+        end
+
         return SolidMapVote.mapPool
     end
 

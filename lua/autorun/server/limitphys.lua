@@ -1,3 +1,4 @@
+--[[]
 hook.Add("InitPostEntity","RemoveShittyHooks",function()
 	local phys_settings = physenv.GetPerformanceSettings()
 
@@ -7,8 +8,8 @@ hook.Add("InitPostEntity","RemoveShittyHooks",function()
 	phys_settings.MaxCollisionChecksPerTimestep = 100 -- 50000
 	phys_settings.MaxCollisionsPerObjectPerTimestep = 1 -- 10
 	phys_settings.MaxFrictionMass = 2500 -- 2500
-	phys_settings.MaxVelocity = 768 -- 4000
+	phys_settings.MaxVelocity = 4000 -- 4000
 	phys_settings.MinFrictionMass = 100 -- 10
 
 	physenv.SetPerformanceSettings(phys_settings)
-end)
+end)]]

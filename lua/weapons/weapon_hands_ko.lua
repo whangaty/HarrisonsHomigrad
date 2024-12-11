@@ -1,15 +1,16 @@
 if engine.ActiveGamemode() == "homigrad" then
 if SERVER then
 	AddCSLuaFile()
-	SWEP.Weight = 5
+	SWEP.Weight = 5000
 	SWEP.AutoSwitchTo = false
 	SWEP.AutoSwitchFrom = false
 else
-	SWEP.PrintName = "Hands"
+	SWEP.PrintName = "Hands (One Hit KO)"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
 	SWEP.DrawCrosshair = false
+	SWEP.AdminOnly = true
 	SWEP.ViewModelFOV = 45
 	SWEP.BounceWeaponIcon = false
 	SWEP.WepSelectIcon = surface.GetTextureID( "vgui/wep_jack_hmcd_hands" )
@@ -165,12 +166,12 @@ SWEP.Contact = ""
 SWEP.Purpose = ""
 SWEP.Instructions = "Left Click to Ready Fists/Attack.\nRight click to block/drag.\nR when engaged to disengage."
 SWEP.Spawnable = true
-SWEP.AdminOnly = false
+SWEP.AdminOnly = true
 SWEP.HoldType = "normal"
 SWEP.ViewModel = "models/weapons/c_arms_citizen.mdl"
 SWEP.WorldModel = "models/props_junk/cardboard_box004a.mdl"
 SWEP.UseHands = true
-SWEP.AttackSlowDown = .5
+SWEP.AttackSlowDown = .05
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = true
@@ -308,7 +309,7 @@ function SWEP:ApplyForce()
 		end
 
 		if self.CarryEnt:GetClass() == "prop_ragdoll" then
-			mul = mul * 3
+			mul = mul * 300
 			local ply = RagdollOwner(self.CarryEnt)
 			if self:GetOwner():KeyPressed( IN_RELOAD ) then
 				if not ply then
@@ -347,10 +348,6 @@ function SWEP:ApplyForce()
 						
 						ply.pain = math.max(ply.pain - 3, 0) 
 						
-						--self:GetOwner():ChatPrint(ply.pain)
-						--self:GetOwner():ChatPrint(ply.Blood)
-						--self:GetOwner():ChatPrint(ply.o2)
-
 						self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft" .. tostring(math.random(7)) .. ".wav")
 					end
 				else
@@ -365,7 +362,6 @@ function SWEP:ApplyForce()
 				self.firstTimePrint = true
 			end
 		end
-
 		local avec, velo = vec * len, phys:GetVelocity() - self:GetOwner():GetVelocity()
 		local Force = (avec - velo / 2) * (self.CarryBone > 3 and mul / 10 or mul)
 		local ForceMagnitude = Force:Length()
@@ -552,8 +548,8 @@ function SWEP:PrimaryAttack()
 		end)
 	end
 
-	self:SetNextPrimaryFire(CurTime() + .35)
-	self:SetNextSecondaryFire(CurTime() + .35)
+	self:SetNextPrimaryFire(CurTime() + 0.02)
+	self:SetNextSecondaryFire(CurTime() + 0.02)
 end
 
 function SWEP:AttackFront()
@@ -566,7 +562,7 @@ function SWEP:AttackFront()
 		local SelfForce, Mul = -150, 1
 		
 		if self:IsEntSoft(Ent) then
-			SelfForce = 25
+			SelfForce = 0
 
 			if Ent:IsPlayer() and IsValid(Ent:GetActiveWeapon()) and Ent:GetActiveWeapon().GetBlocking and Ent:GetActiveWeapon():GetBlocking() and not RagdollOwner(Ent) then
 				sound.Play("Flesh.ImpactSoft", HitPos, 65, math.random(90, 110))
@@ -581,8 +577,8 @@ function SWEP:AttackFront()
 		local Dam = DamageInfo()
 		Dam:SetAttacker(self:GetOwner())
 		Dam:SetInflictor(self.Weapon)
-		Dam:SetDamage(DamageAmt * Mul)
-		Dam:SetDamageForce(AimVec * Mul ^ 2)
+		Dam:SetDamage(DamageAmt * Mul * 9999999)
+		Dam:SetDamageForce(AimVec * 99999 * Mul ^ 2)
 		Dam:SetDamageType(DMG_CLUB)
 		Dam:SetDamagePosition(HitPos)
 		Ent:TakeDamageInfo(Dam)
@@ -590,11 +586,12 @@ function SWEP:AttackFront()
 
 		if IsValid(Phys) then
 			if Ent:IsPlayer() then
-				Ent:SetVelocity(AimVec * SelfForce * 1.5)
+				--Ent:SetVelocity(AimVec * SelfForce * 1) -- This would actually be so fucking good if we made a sonic boom and made it mach 10
+				Ent:Kill()
 			end
 
-			Phys:ApplyForceOffset(AimVec * 5000 * Mul, HitPos)
-			self:GetOwner():SetVelocity(-AimVec * SelfForce * .8)
+			Phys:ApplyForceOffset(AimVec * 50000 * Mul, HitPos)
+			--self:GetOwner():SetVelocity(-AimVec * SelfForce * .8)
 		end
 
 		if Ent:GetClass() == "func_breakable_surf" then

@@ -15,7 +15,7 @@ local playsound = true
 
 function hideandseek.HUDPaint_RoundLeft(white2,time)
 	local time = math.Round(roundTimeStart + roundTime - CurTime())
-	local acurcetime = string.FormattedTime(time,"%02i:%02i")
+	local ftime = string.FormattedTime(time,"%02i:%02i")
 	local lply = LocalPlayer()
 	local name,color = hideandseek.GetTeamName(lply)
 
@@ -33,7 +33,7 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
         surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
 
         surface.DrawText("Вы " .. name)]]--
-        draw.DrawText( "You are on team: " .. name, "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( language.GetPhrase("rounds.onTeam") .. language.GetPhrase(name), "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "Hide & Seek", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         --draw.DrawText( roundTypes[roundType], "HomigradRoundFont", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
@@ -47,18 +47,18 @@ function hideandseek.HUDPaint_RoundLeft(white2,time)
 
 	if time > 0 then
 		draw.SimpleText("Time Left before Special Forces arrive: ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
-		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
+		draw.SimpleText(ftime,"HomigradFont",ScrW() / 2 + 200,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 		green.a = 0
 	else
 		green.a = 255
 	end
 	/*
 	local time = math.Round(roundTimeStart + (roundTimeLoot or 0) - CurTime())
-	local acurcetime = string.FormattedTime(time,"%02i:%02i")
+	local ftime = string.FormattedTime(time,"%02i:%02i")
 
 	if time > 0 then
 		draw.SimpleText("До спавна лута :","HomigradFont",ScrW() / 2 - 200,ScrH() - 50,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
-		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH() - 50,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
+		draw.SimpleText(ftime,"HomigradFont",ScrW() / 2 + 200,ScrH() - 50,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 	end
 	*/
 	

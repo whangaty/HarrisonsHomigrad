@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() ~= "homigrad" then return end
 AddCSLuaFile()
 
 SWEP.Base = "weapon_base"
@@ -66,39 +66,38 @@ SWEP.dwmAUp = 0
 SWEP.dwmARight = 180
 SWEP.dwmAForward = 90
 
-local model = GDrawWorldModel or ClientsideModel(SWEP.WorldModel,RENDER_GROUP_OPAQUE_ENTITY)
-GDrawWorldModel = model
-model:SetNoDraw(true)
-
 function SWEP:DrawWorldModel()
     local owner = self:GetOwner()
     if not IsValid(owner) then
-        self:DrawModel()
 
+        self:DrawModel()
+        self:SetRenderOrigin()
+        self:SetRenderAngles()
         return
     end
 
     local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
     if not Pos then return end
 
-    model:SetModel(self.WorldModel)
+    self:SetModel(self.WorldModel)
     
     Pos:Add(Ang:Forward() * self.dwmForward)
     Pos:Add(Ang:Right() * self.dwmRight)
     Pos:Add(Ang:Up() * self.dwmUp)
 
-    model:SetPos(Pos)
-
     Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
     Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
     Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
-    model:SetAngles(Ang)
 
-    model:SetModelScale(self.dwmModeScale)
+    --self:SetPos(Pos)
+    --self:SetAngles(Ang)
+    self:SetRenderOrigin(Pos)
+    self:SetRenderAngles(Ang)
 
-    model:DrawModel()
+    self:SetModelScale(self.dwmModeScale)
+
+    self:DrawModel()
 end
 
 function SWEP:PrimaryAttack() end
 function SWEP:SecondaryAttack() end
-end

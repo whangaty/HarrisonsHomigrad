@@ -29,6 +29,7 @@ bloodtypes = {
 	["ab+"] = {["ab+"] = true}
 }
 
+
 function SWEP:Think()
 	if self:GetOwner():KeyDown(IN_ATTACK) then
 		local owner = self:GetOwner()
@@ -45,7 +46,7 @@ function SWEP:Think()
 			ent:EmitSound(healsound2)
 			owner:SetAnimation(PLAYER_ATTACK1)
 			ent.bloodtype = ent.bloodtype or math.random(1,8)
-			owner:ChatPrint(self.bloodinside and bloodtranslate[self.bloodtype].." -> "..bloodtranslate[ent.bloodtype] or bloodtranslate[ent.bloodtype].." -> пакет для крови")
+			owner:ChatPrint(self.bloodinside and ("Keep holding to translate the blood to yourself") or ("Keep holding to fill the bag with your blood"))
 			--local compatible = bloodtypes[bloodtranslate[self.bloodtype]][bloodtranslate[ent.bloodtype]]
 			--owner:ChatPrint(not self.bloodinside and tostring(blood_compatibility))
 		end
@@ -58,7 +59,7 @@ function SWEP:Think()
 		end
 	elseif self:GetOwner():KeyDown(IN_ATTACK2) then
 		local owner = self:GetOwner()
-		local ent = owner:GetEyeTraceDis(75).Entity
+		local ent = self:GetEyeTraceDist(75).Entity
 		ent = (ent:IsPlayer() and ent) or (RagdollOwner(ent)) or ((ent.Blood or 0) > 500 and ent)
 		if not ent then
 			self.zabortime = nil
@@ -70,7 +71,7 @@ function SWEP:Think()
 			ent:EmitSound(healsound2)
 			owner:SetAnimation(PLAYER_ATTACK1)
 			ent.bloodtype = ent.bloodtype or math.random(1,8)
-			owner:ChatPrint(self.bloodinside and bloodtranslate[self.bloodtype].." -> "..bloodtranslate[ent.bloodtype] or bloodtranslate[ent.bloodtype].." -> пакет для крови")
+			owner:ChatPrint(self.bloodinside and ("Keep holding to translate the blood to the person") or ("Keep holding to fill the bag with person's blood"))
 			--local compatible = bloodtypes[bloodtranslate[self.bloodtype]][bloodtranslate[ent.bloodtype]]
 			--owner:ChatPrint(not self.bloodinside and tostring(blood_compatibility))
 		end
@@ -92,7 +93,7 @@ end
 function SWEP:PostInit()
 	self.bloodinside = math.random(1,5) > 2 and true or false
 	if self.bloodinside then
-		self.bloodtype = math.random(1,8)
+		self.bloodtype = 1--math.random(1,8)
 		net.Start("blood_gotten")
 		net.WriteEntity(self)
 		net.WriteBool(false)

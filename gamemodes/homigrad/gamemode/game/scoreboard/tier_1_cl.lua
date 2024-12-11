@@ -229,6 +229,8 @@ local function ToggleScoreboard(toggle)
 		end
 
 		function HomigradScoreboard:AddPlayer(ply)
+			if ply:Team() == 1002 then return end
+
 			local playerPanel = vgui.Create("DButton",panelPlayers)
 			self.players[ply] = playerPanel
 			playerPanel:SetText("")
@@ -239,10 +241,6 @@ local function ToggleScoreboard(toggle)
 				playerMenu:SetPos(input.GetCursorPos())
 				playerMenu:AddOption("Copy SteamID", function()
 					SetClipboardText(ply:SteamID())
-					LocalPlayer():ChatPrint("SteamID " .. ply:Name() .. " copied! (" .. ply:SteamID() .. ")")
-				end)
-				playerMenu:AddOption("Copy SteamID64", function()
-					SetClipboardText(ply:SteamID64())
 					LocalPlayer():ChatPrint("SteamID " .. ply:Name() .. " copied! (" .. ply:SteamID() .. ")")
 				end)
 				playerMenu:AddOption("Open Steam Profile", function()

@@ -115,7 +115,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "gm_wick",
     "ttt_minecraft_b5",
     "ttt_minecraftcity_v4",
-    "dm_steamlab",
+    --"dm_steamlab",
     "ttt_airbus_b3",
     "gm_abandoned_factory",
     "gm_assault_sandbox",
@@ -144,7 +144,17 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     --"ttt_bank_change",
     "gm_apartments_hl2",
     "ttt_ile_v4",
+    "cs_office-unlimited",
     "freeway_thicc_v3",
+    "gm_lilys_bedroom",
+    "ph_scotch",
+
+}
+
+SolidMapVote[ 'Config' ][ 'Construct Map Pool' ] = {
+    "gm_construct",
+    "gm_flatgrass",
+    "gm_bigcity_winter_day",
 }
 
 -- Allow players to use their mics while in the mapvote
@@ -254,7 +264,7 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
 
 
     { filename = 'tdm_city18', displayname = 'City 18',image="https://i.imgur.com/FAFS23T.jpeg", width = 1920, height = 1080 },
-    { filename = 'cs_insertion2_dusk', displayname = 'Insertion II',image="https://i.imgur.com/KJAthSW.jpeg", width = 1920, height = 1080 },
+    { filename = 'cs_insertion2_dusk', displayname = 'Insertion II (Fixed)',image="https://i.imgur.com/KJAthSW.jpeg", width = 1920, height = 1080 },
     { filename = 'gm_kleinercomcenter', displayname = 'Communtity Center',image="https://i.imgur.com/NfqaleF.jpeg", width = 1920, height = 1080 },
     { filename = 'mu_smallotown_v2_13', displayname = 'Small Town (Day)',image="https://i.imgur.com/gYI8nD0.jpeg", width = 1920, height = 1080 },
 
@@ -270,4 +280,8 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = "zs_adrift_v4", displayname = 'Adrift',image="https://i.imgur.com/D1UWlcz.jpeg", width = 1920, height = 1080 },
     { filename = "ttt_blackmesa_bahpu", displayname = 'Black Mesa',image="https://i.imgur.com/v0zYPia.jpeg", width = 1920, height = 1080 },
     { filename = "ttt_mc_island_2013", displayname = 'Minecraft Island',image="https://i.imgur.com/FBkaQTn.jpeg", width = 1920, height = 1080 },
+    { filename = "cs_office-unlimited", displayname = 'Office',image="https://i.imgur.com/S2T3jQ8.jpeg", width = 1920, height = 1080 },
+    { filename = "sm_manhattanmegamallnightv1", displayname = 'New York Mall',image="https://i.imgur.com/JDbC6hu.jpeg", width = 1920, height = 1080 },
+    { filename = "gm_lilys_bedroom", displayname = 'Bedroom',image="https://i.imgur.com/n8XfLIa.jpeg", width = 1920, height = 1080 },
+    { filename = "ph_scotch", displayname = 'Scotch',image="", width = 1920, height = 1080 },
 }

@@ -230,7 +230,8 @@ function CLASS:Event(name,a1)
 			end
 		end)
 	end
-	--[[ Also not needed
+
+	--[[ Not used
 	if name == "inventory close" then
 		if a1.roleT then
 			local r = math.random(1,3)

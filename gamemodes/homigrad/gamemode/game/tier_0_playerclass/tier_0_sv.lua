@@ -34,10 +34,10 @@ hook.Add("PlayerInitializeSpawn","PlayerClass",function(plySend)
     end
 end)
 
-hook.Add("PlayerDeath","PlayerClass",function(ply,inf,att)
+hook.Add("Player Death","PlayerClass",function(ply,inf,att)
     if IsValid(att) and att:IsPlayer() then att:PlayerClassEvent("PlayerKill",ply) end
 
-    ply:PlayerClassEvent("PlayerDeath",att)
+    ply:PlayerClassEvent("Player Death",att)
 end)
 
 COMMANDS.playerclass = {function(ply,args)

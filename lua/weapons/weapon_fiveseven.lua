@@ -15,7 +15,7 @@ SWEP.AdminOnly 				= false
 SWEP.Primary.ClipSize		= 20
 SWEP.Primary.DefaultClip	= 20
 SWEP.Primary.Automatic		= false
-SWEP.Primary.Ammo			= "5.7×28 mm"
+SWEP.Primary.Ammo			= "5.7x28 mm"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 10
 SWEP.RubberBullets = false
@@ -50,7 +50,7 @@ SWEP.ViewModel				= "models/pwb2/weapons/w_fiveseven.mdl"
 SWEP.WorldModel				= "models/pwb2/weapons/w_fiveseven.mdl"
 
 SWEP.vbwPos = Vector(8,0,-6)
-SWEP.addPos = Vector(0,0,0.2)
+SWEP.addPos = Vector(-1,-1,-0.7)
 SWEP.addAng = Angle(0.4,0,0)
 
 SWEP.SightPos = Vector(-20,0.4,-0.55)

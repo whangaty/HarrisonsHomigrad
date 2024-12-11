@@ -68,24 +68,6 @@ local prekol = {
 	gmod_tool = true
 }
 
-net.Receive("inventory", function(len, ply)
-    local lootEnt = net.ReadEntity()
-    
-    -- Validate the entity
-    if not IsValid(lootEnt) then 
-        return 
-    end
-
-    -- Initialize UsersInventory if it's nil
-    lootEnt.UsersInventory = lootEnt.UsersInventory or {}
-
-    -- Safely remove the player from the inventory
-    if lootEnt.UsersInventory[ply] then
-        lootEnt.UsersInventory[ply] = nil
-        player.Event(ply, "inventory close", lootEnt)
-    end
-end)
-
 hook.Add("DoPlayerDeath","huyhuy",function(ply)
 	local info = SavePlyInfo(ply)
 
@@ -159,7 +141,7 @@ net.Receive("ply_take_item",function(len,ply)
 	if ply:GetAttachment(ply:LookupAttachment("eyes")).Pos:Distance(lootEnt:GetPos()) > 100 then return end
 	--local weapon = net.ReadEntity()
 	--local wep = weapon:GetClass()
-
+	
 	local lootInfo = lootEnt.Info
 
 	local wep = net.ReadString()

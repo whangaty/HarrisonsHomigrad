@@ -94,96 +94,32 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
                 if ply:Alive() and not IsValid(ply.FakeRagdoll) and not ply.nopain and (IsValid(wep) and not (wep.GetBlocking and wep:GetBlocking())) then Faking(ply) end
             end)
         end
-
+        
         local dmgpos = dmginfo:GetDamagePosition()-- - penetration:GetNormalized() * 0.5
-
-        local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Spine2'))
-        local huy = util.IntersectRayWithOBB(dmgpos,penetration,pos,ang,Vector(-1,0,-6),Vector(10,6,6))
-        
-        if huy then
-            if ply.Organs['lungs'] ~= 0 then
-                ply.Organs['lungs'] = math.max(ply.Organs['lungs'] - dmg,0)
-                if ply.Organs['lungs'] == 0 then
-                    timer.Simple(3,function()
-                        if ply:Alive() then ply:ChatPrint("#chat.health.lungDamage") end
-                    end)
-                end
-            end
-        end
-
-        local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Head1'))
-        local huy = util.IntersectRayWithOBB(dmgpos,penetration,pos,ang,Vector(3,-4,-2.5), Vector(7,3,2.5))
-
-        if huy then
-            if ply.Organs['brain']!=0 and dmginfo:IsDamageType(DMG_BULLET) and not inf.RubberBullets then
-                ply.Organs['brain']=math.max(ply.Organs['brain']-dmg,0)
-                if ply.Organs["brain"] == 0 then
-                    --ply:Kill()
-                    ply.KillReason = "braindeath"
-                    ply.nohook = true
-					ply:TakeDamage(10000,ply.LastAttacker)
-                    ply.nohook = nil
-                    return
-                end
-            end
-        end
-		
-        --brain
-        local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Spine1'))
-        local huy = util.IntersectRayWithOBB(dmgpos,penetration, pos, ang, Vector(-4,-1,-6),Vector(2,5,-1))
-
-        if huy then --ply:ChatPrint("You were hit in the liver.")
-            if ply.Organs['liver']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
-                ply.Organs['liver']=math.max(ply.Organs['liver']-dmg,0)
-                --if ply.Organs['liver']==0 then ply:ChatPrint("Твоя печень была уничтожена.") end
-            end
-        end
-        --liver
-
-        local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Spine1'))
-        local huy = util.IntersectRayWithOBB(dmgpos,penetration, pos, ang, Vector(-4,-1,-1),Vector(2,5,6))
-        
-        if huy then --ply:ChatPrint("You were hit in the stomach.")
-            if ply.Organs['stomach']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
-                ply.Organs['stomach']=math.max(ply.Organs['stomach']-dmg,0)
-                if ply.Organs['stomach']==0 then ply:ChatPrint("You feel something dig straight into your gut.") end
-            end
-        end
-        --stomach
-
-        local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Spine'))
-        local huy = util.IntersectRayWithOBB(dmgpos,penetration, pos, ang, Vector(-4,-1,-6),Vector(1,5,6))
-        
-        if huy then --ply:ChatPrint("You were hit in the intestines.")
-            if ply.Organs['intestines']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
-                ply.Organs['intestines']=math.max(ply.Organs['intestines']-dmg,0)
-                --if ply.Organs['intestines']==0 then ply:ChatPrint("Твои кишечник был уничтожен.")end
-            end
-        end
 
         local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Spine2'))
         local huy = util.IntersectRayWithOBB(dmgpos,penetration, pos, ang, Vector(1,0,-1),Vector(5,4,3))
         
         if huy then --ply:ChatPrint("You were hit in the heart.")
-            if ply.Organs['heart']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
-                ply.Organs['heart']=math.max(ply.Organs['heart']-dmg,0)
-                --if ply.Organs['heart']==0 then ply:ChatPrint("Ты чувствоешь очень сильную боль в сердце.") end
+            if ply.organs['heart']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
+                ply.organs['heart']=math.max(ply.organs['heart']-dmg,0)
+                --if ply.organs['heart']==0 then ply:ChatPrint("Ты чувствоешь очень сильную боль в сердце.") end
             end
         end
 
-        --heart
+        
         if dmginfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_BLAST+DMG_ENERGYBEAM+DMG_NEVERGIB+DMG_ALWAYSGIB+DMG_PLASMA+DMG_AIRBOAT+DMG_SNIPER+DMG_BUCKSHOT) then --and ent:LookupBone(bonename)==2 then
             local pos,ang = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Head1'))
             local huy = util.IntersectRayWithOBB(dmgpos,penetration, pos, ang, Vector(-3,-2,-2),Vector(0,-1,-1))
             local huy2 = util.IntersectRayWithOBB(dmgpos,penetration, pos, ang, Vector(-3,-2,1),Vector(0,-1,2))
 
             if huy or huy2 then --ply:ChatPrint("You were hit in the artery.")
-                if ply.Organs['artery']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
-                    ply.Organs['artery']=math.max(ply.Organs['artery']-dmg,0)
+                if ply.organs.artery!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
+                    ply.organs.artery=math.max(ply.organs.artery-dmg,0)
                 end
             end
         end
-        --coronary artery
+        
         local matrix = ent:GetBoneMatrix(ent:LookupBone('ValveBiped.Bip01_Spine4'))
         local ang = matrix:GetAngles()
         local pos = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Spine4'))
@@ -192,22 +128,22 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         local ang = matrix:GetAngles()
         local pos = ent:GetBonePosition(ent:LookupBone('ValveBiped.Bip01_Spine1'))
         local huy2 = util.IntersectRayWithOBB(dmgpos,penetration, pos, ang, Vector(-8,-3,-1),Vector(2,-2,1))
-        if (huy or huy2) then --ply:ChatPrint("You were hit in the spine.")
-            if ply.Organs['spine']!=0 then
-                ply.Organs['spine']=math.Clamp(ply.Organs['spine']-dmg,0,1)
-                if ply.Organs['spine']==0 then
+        
+        if (huy or huy2) then
+            if ply.organs['spine']!=0 then
+                ply.organs['spine']=math.Clamp(ply.organs['spine']-dmg,0,1)
+                if ply.organs['spine']==0 then
                     timer.Simple(0.01,function()
                         if !IsValid(ply.FakeRagdoll) then
                             Faking(ply)
                         end
                     end)
-                    ply.brokenspine=true 
+                    ply.brokenspine=true
                     ply:ChatPrint("#chat.health.brokenSpine")
                     ent:EmitSound("NPC_Barnacle.BreakNeck",70,125,0.7,CHAN_ITEM)
                 end
             end
         end
-        --spine
     end
 end)
 

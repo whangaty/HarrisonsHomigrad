@@ -9,14 +9,14 @@ ctp.WinPoints[2] = ctp.WinPoints[2] or 0
 
 local red, blue, gray = Color(255,75,75), Color(75,75,255), Color(200, 200, 200)
 
-ctp.red = {"Blue",Color(255,75,75),
+ctp.red = {"Red",Color(255,75,75),
     weapons = {"weapon_binokle","weapon_radio","weapon_gurkha","weapon_hands","med_band_big","med_band_small","medkit","painkiller"},
     main_weapon = {"weapon_ak74u","weapon_akm","weapon_remington870","weapon_galil","weapon_rpk","weapon_asval","weapon_p90","weapon_scout","weapon_barret"},
     secondary_weapon = {"weapon_p220","weapon_mateba","weapon_glock"},
     models = tdm.models
 }
 
-ctp.blue = {"Red",Color(75,75,255),
+ctp.blue = {"Blue",Color(75,75,255),
     weapons = {"weapon_binokle","weapon_radio","weapon_hands","weapon_kabar","med_band_big","med_band_small","medkit","painkiller","weapon_handcuffs","weapon_taser"},
     main_weapon = {"weapon_hk416","weapon_m4a1","weapon_m3super","weapon_mp7","weapon_xm1014","weapon_fal","weapon_asval","weapon_m249","weapon_p90","weapon_scout","weapon_barret"},
     secondary_weapon = {"weapon_beretta","weapon_p99","weapon_hk_usp"},
@@ -35,8 +35,8 @@ function ctp.StartRound()
 	game.CleanUpMap(false)
     ctp.points = {}
     if !file.Read( "homigrad/maps/"..game.GetMap()..".txt", "DATA" ) and SERVER then
-        print("No points are available on this map! This is either by design, or by laziness.") 
-        PrintMessage(HUD_PRINTCENTER, "No points are available on this map! This is either by design, or by laziness.")
+        print("No points are available on this map! Admins have to place them with: !point control_point") 
+        PrintMessage(HUD_PRINTCENTER, "No points are available on this map! Admins have to place them with: !point control_point")
     end
 
     ctp.LastWave = CurTime()

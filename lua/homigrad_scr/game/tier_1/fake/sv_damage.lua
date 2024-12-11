@@ -2,15 +2,10 @@ if engine.ActiveGamemode() == "homigrad" then
 hook.Add("PlayerSpawn","Damage",function(ply)
     if PLYSPAWN_OVERRIDE then return end
 
-	ply.Organs = {
-		['brain']=5,
-		['lungs']=40,
-		['liver']=10,
-		['stomach']=30,
-		['intestines']=30,
-		['heart']=20,
-		['artery']=1,
-		['spine']=5
+	ply.organs = {
+		heart = 20,
+		artery = 1,
+		spine = 5,
 	}
 
 	ply.InternalBleeding=nil
@@ -58,6 +53,54 @@ function GetPhysicsBoneDamageInfo(ent,dmgInfo)
 		return result.PhysicsBone
 	end
 end
+
+bonetohitgroup = {
+    ["ValveBiped.Bip01_Head1"]=1,
+    ["ValveBiped.Bip01_R_UpperArm"]=5,
+    ["ValveBiped.Bip01_R_Forearm"]=5,
+    ["ValveBiped.Bip01_R_Hand"]=5,
+    ["ValveBiped.Bip01_L_UpperArm"]=4,
+    ["ValveBiped.Bip01_L_Forearm"]=4,
+    ["ValveBiped.Bip01_L_Hand"]=4,
+    ["ValveBiped.Bip01_Pelvis"]=3,
+    ["ValveBiped.Bip01_Spine2"]=2,
+    ["ValveBiped.Bip01_L_Thigh"]=6,
+    ["ValveBiped.Bip01_L_Calf"]=6,
+    ["ValveBiped.Bip01_L_Foot"]=6,
+    ["ValveBiped.Bip01_R_Thigh"]=7,
+    ["ValveBiped.Bip01_R_Calf"]=7,
+    ["ValveBiped.Bip01_R_Foot"]=7
+}
+
+RagdollDamageBoneMul = {
+	[HITGROUP_LEFTLEG] = 0.25,
+	[HITGROUP_RIGHTLEG] = 0.25,
+
+	[HITGROUP_GENERIC] = 1,
+
+	[HITGROUP_LEFTARM] = 0.25,
+	[HITGROUP_RIGHTARM] = 0.25,
+
+	[HITGROUP_CHEST] = 1,
+	[HITGROUP_STOMACH] = 1,
+
+	[HITGROUP_HEAD] = 2,
+}
+
+DamageBoneMul = {
+	[HITGROUP_LEFTLEG] = 1,
+	[HITGROUP_RIGHTLEG] = 1,
+
+	[HITGROUP_GENERIC] = 1,
+
+	[HITGROUP_LEFTARM] = 1,
+	[HITGROUP_RIGHTARM] = 1,
+
+	[HITGROUP_CHEST] = 1,
+	[HITGROUP_STOMACH] = 1,
+
+	[HITGROUP_HEAD] = 2.5,
+}
 
 local NULLENTITY = Entity(-1)
 
@@ -128,7 +171,18 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 
 	local mul = RagdollDamageBoneMul[hitgroup]
 
+	local rubatPidor = DamageInfo()
+	rubatPidor:SetAttacker(dmginfo:GetAttacker())
+	--rubatPidor:SetInflictor(dmginfo:GetInflictor())
+	rubatPidor:SetDamage(dmginfo:GetDamage() * (not rag and (1 / mul) or 1))
+	rubatPidor:SetDamageType(dmginfo:GetDamageType())
+	rubatPidor:SetDamagePosition(dmginfo:GetDamagePosition())
+	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
+	
+	ply.LastDMGInfo = rubatPidor
+
 	if rag and mul then dmginfo:ScaleDamage(mul) end
+	if DamageBoneMul[hitgroup] then dmginfo:ScaleDamage(DamageBoneMul[hitgroup]) end
 
 	local entAtt = dmginfo:GetAttacker()
 	local att =
@@ -145,9 +199,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	ply.LastHitGroup = hitgroup
 	ply.LastTimeAttacked = CurTime()
 
-	dmginfo:ScaleDamage(0.05)
+	dmginfo:ScaleDamage(0.01)
 	local armors, mul = JMod.LocationalDmgHandling(ply, hitgroup, dmginfo)
-	dmginfo:ScaleDamage(20)
+	dmginfo:ScaleDamage(100)
 	local armorMul,armorDur = 1,0
 	local haveHelmet
 	
@@ -187,26 +241,17 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	end
 	
 	dmginfo:SetDamage(dmginfo:GetDamage() * armorMul)
-	local rubatPidor = DamageInfo()
-	rubatPidor:SetAttacker(dmginfo:GetAttacker())
-	--rubatPidor:SetInflictor(dmginfo:GetInflictor())
-	rubatPidor:SetDamage(dmginfo:GetDamage())
-	rubatPidor:SetDamageType(dmginfo:GetDamageType())
-	rubatPidor:SetDamagePosition(dmginfo:GetDamagePosition())
-	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
-
-	ply.LastDMGInfo = rubatPidor
 
 	local att = IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker()
 
 	if att and not att:IsNPC() then dmginfo:ScaleDamage(0.5) end
 	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
-	if att and not att:IsNPC() then dmginfo:ScaleDamage(0.3) end
+	if att and not att:IsNPC() then dmginfo:ScaleDamage(0.5) end
 	
 	if dmginfo:IsDamageType(DMG_BLAST) then
 		dmginfo:ScaleDamage(2)
 	end
-
+	
 	if rag then
 		if dmginfo:GetDamageType() == DMG_CRUSH then
 			dmginfo:ScaleDamage(1 / 40 / 15)
@@ -289,7 +334,7 @@ local reasons = {
 	["guilt"] = "You were slayed for exceeding your guilt maximum."
 }
 
-hook.Add("PlayerDeath","plymessage",function(ply,hitgroup,dmginfo)
+hook.Add("Player Death","plymessage",function(ply,hitgroup,dmginfo)
 	local att = ply.LastAttacker
 	--if not IsValid(att) then return end
 	local boneName = bonenames[ply.LastHitBoneName]

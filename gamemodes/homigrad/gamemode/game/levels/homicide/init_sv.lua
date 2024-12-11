@@ -43,6 +43,7 @@ local function makeT(ply)
         ply:Give("weapon_hidebomb")
         ply:Give("weapon_hg_rgd5")
         ply:Give("weapon_radar")
+        ply:GiveAmmo(wep1:GetMaxClip1(),wep1:GetPrimaryAmmoType())
     elseif homicide.roundType == 3 then
         local wep = ply:Give("weapon_hg_crossbow")
         ply:GiveAmmo(8, "XBowBolt", true) -- slots = bolts.
@@ -54,7 +55,8 @@ local function makeT(ply)
         ply:Give("weapon_radar")
         print(player.GetCount())
     elseif homicide.roundType == 5 then
-        local wep = ply:Give("weapon_barret")
+        local wep
+        if math.random(1,2) == 1 then wep = ply:Give("weapon_scout") else wep = ply:Give("weapon_barret") end
         ply:GiveAmmo(20, "XBowBolt", true) -- slots = bolts.
         wep:SetClip1(wep:GetMaxClip1())
         ply:Give("weapon_kabar")
@@ -91,20 +93,20 @@ local function makeCT(ply)
     if homicide.roundType == 1 or homicide.roundType == 5 then
         local wep = ply:Give("weapon_remington870")
         wep:SetClip1(wep:GetMaxClip1())
-        AddNotificate( ply,"You have been given a shotgun. Be careful, the traitor will be likely to target you.")
+        AddNotificate( ply,"#rounds.innocentShotgun")
     elseif homicide.roundType == 2 then
         local wep = ply:Give("weapon_beretta")
         wep:SetClip1(wep:GetMaxClip1())
-        AddNotificate( ply,"You have been given a M9 Beretta with one magazine.")
+        AddNotificate( ply,"#rounds.innocentBerreta")
     elseif homicide.roundType == 3 then
         local wep = ply:Give("weapon_taser")
         ply:Give("weapon_police_bat")
         wep:SetClip1(wep:GetMaxClip1())
-        AddNotificate( ply,"You have been given a Taser & Baton to take care of the traitor.")
+        AddNotificate( ply,"#rounds.innocentTaser")
     elseif homicide.roundType == 4 then
         local wep = ply:Give("weapon_mateba")
         wep:SetClip1(wep:GetMaxClip1())
-        AddNotificate( ply,"You & the traitor have been given identical revolvers. Find them and kill them.")
+        AddNotificate( ply,"#rounds.innocentWildWest")
     else
     end
 end
@@ -184,9 +186,9 @@ function SpawnPolicePlayers()
 
     timer.Simple(0, function()
         if homicide.roundType == 1 then
-            PrintMessage(3, "A SWAT Team has arrived.")
+            PrintMessage(3, "#chat.rounds.swatArrival")
         else
-            PrintMessage(3, "The Police have arrived.")
+            PrintMessage(3, "#chat.rounds.policeArrival")
         end
         if playsound then
             ply:EmitSound("police_arrive")
@@ -202,7 +204,14 @@ function SpawnPolicePlayers()
                 ply:SetPlayerClass("police")
             end
 
-            ply:ChatPrint(#homicide.t > 1 and ("The traitors are: <clr:red>" .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("The traitor is: <clr:red>" .. homicide.t[1]:Name()))
+            if #homicide.t > 1 then
+                PrintMessage(3,"#chat.rounds.traitorAre")
+                PrintMessage(3,(homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
+            else
+                PrintMessage(3, "#chat.rounds.traitorIs")
+                PrintMessage(3, homicide.t[1]:Name())
+            end
+
             ply:ChatPrint("<clr:red>WARNING: <clr:white>Killing friendlies will result in a punishment determined by staff.")
             
             net.Start("homicide_roleget")
@@ -244,8 +253,6 @@ function homicide.StartRoundSV()
 
     local aviable = homicide.Spawns()
     
-    if not aviable or table.IsEmpty(aviable) then return end
-
     tdm.SpawnCommand(PlayersInGame(),aviable,function(ply)
         ply.roleT = false
         ply.roleCT = false
@@ -339,20 +346,21 @@ local aviable = ReadDataMap("spawnpointsct")
 
 COMMANDS.forcepolice = {function(ply)
     if not ply:IsAdmin() then PrintMessage(3,"nope") return end
+
     homicide.police = false
-    prePolicePlayers = {}
-
-    --for i, ply in pairs(player.GetAll()) do
-        --TryAssignPolice(ply)
-    --end
-
     roundTime = 0
 end}
 
 function homicide.EndRound(winner)
-    PrintMessage(3,(winner == 1 and "Traitors Win." or winner == 2 and "Innocents Win!" or "Nobody Wins!"))
+    PrintMessage(3,(winner == 1 and "#chat.rounds.traitorWin" or winner == 2 and "#chat.rounds.innocentWin" or "#chat.rounds.nobodyWin"))
     if homicide.t and #homicide.t > 0 then
-        PrintMessage(3,#homicide.t > 1 and ("The traitors were: " .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("The traitor was: " .. homicide.t[1]:Name()))
+        if #homicide.t > 1 then
+            PrintMessage(3,"#chat.rounds.traitorWere")
+            PrintMessage(3,(homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
+        else
+            PrintMessage(3, "#chat.rounds.traitorWas")
+            PrintMessage(3, homicide.t[1]:Name())
+        end
     end
 end
 

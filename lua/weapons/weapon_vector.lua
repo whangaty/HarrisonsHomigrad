@@ -18,7 +18,7 @@ SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "pwb2/weapons/vectorsmg/fire1.wav"
 SWEP.Primary.Force = 240/3
 SWEP.ReloadTime = 2
-SWEP.ShootWait = 0.06
+SWEP.ShootWait = 0.03
 SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
 SWEP.TwoHands = true
 

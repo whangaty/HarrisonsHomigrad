@@ -3,7 +3,7 @@ if engine.ActiveGamemode() == "homigrad" then
 
     hook.Add("PlayerSpawn", "homigrad-pain", function(ply)
         if PLYSPAWN_OVERRIDE then return end
-        ply.painlosing = 0
+        ply.painlosing = 1
         ply.pain = 0
         ply.painNext = 0
         ply.painNextNet = 0
@@ -78,7 +78,7 @@ if engine.ActiveGamemode() == "homigrad" then
             pain = pain + 5
         end
 
-        ply.pain = math.max(pain - painlosing + ply.adrenalineNeed * k, 0)
+        ply.pain = math.max(pain - painlosing * 2 + ply.adrenalineNeed * k, 0)
         ply.painlosing = math.max(painlosing - 0.01, 1)
 
         if ply.painNextNet <= time then

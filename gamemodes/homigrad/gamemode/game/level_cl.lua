@@ -33,14 +33,14 @@ net.Receive("round",function()
 
 	system.FlashWindow()
 
-	chat.AddText("Current Gamemode: " .. TableRound().Name)
+	chat.AddText("Current Gamemode: " .. language.GetPhrase(TableRound().Name))
 end)
 
 net.Receive("round_next",function()
 	roundActiveNameNext = net.ReadString()
 	showRoundInfo = CurTime() + 10
 
-	chat.AddText("Next Gamemode: " .. TableRound(roundActiveNameNext).Name)
+	chat.AddText("Next Gamemode: " .. language.GetPhrase(TableRound(roundActiveNameNext).Name))
 end)
 
 local white = Color(255,255,255)
@@ -55,10 +55,10 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 			func(showRoundInfoColor)
 		else
 			local time = math.Round(roundTimeStart + roundTime - CurTime())
-			local acurcetime = string.FormattedTime(time,"%02i:%02i")
-			if time < 0 then acurcetime = "Accadumadekosay;3" end
+			local ftime = string.FormattedTime(time,"%02i:%02i")
+			if time < 0 then ftime = "stupid_idiot" end
 
-			draw.SimpleText(acurcetime,"HomigradFont",ScrW()/2,ScrH()-25,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.SimpleText(ftime,"HomigradFont",ScrW()/2,ScrH()-25,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 		end
 	else
 		draw.WordBox(5, ScrW() / 2, ScrH() - 50, (#PlayersInGame() <= 1 and "At least two players are required to play.") or "Round Over!", 'HomigradFont', Color(35, 35, 35, 200), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -66,18 +66,13 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 
 	local k = showRoundInfo - CurTime()
 
-	if k > 0 then
+	if k > 0 and GetConVar("sv_construct"):GetBool() ~= true then
 		k = math.min(k,1)
 
 		showRoundInfoColor.a = k * 255
 		yellow.a = showRoundInfoColor.a
 
 		local name,nextName = TableRound().Name,TableRound(roundActiveNameNext).Name
-		if name == "Counter Strike: Source" then
-			RunConsoleCommand("hg_bodycam", "0")
-		else
-			RunConsoleCommand("hg_bodycam", "0")
-		end
 
 		draw.RoundedBox(5, ScrW() - 270 - math.max(#nextName, #name) * 4, ScrH() - 65, 800, 70, Color(0, 0, 0, showRoundInfoColor.a - 30))
 		draw.SimpleText("Active Gamemode: " .. name,"HomigradFont",ScrW() - 15, ScrH() - 40, showRoundInfoColor, TEXT_ALIGN_RIGHT)

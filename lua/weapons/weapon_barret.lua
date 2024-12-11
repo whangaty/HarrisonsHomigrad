@@ -32,14 +32,14 @@ if CLIENT then
     SWEP.spos = Vector(-25, 0, 3)
     SWEP.sang = Angle(0, 0, 0)
 
-    SWEP.zoomfov = 3
+    SWEP.zoomfov = 5
 
     --SWEP.scope_mat = Material("")
 
     --SWEP.opticmodel = "models/weapons/arccw/atts/magnus.mdl"
     --SWEP.opticmodel2 = "models/weapons/arccw/atts/magnus_hsp.mdl"
 
-    SWEP.addfov = 30
+    SWEP.addfov = 60
 end
 
 SWEP.vbwPos = Vector(-3,-5,-5)

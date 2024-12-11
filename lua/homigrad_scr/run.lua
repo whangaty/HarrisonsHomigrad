@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() ~= "homigrad" then return end
 AddCSLuaFile()
 
 print("	homigrad start.")
@@ -8,4 +8,3 @@ hg.includeDir("homigrad_scr/")--cring
 
 print("	homigrad structure end " .. math.Round(SysTime() - start,3) .. "s")
 hook.Run("HomigradRun")
-end
