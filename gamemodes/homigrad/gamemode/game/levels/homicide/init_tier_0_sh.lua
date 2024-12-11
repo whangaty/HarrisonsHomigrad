@@ -131,7 +131,7 @@ function homicide.Scoreboard_Status(ply)
 end
 
 local red,blue = Color(200,0,10),Color(75,75,255)
-local roundTypes = {"Shotgun", "Regular Round", "No Firearms Permitted Zone", "Wild West","Hitman"}
+local roundTypes = {"#rounds.homicide.shotgun", "#rounds.homicide.regular", "#rounds.homicide.nofirearms", "#rounds.homicide.wildwest","#rounds.homicide.hitman"}
 local roundSound = {"snd_jack_hmcd_disaster.mp3","snd_jack_hmcd_shining.mp3","snd_jack_hmcd_panic.mp3","snd_jack_hmcd_wildwest.mp3","snd_jack_hmcd_disaster.mp3"}
 
 local DescCT = {

@@ -14,6 +14,8 @@ chat.fake.restrainedNotif=You have been restrained. You use 'Jump' to try to esc
 chat.fake.failBreak=You attempt to break free, but fail.
 chat.fake.breakFree=You have managed to break free.
 
+chat.example=This is a test of the Locales file!
+
 ##########
 # Player
 ##########
@@ -39,6 +41,16 @@ rounds.hideandseek=Hide & Seek
 rounds.tdmFull=Team Deathmatch
 rounds.tdm=TDM
 rounds.hl2dm=HL2DM
+
+
+
+rounds.homicide.shotgun=Shotgun
+rounds.homicide.regular=Regular Round
+rounds.homicide.nofirearms=No Firearms Permitted Zone
+rounds.homicide.wildwest=Wild West
+rounds.homicide.hitman=Hitman
+
+
 
 rounds.tdmMessage=Eliminate the Enemy Team, and emerge victorious!
 
@@ -85,3 +97,10 @@ rounds.traitorUsps=You have a silenced USP with one magazine.
 
 chat.hammer.unnailmode = "Unnailing Mode"
 chat.hammer.nailmode = "Nailing Mode"
+
+
+
+
+#####################
+# Medical Names
+#####################

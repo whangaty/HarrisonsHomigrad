@@ -1,3 +1,10 @@
+resource.AddFile("resource/localization/en/homigrad.lang")
+resource.AddFile("resource/localization/de/homigrad.lang")
+resource.AddFile("resource/localization/ru/homigrad.lang")
+resource.AddFile("resource/localization/es-ES/homigrad.lang")
+resource.AddFile("resource/localization/en-PT/homigrad.lang")
+resource.AddFile("resource/localization/sv-SE/homigrad.lang")
+
 util.AddNetworkString( "SIX.SIDETO" )
 SIX = SIX or {}
 
