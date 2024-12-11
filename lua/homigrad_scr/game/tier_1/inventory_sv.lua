@@ -68,13 +68,6 @@ local prekol = {
 	gmod_tool = true
 }
 
-net.Receive("inventory",function(len,ply)
-	local lootEnt = net.ReadEntity()
-	if not IsValid(lootEnt) then return end
-
-	lootEnt.UsersInventory[ply] = nil
-end)
-
 hook.Add("DoPlayerDeath","huyhuy",function(ply)
 	local info = SavePlyInfo(ply)
 

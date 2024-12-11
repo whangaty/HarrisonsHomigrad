@@ -230,6 +230,7 @@ function CLASS:Event(name,a1)
 			end
 		end)
 	end
+
 	--[[ Not used
 	if name == "inventory close" then
 		if a1.roleT then
