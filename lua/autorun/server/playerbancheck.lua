@@ -1,11 +1,13 @@
 -- Configuration
-local STEAM_API_KEY = "F5F6CB340D1D3080185A4AAA5AB104A8" -- Not the real key
+local STEAM_API_KEY = "F5F6CB340D1D3080185A4AAA5AB104A8" -- Just a key from a Steam Alt.
+
+-- clueless
 local databaseConfig = {
-    host = "localhost",
+    host = "91.229.114.53",
     port = 3306,
-    username = "root",
-    password = "password",
-    database = "homigrad"
+    username = "u1_x4NmwgefvF",
+    password = "Oo@6.bhaefHkqTNlo+oDx2NL",
+    database = "s1_homigradwhitelist"
 }
 
 -- SQL Setup
