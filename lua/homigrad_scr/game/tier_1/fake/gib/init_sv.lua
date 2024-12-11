@@ -332,7 +332,8 @@ hook.Add("HomigradGib","Gib",function(ent, dmgInfo, phys_bone)
 	ent.dmgstack = ent.dmgstack or {}
 	ent.dmgstack[phys_bone] = (ent.dmgstack[phys_bone] or 0) + dmg * (dmgInfo:IsDamageType(DMG_CRUSH) and 0.15 or 0.75)
 	
-	print(ent.dmgstack[phys_bone],dmgInfo:IsDamageType(DMG_CRUSH))
+	-- Commenting out for now
+	--print(ent.dmgstack[phys_bone],dmgInfo:IsDamageType(DMG_CRUSH))
 
 	timer.Create("removedmgstack"..ent:EntIndex()..phys_bone, 0.3, 1, function()
 		if IsValid(ent) then
