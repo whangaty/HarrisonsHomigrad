@@ -180,7 +180,7 @@ if CLIENT then
 end
 
 function SWEP:AdjustMouseSensitivity()
-    return self:IsSighted() and GetConVar("hg_scopespeed"):GetFloat() / 10 or 1 
+    return self:IsSighted() and (GetConVar("hg_scopespeed"):GetFloat() / 10) or 1 
 end
 
 SWEP.vbwPos = Vector(-3,-5,-5)

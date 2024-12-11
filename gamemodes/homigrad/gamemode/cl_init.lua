@@ -53,7 +53,7 @@ surface.CreateFont("HomigradFontSmall",{
 })
 
 -- Harrisons puts ConVar in worst script, asked to leave
-CreateClientConVar("hg_scopespeed","0.5",true,false,"Changes the speed of the sniper scope when zoomed in.",0,1)
+CreateClientConVar("hg_scopespeed","0.5",true,false,"Changes the speed of the sniper scope when zoomed in.",0,5)
 
 net.Receive("round_active",function(len)
 	roundActive = net.ReadBool()
