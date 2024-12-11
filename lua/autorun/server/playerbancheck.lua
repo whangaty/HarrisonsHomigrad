@@ -1,40 +1,66 @@
-local STEAM_API_KEY = "F5F6CB340D1D3080185A4AAA5AB104A8" -- This is not my SteamID. Don't bother using it for anything bad ~ Harrison
+-- Configuration
+local STEAM_API_KEY = "F5F6CB340D1D3080185A4AAA5AB104A8" -- Not the real key
+local databaseConfig = {
+    host = "localhost",
+    port = 3306,
+    username = "root",
+    password = "password",
+    database = "homigrad"
+}
 
-local whitelistFile = "whitelisted_steamids.txt" -- File to store whitelisted SteamIDs
-local whitelistedSteamIDs = {} -- Table to store whitelisted SteamIDs
+-- SQL Setup
+require("mysqloo")
+local db = mysqloo.connect(databaseConfig.host, databaseConfig.username, databaseConfig.password, databaseConfig.database, databaseConfig.port)
 
--- Function to load the whitelist from file
-local function LoadWhitelist()
-    if not file.Exists(whitelistFile, "DATA") then return end
-
-    local data = file.Read(whitelistFile, "DATA")
-    for steamID in string.gmatch(data, "[^\r\n]+") do
-        whitelistedSteamIDs[steamID] = true
-    end
-
-    print("Whitelist loaded with " .. table.Count(whitelistedSteamIDs) .. " entries.")
+local function onDatabaseConnected()
+    print("Connected to the SQL database.")
+    db:query("CREATE TABLE IF NOT EXISTS whitelist (steamID VARCHAR(32) PRIMARY KEY)"):start()
 end
 
--- Function to save the whitelist to file
-local function SaveWhitelist()
-    local data = ""
-    for steamID, _ in pairs(whitelistedSteamIDs) do
-        data = data .. steamID .. "\n"
-    end
-
-    file.Write(whitelistFile, data)
-    print("Whitelist saved with " .. table.Count(whitelistedSteamIDs) .. " entries.")
+local function onDatabaseConnectionFailed(err)
+    print("Failed to connect to the database: " .. err)
 end
 
--- Function to whitelist a SteamID
+db.onConnected = onDatabaseConnected
+db.onConnectionFailed = onDatabaseConnectionFailed
+db:connect()
+
+-- Function to load the whitelist from SQL
+local function LoadWhitelist(callback)
+    local query = db:query("SELECT steamID FROM whitelist")
+
+    query.onSuccess = function(q)
+        local data = q:getData()
+        local whitelist = {}
+
+        for _, row in ipairs(data) do
+            whitelist[row.steamID] = true
+        end
+
+        if callback then callback(whitelist) end
+        print("Whitelist loaded with " .. table.Count(whitelist) .. " entries.")
+    end
+
+    query.onError = function(q, err)
+        print("Failed to load whitelist: " .. err)
+    end
+
+    query:start()
+end
+
+-- Function to add a SteamID to the SQL whitelist
 local function AddToWhitelist(steamID)
-    if not whitelistedSteamIDs[steamID] then
-        whitelistedSteamIDs[steamID] = true
-        SaveWhitelist()
+    local query = db:query("INSERT IGNORE INTO whitelist (steamID) VALUES (" .. db:escape(steamID) .. ")")
+
+    query.onSuccess = function()
         print("SteamID " .. steamID .. " has been added to the whitelist.")
-    else
-        print("SteamID " .. steamID .. " is already in the whitelist.")
     end
+
+    query.onError = function(q, err)
+        print("Failed to add SteamID to whitelist: " .. err)
+    end
+
+    query:start()
 end
 
 -- Console command to add a SteamID to the whitelist
@@ -42,7 +68,7 @@ concommand.Add("forgive", function(ply, cmd, args)
     if IsValid(ply) then
         -- Check player permissions
         local userGroup = ply:GetUserGroup()
-        if not (userGroup == "superadmin" or userGroup == "owner" or userGroup == "servermanager") then
+        if not (userGroup == "superadmin" or userGroup == "owner" or userGroup == "servermanager" or userGroup == "admin") then
             ply:ChatPrint("You do not have permission to use this command.")
             return
         end
@@ -50,7 +76,7 @@ concommand.Add("forgive", function(ply, cmd, args)
 
     local steamID = args[1]
     if not steamID then
-        print("Usage: add_whitelist <SteamID>")
+        print("Usage: forgive <SteamID>")
         return
     end
 
@@ -63,17 +89,19 @@ local function CheckPlayerDetails(ply)
 
     local steamID = ply:SteamID()
     local steamID64 = ply:SteamID64()
+    local userGroup = ply:GetUserGroup()
 
-    -- Skip check if player is whitelisted
-    if whitelistedSteamIDs[steamID] then
-        print("Player ", ply:Nick(), " (SteamID: ", steamID, ") is whitelisted and bypassed checks.")
+    -- Check user group exemptions
+    local exemptGroups = { tmod = true, operator = true, admin = true, superadmin = true, servermanager = true, owner = true }
+    if exemptGroups[userGroup] then
+        --print("Player ", ply:Nick(), " (SteamID: ", steamID, ") is in an exempt user group and bypassed checks.")
         return
     end
 
     -- Check if the player owns the game
     if steamID64 ~= ply:OwnerSteamID64() then
-        --print("Player ", ply:Nick(), " (SteamID: ", steamID, ") is likely using family share.")
-        ply:Kick("You must own Garry's Mod to play on this server.")
+        ply:Kick("[Harrison's Homigrad] You cannot join this server because you do not own Garry's Mod.\nTo become whitelisted, you can appeal at https://harrisonshomigrad.noclip.me.")
+        return
     end
 
     -- Check VAC/Game bans using Steam Web API
@@ -87,8 +115,7 @@ local function CheckPlayerDetails(ply)
                 local banData = data.players[1]
 
                 if banData.VACBanned or banData.NumberOfGameBans > 0 then
-                    print("Player ", ply:Nick(), " (SteamID: ", steamID, ") has a VAC/Game ban.")
-                    ply:Kick("You are banned from playing due to VAC or game bans.")
+                    ply:Kick("[Harrison's Homigrad] You cannot join this server due to VAC or Game Ban on your account.\nTo become whitelisted, you can appeal at https://harrisonshomigrad.noclip.me")
                 else
                     print("Player ", ply:Nick(), " (SteamID: ", steamID, ") is clean.")
                 end
@@ -105,9 +132,12 @@ end
 -- Hook into the player join event
 hook.Add("PlayerInitialSpawn", "CheckPlayerOwnershipAndBans", function(ply)
     timer.Simple(1, function() -- Delay to ensure player entity is fully initialized
-        CheckPlayerDetails(ply)
+        LoadWhitelist(function(whitelist)
+            if whitelist[ply:SteamID()] then
+                print("Player ", ply:Nick(), " (SteamID: ", ply:SteamID(), ") is whitelisted and bypassed checks.")
+            else
+                CheckPlayerDetails(ply)
+            end
+        end)
     end)
 end)
-
--- Load the whitelist at server start
-hook.Add("Initialize", "LoadWhitelistOnInit", LoadWhitelist)
