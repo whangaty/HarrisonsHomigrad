@@ -959,6 +959,48 @@ hook.Add("RenderScreenspaceEffects","BloomEffect-homigrad",function()
 	
 end)
 
+-- Create a client console variable to control showing the voice icon
+CreateClientConVar("hg_showvoice", 1, true, false, "Show or hide the voice icon (1 = show, 0 = hide)")
+
+hook.Add("HUDPaint", "ShowSpeakingIconWithSpin", function()
+    local ply = LocalPlayer()
+    if not IsValid(ply) then return end
+
+    -- Check if the console variable is set to 1 (enabled)
+    if GetConVar("hg_showvoice"):GetInt() == 0 then return end
+
+    -- Check if the player is speaking
+    if ply:IsSpeaking() then
+        -- Set the base position for the icon
+        local x = ScrW() * 0.9 -- 90% of screen width (adjust for your desired position)
+        local y = ScrH() * 0.8 -- 80% of screen height (adjust for your desired position)
+        local baseSize = 64 -- Base size for the icon height
+
+        -- Calculate dynamic scaling and flipping
+        local time = CurTime() * 5 -- Speed of the spinning effect
+        local scaleFactor = math.sin(time) -- Sinusoidal scaling between -1 and 1
+        local dynamicWidth = math.abs(scaleFactor) * baseSize -- Scale width up and down
+        local height = baseSize -- Keep the height constant
+
+        -- Determine UV flipping based on the sign of scaleFactor
+        local u1, v1 = 0, 0
+        local u2, v2 = 1, 1
+        if scaleFactor < 0 then
+            u1, u2 = 1, 0 -- Flip texture horizontally
+        end
+
+        -- Center the icon correctly by offsetting the dynamic width
+        local offsetX = dynamicWidth / 2
+
+        -- Draw the icon with dynamic width and flipping
+        surface.SetDrawColor(255, 255, 255, 255) -- White color
+        surface.SetMaterial(Material("icon16/sound.png")) -- Replace with your custom icon path
+        surface.DrawTexturedRectUV(x - offsetX, y - (height / 2), dynamicWidth, height, u1, v1, u2, v2)
+    end
+end)
+
+
+
 local colred = Color(255,0,0)
 hook.Add("PostDrawTranslucentRenderables","fuck_off",function()
 	--[[local lply = LocalPlayer()
