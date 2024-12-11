@@ -43,7 +43,7 @@ local function makeT(ply)
         ply:Give("weapon_hidebomb")
         ply:Give("weapon_hg_rgd5")
         ply:Give("weapon_radar")
-        ply:GiveAmmo(wep:GetMaxClip1(),wep1:GetPrimaryAmmoType())
+        ply:GiveAmmo(wep:GetMaxClip1(),wep:GetPrimaryAmmoType())
     elseif homicide.roundType == 3 then
         local wep = ply:Give("weapon_hg_crossbow")
         ply:GiveAmmo(8, "XBowBolt", true) -- slots = bolts.
