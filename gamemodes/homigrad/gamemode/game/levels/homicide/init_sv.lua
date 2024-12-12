@@ -203,15 +203,15 @@ function SpawnPolicePlayers()
             else
                 ply:SetPlayerClass("police")
             end
-
+            
             if #homicide.t > 1 then
-                PrintMessage(3,"#The traitors are:")
+                PrintMessage(3,"#The traitors are: ")
                 PrintMessage(3,(homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
             else
-                PrintMessage(3, "The traitor was:")
+                PrintMessage(3, "The traitor is: ")
                 PrintMessage(3, homicide.t[1]:Name())
             end
-
+            
             ply:ChatPrint("<clr:red>WARNING: <clr:white>Killing friendlies will result in a punishment determined by staff.")
             
             net.Start("homicide_roleget")

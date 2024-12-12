@@ -903,7 +903,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			
 			-- Remember to not swim 30 minutes after eating
 			if (table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))>0 or ((rag.IsWeld or 0) > 0)) and ply.firstTimeNotifiedRestrained then
-				ply:ChatPrint("#chat.fake.restrainedNotif")
+				ply:ChatPrint("You have been restrained. Spam G + Space to break free.")
 				ply.firstTimeNotifiedRestrained = false
 			end
 			
@@ -937,14 +937,14 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 							ply:ChatPrint("Ropes Left: "..RopeCount - 1)
 						end
 						if (rag.IsWeld or 0) > 0 then
-							ply:ChatPrint("#chat.fake.restrainedNotif")
+							ply:ChatPrint("You have been restrained. You can press Space + G to try to break free")
 							ply.Bloodlosing = ply.Bloodlosing + 10
 							ply.pain = ply.pain + 20
 						elseif (not rag.IsWeld or 0) == 0 then
-							ply:ChatPrint("#chat.fake.breakFree")
+							ply:ChatPrint("You have broken free.")
 						end
 					else
-						ply:ChatPrint("#chat.fake.breakFree")
+						ply:ChatPrint("You have broken free.")
 					end
 					Ropes[1].Constraint:Remove()
 					rag:EmitSound("snd_jack_hmcd_ducttape.wav",90,50,0.5,CHAN_AUTO)
