@@ -288,7 +288,7 @@ function SWEP:Think()
                 net.WriteEntity(self)
                 net.WriteBool(self.mode)
                 net.Send(ply)
-                ply:ChatPrint(not self.mode and language.GetPhrase("chat.hammer.nailmode") or language.GetPhrase("chat.hammer.unnailmode"))
+                ply:ChatPrint(not self.mode and "Nailing Mode" or "Unnailing Mode")
             end
         else
             self.modechanged = false
