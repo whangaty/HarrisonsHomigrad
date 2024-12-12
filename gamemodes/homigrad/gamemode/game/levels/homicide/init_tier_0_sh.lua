@@ -2,7 +2,7 @@ table.insert(LevelList,"homicide")
 homicide = homicide or {}
 homicide.Name = "Homicide"
 
-homicide.red = {"#team.innocent",Color(255,255,255),
+homicide.red = {"Innocent",Color(255,255,255),
     models = tdm.models
 }
 
@@ -96,15 +96,15 @@ local red,blue = Color(200,0,10),Color(75,75,255)
 local gray = Color(122,122,122,255)
 local white = Color(255,255,255,255)
 function homicide.GetTeamName(ply)
-    if ply.roleT then return language.GetPhrase("team.traitor"),red end
-    if ply.roleCT then return language.GetPhrase("team.innocent"),blue end
+    if ply.roleT then return "Traitor",red end
+    if ply.roleCT then return "Innocent",blue end
 
     local teamID = ply:Team()
     if teamID == 1 then
-        return "#team.innocent",white
+        return "Innocent",white
     end
     if teamID == 3 then
-        return "#team.police",blue
+        return "Police",blue
     end
 end
 
@@ -131,15 +131,15 @@ function homicide.Scoreboard_Status(ply)
 end
 
 local red,blue = Color(200,0,10),Color(75,75,255)
-local roundTypes = {"#rounds.homicide.shotgun", "#rounds.homicide.regular", "#rounds.homicide.nofirearms", "#rounds.homicide.wildwest","#rounds.homicide.hitman"}
+local roundTypes = {"Shotgun", "Regular Round", "No Fire-Arms", "Wild West","Hitman"}
 local roundSound = {"snd_jack_hmcd_disaster.mp3","snd_jack_hmcd_shining.mp3","snd_jack_hmcd_panic.mp3","snd_jack_hmcd_wildwest.mp3","snd_jack_hmcd_disaster.mp3"}
 
 local DescCT = {
-    [1] = "#rounds.innocentShotgun", --emergency
-    [2] = "#rounds.innocentBerreta", --base
-    [3] = "#rounds.innocentTaser", --gunfree
-    [4] = "#rounds.innocentWildWest", --wildwest
-    [5] = "#rounds.innocentShotgun" -- hitman
+    [1] = "You have been given a shotgun. Be careful, the traitor will be likely to target you.", --emergency
+    [2] = "You have been given a M9 Beretta with one magazine.", --base
+    [3] = "You have been given a Taser & Baton to take care of the traitor.", --gunfree
+    [4] = "You & the traitor have been given identical revolvers.", --wildwest
+    [5] = "You have been given a shotgun. Be careful, the traitor will be likely to target you." -- hitman
 }
 
 function homicide.HUDPaint_RoundLeft(white2)
@@ -156,26 +156,26 @@ function homicide.HUDPaint_RoundLeft(white2)
         end
         
 
-        draw.DrawText( language.GetPhrase( "rounds.youAre" ) .. " " .. language.GetPhrase(name), "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "#rounds.homicide", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You are: " .. name, "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Homicide", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( roundTypes[roundType], "HomigradRoundFont", ScrW() / 2, ScrH() / 5, Color( color.r,color.g,color.b ,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
 
         if lply.roleT then --Traitor
             if homicide.roundType == 3 then --gunfree
-                draw.DrawText( "#rounds.traitorCrossbow", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "You have a Crossbow. It is hidden from your character.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
                 --"", "HomigradFontBig", ScrW() / 2, ScrH() / 1.1, Color( 155,55,55,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
             elseif homicide.roundType == 4 then --wildwest
-                draw.DrawText( "#rounds.traitorWildWest", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.1, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "You have been given a revolver to take everyone else out.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.1, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
             elseif homicide.roundType == 5 then --wildwest
-                draw.DrawText( "#rounds.traitorSniper", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "You have a sniper rifle. It is hidden from your character.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
             else --emergency/base
-                draw.DrawText( "#rounds.traitorUsps", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "You have a silenced USP with two magazines.", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
             end
         elseif lply.roleCT then 
             draw.DrawText( DescCT[homicide.roundType] or "...", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "#rounds.innocentGeneric", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Find the Traitor(s), and kill them to win!", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         end
         return
     end
@@ -195,7 +195,7 @@ function homicide.HUDPaint_RoundLeft(white2)
         if not pos.visible then continue end
 
         color.a = 255 * (1 - dis / 1024)
-        draw.SimpleText(language.GetPhrase( "rounds.buddy" ).." "..ply:Nick(),"HomigradFontBig",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        draw.SimpleText("Buddy: "..ply:Nick(),"HomigradFontBig",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 end
 

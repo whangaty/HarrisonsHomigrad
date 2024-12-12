@@ -38,7 +38,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.LeftArm = math.min(0.6,ply.LeftArm - sub)
             if ply.msgLeftArm < CurTime() then
                 ply.msgLeftArm = CurTime() + 1
-                ply:ChatPrint("#chat.health.brokenLArm")
+                ply:ChatPrint("Your left arm is now broken.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -47,7 +47,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.RightArm = math.max(0.6,ply.RightArm - sub)
             if ply.msgRightArm < CurTime() then
                 ply.msgRightArm = CurTime() + 1
-                ply:ChatPrint("#chat.health.brokenRArm")
+                ply:ChatPrint("Your right arm is now broken.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -56,7 +56,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.LeftLeg = math.max(0.6,ply.LeftLeg - sub)
             if ply.msgLeftLeg < CurTime() then
                 ply.msgLeftLeg = CurTime() + 1
-                ply:ChatPrint("#chat.health.brokenLLeg")
+                ply:ChatPrint("Your left leg is now broken.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -65,7 +65,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.RightLeg = math.max(0.6,ply.RightLeg - sub)
             if ply.msgRightLeg < CurTime() then
                 ply.msgRightLeg = CurTime() + 1
-                ply:ChatPrint("#chat.health.brokenRLeg")
+                ply:ChatPrint("Your right leg is now broken.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -139,7 +139,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
                         end
                     end)
                     ply.brokenspine=true
-                    ply:ChatPrint("#chat.health.brokenSpine")
+                    ply:ChatPrint("You feel your spine shatter.\nYou can no longer walk.")
                     ent:EmitSound("NPC_Barnacle.BreakNeck",70,125,0.7,CHAN_ITEM)
                 end
             end

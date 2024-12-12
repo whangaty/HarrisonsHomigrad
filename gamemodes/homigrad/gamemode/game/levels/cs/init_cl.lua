@@ -44,7 +44,7 @@ function css.HUDPaint_RoundLeft(white2) --позиции точек и счёт
 	local startRound = roundTimeStart + 5 - CurTime()
     if startRound > 0 and lply:Alive() then
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),0.5,4)
-        draw.DrawText( language.GetPhrase("rounds.onTeam") .. language.GetPhrase(name), "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You are on team: " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "Захват точек", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,55,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "Захватите точки, наберайте очки для победы", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,155,155,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         return

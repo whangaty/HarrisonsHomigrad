@@ -152,7 +152,7 @@ end
 function tdm.EndRoundMessage(winner)
 	local tbl = TableRound()
 	PrintMessage(3,"The winning team is")
-	PrintMessage(3, (winner == 0 and "#team.nobody" or tbl[tbl.teamEncoder[winner]] and tbl[tbl.teamEncoder[winner]][1] or "#team.nobody"))
+	PrintMessage(3, (winner == 0 and "Nobody" or tbl[tbl.teamEncoder[winner]] and tbl[tbl.teamEncoder[winner]][1] or "Nobody"))
 end
 
 function tdm.EndRound(winner) tdm.EndRoundMessage(winner) end

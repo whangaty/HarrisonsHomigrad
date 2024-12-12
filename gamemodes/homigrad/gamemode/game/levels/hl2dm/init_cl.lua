@@ -18,7 +18,7 @@ function hl2dm.HUDPaint_RoundLeft(white)
         end
         
 
-        draw.DrawText( language.GetPhrase("rounds.onTeam") .. language.GetPhrase(name), "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "You are on team " .. name, "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "HL2 DM", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( 155,155,55,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "Neutralise the enemy team, and take back what's yours!", "HomigradRoundFont", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         return
