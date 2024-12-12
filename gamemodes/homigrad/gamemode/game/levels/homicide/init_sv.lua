@@ -205,7 +205,7 @@ function SpawnPolicePlayers()
             end
             
             if #homicide.t > 1 then
-                PrintMessage(3,"#The traitors are: ")
+                PrintMessage(3,"The traitors are: ")
                 PrintMessage(3,(homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
             else
                 PrintMessage(3, "The traitor is: ")
