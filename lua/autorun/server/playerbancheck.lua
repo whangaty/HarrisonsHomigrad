@@ -9,6 +9,7 @@ local databaseConfig = {
     database = "s1_homigradwhitelist"
 }
 
+-- SQL Setup
 require("mysqloo")
 local database = mysqloo.connect(databaseConfig.host, databaseConfig.username, databaseConfig.password, databaseConfig.database, databaseConfig.port)
 
@@ -27,8 +28,10 @@ database:connect()
 
 -- Function to load the whitelist from SQL
 local function LoadWhitelist(ply, callback)
+    if not IsValid(ply) then return end
+
     local queryStr = [[SELECT steamID FROM whitelist WHERE steamID = %s]]
-    local query = database:query(queryStr:format(ply:steamID()))
+    local query = database:query(queryStr:format(ply:SteamID64()))
 
     query.onSuccess = function(q, data)
         callback(data[1])
@@ -88,7 +91,7 @@ local function CheckPlayerDetails(ply)
     -- Check user group exemptions
     local exemptGroups = { ["tmod"] = true, ["operator"] = true, ["admin"] = true, ["superadmin"] = true, ["servermanager"] = true, ["owner"] = true }
     if exemptGroups[userGroup] then
-        print("Player ", ply:Nick(), " (SteamID: ", steamID, ") is in an exempt user group and bypassed checks.")
+        --print("Player ", ply:Nick(), " (SteamID: ", steamID, ") is in an exempt user group and bypassed checks.")
         return
     end
 
@@ -125,10 +128,14 @@ end
 
 -- Hook into the player join event
 hook.Add("PlayerInitialSpawn", "CheckPlayerOwnershipAndatabaseans", function(ply)
-    timer.Simple(1, function() -- Delay to ensure player entity is fully initialized
-        LoadWhitelist(function(whitelist)
-            if whitelist[ply:SteamID()] then
-                print("Player ", ply:Nick(), " (SteamID: ", ply:SteamID(), ") is whitelisted and bypassed checks.")
+    timer.Simple(2, function() -- Delay to ensure player entity is fully initialized
+        print("Timer:"..ply:SteamID64())
+        LoadWhitelist(ply, function(result)
+            print("Load:"..ply:SteamID64())
+            if result and whitelist[result] then
+                --print("Player ", ply:Nick(), " (SteamID: ", ply:SteamID64(), ") is whitelisted and bypassed checks.")
+                --print("Passed")
+                return
             else
                 CheckPlayerDetails(ply)
             end

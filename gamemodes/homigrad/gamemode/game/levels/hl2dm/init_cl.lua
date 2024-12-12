@@ -13,9 +13,10 @@ function hl2dm.HUDPaint_RoundLeft(white)
     if startRound > 0 and lply:Alive() then
         if playsound then
             playsound = false
-            surface.PlaySound("snd_jack_hmcd_deathmatch.mp3")
+            --surface.PlaySound("snd_jack_hmcd_deathmatch.mp3")
+            lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),0.5,4)
         end
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),0.5,4)
+        
 
         draw.DrawText( language.GetPhrase("rounds.onTeam") .. language.GetPhrase(name), "HomigradRoundFont", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "HL2 DM", "HomigradRoundFont", ScrW() / 2, ScrH() / 8, Color( 155,155,55,math.Clamp(startRound,0,1) * 255 ), TEXT_ALIGN_CENTER )
