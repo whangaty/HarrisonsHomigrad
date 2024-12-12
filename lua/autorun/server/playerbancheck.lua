@@ -28,6 +28,8 @@ database:connect()
 
 -- Function to load the whitelist from SQL
 local function LoadWhitelist(ply, callback)
+    if !IsValid(ply) then return end
+
     local queryStr = [[SELECT steamID FROM whitelist WHERE steamID = %s]]
     local query = database:query(queryStr:format(ply:steamID()))
 
@@ -126,7 +128,7 @@ end
 
 -- Hook into the player join event
 hook.Add("PlayerInitialSpawn", "CheckPlayerOwnershipAndatabaseans", function(ply)
-    timer.Simple(1, function() -- Delay to ensure player entity is fully initialized
+    timer.Simple(2, function() -- Delay to ensure player entity is fully initialized
         LoadWhitelist(ply, function(result)
             if result and whitelist[result] then
                 print("Player ", ply:Nick(), " (SteamID: ", ply:SteamID(), ") is whitelisted and bypassed checks.")
