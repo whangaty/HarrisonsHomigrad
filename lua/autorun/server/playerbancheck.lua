@@ -1,50 +1,44 @@
 -- Configuration
-local STEAM_API_KEY = "F5F6CB340D1D3080185A4AAA5AB104A8" -- Just a key from a Steam Alt.
+local STEAM_API_KEY = "SteamKey" -- Just a key from a Steam Alt.
 
 -- clueless
 local databaseConfig = {
-    host = "91.229.114.53",
+    host = "12.345.67.89",
     port = 3306,
-    username = "u1_x4NmwgefvF",
-    password = "Oo@6.bhaefHkqTNlo+oDx2NL",
+    username = "usernameForServer",
+    password = "RedactedPassword",
     database = "s1_homigradwhitelist"
 }
 
 -- SQL Setup
 require("mysqloo")
-local db = mysqloo.connect(databaseConfig.host, databaseConfig.username, databaseConfig.password, databaseConfig.database, databaseConfig.port)
+local database = mysqloo.connect(databaseConfig.host, databaseConfig.username, databaseConfig.password, databaseConfig.database, databaseConfig.port)
 
 local function onDatabaseConnected()
     print("Connected to the SQL database.")
-    db:query("CREATE TABLE IF NOT EXISTS whitelist (steamID VARCHAR(32) PRIMARY KEY)"):start()
+    database:query("CREATE TABLE IF NOT EXISTS whitelist (steamID VARCHAR(32) PRIMARY KEY)"):start()
 end
 
 local function onDatabaseConnectionFailed(err)
     print("Failed to connect to the database: " .. err)
 end
 
-db.onConnected = onDatabaseConnected
-db.onConnectionFailed = onDatabaseConnectionFailed
-db:connect()
+database.onConnected = onDatabaseConnected
+database.onConnectionFailed = onDatabaseConnectionFailed
+database:connect()
 
 -- Function to load the whitelist from SQL
-local function LoadWhitelist(callback)
-    local query = db:query("SELECT steamID FROM whitelist")
+local function LoadWhitelist(ply, callback)
+    local queryStr = [[SELECT steamID FROM whitelist WHERE steamID = %s]]
+    local query = database:query(queryStr:format(ply:steamID()))
 
-    query.onSuccess = function(q)
-        local data = q:getData()
-        local whitelist = {}
-
-        for _, row in ipairs(data) do
-            whitelist[row.steamID] = true
-        end
-
-        if callback then callback(whitelist) end
-        print("Whitelist loaded with " .. table.Count(whitelist) .. " entries.")
+    query.onSuccess = function(q, data)
+        callback(data[1])
     end
 
     query.onError = function(q, err)
         print("Failed to load whitelist: " .. err)
+        callback("")
     end
 
     query:start()
@@ -52,7 +46,7 @@ end
 
 -- Function to add a SteamID to the SQL whitelist
 local function AddToWhitelist(steamID)
-    local query = db:query("INSERT IGNORE INTO whitelist (steamID) VALUES (" .. db:escape(steamID) .. ")")
+    local query = database:query("INSERT IGNORE INTO whitelist (steamID) VALUES (" .. database:escape(steamID) .. ")")
 
     query.onSuccess = function()
         print("SteamID " .. steamID .. " has been added to the whitelist.")
@@ -94,9 +88,9 @@ local function CheckPlayerDetails(ply)
     local userGroup = ply:GetUserGroup()
 
     -- Check user group exemptions
-    local exemptGroups = { tmod = true, operator = true, admin = true, superadmin = true, servermanager = true, owner = true }
+    local exemptGroups = { ["tmod"] = true, ["operator"] = true, ["admin"] = true, ["superadmin"] = true, ["servermanager"] = true, ["owner"] = true }
     if exemptGroups[userGroup] then
-        --print("Player ", ply:Nick(), " (SteamID: ", steamID, ") is in an exempt user group and bypassed checks.")
+        print("Player ", ply:Nick(), " (SteamID: ", steamID, ") is in an exempt user group and bypassed checks.")
         return
     end
 
@@ -132,10 +126,10 @@ local function CheckPlayerDetails(ply)
 end
 
 -- Hook into the player join event
-hook.Add("PlayerInitialSpawn", "CheckPlayerOwnershipAndBans", function(ply)
+hook.Add("PlayerInitialSpawn", "CheckPlayerOwnershipAndatabaseans", function(ply)
     timer.Simple(1, function() -- Delay to ensure player entity is fully initialized
-        LoadWhitelist(function(whitelist)
-            if whitelist[ply:SteamID()] then
+        LoadWhitelist(ply, function(result)
+            if result and whitelist[result] then
                 print("Player ", ply:Nick(), " (SteamID: ", ply:SteamID(), ") is whitelisted and bypassed checks.")
             else
                 CheckPlayerDetails(ply)
