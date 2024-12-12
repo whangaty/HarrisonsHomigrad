@@ -4,8 +4,8 @@ local STEAM_API_KEY = "F5F6CB340D1D3080185A4AAA5AB104A8" -- Just a key from a St
 local databaseConfig = {
     host = "91.229.114.53",
     port = 3306,
-    username = "u1_x4NmwgefvF",
-    password = "Oo@6.bhaefHkqTNlo+oDx2NL",
+    username = "u1_CqDqySIctX",
+    password = "l=pHQO^IFVh=snwjSS=eW+1E",
     database = "s1_homigradwhitelist"
 }
 
