@@ -101,10 +101,10 @@ function homicide.GetTeamName(ply)
 
     local teamID = ply:Team()
     if teamID == 1 then
-        return "#team.innocent",white
+        return "Innocent",white
     end
     if teamID == 3 then
-        return "#team.police",blue
+        return "Police",blue
     end
 end
 

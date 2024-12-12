@@ -352,13 +352,13 @@ COMMANDS.forcepolice = {function(ply)
 end}
 
 function homicide.EndRound(winner)
-    PrintMessage(3,(winner == 1 and "#chat.rounds.traitorWin" or winner == 2 and "#chat.rounds.innocentWin" or "#chat.rounds.nobodyWin"))
+    PrintMessage(3,(winner == 1 and "Traitors Win!" or winner == 2 and "Innocents Win!" or "Nobody Wins..."))
     if homicide.t and #homicide.t > 0 then
         if #homicide.t > 1 then
-            PrintMessage(3,"#chat.rounds.traitorWere")
+            PrintMessage(3,"The Traitor's were:")
             PrintMessage(3,(homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
         else
-            PrintMessage(3, "#chat.rounds.traitorWas")
+            PrintMessage(3, "The Traitor was:")
             PrintMessage(3, homicide.t[1]:Name())
         end
     end
