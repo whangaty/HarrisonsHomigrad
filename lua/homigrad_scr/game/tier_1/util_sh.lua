@@ -157,6 +157,147 @@ hook.Add("Fake","faked",function(ply, rag)
     ply:SetMoveType(MOVETYPE_NONE)
 end)
 
+function hg.GetCurrentCharacter(ply)
+	if not IsValid(ply) then return end
+	local rag = ply:GetNWEntity("Ragdoll", NULL)
+	ply.FakeRagdoll = rag
+	rag = IsValid(rag) and rag
+
+	return (IsValid(rag) and rag) or ply
+end
+
+local lend = 2
+local vec = Vector(lend,lend,lend)
+local traceBuilder = {
+	mins = -vec,
+	maxs = vec,
+	mask = MASK_SOLID,
+	collisiongroup = COLLISION_GROUP_DEBRIS
+}
+
+local util_TraceHull = util.TraceHull
+
+function hg.hullCheck(startpos,endpos,ply)
+	if ply:InVehicle() then return {HitPos = endpos} end
+	traceBuilder.start = IsValid(ply.FakeRagdoll) and endpos or startpos
+	traceBuilder.endpos = endpos
+	traceBuilder.filter = {ply,hg.GetCurrentCharacter(ply)}
+	local trace = util_TraceHull(traceBuilder)
+
+	return trace
+end
+
+function hg.eyeTrace(ply, dist, ent, aim_vector)
+	local fakeCam = IsValid(ply.FakeRagdoll)
+	local ent = hg.GetCurrentCharacter(ply)
+	local bon = ent:LookupBone("ValveBiped.Bip01_Head1")
+	if not bon then return end
+	if not IsValid(ply) then return end
+	if not ply.GetAimVector then return end
+	
+	local aim_vector = aim_vector or ply:GetAimVector()
+
+	if not bon or not ent:GetBoneMatrix(bon) then
+		local tr = {
+			start = ply:EyePos(),
+			endpos = ply:EyePos() + aim_vector * (dist or 60),
+			filter = ply
+		}
+		return util.TraceLine(tr)
+	end
+
+	if (ply.InVehicle and ply:InVehicle() and IsValid(ply:GetVehicle())) then
+		local veh = ply:GetVehicle()
+		local vehang = veh:GetAngles()
+		local tr = {
+			start = ply:EyePos() + vehang:Right() * -6 + vehang:Up() * 4,
+			endpos = ply:EyePos() + aim_vector * (dist or 60),
+			filter = ply
+		}
+		return util.TraceLine(tr), nil, headm
+	end
+
+	local headm = ent:GetBoneMatrix(bon)
+
+	if CLIENT and ply.headmat then headm = ply.headmat end
+
+	--local att_ang = ply:GetAttachment(ply:LookupAttachment("eyes")).Ang
+	--ply.lerp_angle = LerpFT(0.1, ply.lerp_angle or Angle(0,0,0), ply:GetNWBool("TauntStopMoving", false) and att_ang or aim_vector:Angle())
+	--aim_vector = ply.lerp_angle:Forward()
+
+	local eyeAng = aim_vector:Angle()
+    eyeAng:Normalize()
+	local eyeang2 = aim_vector:Angle()
+	eyeang2.p = 0
+    
+	local trace = hg.hullCheck(ply:EyePos()+select(2,ply:GetHull())[2] * eyeAng:Forward(),headm:GetTranslation() + (fakeCam and (headm:GetAngles():Forward() * 2 + headm:GetAngles():Up() * -2 + headm:GetAngles():Right() * 3) or (eyeAng:Up() * 1 + eyeang2:Forward() * ((math.max(eyeAng[1],0) / 90 + 0.5) * 4) + eyeang2:Right() * 0.5)),ply)
+
+	--[[if CLIENT then
+		cam.Start3D()
+			render.DrawWireframeBox(trace.HitPos,angle_zero,traceBuilder.mins,traceBuilder.maxs,color_white)
+		cam.End3D()
+	end--]]
+	
+	local tr = {}
+	if !ply:IsPlayer() then return false end
+	tr.start = trace.HitPos
+	tr.endpos = tr.start + aim_vector * (dist or 60)
+	tr.filter = {ply,ent}
+
+	return util.TraceLine(tr), trace, headm
+end
+
+if SERVER then
+	util.AddNetworkString("keyDownply2")
+	hook.Add("KeyPress", "huy-hg", function(ply, key)
+		net.Start("keyDownply2")
+		net.WriteInt(key, 26)
+		net.WriteBool(true)
+		net.WriteEntity(ply)
+		net.Broadcast()
+	end)
+
+	hook.Add("KeyRelease", "huy-hg2", function(ply, key)
+		net.Start("keyDownply2")
+		net.WriteInt(key, 26)
+		net.WriteBool(false)
+		net.WriteEntity(ply)
+		net.Broadcast()
+	end)
+else
+	net.Receive("keyDownply2", function(len)
+		local key = net.ReadInt(26)
+		local down = net.ReadBool()
+		local ply = net.ReadEntity()
+		if not IsValid(ply) then return end
+		ply.keydown = ply.keydown or {}
+		ply.keydown[key] = down
+		if ply.keydown[key] == false then ply.keydown[key] = nil end
+	end)
+end
+
+hook.Add("Player Think","FUCKING FUCK YOU",function(ply,time)		
+	if (ply.FUCKYOU_TIMER or 0) < time then
+		ply.FUCKYOU_TIMER = time + 1
+
+		ply:SetRenderMode(IsValid(ply:GetNWEntity("Ragdoll")) and RENDERMODE_NONE or RENDERMODE_NORMAL)
+	end
+end)
+
+function hg.KeyDown(owner,key)
+	if not IsValid(owner) then return false end
+	owner.keydown = owner.keydown or {}
+	local localKey
+	if CLIENT then
+		if owner == LocalPlayer() then
+			localKey = owner:KeyDown(key)
+		else
+			localKey = owner.keydown[key]
+		end
+	end
+	return SERVER and owner:IsPlayer() and owner:KeyDown(key) or CLIENT and localKey
+end
+
 -- PewPaws!!!
 game.AddParticles("particles/muzzleflashes_test.pcf")
 game.AddParticles("particles/muzzleflashes_test_b.pcf")

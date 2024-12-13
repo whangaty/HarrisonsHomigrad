@@ -156,7 +156,7 @@ else
     local vecZero = Vector(0,0,0)
 
     hook.Add("PostPlayerDraw","per4ikeffect",function(ply)
-        if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() == "weapon_per4ik" then
+        if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() == "weapon_pepperspray" then
             render.SetMaterial(mat)
 
             local bone = ply:LookupBone("ValveBiped.Bip01_R_Hand")

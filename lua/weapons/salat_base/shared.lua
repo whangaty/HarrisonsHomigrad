@@ -362,7 +362,7 @@ function SWEP:PrimaryAttack()
 
 	self:PrePrimaryAttack()
 
-	if not (self:GetOwner():IsNPC() or IsValid(self:GetOwner().FakeRagdoll)) and (self.isClose and self:GetOwner():IsSprinting()) then return end
+	if not (self:GetOwner():IsNPC() or IsValid(self:GetOwner().FakeRagdoll)) and (self.isClose and self:IsSprinting()) then return end
 
 	local ply = self:GetOwner() -- а ну да
 	self.NextShot = CurTime() + self.ShootWait
@@ -412,7 +412,7 @@ function SWEP:Reload()
 	if !self:GetOwner():KeyDown(IN_WALK) then
 		self.AmmoChek = 3
 		if timer.Exists("reload"..self:EntIndex())  or self:Clip1()>=self:GetMaxClip1() or self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )<=0 then return nil end
-		if self:GetOwner():IsSprinting() then return nil end
+		if self:IsSprinting() then return nil end
 		if ( self.NextShot > CurTime() ) then return end
 		self:GetOwner():SetAnimation(PLAYER_RELOAD)
 		if SERVER then self:GetOwner():EmitSound(self.ReloadSound,60,100,0.8,CHAN_AUTO) end
@@ -706,7 +706,7 @@ function SWEP:IsSighted()
 	if ply:IsNPC() then return end
 
 	if (self:IsLocal() or SERVER) and ply:IsPlayer() then
-		return not ply:IsSprinting() and ply:KeyDown(IN_ATTACK2) and not self:IsReloaded()
+		return not self:IsSprinting() and ply:KeyDown(IN_ATTACK2) and not self:IsReloaded()
 	else
 		return self:GetNWBool("IsSighted")
 	end
@@ -768,6 +768,13 @@ function ishgweapon(wep)
 	return wep.ishgweapon
 end
 
+function SWEP:IsSprinting()
+	local owner = self:GetOwner()
+	return hg.KeyDown(owner,IN_SPEED) or (((self:GetNWFloat("DeployTime",0) or 0) + 0.2) > CurTime())
+end
+
+SWEP.localAng = Angle(10,0,-90)
+
 function SWEP:Step()
 	local ply = self:GetOwner()
 	local isLocal = self:IsLocal()
@@ -818,7 +825,7 @@ function SWEP:ApplyAnim(ply)
 	local tr = util.TraceLine(t)
 	self.dist = (tr.HitPos - t.start):Length()
 
-	if not ply:IsSprinting() then
+	if not self:IsSprinting() then
 		local scope = self:IsSighted()
 		if SERVER then self:SetNWBool("IsSighted",scope) end
 
@@ -850,7 +857,7 @@ function SWEP:ApplyAnim(ply)
 			self.isClose = self:GetNWBool("isClose")
 		end
 		hand:Set(angZero)
-		if not self.isClose and not ply:IsSprinting() then
+		if not self.isClose and not self:IsSprinting() then
 			if not ply:GetNWBool("Suiciding") then
 				self:SetWeaponHoldType(self.HoldType)
 				hand:Set(angZero)
@@ -884,8 +891,7 @@ function SWEP:ApplyAnim(ply)
 	local forearm_index = ply:LookupBone("ValveBiped.Bip01_R_Forearm")
 	local clavicle_index = ply:LookupBone("ValveBiped.Bip01_R_Clavicle")
 	
-	local attPos,attAng = self:GetTrace()
-
+	local attPos, attAng = self:GetTrace()
 	local matrix = ply:GetBoneMatrix(hand_index)
 	if not matrix then return end
 	local plyang = ply:EyeAngles()
@@ -893,26 +899,35 @@ function SWEP:ApplyAnim(ply)
 
 	local _,newAng = LocalToWorld(vector_origin,self.localAng or angle_zero,vector_origin,plyang)
 	local ang = newAng
+	--attAng[3] = attAng[3] + (ply:KeyDown(IN_ALT1) and -30 or ply:KeyDown(IN_ALT2) and 30 or 0) / 3
 	ang:RotateAroundAxis(ang:Forward(),-90)
 	--ang:RotateAroundAxis(ang:Right(),8)
 	matrix:SetAngles(ang)
 	
-	local lpos,lang = ply:SetBoneMatrix2(hand_index,matrix,false)
+	local lpos, lang = ply:SetBoneMatrix2(hand_index, matrix, false)
 
-	if not ply:GetNWBool("Suiciding") and not ply:IsSprinting() and not self.isClose then
-		hand = lang
-	end
+	if not ply:GetNWBool("Suiciding") then
 
-	local _,localAng = WorldToLocal(vector_origin,attAng,vector_origin,ang)
-	localAng:RotateAroundAxis(localAng:Forward(),0)
+		if not self:IsSprinting() and not self.isClose then
+			self.lerp_aim = LerpFT(0.1, self.lerp_aim or 0, 1)
+		else
+			self.lerp_aim = LerpFT(0.1, self.lerp_aim or 0, 0)
+		end
 
-	if not ply:GetNWBool("Suiciding") and not ply:IsSprinting() then
-		self.localAng = LerpFT(0.2, self.localAng or angle_zero, localAng)
+		hand = lang * self.lerp_aim
 	end
 	
-	ply:ManipulateBoneAngles(forearm_index,forearm,false)
-	ply:ManipulateBoneAngles(clavicle_index,clavicle,false)
-	ply:ManipulateBoneAngles(hand_index,hand,false)
+	local _,localAng = WorldToLocal(vector_origin,attAng,vector_origin,ang)
+	localAng:RotateAroundAxis(localAng:Forward(),0)
+	
+	if not ply:GetNWBool("Suiciding") and not self:IsSprinting() and not self.isClose then
+		self.localAng = LerpFT(0.1, self.localAng or angle_zero, localAng)
+		--print(self.localAng)
+	end
+
+	ply:ManipulateBoneAngles(forearm_index, forearm, false)
+	ply:ManipulateBoneAngles(clavicle_index, clavicle, false)
+	ply:ManipulateBoneAngles(hand_index, hand, false)
 end
 
 hook.Add("UpdateAnimation","weapon_animations",function(ply,vel,maxseqgroundspeed)
@@ -949,6 +964,7 @@ function SWEP:Holster( wep )
 end
 
 hook.Add("Player Death","weapons",function(ply)
+	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),angZero,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),angZero,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),angZero,false)
@@ -961,8 +977,9 @@ function SWEP:Deploy()
 	if SERVER then
 		self:GetOwner():EmitSound("snd_jack_hmcd_pistoldraw.wav", 65,(self.TwoHands and 100) or (!self.TwoHands and 110), 1, CHAN_AUTO)
 	end
-
+	
 	self.NextShot = CurTime() + 0.5
+	self:SetNWFloat("DeployTime",CurTime())
 
 	self:SetHoldType( self.HoldType )
 end

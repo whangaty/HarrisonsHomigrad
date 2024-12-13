@@ -62,6 +62,8 @@ function StartRound()
 	if roundActiveName ~= roundActiveNameNext then
 		SetActiveRound(roundActiveNameNext)
 	end
+	
+	hook.Run("HomigradStartRound")
 
 	local players = PlayersInGame()
 	for i,ply in pairs(players) do

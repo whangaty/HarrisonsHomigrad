@@ -24,7 +24,7 @@ hook.Add("Player Think","ControlPlayersAdmins",function(ply,time)
 		timer.Simple(5, function() ply.AdminAttackerWithPhys = false end)
 		if IsValid(ply.CarryEnt) then
 			if ply:KeyPressed(IN_ATTACK) then
-				local text = tostring(ply:Name()).."Raised the yentiti"..tostring(RagdollOwner(ply.CarryEnt) and RagdollOwner(ply.CarryEnt):Name() or ply.CarryEnt:GetClass())
+				local text = tostring(ply:Name()).."Raised the yeetiti"..tostring(RagdollOwner(ply.CarryEnt) and RagdollOwner(ply.CarryEnt):Name() or ply.CarryEnt:GetClass())
 				--DiscordSendMessage("💙" .. text)
 				print(text)
 			end

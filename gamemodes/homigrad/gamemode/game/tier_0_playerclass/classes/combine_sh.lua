@@ -111,7 +111,3 @@ function CLASS.HomigradDamage(self,hitGroup,dmgInfo,rag)
         self:EmitSound("npc/combine_soldier/pain" .. math.random(1,3) .. ".wav")
     end
 end
-
-function CLASS.GuiltLogic(self,ply)
-    return false
-end

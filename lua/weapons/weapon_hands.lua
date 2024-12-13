@@ -330,7 +330,7 @@ function SWEP:ApplyForce()
 
 		if SERVER then
 			local ply = RagdollOwner(self.CarryEnt)
-			if self:GetOwner():KeyDown(IN_ATTACK) then
+			if self:GetOwner():KeyDown(IN_ATTACK) and self.CarryEnt:GetBoneName(self.CarryEnt:TranslatePhysBoneToBone(self.CarryBone)) == "ValveBiped.Bip01_Spine2" then
 				if ply then
 					if self.firstTimePrint then 
 						self:GetOwner():ChatPrint("You start to perform CPR (Hold Left Mouse down to keep the target alive)") 
@@ -351,7 +351,8 @@ function SWEP:ApplyForce()
 						--self:GetOwner():ChatPrint(ply.Blood)
 						--self:GetOwner():ChatPrint(ply.o2)
 
-						self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft" .. tostring(math.random(7)) .. ".wav")
+						--self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft" .. tostring(math.random(7)) .. ".wav")
+						phys:ApplyForceCenter(-vector_up * 15000)
 					end
 				else
 					if not ply and self.CarryEnt:GetClass() == "prop_ragdoll" then
@@ -371,7 +372,8 @@ function SWEP:ApplyForce()
 		local ForceMagnitude = Force:Length()
 
 		if ForceMagnitude > 6000 * 1 then
-			self:SetCarrying()
+			ForceMagnitude = 6000
+			--self:SetCarrying()
 
 			return
 		end

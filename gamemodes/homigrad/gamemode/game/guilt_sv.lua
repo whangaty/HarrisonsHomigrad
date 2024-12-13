@@ -1,12 +1,10 @@
-function GuiltLogic(ply,att,dmgInfo,dontApply)
-	--if ply.RoundGuilt > 3 then return end
-	--if #ply.attackees > 0 then return end
+
+hg.GuiltTable = hg.GuiltTable or {}
+
+function GuiltLogic(ply, att, dmgInfo, dontApply)
+	--if ply.RoundGuilt > 10 then return end
 	if att == ply then return end
 	if not roundActive then return end
-	--if #player.GetAll() <= 6 then return end
-
-	local resultHook = hook.Run("Guilt Logic",ply,att,dmgInfo)
-	if resultHook == false then return end
 
 	local resultGame = TableRound().GuiltLogic
 	resultGame = resultGame and resultGame(ply,att,dmgInfo)
@@ -18,20 +16,28 @@ function GuiltLogic(ply,att,dmgInfo,dontApply)
 	local plyTeam = ply:Team()
 	local attTeam = att:Team()
 
-	if resultGame or resultHook or resultClass or plyTeam == attTeam then
+	if resultGame or resultClass or plyTeam == attTeam then
 		if ply.DontGuiltProtect then
 			if not dontApply then
-				att.Guilt = math.max(att.Guilt - dmgInfo:GetDamage(),0)
+				--att.Guilt = math.max(att.Guilt - dmgInfo:GetDamage(),0)
 			end
 
 			return false,true
 		end
 
 		if not dontApply then
-			local customGuiltAdd = (type(resultHook) == "number" and resultHook) or (type(resultGame) == "number" and resultGame) or (type(resultClass) == "number" and resultClass)
+			local customGuiltAdd = (type(resultGame) == "number" and resultGame or (resultGame == false and 0 or 1)) * (type(resultClass) == "number" and resultClass or (resultClass == false and 0 or 1))
+			hg.GuiltTable[att] = hg.GuiltTable[att] or {}
+			hg.GuiltTable[att][ply] = hg.GuiltTable[att][ply] or 0
 
-			att.Guilt = (att.Guilt or 0) + (customGuiltAdd or math.min(dmgInfo:GetDamage() / (3),50))
-			att.DontGuiltProtect = true
+			local oldguilt = hg.GuiltTable[att][ply]
+			local add = customGuiltAdd * dmgInfo:GetDamage() / (3)
+
+			hg.GuiltTable[att][ply] = math.Clamp(hg.GuiltTable[att][ply] + add, 0, 50)
+
+			local add_final = hg.GuiltTable[att][ply] - oldguilt
+
+			att.Guilt = (att.Guilt or 0) + add_final
 
 			GuiltCheck(att,ply)
 		end
@@ -41,6 +47,11 @@ function GuiltLogic(ply,att,dmgInfo,dontApply)
 
 	return false
 end
+
+
+hook.Add("HomigradStartRound","Guilt",function()
+	hg.GuiltTable = {}
+end)
 
 local validUserGroup = {
 	superadmin = true,
@@ -75,12 +86,12 @@ function GuiltCheck(att,ply)
 		att.Guilt = 0
 		
 		if not att:HasGodMode() and att:Alive() then
-			--RunConsoleCommand("ulx","asay","[AUTOMATED] "..att:Name().." has exceeded their guilt of 100%, and was killed They are "..tostring(att:Team()))
-			--print("[GUILT CHECK] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
+			RunConsoleCommand("ulx","asay","[AUTOMATED] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
+			print("[GUILT CHECK] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
 			if not validUserGroup[att:GetUserGroup()] then
-				--att:Kill()
-				--RunConsoleCommand("ulx","tsay","<clr:red>[GUILT] "..att:Name().." has been slayed for exceeding their guilt of 100%.")
-				--att:ChatPrint("You were slayed for killing the wrong team! ")
+				att:Kill()
+				RunConsoleCommand("ulx","tsay","<clr:red>[GUILT] "..att:Name().." has been slayed for exceeding their guilt of 100%.")
+				att:ChatPrint("You were slayed for killing the wrong team! ")
 				return
 			else
 				return
@@ -100,7 +111,7 @@ end)
 hook.Add("Should Fake Collide","guilt",function(ply,hitEnt,data)
 	if hitEnt == game.GetWorld() then return end
 	hitEnt = RagdollOwner(hitEnt) or hitEnt
-	if not hitEnt:IsPlayer() then return end --Убийство с РПГ = ошибка ))
+	if not hitEnt:IsPlayer() then return end
 
 	local dmgInfo = DamageInfo()
 	dmgInfo:SetAttacker(hitEnt)
@@ -110,10 +121,14 @@ hook.Add("Should Fake Collide","guilt",function(ply,hitEnt,data)
 	GuiltLogic(ply,hitEnt,dmgInfo)
 end)
 
-hook.Add("PlayerInitialSpawn","guiltasdd",function(ply)
-	ply.Guilt = ply:GetPData("Guilt") or 0
-	ply:ChatPrint("Your guilt is currently at " .. tostring(ply.Guilt) .. "% out of 100%")
+hook.Add("Player Spawn","guiltasdd",function(ply)
+	ply.Guilt = ply.Guilt or 0
+	ply:ChatPrint("Your guilt is currently at " .. tostring(math.Round(ply.Guilt,0)) .. "% out of 100%")
 	ply.RoundGuilt = 0
+end)
+
+hook.Add("PlayerInitialSpawn","lololo",function(ply)
+	ply.Guilt = ply:GetPData("Guilt") or 0
 end)
 
 --[[local function Seizure(ply)

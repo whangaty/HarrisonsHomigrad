@@ -53,7 +53,6 @@ local function makeT(ply)
         ply:Give("weapon_hidebomb")
         ply:Give("weapon_hg_t_vxpoison")
         ply:Give("weapon_radar")
-        print(player.GetCount())
     elseif homicide.roundType == 5 then
         local wep
         if math.random(1,2) == 1 then wep = ply:Give("weapon_scout") else wep = ply:Give("weapon_barret") end
@@ -205,21 +204,23 @@ function SpawnPolicePlayers()
             end
             
             if #homicide.t > 1 then
-                PrintMessage(3,"The traitors are: ")
-                PrintMessage(3,(homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
+                ply:ChatPrint("#chat.rounds.traitorAre")
+                ply:ChatPrint((homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
             else
-                PrintMessage(3, "The traitor is: ")
-                PrintMessage(3, homicide.t[1]:Name())
+                ply:ChatPrint("#chat.rounds.traitorIs")
+                ply:ChatPrint(homicide.t[1]:Name())
             end
             
             ply:ChatPrint("<clr:red>WARNING: <clr:white>Killing friendlies will result in a punishment determined by staff.")
-            
-            net.Start("homicide_roleget")
-            net.WriteTable({{}, {}})
-            net.Send(ply)
         end)
     end)
 end
+
+hook.Add("Player Spawn","bruhwtf",function(ply)
+    net.Start("homicide_roleget")
+    net.WriteTable({{}, {}})
+    net.Send(ply)
+end)
 
 function homicide.StartRoundSV()
     tdm.RemoveItems()
@@ -430,7 +431,7 @@ function homicide.PlayerDeath(ply,inf,att)
 end
 
 local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
-local uncommon = {"medkit","weapon_molotok","weapon_per4ik","painkiller"}
+local uncommon = {"medkit","weapon_hammer","weapon_pepperspray","painkiller"}
 local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_mateba","weapon_m590"}
 
 function homicide.ShouldSpawnLoot()
@@ -458,6 +459,6 @@ function homicide.ShouldDiscordInput(ply,text)
 end
 
 function homicide.GuiltLogic(ply,att,dmgInfo)
-    return ply.roleT == att.roleT
+    return ply.roleT == att.roleT and 1 or 0
 end
 

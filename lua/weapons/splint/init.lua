@@ -27,9 +27,8 @@ if engine.ActiveGamemode() == "homigrad" then
         if not ent then return end
 
         if self:Heal(ent) then
+            sound.Play(healsound,ent:GetPos(),75,100,0.5)
             if ent:IsPlayer() then
-
-                sound.Play(healsound,ent:GetPos(),75,100,0.5)
                 local dmg = DamageInfo()
                 dmg:SetDamage(-5)
                 dmg:SetAttacker(self)
@@ -37,7 +36,7 @@ if engine.ActiveGamemode() == "homigrad" then
                 local att = self:GetOwner()
 
                 if GuiltLogic(att,ent,dmg,true) then
-                    att.Guilt = math.max(att.Guilt - 20,0)
+                    att.Guilt = math.max(att.Guilt - 10,0)
                 end
             end
             owner:SetAnimation(PLAYER_ATTACK1)

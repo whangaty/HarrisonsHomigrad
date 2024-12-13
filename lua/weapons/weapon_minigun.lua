@@ -49,6 +49,7 @@ SWEP.DrawCrosshair			= false
 
 SWEP.ViewModel				= "models/pwb/weapons/w_m134.mdl"
 SWEP.WorldModel				= "models/pwb/weapons/w_m134.mdl"
+SWEP.SightPos = Vector(-30,5.85,-0.24)
 
 function SWEP:PrimaryAttack()
 	self.ShootNext=self.NextShot or NextShot

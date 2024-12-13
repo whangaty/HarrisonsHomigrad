@@ -70,7 +70,7 @@ function riot.PlayerCanJoinTeam(ply,teamID)
 end
 
 local common = {"food_lays","weapon_pipe","weapon_bat","medkit","food_monster","food_fishcan","food_spongebob_home"}
-local uncommon = {"weapon_molotok","painkiller"}
+local uncommon = {"weapon_hammer","painkiller"}
 
 function riot.ShouldSpawnLoot()
 	local chance = math.random(100)

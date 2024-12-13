@@ -26,7 +26,6 @@ SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.075
 SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
 SWEP.TwoHands = true
-
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
