@@ -23,14 +23,53 @@ SWEP.Secondary.Ammo = "none"
 SWEP.DrawWeaponSelection = DrawWeaponSelection
 SWEP.OverridePaintIcon = OverridePaintIcon
 
-SWEP.dwmUp = 0.5
-SWEP.dwmRight = 0
-SWEP.dwmForward = 0
+SWEP.dwmUp = 1
+SWEP.dwmRight = 2
+SWEP.dwmForward = 3
 
 SWEP.dwmARight = 180
-SWEP.dwmAUp = 200
-SWEP.dwmAForward = 0
+SWEP.dwmAUp = 110
+SWEP.dwmAForward = 90
 
+SWEP.dwmModeScale = 1
+
+function SWEP:DrawWorldModel()
+    local owner = self:GetOwner()
+    if not IsValid(owner) then
+        self:DrawModel()
+        self:SetRenderOrigin()
+        self:SetRenderAngles()
+        return
+    end
+
+    local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+    if not Pos then return end
+
+    self:SetModel(self.WorldModel)
+    
+    Pos:Add(Ang:Forward() * self.dwmForward)
+    Pos:Add(Ang:Right() * self.dwmRight)
+    Pos:Add(Ang:Up() * self.dwmUp)
+    
+    Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+    Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+    Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+
+    --self:SetPos(Pos)
+    --self:SetAngles(Ang)
+    self:SetRenderOrigin(Pos)
+    self:SetRenderAngles(Ang)
+
+	self:SetupBones()
+	local mat = self:GetBoneMatrix(0)
+	mat:SetTranslation(Pos)
+	mat:SetAngles(Ang)
+	self:SetBoneMatrix(0,mat)
+    
+    self:SetModelScale(self.dwmModeScale)
+
+    self:DrawModel()
+end
 
 function SWEP:Initialize()
 	self:SetHoldType("revolver")
@@ -79,7 +118,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:Reload()
-if timer.Exists("reload"..self:EntIndex()) or self:Clip1()>=self:GetMaxClip1() or self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )<=0 then return nil end
+	if timer.Exists("reload"..self:EntIndex()) or self:Clip1()>=self:GetMaxClip1() or self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )<=0 then return nil end
 	if self:GetOwner():IsSprinting() then return nil end
 	self:GetOwner():SetAnimation(PLAYER_RELOAD)
 	--self:EmitSound(self.ReloadSound,60,100,0.8,CHAN_AUTO)

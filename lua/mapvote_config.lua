@@ -136,7 +136,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
 
     -- Maps that need fixing
      --Requires Checks for info_player spawns to be removed
-    --"gm_church", Crashes on IED Explosion
+    --"gm_church",
     --"ttt_pizzeria", Buggy NPCs and Players
 
     "gm_building",
@@ -146,9 +146,9 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_ile_v4",
     "cs_office-unlimited",
     "freeway_thicc_v3",
-    "gm_lilys_bedroom",
+    --"gm_lilys_bedroom",
     "ph_scotch",
-
+    "gm_paradise_resort"
 }
 
 SolidMapVote[ 'Config' ][ 'Construct Map Pool' ] = {
@@ -283,5 +283,6 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = "cs_office-unlimited", displayname = 'Office',image="https://i.imgur.com/S2T3jQ8.jpeg", width = 1920, height = 1080 },
     { filename = "sm_manhattanmegamallnightv1", displayname = 'New York Mall',image="https://i.imgur.com/JDbC6hu.jpeg", width = 1920, height = 1080 },
     { filename = "gm_lilys_bedroom", displayname = 'Bedroom',image="https://i.imgur.com/n8XfLIa.jpeg", width = 1920, height = 1080 },
-    { filename = "ph_scotch", displayname = 'Scotch',image="", width = 1920, height = 1080 },
+    { filename = "ph_scotch", displayname = 'Scotch',image="https://i.imgur.com/pWp9Az4.jpeg", width = 1920, height = 1080 },
+    { filename = "gm_paradise_resort", displayname = 'Paradise Resort',image="https://i.imgur.com/KkqgNll.jpeg", width = 1920, height = 1080 },
 }

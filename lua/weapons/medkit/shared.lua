@@ -69,7 +69,6 @@ SWEP.dwmAForward = 90
 function SWEP:DrawWorldModel()
     local owner = self:GetOwner()
     if not IsValid(owner) then
-
         self:DrawModel()
         self:SetRenderOrigin()
         self:SetRenderAngles()
@@ -84,7 +83,7 @@ function SWEP:DrawWorldModel()
     Pos:Add(Ang:Forward() * self.dwmForward)
     Pos:Add(Ang:Right() * self.dwmRight)
     Pos:Add(Ang:Up() * self.dwmUp)
-
+    
     Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
     Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
     Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
@@ -93,7 +92,7 @@ function SWEP:DrawWorldModel()
     --self:SetAngles(Ang)
     self:SetRenderOrigin(Pos)
     self:SetRenderAngles(Ang)
-
+    
     self:SetModelScale(self.dwmModeScale)
 
     self:DrawModel()

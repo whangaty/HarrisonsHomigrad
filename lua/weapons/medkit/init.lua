@@ -35,7 +35,7 @@ function SWEP:SecondaryAttack()
             local att = self:GetOwner()
 
             if GuiltLogic(att,ent,dmg,true) then
-                att.Guilt = math.max(att.Guilt - 20,0)
+                att.Guilt = math.max(att.Guilt - 10,0)
             end
         end
         owner:SetAnimation(PLAYER_ATTACK1)

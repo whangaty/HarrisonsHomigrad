@@ -171,15 +171,15 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 
 	local mul = RagdollDamageBoneMul[hitgroup]
 
-	local rubatPidor = DamageInfo()
-	rubatPidor:SetAttacker(dmginfo:GetAttacker())
-	--rubatPidor:SetInflictor(dmginfo:GetInflictor())
-	rubatPidor:SetDamage(dmginfo:GetDamage() * (not rag and (1 / mul) or 1))
-	rubatPidor:SetDamageType(dmginfo:GetDamageType())
-	rubatPidor:SetDamagePosition(dmginfo:GetDamagePosition())
-	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
+	local sharikLoh = DamageInfo()
+	sharikLoh:SetAttacker(dmginfo:GetAttacker())
+	--sharikLoh:SetInflictor(dmginfo:GetInflictor())
+	sharikLoh:SetDamage(dmginfo:GetDamage() * (not rag and (1 / (mul or 1)) or 1))
+	sharikLoh:SetDamageType(dmginfo:GetDamageType())
+	sharikLoh:SetDamagePosition(dmginfo:GetDamagePosition())
+	sharikLoh:SetDamageForce(dmginfo:GetDamageForce())
 	
-	ply.LastDMGInfo = rubatPidor
+	ply.LastDMGInfo = sharikLoh
 
 	if rag and mul then dmginfo:ScaleDamage(mul) end
 	if DamageBoneMul[hitgroup] then dmginfo:ScaleDamage(DamageBoneMul[hitgroup]) end

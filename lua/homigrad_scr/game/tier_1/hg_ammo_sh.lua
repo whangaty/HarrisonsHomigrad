@@ -1,4 +1,4 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
+if engine.ActiveGamemode() != "homigrad" then return end
 local ammotypes = {
     ["556x45mm"] = {
         name = "5.56x45 mm",
@@ -24,7 +24,7 @@ local ammotypes = {
         maxsplash = 5
     },
 
-    ["545×39mm"] = {
+    ["545x39mm"] = {
         name = "5.45x39 mm",
         dmgtype = DMG_BULLET, 
         tracer = TRACER_LINE,
@@ -84,8 +84,8 @@ local ammotypes = {
         maxsplash = 5
     },
 
-    ["46×30mm"] = {
-        name = "4.6×30 mm",
+    ["46x30mm"] = {
+        name = "4.6x30 mm",
         dmgtype = DMG_BULLET, 
         tracer = TRACER_LINE,
         plydmg = 0,
@@ -96,8 +96,8 @@ local ammotypes = {
         maxsplash = 5
     },
     
-    ["57×28mm"] = {
-        name = "5.7×28 mm",
+    ["57x28mm"] = {
+        name = "5.7x28 mm",
         dmgtype = DMG_BULLET, 
         tracer = TRACER_LINE,
         plydmg = 0,
@@ -145,7 +145,7 @@ local ammoents = {
         Color = Color(95,95,95)
     },
 
-    ["545×39mm"] = {
+    ["545x39mm"] = {
         Material = "mmodels/hmcd_ammobox_792",
         Scale = 0.8,
         Color = Color(125,155,95)
@@ -172,7 +172,7 @@ local ammoents = {
         Scale = 0.8,
     },
 
-    ["46×30mm"] = {
+    ["46x30mm"] = {
         Material = "models/hmcd_ammobox_22",
         Scale = 1,
     },
@@ -188,14 +188,14 @@ local ammoents = {
         Color = Color(125,155,95)
     },
     
-    ["57×28mm"] = {
+    ["57x28mm"] = {
         Material = "models/hmcd_ammobox_22",
         Scale = 1.2,
         Color = Color(125,155,95)
     },
 }
 
-print("yea!")
+print("ammotypes loaded!")
 for k,v in pairs(ammotypes) do
     --PrintTable(v)
     game.AddAmmoType( v )
@@ -317,10 +317,10 @@ local ammolistent = {
     [39] = ".45rubber",
     [40] = "12/70beanbag",
     [41] = "12/70gauge",
-    [42] = "46×30mm",
-    [44] = "545×39mm",
+    [42] = "46x30mm",
+    [44] = "545x39mm",
     [45] = "556x45mm",
-    [46] = "57×28mm",
+    [46] = "57x28mm",
     [47] = "762x39mm",
     [48] = "9x39mm",
     [49] = "9х19mm"

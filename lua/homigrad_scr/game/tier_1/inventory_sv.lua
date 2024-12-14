@@ -1,4 +1,4 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
+if engine.ActiveGamemode() != "homigrad" then return end
 util.AddNetworkString("inventory")
 util.AddNetworkString("ply_take_item")
 util.AddNetworkString("ply_take_ammo")
@@ -133,21 +133,18 @@ local trollmsgs = {
 }
 
 net.Receive("ply_take_item",function(len,ply)
-	--if ply:Team() ~= 1002 then return end
-
 	local lootEnt = net.ReadEntity()
+	if not ply:Alive() or ply.unconscious then return end
 	if not IsValid(lootEnt) then return end
 	if lootEnt:IsPlayer() and not IsValid(lootEnt.FakeRagdoll) then return end
 	if ply:GetAttachment(ply:LookupAttachment("eyes")).Pos:Distance(lootEnt:GetPos()) > 100 then return end
-	--local weapon = net.ReadEntity()
-	--local wep = weapon:GetClass()
-	
+
 	local lootInfo = lootEnt.Info
 
 	local wep = net.ReadString()
 	local weapon = lootInfo.Weapons[wep]
 
-	if not IsValid(weapon) then return end 
+	if not IsValid(weapon) then return end
 	
 	if prekol[wep] and not ply:IsAdmin() then ply:Kick(trollmsgs[math.random(#trollmsgs)]) return end
 

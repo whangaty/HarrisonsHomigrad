@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() != "homigrad" then return end
 hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
     local ent = rag or ply
     local inf = dmginfo:GetInflictor()
@@ -103,7 +103,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         if huy then --ply:ChatPrint("You were hit in the heart.")
             if ply.organs['heart']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
                 ply.organs['heart']=math.max(ply.organs['heart']-dmg,0)
-                --if ply.organs['heart']==0 then ply:ChatPrint("Ты чувствоешь очень сильную боль в сердце.") end
+                if ply.organs['heart']==0 and ply:IsPlayer() then ply:ChatPrint("You feel a sudden sharp pain in your torso. You are fainting.") end
             end
         end
 
@@ -116,6 +116,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             if huy or huy2 then --ply:ChatPrint("You were hit in the artery.")
                 if ply.organs.artery!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
                     ply.organs.artery=math.max(ply.organs.artery-dmg,0)
+                    if ply.organs['heart']==0 and ply:IsPlayer() then ply:ChatPrint("Your carotid artery was ruptured. You are losing your blood excessively.") end
                 end
             end
         end
@@ -138,8 +139,13 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
                             Faking(ply)
                         end
                     end)
+
                     ply.brokenspine=true
-                    ply:ChatPrint("You feel your spine shatter.\nYou can no longer walk.")
+                    
+                    if ply:IsPlayer() then
+                        ply:ChatPrint("You feel your spine shatter.\nYou can no longer walk.")
+                    end
+
                     ent:EmitSound("NPC_Barnacle.BreakNeck",70,125,0.7,CHAN_ITEM)
                 end
             end
@@ -152,4 +158,3 @@ hook.Add("HomigradDamage","BurnDamage",function(ply,hitgroup,dmginfo)
         dmginfo:ScaleDamage( 5 )
     end
 end)
-end

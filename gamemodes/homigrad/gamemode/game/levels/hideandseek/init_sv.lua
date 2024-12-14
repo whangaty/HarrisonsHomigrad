@@ -139,7 +139,7 @@ function hideandseek.PlayerSpawn2(ply,teamID)
 	tdm.GiveSwep(ply,teamTbl.main_weapon,teamID == 1 and 16 or 4)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon,teamID == 1 and 8 or 2)
 
-	if math.random(1,4) == 4 then ply:Give("weapon_per4ik") end
+	if math.random(1,4) == 4 then ply:Give("weapon_pepperspray") end
 	if math.random(1,8) == 8 then ply:Give("adrenaline") end
 	if math.random(1,7) == 7 then ply:Give("painkiller") end
 	if math.random(1,6) == 6 then ply:Give("medkit") end
@@ -215,8 +215,8 @@ function hideandseek.PlayerCanJoinTeam(ply,teamID)
 end
 
 local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
-local uncommon = {"medkit","weapon_molotok","painkiller"}
-local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_per4ik"}
+local uncommon = {"medkit","weapon_hammer","painkiller"}
+local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_pepperspray"}
 
 function hideandseek.ShouldSpawnLoot()
    	if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end

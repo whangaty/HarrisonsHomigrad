@@ -156,7 +156,7 @@ function basedefence.PlayerSpawn2(ply,teamID)
     wep:SetClip1(wep:GetMaxClip1())
     ply:SetAmmo(wep:GetMaxClip1() * 3,wep:GetPrimaryAmmoType())
 
-    if math.random(3) == 3 then ply:Give("weapon_molotok") end
+    if math.random(3) == 3 then ply:Give("weapon_hammer") end
 
 	if math.random(1,4) == 4 then ply:Give("adrenaline") end
 	if math.random(1,4) == 4 then ply:Give("painkiller") end

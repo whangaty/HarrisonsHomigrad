@@ -217,8 +217,6 @@ function SWEP:SecondaryAttack()
                 ply.Bloodlosing = ply.Bloodlosing + 10
 
                 if GuiltLogic(att,ply,dmg) then
-                    att.Guilt = 10
-
                     GuiltCheck(att)
                 end
             end
@@ -265,10 +263,6 @@ function SWEP:SecondaryAttack()
                 dmg:SetDamageType(DMG_SLASH)
 
                 ply.Bloodlosing = ply.Bloodlosing + 10
-
-                if GuiltLogic(att,ply,dmg,true) then
-                    att.Guilt = math.max(att.Guilt - 2,0)
-                end
             end
         end
 

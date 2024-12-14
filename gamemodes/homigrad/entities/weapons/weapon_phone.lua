@@ -137,7 +137,6 @@ if SERVER then
     function SWEP:PrimaryAttack() end
 
     function SWEP:SecondaryAttack()
-		print(self:GetState(),JMod.EZ_STATION_STATE_READY )
         if self:GetState() == JMod.EZ_STATION_STATE_READY then
             net.Start("JMod_EZradio")
             net.WriteBool(false)
