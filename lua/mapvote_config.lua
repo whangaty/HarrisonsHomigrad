@@ -136,7 +136,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
 
     -- Maps that need fixing
      --Requires Checks for info_player spawns to be removed
-    "gm_church",
+    --"gm_church",
     --"ttt_pizzeria", Buggy NPCs and Players
 
     "gm_building",
