@@ -98,7 +98,7 @@ function ctp.HUDPaint_RoundLeft(white2) --позиции точек и счёт
 
     local respawntime = GetGlobalInt("CP_respawntime", CurTime())
     
-    local time2 = math.Round(respawntime + 60 - CurTime(),0)
+    local time2 = math.Round(respawntime + 20 - CurTime(),0)
     local ftime2 = string.FormattedTime( time2, "%02i:%02i" )
     draw.SimpleText("Время до респавна: " .. ftime2,"HomigradFont",ScrW()/2,ScrH()-55,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 end
