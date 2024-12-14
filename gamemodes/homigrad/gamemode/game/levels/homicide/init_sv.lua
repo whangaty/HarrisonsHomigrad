@@ -92,19 +92,23 @@ local function makeCT(ply)
     if homicide.roundType == 1 or homicide.roundType == 5 then
         local wep = ply:Give("weapon_remington870")
         wep:SetClip1(wep:GetMaxClip1())
+        ply:GiveAmmo(wep:GetMaxClip1(),wep:GetPrimaryAmmoType())
         --AddNotificate( ply,"#rounds.innocentShotgun")
     elseif homicide.roundType == 2 then
         local wep = ply:Give("weapon_beretta")
         wep:SetClip1(wep:GetMaxClip1())
+        ply:GiveAmmo(wep:GetMaxClip1(),wep:GetPrimaryAmmoType())
         --AddNotificate( ply,"#rounds.innocentBerreta")
     elseif homicide.roundType == 3 then
         local wep = ply:Give("weapon_taser")
         ply:Give("weapon_police_bat")
         wep:SetClip1(wep:GetMaxClip1())
+        ply:GiveAmmo(3,wep:GetPrimaryAmmoType())
         --AddNotificate( ply,"#rounds.innocentTaser")
     elseif homicide.roundType == 4 then
         local wep = ply:Give("weapon_mateba")
         wep:SetClip1(wep:GetMaxClip1())
+        ply:GiveAmmo(3,wep:GetPrimaryAmmoType())
         --AddNotificate( ply,"#rounds.innocentWildWest")
     else
     end
