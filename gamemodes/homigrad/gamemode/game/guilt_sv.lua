@@ -86,8 +86,8 @@ function GuiltCheck(att,ply)
 		att.Guilt = 0
 		
 		if not att:HasGodMode() and att:Alive() then
-			RunConsoleCommand("ulx","asay","[AUTOMATED] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
-			print("[GUILT CHECK] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
+			--RunConsoleCommand("ulx","asay","[AUTOMATED] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
+			--print("[GUILT CHECK] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
 			if not validUserGroup[att:GetUserGroup()] then
 				att:Kill()
 				RunConsoleCommand("ulx","tsay","<clr:red>[GUILT] "..att:Name().." has been slayed for exceeding their guilt of 100%.")
@@ -123,7 +123,9 @@ end)
 
 hook.Add("Player Spawn","guiltasdd",function(ply)
 	ply.Guilt = ply.Guilt or 0
-	ply:ChatPrint("Your guilt is currently at " .. tostring(math.Round(ply.Guilt,0)) .. "% out of 100%")
+	if not validUserGroup[ply:GetUserGroup()] then
+		ply:ChatPrint("Your guilt is currently at " .. tostring(math.Round(ply.Guilt,0)) .. "% out of 100%")
+	end
 	ply.RoundGuilt = 0
 end)
 

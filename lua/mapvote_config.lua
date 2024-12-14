@@ -146,9 +146,9 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "ttt_ile_v4",
     "cs_office-unlimited",
     "freeway_thicc_v3",
-    "gm_lilys_bedroom",
+    --"gm_lilys_bedroom",
     "ph_scotch",
-
+    "gm_paradise_resort"
 }
 
 SolidMapVote[ 'Config' ][ 'Construct Map Pool' ] = {
@@ -284,4 +284,5 @@ SolidMapVote[ 'Config' ][ 'Specific Maps' ] = {
     { filename = "sm_manhattanmegamallnightv1", displayname = 'New York Mall',image="https://i.imgur.com/JDbC6hu.jpeg", width = 1920, height = 1080 },
     { filename = "gm_lilys_bedroom", displayname = 'Bedroom',image="https://i.imgur.com/n8XfLIa.jpeg", width = 1920, height = 1080 },
     { filename = "ph_scotch", displayname = 'Scotch',image="", width = 1920, height = 1080 },
+    { filename = "gm_paradise_resort", displayname = 'Paradise Resort',image="", width = 1920, height = 1080 },
 }
