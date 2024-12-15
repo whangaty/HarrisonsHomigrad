@@ -451,7 +451,7 @@ function Stun(Entity)
 		timer.Create( "StunEffect"..Entity:EntIndex(), 0.1, 80, function()
 			local rand = math.random(1,50)
 			if rand == 50 then
-			RagdollOwner(fake):Say("*drop")
+			RagdollOwner(fake):DropWeapon1()
 			end
 			RagdollOwner(fake).pain = RagdollOwner(fake).pain + 3
 			fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-55,55),math.random(-55,55),0))
@@ -459,12 +459,12 @@ function Stun(Entity)
 		end)
 	elseif Entity:IsRagdoll() then
 		if RagdollOwner(Entity) then
-			RagdollOwner(Entity):Say("*drop")
+			RagdollOwner(Entity):DropWeapon1()
 			timer.Create("StunTime"..RagdollOwner(Entity):EntIndex(), 8, 1, function() end)
 			local fake = Entity
 			timer.Create( "StunEffect"..RagdollOwner(Entity):EntIndex(), 0.1, 80, function()
 				if rand == 50 then
-					RagdollOwner(fake):Say("*drop")
+					RagdollOwner(fake):DropWeapon1()
 				end
 				RagdollOwner(fake).pain = RagdollOwner(fake).pain + 3
 				fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-55,55),math.random(-55,55),0))
@@ -1341,11 +1341,12 @@ hook.Add("PlayerSay", "unconsay", function(ply,text)
 end)
 
 hook.Add("PlayerSay","dropweaponhuy",function(ply,text)
-    if string.lower(text)=="*drop" then
+    --[[
+	if string.lower(text)=="*drop" then
         ply:DropWeapon1()
 		return ""
     end
-
+	]]
 	--[[if string.lower(text)=="!viptest" then
 		if !IsValid(ply.FakeRagdoll) then
 		ply:SetVelocity( Vector(0,0,50000) )
