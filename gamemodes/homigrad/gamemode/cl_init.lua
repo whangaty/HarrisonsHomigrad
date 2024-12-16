@@ -298,7 +298,7 @@ local function ToggleMenu(toggle)
         wepMenu:SetKeyboardInputEnabled(false)
 		if wep:GetClass()!="weapon_hands" then
 			wepMenu:AddOption("Drop Weapon",function()
-				LocalPlayer():DropWeapon1()
+				LocalPlayer():ConCommand("say *drop")
 			end)
 		end
         if wep:Clip1()>0 then
