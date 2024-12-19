@@ -12,13 +12,16 @@ if CLIENT then
     include("jmod/cl_armor.lua")
 end
 local blackListedWeps = {
-    ["weapon_hands"] = true
+    ["weapon_hands"] = true,
 }
 
 local blackListedAmmo = {
     [8] = true,
     [9] = true,
-    [10] = true
+    [10] = true,
+	["AR2AltFire"] = true,
+	["357"] = true,
+	["SMG1"] = true
 }
 
 Gunshuy = {

@@ -548,8 +548,8 @@ net.Receive("close_tab",function(len)
 	if fullscreenBackground then
 		fullscreenBackground:Remove()
 	end
-	ResetBeerEffect()
-	ResetRumEffect()  
+	--ResetBeerEffect()
+	--ResetRumEffect()  
 end)
 
 ToggleScoreboard(false, nil)
