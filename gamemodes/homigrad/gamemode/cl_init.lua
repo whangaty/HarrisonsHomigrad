@@ -55,6 +55,17 @@ surface.CreateFont("HomigradFontSmall",{
 -- Harrisons puts ConVar in worst script, asked to leave
 CreateClientConVar("hg_scopespeed","0.5",true,false,"Changes the speed of the sniper scope when zoomed in.",0,5)
 
+-- For player models!!
+local validUserGroup = {
+	superadmin = true,
+	servermanager = true,
+	owner = true,
+	admin = true,
+	headmod = true,
+	sponsor = true,
+	operator = true
+}
+
 net.Receive("round_active",function(len)
 	roundActive = net.ReadBool()
 	roundTimeStart = net.ReadFloat()
@@ -332,12 +343,31 @@ local function ToggleMenu(toggle)
         plyMenu:MakePopup()
         plyMenu:SetKeyboardInputEnabled(false)
 
-		plyMenu:AddOption("Armor Menu",function()
+		local armorMenu = plyMenu:AddOption("Armor Menu",function()
             LocalPlayer():ConCommand("jmod_ez_inv")
+			surface.PlaySound("UI/buttonclickrelease.wav")
         end)
-		plyMenu:AddOption("Ammo Menu",function()
+		armorMenu:SetIcon("icon16/shield.png")
+		
+		local ammoMenu = plyMenu:AddOption("Ammo Menu",function()
 			LocalPlayer():ConCommand("hg_ammomenu")
+			surface.PlaySound("UI/buttonclickrelease.wav")
 		end)
+		ammoMenu:SetIcon("icon16/box.png")
+
+		local plyModelMenu = plyMenu:AddOption("Player Model",function()
+			if validUserGroup[LocalPlayer():GetUserGroup()] then
+				LocalPlayer():ConCommand("playermodel_selector")
+				surface.PlaySound("UI/buttonclickrelease.wav")
+			else
+				LocalPlayer():ChatPrint("<clr:red>Failed!<clr:white> Only <rainbow>:gem: Server Sponsor's<clr:white> can access this menu.\nYou can donate at <link:https://harrisonshomigrad.tip4serv.com/>")
+				surface.PlaySound("Friends/friend_join.wav")
+			end
+
+		end)
+		
+		plyModelMenu:SetIcon("icon16/user_suit.png")
+		
 		local EZarmor = LocalPlayer().EZarmor
 		if JMod.GetItemInSlot(EZarmor, "eyes") then
 			plyMenu:AddOption("Toggle Mask/Helmet Visor",function()
