@@ -3,7 +3,7 @@ local specColor = Color(155,155,155)
 local whiteAdd = Color(255,255,255,5)
 local unmutedicon = Material( "icon32/unmuted.png", "noclamp smooth" )
 local mutedicon = Material( "icon32/muted.png", "noclamp smooth" )
-local currentTab = nil
+
 local function ReadMuteStatusPlayers()
 	return util.JSONToTable(file.Read("homigrad_mute.txt","DATA") or "") or {}
 end
@@ -46,167 +46,38 @@ local function timeSort(a,b)
 	return time1 > time2
 end
 
-local isScoreboardOpen = false
-local isInventoryOpen = false
-local white = Color(255,255,255)
-local black = Color(0,0,0,128)
-local black2 = Color(64,64,64,128)
-local red = Color(148,64,64,128)
-local blurMat = Material("pp/blurscreen")
-local panel1_inv, panel2_inv, panel3_inv
-local fullscreenBackground = nil
-
-
-local function CreateBackground()
-    if IsValid(fullscreenBackground) then return fullscreenBackground end
-    
-    local scrw, scrh = ScrW(), ScrH()
-    fullscreenBackground = vgui.Create("Panel")
-    fullscreenBackground:SetPos(0, 0)
-    fullscreenBackground:SetSize(scrw, scrh)
-    fullscreenBackground:SetZPos(-100)
-	
-    fullscreenBackground.Paint = function(self, w, h)
-        surface.SetDrawColor(0, 0, 0, 200)
-        surface.DrawRect(0, 0, w, h)
-        draw.SimpleText("Harrison's Homigrad", "HomigradFontLarge", w/2, h/2, Color(155,155,165,50	), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    end
-    
-    function fullscreenBackground:OnMousePressed() return true end
-    function fullscreenBackground:OnMouseReleased() return true end
-    
-    ScoreboardList = ScoreboardList or {}
-    ScoreboardList[fullscreenBackground] = true
-    
-    return fullscreenBackground
-end
-
-function CleanupInventory()
-    if panel1_inv and IsValid(panel1_inv) then panel1_inv:Remove() end
-    if panel2_inv and IsValid(panel2_inv) then panel2_inv:Remove() end
-    if panel3_inv and IsValid(panel3_inv) then panel3_inv:Remove() end
-    isInventoryOpen = false
-end
-
-
-function CleanupScoreboard()
-    if IsValid(HomigradScoreboard) then HomigradScoreboard:Remove() end
-    isScoreboardOpen = false
-end
-
-local function CleanupAll()
-    CleanupInventory()
-    CleanupScoreboard()
-    if IsValid(fullscreenBackground) then fullscreenBackground:Remove() end
-    if IsValid(topButtonsPanel) then topButtonsPanel:Remove() end
-end
-
-local function CreateTopButtons(bg)
-    if IsValid(topButtonsPanel) then topButtonsPanel:Remove() end
-    
-    local scrw, scrh = ScrW(), ScrH()
-    topButtonsPanel = vgui.Create("DPanel", bg)
-    topButtonsPanel:SetPos(scrw*0.35, 0)
-    topButtonsPanel:SetSize(scrw*0.3, 50)
-    topButtonsPanel.Paint = function(self, w, h)
-        draw.RoundedBox(0,0,0,w,h,black)
-        surface.SetDrawColor(255,255,255,128)
-        surface.DrawOutlinedRect(1,1,w-2,h-2)
-    end
-	-- inventory button
-	local posbutton = {10,5}
-	if (LocalPlayer():Alive()) and LocalPlayer():Team() ~= 1002 then
-		local inventoryButton = vgui.Create("DButton", topButtonsPanel)
-		inventoryButton:SetSize(100, 40)
-		inventoryButton:SetPos(10, 5)
-		inventoryButton:SetText("Inventory")
-		inventoryButton:SetFont('HomigradFont')
-		inventoryButton.DoClick = function()
-			CleanupScoreboard()
-			if isInventoryOpen == false then
-				panel1_inv, panel2_inv, panel3_inv = createInventoryPanel(fullscreenBackground,nil,nil,nil,false)
-				isInventoryOpen = true
-			end
-
-
-		end
-		inventoryButton.Paint = function(self, w,h)
-			draw.RoundedBox(0, 0, 0, w, h, self:IsHovered() and black2 or black)
-			surface.SetDrawColor(255,255,255,128)
-			surface.DrawOutlinedRect(1,1,w-2,h-2)
-		end
-		posbutton = {120,5}
+hook.Add("Player Death","mutedead",function(ply)
+	if muteAlldead and (not LocalPlayer():Alive() or ply:Team() == 1002) then
+		ply:SetMuted(true)
 	end
+end)
 
-    -- Tab button
-    local tabButton = vgui.Create("DButton", topButtonsPanel)
-    tabButton:SetSize(100, 40)
-    tabButton:SetPos(posbutton[1], posbutton[2])
-    tabButton:SetText("Scoreboard")
-    tabButton:SetFont('HomigradFont')
-    tabButton.Paint = function(self, w,h)
-		
-        draw.RoundedBox(0, 0, 0, w, h, self:IsHovered() and black2 or black)
-        surface.SetDrawColor(255,255,255,128)
-        surface.DrawOutlinedRect(1,1,w-2,h-2)
-    end
+hook.Add("Player Spawn","unmutealive",function(ply)
+	if muteall then return end
 
+	if muteAlldead then
+		ply:SetMuted(MutePlayers[ply:SteamID()])
+	end
+end)
 
-    -- Close button
-    local closeButton = vgui.Create("DButton", topButtonsPanel)
-    closeButton:SetSize(100, 40)
-    closeButton:SetPos(scrw*.3-110, 5)
-    closeButton:SetText("Close")
-    closeButton:SetFont('HomigradFont')
-    closeButton.Paint = function(self, w,h)
-        draw.RoundedBox(0, 0, 0, w, h, self:IsHovered() and black2 or black)
-        surface.SetDrawColor(255,255,255,128)
-        surface.DrawOutlinedRect(1,1,w-2,h-2)
-    end
-    closeButton.DoClick = function()
-        CleanupAll()
-    end
+local function ToggleScoreboard(toggle)
+	if toggle then
+        if IsValid(HomigradScoreboard) then return end--shut the fuck up
 
-    return topButtonsPanel, tabButton
-end
+		showRoundInfo = CurTime() + 2.5
 
-function ToggleScoreboard(toggle, button, lootent, items, items_ammo)
-    if toggle and not isScoreboardOpen or not toggle and isScoreboardOpen then
+		local scrw,scrh = ScrW(),ScrH()
 
-
-        CleanupInventory()
-        CleanupScoreboard()
-        
-        isScoreboardOpen = toggle
-        if not toggle then return end
-        
-        local scrw, scrh = ScrW(), ScrH()
-
-        local bg = CreateBackground()
-
-        HomigradScoreboard = vgui.Create("DFrame", bg)
-        HomigradScoreboard:SetTitle("")
-        HomigradScoreboard:SetSize(scrw*.7, scrh*.9)
-        HomigradScoreboard:Center()
-        HomigradScoreboard:ShowCloseButton(false)
-        HomigradScoreboard:SetDraggable(false)
+		HomigradScoreboard = vgui.Create("DFrame")
+		HomigradScoreboard:SetTitle("")
+		HomigradScoreboard:SetSize(scrw*.7,scrh*.9)
+		HomigradScoreboard:Center()
+		HomigradScoreboard:ShowCloseButton(false)
+		HomigradScoreboard:SetDraggable(false)
         HomigradScoreboard:MakePopup()
         HomigradScoreboard:SetKeyboardInputEnabled(false)
-        ScoreboardList[HomigradScoreboard] = true
-        
-        function HomigradScoreboard:OnKeyCodePressed(key)
-            if key == KEY_TAB then
-                ToggleScoreboard(false, nil)
-            end
-        end
-        -- Create top buttons
-        local topButtonsPanel, tabButton = CreateTopButtons(bg)
-		tabButton.DoClick = function()
-			CleanupScoreboard()
-			CleanupInventory()
-			ToggleScoreboard(false, true)
-			ToggleScoreboard(true, true)
-		end
+		ScoreboardList[HomigradScoreboard] = true
+
 		local wheelY = 0
 		local animWheelUp,animWheelDown = 0,0
 
@@ -273,9 +144,12 @@ function ToggleScoreboard(toggle, button, lootent, items, items_ammo)
 
 			draw.SimpleText("Status","HomigradFont",100,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			draw.SimpleText("Name","HomigradFont",w / 2,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-			draw.SimpleText("K/A/D","HomigradFont",w - 300,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 
-			--draw.SimpleText("Дни Часы Минуты","HomigradFont",w - 300,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Harrison's Homigrad","HomigradFontLarge",w / 2,h / 2,Color(155,155,165,50),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			--draw.SimpleText("HOMIGRADED","HomigradFontLarge",w / 2,h / 2,Color(155,155,165,5),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			
+			draw.SimpleText("Role","HomigradFont",w - 300,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			--draw.SimpleText("Дни Часы Минуты","HomigradFont",w - 300,20,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			--draw.SimpleText("M","HomigradFont",w - 300 + 15,15,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 			
 
@@ -283,10 +157,10 @@ function ToggleScoreboard(toggle, button, lootent, items, items_ammo)
 			draw.SimpleText("Team","HomigradFont",w - 100,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			draw.SimpleText("Players: " .. table.Count(player.GetAll()),"HomigradFont",15,h - 25,green,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 			local tick = math.Round(1 / engine.ServerFrameTime())
-			draw.SimpleText("Server Tickrate:  " .. tick,"HomigradFont",w - 15,h - 25,tick <= 35 and red or green,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Server Tickrate: " .. tick,"HomigradFont",w - 15,h - 25,tick <= 35 and red or green,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 
 			local players = self.players
-			for i,ply in pairs(player.GetAll()) do
+			for i,ply in player.Iterator() do
 				if not players[ply] then self:AddPlayer(ply) self:Sort() end
 			end
 
@@ -355,6 +229,8 @@ function ToggleScoreboard(toggle, button, lootent, items, items_ammo)
 		end
 
 		function HomigradScoreboard:AddPlayer(ply)
+			if ply:Team() == 1002 then return end
+
 			local playerPanel = vgui.Create("DButton",panelPlayers)
 			self.players[ply] = playerPanel
 			playerPanel:SetText("")
@@ -363,12 +239,18 @@ function ToggleScoreboard(toggle, button, lootent, items, items_ammo)
 			playerPanel.DoClick = function()
 				local playerMenu = vgui.Create("DMenu")
 				playerMenu:SetPos(input.GetCursorPos())
-				playerMenu:AddOption("Скопировать SteamID", function()
+				playerMenu:AddOption("Copy SteamID", function()
 					SetClipboardText(ply:SteamID())
-					LocalPlayer():ChatPrint("SteamID " .. ply:Name() .. " скопирован! (" .. ply:SteamID() .. ")")
+					LocalPlayer():ChatPrint("SteamID " .. ply:Name() .. " copied! (" .. ply:SteamID() .. ")")
 				end)
-				playerMenu:AddOption("Открыть профиль", function()
+				playerMenu:AddOption("Open Steam Profile", function()
 					ply:ShowProfile()
+				end)
+				playerMenu:AddOption("Go To", function()
+					LocalPlayer():ConCommand("ulx goto $" .. ply:UserID())
+				end)
+				playerMenu:AddOption("Bring", function()
+					LocalPlayer():ConCommand("ulx bring $" .. ply:UserID())
 				end)
 				playerMenu:MakePopup()
 
@@ -387,21 +269,21 @@ function ToggleScoreboard(toggle, button, lootent, items, items_ammo)
 			if not func or (func and alive == true) then
 				if LocalPlayer():Team() == 1002 or not LocalPlayer():Alive() then
 					if ply:Alive() then
-						alive = "Живой"
+						alive = "Alive"
 						alivecol = colorGreen
 					elseif ply:Team() == 1002 then
-						alive = "Наблюдает"
+						alive = "Spectating"
 						alivecol = colorSpec
 					else
-						alive = "Мёртв"
+						alive = "Dead"
 						alivecol = colorRed
 						colorAdd = colorRed
 					end
 				elseif ply:Team() == 1002 then
-					alive = "Наблюдает"
+					alive = "Spectating"
 					alivecol = colorSpec
 				else
-					alive = "Неизвестно"
+					alive = "Unknown"
 					alivecol = colorSpec
 					colorAdd = colorSpec
 				end
@@ -420,31 +302,56 @@ function ToggleScoreboard(toggle, button, lootent, items, items_ammo)
 					draw.RoundedBox(0,0,0,w,h,whiteAdd)
 				end
 
-				if alive ~= "Неизвестно" and ply.last then
+				if alive ~= "Unknown" and ply.last then
 					draw.SimpleText(ply.last,"HomigradFont",25,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 				end
 
 				draw.SimpleText(alive,"HomigradFont",100,h / 2,alivecol,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 				draw.SimpleText(name1,"HomigradFont",w / 2,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 				
-				if not ply.TimeStart then
-					draw.SimpleText("wait","HomigradFont",w - 300,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-				else
-					local time = math.floor(CurTime() - ply.TimeStart + (ply.Time or 0))
-					local dTime,hTime,mTime = math.floor(time / 60 / 60 / 24),tostring(math.floor(time / 60 / 60) % 24),tostring(math.floor(time / 60) % 60)
+				--Table for usergroup names and corresponding display names and colors
+				local userGroupDisplay = {
+					owner = {name = "Owner", color = Color(0,242,255)},
+					servermanager = {name = "Server Manager", color = Color(255, 25, 25)}, 
+					superadmin = {name = "Head Administrator", color = Color(255,223,0)},
+					admin = {name = "Administrator", color = Color(50, 255, 50)},
+					operator = {name = "Moderator", color = Color(75, 200, 75)},
+					tmod = {name = "Trial Mod", color = Color(75, 150, 70)},
+					sponsor = {name = "Sponsor", color = Color(77, 201, 255)},
+					supporterplus = {name = "Supporter+", color = Color(255, 159, 62)},
+					supporter = {name = "Supporter", color = Color(241, 196, 15)},
+					regular = {name = "Regular", color = Color(0,150,220)},
+					user = {name = "User", color = Color(125, 125, 125)}
+				}
 
-					draw.SimpleText(dTime,"HomigradFont",w - 300 - 15,h / 2,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
-					draw.SimpleText(hTime,"HomigradFont",w - 300,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-					draw.SimpleText(mTime,"HomigradFont",w - 300 + 15,h / 2,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+				-- Function to get the display name and color for a user group
+				local function GetDisplayNameAndColor(usergroup)
+					return userGroupDisplay[usergroup] and userGroupDisplay[usergroup].name or usergroup,
+						userGroupDisplay[usergroup] and userGroupDisplay[usergroup].color or color_white
 				end
+
+				-- Example of how to draw the text with the display name and color
+				local displayName, displayColor = GetDisplayNameAndColor(ply:GetUserGroup())
+				
+				draw.SimpleText(displayName, "HomigradFont", w - 300, h / 2, displayColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+				-- else
+				-- 	local time = math.floor(CurTime() - ply.TimeStart + (ply.Time or 0))
+				-- 	local dTime,hTime,mTime = math.floor(time / 60 / 60 / 24),tostring(math.floor(time / 60 / 60) % 24),tostring(math.floor(time / 60) % 60)
+
+				-- 	draw.SimpleText(dTime,"HomigradFont",w - 300 - 15,h / 2,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
+				-- 	draw.SimpleText(hTime,"HomigradFont",w - 300,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+				-- 	draw.SimpleText(mTime,"HomigradFont",w - 300 + 15,h / 2,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+				-- end
 				
 				draw.SimpleText(ply:Ping(),"HomigradFont",w - 200,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 
 				local name,color = ply:PlayerClassEvent("TeamName")
+				--print()
 
 				if not name then
 					name,color = TableRound().GetTeamName(ply)
-					name = name or "Наблюдатель"
+					name = name or "Spectator"
 					color = color or ScoreboardSpec
 				end
 
@@ -470,25 +377,45 @@ function ToggleScoreboard(toggle, button, lootent, items, items_ammo)
 				end
 			end
 		end
-		if (LocalPlayer():Alive()) and button == nil then
-			if not isScoreboardOpen or 
-			   not (IsValid(panel1_inv) and IsValid(panel2_inv) and IsValid(panel3_inv)) then
-				CleanupScoreboard()
-				panel1_inv, panel2_inv, panel3_inv = createInventoryPanel(fullscreenBackground, 
-					lootent ~= nil and lootent or nil, 
-					lootent ~= nil and items or nil, 
-					lootent ~= nil and items_ammo or nil, 
-					false
-				)
-				isScoreboardOpen = true
-			end
+
+		local button = SB_CreateButton(HomigradScoreboard)
+		button:SetSize(30,30)
+		button:SetPos(HomigradScoreboard:GetWide() / 2 - button:GetWide() / 2,HomigradScoreboard:GetTall() - 15 - button:GetTall())
+		button.text = "S"
+		function button:DoClick()
+			OpenHomigradMenu()
+            HomigradScoreboard:Remove()
 		end
+
+		local muteAll = SB_CreateButton(HomigradScoreboard)
+		muteAll:SetSize(175,30)
+		muteAll:SetPos(-muteAll:GetWide() - 35 + HomigradScoreboard:GetWide() / 2,HomigradScoreboard:GetTall() - 45)
+		muteAll.text = "Mute Everyone"
+
+		function muteAll:Paint(w,h)
+			self.textColor = not muteall and green or red
+			SB_PaintButton(self,w,h)
+		end
+
+		function muteAll:DoClick() muteall = not muteall end
+
+		local muteAllDead = SB_CreateButton(HomigradScoreboard)
+		muteAllDead:SetSize(175,30)
+		muteAllDead:SetPos(35 + HomigradScoreboard:GetWide() / 2,HomigradScoreboard:GetTall() - 45)
+		muteAllDead.text = "Mute All Dead"
+
+		function muteAllDead:Paint(w,h)
+			self.textColor = not muteAlldead and green or red
+			SB_PaintButton(self,w,h)
+		end
+
+		function muteAllDead:DoClick() muteAlldead = not muteAlldead end
+
 		local func = TableRound().ScoreboardBuild
 
 		if func then
 			func(HomigradScoreboard,ScoreboardList)
 		end
-		
 	else
 		ToggleScoreboard_Override = nil
 		
@@ -501,55 +428,34 @@ function ToggleScoreboard(toggle, button, lootent, items, items_ammo)
 
 			if panel.Close then panel:Close() else panel:Remove() end
 		end 
-		for panel in pairs(ScoreboardList) do
-			if IsValid(panel) then
-				if panel.Close then panel:Close() else panel:Remove() end
-			end
-		end
-		isScoreboardOpen = false 
-		isInventoryOpen = false 
 	end
 end
 
+hook.Add("ScoreboardShow","HomigradOpenScoreboard",function()
+	ToggleScoreboard(true)
 
-local tabPressed = false
-hook.Add("Think", "HomigradScoreboardToggle", function()
-    local isTabDown = input.IsKeyDown(KEY_TAB)
-    
-    if isTabDown and not tabPressed then
-        tabPressed = true
-        if not isScoreboardOpen then
-			print(isScoreboardOpen, isInventoryOpen)
-            ToggleScoreboard(true, nil)
-        else
-			isScoreboardOpen = false 
-            ToggleScoreboard(false, true)
-			CleanupInventory()
-			CleanupScoreboard()
-			CleanupAll()
-        end
-    elseif not isTabDown then
-        tabPressed = false
-    end
+	return false
 end)
 
-hook.Add("ScoreboardShow", "HomigradScoreboardShow", function()
-    return true
-end)
+hook.Add("ScoreboardHide","HomigradHideScoreboard",function()
+	if ToggleScoreboard_Override then return end
 
-hook.Add("ScoreboardHide", "HomigradScoreboardHide", function()
-    return true
+	ToggleScoreboard(false)
 end)
 
 net.Receive("close_tab",function(len)
-	ToggleScoreboard(false, nil)
-	CleanupInventory()
-	CleanupScoreboard()
-	if fullscreenBackground then
-		fullscreenBackground:Remove()
-	end
-	--ResetBeerEffect()
-	--ResetRumEffect()  
+	ToggleScoreboard(false)
 end)
 
-ToggleScoreboard(false, nil)
+-- Probably not the best place to put it, but who give's a fuck. - Harrison
+hook.Add("HUDDrawScoreBoard","spectatorwarning",function()  
+    if LocalPlayer():Team() == 1002 then
+        draw.DrawText("You are currently in Spectator Mode.", "HomigradFontSmall", ScrW() / 2, ScrH() /1.2 ,
+            Color(255, 255, 255,255), TEXT_ALIGN_CENTER)
+		draw.DrawText("To Join in next round, please press F2 and select 'Join Game'!", "HomigradFontBigger", ScrW() / 2, ScrH() /1.15 ,
+            Color(255, 255, 255,255), TEXT_ALIGN_CENTER)
+    end
+end)
+
+
+ToggleScoreboard(false)
