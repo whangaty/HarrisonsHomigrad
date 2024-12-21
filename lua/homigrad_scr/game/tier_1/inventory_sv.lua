@@ -32,11 +32,14 @@ hook.Add("PlayerSpawn","!!!huyassdd",function(lootEnt)
 	end
 end)
 
+local searchSound = false 
 hook.Add("Player Think","Looting",function(ply)
 	local key = ply:KeyDown(IN_USE)
 
 	if not IsValid(ply.FakeRagdoll) and ply:Alive() and ply:KeyDown(IN_ATTACK2) then
 		if ply.okeloot ~= key and key then
+			ply:EmitSound("npc/combine_soldier/gear" .. math.random(1, 7) .. ".wav", 50, math.random(95, 105))
+
 			local tr = {}
 			tr.start = ply:GetAttachment(ply:LookupAttachment("eyes")).Pos
 			tr.endpos = tr.start + ply:EyeAngles():Forward() * 64

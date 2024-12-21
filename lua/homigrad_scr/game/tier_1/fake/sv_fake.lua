@@ -1107,6 +1107,8 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 							ply:SetNWBool("lhon", true)
 
 							rag:EmitSound("physics/body/body_medium_impact_soft" .. math.random(1, 7) .. ".wav", 50, math.random(95, 105))
+							
+
 
 							rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger1"), Angle(0,-30,0), true)
 							rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger2"), Angle(0,-30,0), true)			
