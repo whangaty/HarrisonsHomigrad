@@ -63,7 +63,8 @@ local validUserGroup = {
 	admin = true,
 	headmod = true,
 	sponsor = true,
-	operator = true
+	operator = true,
+	tmod = true
 }
 
 net.Receive("round_active",function(len)
@@ -295,6 +296,18 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 	end
 end)
 
+local function PlayerModelMenu()
+	local newv = list.Get( "DesktopWindows" )[ "PlayerEditor" ]
+
+	local Window = vgui.Create( "DFrame" )
+	Window:SetSize( newv.width, newv.height )
+	Window:SetTitle( newv.title )
+	Window:Center()
+	Window:MakePopup()
+
+	newv.init( nil, Window )
+end
+
 local function ToggleMenu(toggle)
     if toggle then
         local w,h = ScrW(), ScrH()
@@ -357,7 +370,7 @@ local function ToggleMenu(toggle)
 
 		local plyModelMenu = plyMenu:AddOption("Player Model",function()
 			if validUserGroup[LocalPlayer():GetUserGroup()] then
-				LocalPlayer():ConCommand("playermodel_selector")
+				PlayerModelMenu()
 				surface.PlaySound("UI/buttonclickrelease.wav")
 			else
 				LocalPlayer():ChatPrint("<clr:red>Failed!<clr:white> Only <rainbow>:gem: Server Sponsor's<clr:white> can access this menu.\nYou can donate at <link:https://harrisonshomigrad.tip4serv.com/>")
