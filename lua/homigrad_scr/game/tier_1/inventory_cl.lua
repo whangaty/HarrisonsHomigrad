@@ -22,7 +22,7 @@ local AmmoTypes = {
 	[9] = "vgui/wep_jack_hmcd_oldgrenade",
 	[10] = "vgui/wep_jack_hmcd_oldgrenade",
 	[11] = "vgui/wep_jack_hmcd_ied"
-	}
+}
 
 local white = Color(255,255,255)
 local black = Color(0,0,0,128)
@@ -53,26 +53,8 @@ local function getText(text,limitW)
 end
 
 local panel
-net.Receive("inventory", function()
-    local lply = LocalPlayer()
-
+local function openInventoryPanel(lootEnt, nickname, items, items_ammo)
     if IsValid(panel) then panel.override = true panel:Remove() end
-
-    local lootEnt = net.ReadEntity()
-    local success, items = pcall(net.ReadTable)
-    local nickname = lootEnt:IsPlayer() and lootEnt:Name() or lootEnt:GetNWString("Nickname") or ""
-
-    if not success or not lootEnt then return end
-
-    if IsValid(lootEnt:GetNWEntity("ActiveWeapon")) and items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] then
-        items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] = nil
-    end
-
-    local items_ammo = net.ReadTable()
-
-    items.weapon_hands = nil
-
-    local isSearching = true -- Flag to control "Searching" text
 
     panel = vgui.Create("DFrame")
     panel:SetAlpha(255)
@@ -102,111 +84,162 @@ net.Receive("inventory", function()
         surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
 
         draw.SimpleText(nickname .. "'s Inventory", "DefaultFixedDropShadow", 6, 6, white)
-        if isSearching then
-            draw.SimpleText("Searching...", "DefaultFixedDropShadow", w / 2, h / 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-        end
     end
 
     local x, y = 40, 40
     local corner = 6
 
-    -- Delay for weapons
-    timer.Simple(2, function()
-        if not IsValid(panel) then return end -- Ensure the panel still exists after the delay
+    if table.Count(items) == 0 then
+        panel.Paint = function(self, w, h)
+            draw.RoundedBox(0, 0, 0, w, h, black)
+            surface.SetDrawColor(255, 255, 255, 128)
+            surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
 
-        for wep, weapon in pairs(items) do
-            local button = vgui.Create("DButton", panel)
-            button:SetPos(x, y)
-            button:SetSize(64, 64)
+            draw.SimpleText(nickname .. " has no items.", "DefaultFixedDropShadow", w / 2, h / 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        end
+        return
+    end
 
-            x = x + button:GetWide() + 6
-            if x + button:GetWide() >= panel:GetWide() then
-                x = 40
-                y = y + button:GetTall() + 6
+    for wep, weapon in pairs(items) do
+        local button = vgui.Create("DButton", panel)
+        button:SetPos(x, y)
+        button:SetSize(64, 64)
+
+        x = x + button:GetWide() + 6
+        if x + button:GetWide() >= panel:GetWide() then
+            x = 40
+            y = y + button:GetTall() + 6
+        end
+
+        button:SetText("")
+
+        local wepTbl = wep
+
+        local text = type(wepTbl) == "table" and wepTbl.PrintName or wep
+        text = getText(text, button:GetWide() - corner * 2)
+
+        button.Paint = function(self, w, h)
+            draw.RoundedBox(0, 0, 0, w, h, self:IsHovered() and black2 or black)
+            surface.SetDrawColor(255, 255, 255, 128)
+            surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
+
+            for i, text in pairs(text) do
+                draw.SimpleText(text, "DefaultFixedDropShadow", corner, corner + (i - 1) * 12, white)
             end
 
-            button:SetText("")
+            local x, y = self:LocalToScreen(0, 0)
+            DrawWeaponSelectionEX(wepTbl, x, y, w, h)
+        end
 
-            local wepTbl = wep
+        function button:OnRemove()
+            if IsValid(model) then model:Remove() end
+        end
 
-            local text = type(wepTbl) == "table" and wepTbl.PrintName or wep
-            text = getText(text, button:GetWide() - corner * 2)
+        button.DoRightClick = function()
+            net.Start("ply_take_item")
+            net.WriteEntity(lootEnt)
+            net.WriteString(wep)
+            net.SendToServer()
+        end
 
-            button.Paint = function(self, w, h)
-                draw.RoundedBox(0, 0, 0, w, h, self:IsHovered() and black2 or black)
-                surface.SetDrawColor(255, 255, 255, 128)
-                surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
+        button.DoClick = function()
+            net.Start("ply_take_item")
+            net.WriteEntity(lootEnt)
+            net.WriteString(wep)
+            net.SendToServer()
+        end
+    end
 
-                for i, text in pairs(text) do
-                    draw.SimpleText(text, "DefaultFixedDropShadow", corner, corner + (i - 1) * 12, white)
-                end
+    for ammo, amt in pairs(items_ammo) do
+        if blackListedAmmo[ammo] then continue end
+        local button = vgui.Create("DButton", panel)
+        button:SetPos(x, y)
+        button:SetSize(64, 64)
 
-                local x, y = self:LocalToScreen(0, 0)
-                DrawWeaponSelectionEX(wepTbl, x, y, w, h)
-            end
+        x = x + button:GetWide() + 6
+        if x + button:GetWide() >= panel:GetWide() then
+            x = 40
+            y = y + button:GetTall() + 6
+        end
 
-            function button:OnRemove()
-                if IsValid(model) then model:Remove() end
-            end
+        button:SetText('')
 
-            button.DoRightClick = function()
-                net.Start("ply_take_item")
-                net.WriteEntity(lootEnt)
-                net.WriteString(wep)
-                net.SendToServer()
-            end
+        local text = game.GetAmmoName(ammo)
+        text = getText(text, button:GetWide() - corner * 2)
 
-            button.DoClick = function()
-                net.Start("ply_take_item")
-                net.WriteEntity(lootEnt)
-                net.WriteString(wep)
-                net.SendToServer()
+        button.Paint = function(self, w, h)
+            draw.RoundedBox(0, 0, 0, w, h, self:IsHovered() and black2 or black)
+            surface.SetDrawColor(255, 255, 255, 128)
+            surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
+
+            local round = Material(AmmoTypes[tonumber(ammo)] or "vgui/hud/hmcd_person", "noclamp smooth")
+            surface.SetMaterial(round)
+            surface.SetDrawColor(255, 255, 255, 255)
+            surface.DrawTexturedRect(2, 2, w - 4, h - 4)
+
+            for i, text in pairs(text) do
+                draw.SimpleText(text, "DefaultFixedDropShadow", corner, corner + (i - 1) * 12, white)
             end
         end
 
-        if not IsValid(panel) then return end -- Ensure the panel still exists after the delay
+        button.DoClick = function()
+            net.Start("ply_take_ammo")
+            net.WriteEntity(lootEnt)
+            net.WriteFloat(tonumber(ammo))
+            net.SendToServer()
+        end
+        button.DoRightClick = button.DoClick
+    end
+end
 
-        for ammo, amt in pairs(items_ammo) do
-            if blackListedAmmo[ammo] then continue end
-            local button = vgui.Create("DButton", panel)
-            button:SetPos(x, y)
-            button:SetSize(64, 64)
+net.Receive("inventory", function()
+    local lply = LocalPlayer()
 
-            x = x + button:GetWide() + 6
-            if x + button:GetWide() >= panel:GetWide() then
-                x = 40
-                y = y + button:GetTall() + 6
-            end
+    local lootEnt = net.ReadEntity()
+    local success, items = pcall(net.ReadTable)
+    local nickname = lootEnt:IsPlayer() and lootEnt:Name() or lootEnt:GetNWString("Nickname") or ""
 
-            button:SetText('')
+    if not success or not lootEnt then return end
 
-            local text = game.GetAmmoName(ammo)
-            text = getText(text, button:GetWide() - corner * 2)
+    if IsValid(lootEnt:GetNWEntity("ActiveWeapon")) and items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] then
+        items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] = nil
+    end
 
-            button.Paint = function(self, w, h)
-                draw.RoundedBox(0, 0, 0, w, h, self:IsHovered() and black2 or black)
-                surface.SetDrawColor(255, 255, 255, 128)
-                surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
+    local items_ammo = net.ReadTable()
 
-                local round = Material(AmmoTypes[tonumber(ammo)] or "vgui/hud/hmcd_person", "noclamp smooth")
-                surface.SetMaterial(round)
-                surface.SetDrawColor(255, 255, 255, 255)
-                surface.DrawTexturedRect(2, 2, w - 4, h - 4)
+    items.weapon_hands = nil
 
-                for i, text in pairs(text) do
-                    draw.SimpleText(text, "DefaultFixedDropShadow", corner, corner + (i - 1) * 12, white)
-                end
-            end
+    if not IsValid(panel) then
+        -- Create the "Searching..." panel only if no inventory panel exists
+        local searchingPanel = vgui.Create("DFrame")
+        searchingPanel:SetAlpha(255)
+        searchingPanel:SetSize(300, 100)
+        searchingPanel:Center()
+        searchingPanel:SetDraggable(false)
+        searchingPanel:MakePopup()
+        searchingPanel:SetTitle("")
 
-            button.DoClick = function()
-                net.Start("ply_take_ammo")
-                net.WriteEntity(lootEnt)
-                net.WriteFloat(tonumber(ammo))
-                net.SendToServer()
-            end
-            button.DoRightClick = button.DoClick
+        local searchingTimer
+
+        searchingPanel.Paint = function(self, w, h)
+            draw.RoundedBox(0, 0, 0, w, h, black)
+            surface.SetDrawColor(255, 255, 255, 255)
+            surface.DrawOutlinedRect(0, 0, w, h)
+            draw.SimpleText("Searching "..nickname.."...", "DefaultFixedDropShadow", w / 2, h / 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         end
 
-		isSearching = false;
-	end)
+        searchingPanel.OnRemove = function()
+            if searchingTimer then timer.Remove(searchingTimer) end
+        end
+
+		searchingTimer = timer.Simple(2, function()
+			if IsValid(searchingPanel) then
+				searchingPanel:Remove()
+				openInventoryPanel(lootEnt, nickname, items, items_ammo)
+			end
+		end)
+    else
+        -- Refresh the existing inventory panel
+        openInventoryPanel(lootEnt, nickname, items, items_ammo)
+    end
 end)
