@@ -185,7 +185,7 @@ function Gib_Input(rag, bone, dmgInfo)
 	local dmgPos = dmgInfo:GetDamagePosition()
 	
 	if not gibRemove[phys_bone] then
-		sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
+		sound.Emit(rag,"homigrad/player/headshot" .. math.random(1,2) .. ".wav")
 		sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
 		sound.Emit(rag,"physics/body/body_medium_break3.wav")
 		sound.Emit(rag,"physics/glass/glass_sheet_step" .. math.random(1,4) .. ".wav",90,50,2)

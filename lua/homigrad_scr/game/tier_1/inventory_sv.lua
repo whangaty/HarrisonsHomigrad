@@ -32,6 +32,7 @@ hook.Add("PlayerSpawn","!!!huyassdd",function(lootEnt)
 	end
 end)
 
+local searchSound = false 
 hook.Add("Player Think","Looting",function(ply)
 	local key = ply:KeyDown(IN_USE)
 
@@ -45,7 +46,12 @@ hook.Add("Player Think","Looting",function(ply)
 			local hitEnt = tracea.Entity
 
 			if not IsValid(hitEnt) then return end
-			if IsValid(RagdollOwner(hitEnt)) then hitEnt = RagdollOwner(hitEnt) end
+
+			if IsValid(RagdollOwner(hitEnt)) then 
+				hitEnt = RagdollOwner(hitEnt) 
+				ply:EmitSound("npc/combine_soldier/gear" .. math.random(1, 7) .. ".wav", 50, math.random(95, 105)) 
+			end
+			
 			if IsValid(hitEnt) and hitEnt.IsJModArmor then hitEnt = hitEnt.Owner end
 			if not IsValid(hitEnt) then return end
 			if hitEnt:IsPlayer() and hitEnt:Alive() and not IsValid(hitEnt.FakeRagdoll) then return end
@@ -128,8 +134,8 @@ end)
 local trollmsgs = {
 	"You have been kicked. Error Code: AT6001",
 	"You have been banned for exploits.",
-	"You are suspected of cheating! For further information proceed to natribu.org",
-	"Disconnect: Client 0 overflowed reliable channel..",
+	"Shouldn't of taken that...",
+	"Off you go!",
 }
 
 net.Receive("ply_take_item",function(len,ply)

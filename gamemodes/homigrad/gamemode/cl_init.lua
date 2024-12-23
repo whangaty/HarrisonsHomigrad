@@ -55,6 +55,18 @@ surface.CreateFont("HomigradFontSmall",{
 -- Harrisons puts ConVar in worst script, asked to leave
 CreateClientConVar("hg_scopespeed","0.5",true,false,"Changes the speed of the sniper scope when zoomed in.",0,5)
 
+-- For player models!!
+local validUserGroup = {
+	superadmin = true,
+	servermanager = true,
+	owner = true,
+	admin = true,
+	headmod = true,
+	sponsor = true,
+	operator = true,
+	tmod = true
+}
+
 net.Receive("round_active",function(len)
 	roundActive = net.ReadBool()
 	roundTimeStart = net.ReadFloat()
@@ -284,6 +296,18 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 	end
 end)
 
+local function PlayerModelMenu()
+	local newv = list.Get( "DesktopWindows" )[ "PlayerEditor" ]
+
+	local Window = vgui.Create( "DFrame" )
+	Window:SetSize( newv.width, newv.height )
+	Window:SetTitle( newv.title )
+	Window:Center()
+	Window:MakePopup()
+
+	newv.init( nil, Window )
+end
+
 local function ToggleMenu(toggle)
     if toggle then
         local w,h = ScrW(), ScrH()
@@ -332,12 +356,30 @@ local function ToggleMenu(toggle)
         plyMenu:MakePopup()
         plyMenu:SetKeyboardInputEnabled(false)
 
-		plyMenu:AddOption("Armor Menu",function()
+		local armorMenu = plyMenu:AddOption("Armor Menu",function()
             LocalPlayer():ConCommand("jmod_ez_inv")
+			surface.PlaySound("UI/buttonclickrelease.wav")
         end)
-		plyMenu:AddOption("Ammo Menu",function()
+		armorMenu:SetIcon("icon16/shield.png")
+		
+		local ammoMenu = plyMenu:AddOption("Ammo Menu",function()
 			LocalPlayer():ConCommand("hg_ammomenu")
+			surface.PlaySound("UI/buttonclickrelease.wav")
 		end)
+		ammoMenu:SetIcon("icon16/box.png")
+
+
+		-- TODO: This option does not work and does not actually do anything.
+		-- TODO: In select gamemodes, we need to make this so that whatever the player chooses (Which I belive is cl_playermodel) is displayed.
+		local plyModelMenu = plyMenu:AddOption("Player Model",function()
+			if validUserGroup[LocalPlayer():GetUserGroup()] then
+				PlayerModelMenu()
+				surface.PlaySound("UI/buttonclickrelease.wav")
+			end
+		end)
+		
+		plyModelMenu:SetIcon("icon16/user_suit.png")
+		
 		local EZarmor = LocalPlayer().EZarmor
 		if JMod.GetItemInSlot(EZarmor, "eyes") then
 			plyMenu:AddOption("Toggle Mask/Helmet Visor",function()
