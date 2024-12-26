@@ -375,9 +375,12 @@ local function ToggleMenu(toggle)
 			if validUserGroup[LocalPlayer():GetUserGroup()] then
 				PlayerModelMenu()
 				surface.PlaySound("UI/buttonclickrelease.wav")
+			else
+				LocalPlayer():ChatPrint("<clr:red>Failed!<clr:white> Only <rainbow>:gem: Server Sponsor's<clr:white> can access this menu.\nYou can donate at <link:https://harrisonshomigrad.tip4serv.com/>")
+				surface.PlaySound("Friends/friend_join.wav")
 			end
+
 		end)
-		
 		plyModelMenu:SetIcon("icon16/user_suit.png")
 		
 		local EZarmor = LocalPlayer().EZarmor
