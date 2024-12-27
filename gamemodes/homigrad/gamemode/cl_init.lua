@@ -368,9 +368,6 @@ local function ToggleMenu(toggle)
 		end)
 		ammoMenu:SetIcon("icon16/box.png")
 
-
-		-- TODO: This option does not work and does not actually do anything.
-		-- TODO: In select gamemodes, we need to make this so that whatever the player chooses (Which I belive is cl_playermodel) is displayed.
 		local plyModelMenu = plyMenu:AddOption("Player Model",function()
 			if validUserGroup[LocalPlayer():GetUserGroup()] then
 				PlayerModelMenu()

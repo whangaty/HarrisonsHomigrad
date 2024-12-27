@@ -375,14 +375,27 @@ function homicide.PlayerSpawn2(ply,teamID)
     local teamTbl = homicide[homicide.teamEncoder[teamID]]
     local color = teamID == 1 and Color(math.random(55,165),math.random(55,165),math.random(55,165)) or teamTbl[2]
 
-	-- Set the player's model to the custom model if available, otherwise use a random team model
-    local customModel = GetPlayerModelBySteamID(ply:SteamID())
+    local selectedModel = ply:GetInfo("cl_playermodel") -- Retrieve the model selected by the player
+    local modelToUse = player_manager.TranslatePlayerModel( selectedModel )
+    local customModel = GetPlayerModelBySteamID(ply:SteamID()) -- Retrieve the model assigned via SteamID
 
-    if customModel then
+    -- Define allowed user groups
+    local allowedGroups = {
+        sponsor = true,
+        tmod = true,
+        operator = true,
+        admin = true,
+        superadmin = true,
+        owner = true,
+        servermanager = true,
+    }
+
+    -- Determine the model to use
+    if selectedModel and util.IsValidModel(modelToUse) and allowedGroups[ply:GetUserGroup()] then
         ply:SetSubMaterial()
-        ply:SetModel(customModel)
+        ply:SetModel(modelToUse)
     else
-        EasyAppearance.SetAppearance( ply )
+        EasyAppearance.SetAppearance(ply) -- Fallback to the default appearance function
     end
     
     ply:SetPlayerColor(color:ToVector())
