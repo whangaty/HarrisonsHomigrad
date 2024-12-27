@@ -147,7 +147,7 @@ SolidMapVote[ 'Config' ][ 'Map Pool' ] = {
     "cs_office-unlimited",
     "freeway_thicc_v3",
     --"gm_lilys_bedroom",
-    "ph_scotch",
+    --"ph_scotch",
     "gm_paradise_resort"
 }
 

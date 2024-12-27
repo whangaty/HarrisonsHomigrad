@@ -90,7 +90,7 @@ function GuiltCheck(att,ply)
 			--print("[GUILT CHECK] "..att:Name().." has exceeded their guilt of 100%. They are on team "..tostring(att:Team()))
 			if not validUserGroup[att:GetUserGroup()] then
 				att:Kill()
-				RunConsoleCommand("ulx","tsay",att:Name().." has been slayed for exceeding their guilt of 100%.")
+				RunConsoleCommand("ulx","tsay",":<clr:red>[GUILT] "..att:Name().." has been slayed for exceeding their guilt of 100%.")
 				return
 			else
 				return
