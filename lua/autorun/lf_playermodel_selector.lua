@@ -883,7 +883,7 @@ function Menu.Setup()
 			
 			local panel = panel:Add( "DScrollPanel" )
 			panel:Dock( FILL )
-			
+			--[[]
 			local c = panel:Add( "DCheckBoxLabel" )
 			c.cvar = "cl_playermodel_selector_force"
 			c:Dock( TOP )
@@ -901,7 +901,7 @@ function Menu.Setup()
 			t:SetAutoStretchVertical( true )
 			t:SetText( "If enabled, your selected playermodel will be protected. No other function will be able to change your playermodel anymore." )
 			t:SetDark( true )
-			t:SetWrap( true )
+			t:SetWrap( true )]]
 			
 			local c = panel:Add( "DCheckBoxLabel" )
 			c.cvar = "cl_playermodel_selector_bgcolor_custom"
@@ -943,6 +943,7 @@ function Menu.Setup()
 			t:SetDark( true )
 			t:SetWrap( true )
 			
+			--[[]
 			local c = panel:Add( "DCheckBoxLabel" )
 			c.cvar = "cl_playermodel_selector_unlockflexes"
 			c:Dock( TOP )
@@ -963,7 +964,7 @@ function Menu.Setup()
 			t:SetText( "This allows you to manipulate flexes on your playermodel. However, flex manipulation is not really made for playermodels and will cause issues. This includes the following:\n- Eye blinking no longer working.\n- Faces might be distorted unless the flexes are corrected manually.\n- Might break the faces of incompatible playermodels completely.\n- Even if you put all flexes to default value, the engine still considers them as manipulated. Models with problems won't be fixed.\nYou must switch your model once, for the tab to appear!" )
 			t:SetDark( true )
 			t:SetWrap( true )
-			
+			]]
 			local b = panel:Add( "DButton" )
 			b:Dock( TOP )
 			b:DockMargin( 0, 0, 270, 5 )
