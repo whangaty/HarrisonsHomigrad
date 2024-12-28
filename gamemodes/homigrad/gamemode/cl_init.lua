@@ -370,15 +370,30 @@ local function ToggleMenu(toggle)
 
 		local plyModelMenu = plyMenu:AddOption("Player Model",function()
 			if validUserGroup[LocalPlayer():GetUserGroup()] then
-				PlayerModelMenu()
+				RunConsoleCommand("playermodel_selector")
 				surface.PlaySound("UI/buttonclickrelease.wav")
 			else
-				LocalPlayer():ChatPrint("<clr:red>Failed!<clr:white> Only <rainbow>:gem: Server Sponsor's<clr:white> can access this menu.\nYou can donate at <link:https://harrisonshomigrad.tip4serv.com/>")
+				LocalPlayer():ChatPrint("<clr:red>Failed!<clr:white> Only <rainbow>:gem: Server Sponsor's<clr:white> can access this menu.\nBecome a <rainbow>:gem: Server Sponsor<clr:white> at <link:https://harrisonshomigrad.tip4serv.com/>")
 				surface.PlaySound("Friends/friend_join.wav")
 			end
 
 		end)
 		plyModelMenu:SetIcon("icon16/user_suit.png")
+
+		if validUserGroup[LocalPlayer():GetUserGroup()] then
+			local plyModelMenu = plyMenu:AddOption("Remove Custom Model",function()
+				if LocalPlayer():GetInfo("cl_playermodel") != "none" and validUserGroup[LocalPlayer():GetUserGroup()] then
+					LocalPlayer():ChatPrint("<clr:green>Success!<clr:white> Your player model has been reverted to a regular citizen model, and will be applied next round.")
+					RunConsoleCommand("cl_playermodel", "none")
+					surface.PlaySound("UI/buttonclickrelease.wav")
+				else
+					LocalPlayer():ChatPrint("<clr:red>Failed!<clr:white> You do not have a model assigned.")
+					surface.PlaySound("Friends/friend_join.wav")
+				end
+
+			end)
+			plyModelMenu:SetIcon("icon16/cancel.png")
+		end
 		
 		local EZarmor = LocalPlayer().EZarmor
 		if JMod.GetItemInSlot(EZarmor, "eyes") then

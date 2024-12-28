@@ -138,7 +138,7 @@ function hideandseek.PlayerSpawn2(ply,teamID)
     }
 
     -- Determine the model to use
-    if selectedModel and util.IsValidModel(modelToUse) and allowedGroups[ply:GetUserGroup()] then
+    if selectedModel and util.IsValidModel(modelToUse) and allowedGroups[ply:GetUserGroup()] and selectedModel != "none" then
         ply:SetSubMaterial()
         ply:SetModel(modelToUse)
     else

@@ -424,7 +424,7 @@ function Menu.Setup()
 	Frame = vgui.Create( "DFrame" )
 	local fw, fh = math.min( ScrW() - 16, 960 ), math.min( ScrH() - 16, 700 )
 	Frame:SetSize( fw, fh )
-	Frame:SetTitle( "Enhanced PlayerModel Selector "..Version )
+	Frame:SetTitle( "Enhanced PlayerModel Selector "..Version.." (Optimised for Harrison's Homigrad)" )
 	Frame:SetVisible( true )
 	Frame:SetDraggable( true )
 	Frame:SetScreenLock( false )
@@ -468,12 +468,12 @@ function Menu.Setup()
 			Frame:SetSize( ScrW(), ScrH() )
 			Frame:Center()
 			Frame:SetDraggable( false )
-			Menu.ApplyButton:SetPos( ScrW() - 560, 30 )
+			--Menu.ApplyButton:SetPos( ScrW() - 560, 30 )
 			Menu.ResetButton:SetPos( 5, ScrH() - 25 )
 			Menu.AdvButton:SetPos( ScrW() - 200, 3 )
 			maxi_mode = 1
 		elseif maxi_allowed and maxi_mode == 1 then
-			Menu.ApplyButton:SetVisible( false )
+			--Menu.ApplyButton:SetVisible( false )
 			Menu.ResetButton:SetVisible( false )
 			Menu.AdvButton:SetVisible( false )
 			Menu.Right:SetVisible( false )
@@ -483,8 +483,8 @@ function Menu.Setup()
 			Frame:SetSize( fw, fh )
 			Frame:Center()
 			Frame:SetDraggable( true )
-			Menu.ApplyButton:SetPos( fw - 560, 30 )
-			Menu.ApplyButton:SetVisible( true )
+			--Menu.ApplyButton:SetPos( fw - 560, 30 )
+			--Menu.ApplyButton:SetVisible( true )
 			Menu.ResetButton:SetPos( 5, fh - 25 )
 			Menu.ResetButton:SetVisible( true )
 			Menu.AdvButton:SetPos( fw - 200, 3 )
@@ -519,13 +519,14 @@ function Menu.Setup()
 		SetClipboardText( "http://steamcommunity.com/sharedfiles/filedetails/?id=504945881" )
 	end
 	
+	--[[
 	Menu.ApplyButton = Frame:Add( "DButton" )
 	Menu.ApplyButton:SetSize( 120, 30 )
 	Menu.ApplyButton:SetPos( fw - 560, 30 )
 	Menu.ApplyButton:SetText( "Apply playermodel" )
 	Menu.ApplyButton:SetEnabled( LocalPlayer():IsAdmin() or GetConVar( "sv_playermodel_selector_instantly" ):GetBool() )
 	Menu.ApplyButton.DoClick = LoadPlayerModel
-	
+	]]
 	Menu.ResetButton = Frame:Add( "DButton" )
 	Menu.ResetButton:SetSize( 40, 20 )
 	Menu.ResetButton:SetPos( 5, fh - 25 )
@@ -583,22 +584,82 @@ function Menu.Setup()
 				timer.Simple( 0.1, function() Menu.UpdateFromConvars() end )
 			end
 			
+			local ModelBlacklist = {
+				"combine",
+				"combineelite",
+				"combineprison",
+				"police",
+				"policefem",
+				"gman",
+				"EC Male_01",
+				"EC Male_02",
+				"EC Male_03",
+				"EC Male_04",
+				"EC Male_05",
+				"EC Male_06",
+				"EC Male_07",
+				"EC Male_08",
+				"EC Male_09",
+				"EC Male_10",
+				"EC Male_11",
+				"EC Female_01",
+				"EC Female_01_b",
+				"EC Female_02",
+				"EC Female_02_b",
+				"EC Female_03",
+				"EC Female_03_b",
+				"EC Female_04",
+				"EC Female_04_b",
+				"EC Female_05",
+				"EC Female_05_b",
+				"EC Female_06",
+				"EC Female_06_b",
+				"EC Female_07",
+				"EC Female_07_b",
+				"Doot Doot Skelly",
+				"JMod_HazMat",
+				"zombine",
+				"skeleton",
+				"Creeper Girl",
+			}
+
+			-- Actually the worst code I have ever had to deal with.
+			for i = 1, 41 do
+				table.insert(ModelBlacklist, "Citizen_male" .. i)
+			end
+
+			for i = 1, 41 do
+				table.insert(ModelBlacklist, "Cool_Citizen_male" .. i)
+			end
+
+			for i = 1, 6 do
+				table.insert(ModelBlacklist, "Citizen_Female" .. i)
+			end
+
+			for i = 1, 62 do
+				table.insert(ModelBlacklist, "Police Female 0" .. i)
+			end
+
+			for i = 1, 100 do
+				table.insert(ModelBlacklist, "Police Male 0" .. i)
+			end
+
+
 			local AllModels = player_manager.AllValidModels()
 			
 			function Menu.ModelPopulate()
-				
 				ModelIconLayout:Clear()
 				ModelList:Clear()
 				
 				local ModelFilter = Menu.ModelFilter:GetValue() or nil
 				
-				local function IsInFilter( name )
+				local function IsInFilter(name)
 					if not ModelFilter or ModelFilter == "" then
 						return true
 					else
-						local tbl = string.Split( ModelFilter, " " )
-						for _, substr in pairs( tbl ) do
-							if not string.match( name:lower(), string.PatternSafe( substr:lower() ) ) then
+						local tbl = string.Split(ModelFilter, " ")
+						for _, substr in pairs(tbl) do
+							if not string.match(name:lower(), string.PatternSafe(substr:lower())) then
 								return false
 							end
 						end
@@ -606,31 +667,35 @@ function Menu.Setup()
 					end
 				end
 				
-				for name, model in SortedPairs( AllModels ) do
-					
-					if IsInFilter( name ) then
-					
-						local icon = ModelIconLayout:Add( "SpawnIcon" )
-						icon:SetSize( 64, 64 )
-						--icon:InvalidateLayout( true )
-						icon:SetModel( model )
-						icon:SetTooltip( name )
-						table.insert( modelicons, icon )
-						icon.DoClick = function()
-							RunConsoleCommand( "cl_playermodel", name )
-							RunConsoleCommand( "cl_playerbodygroups", "0" )
-							RunConsoleCommand( "cl_playerskin", "0" )
-							RunConsoleCommand( "cl_playerflexes", "0" )
-							timer.Simple( 0.1, function() Menu.UpdateFromConvars() end )
+				local function IsBlacklisted(name)
+					for _, blacklistedModel in pairs(ModelBlacklist) do
+						if name == blacklistedModel then
+							return true
 						end
-						
-						ModelList:AddLine( name, model )
-						
 					end
-					
+					return false
 				end
 				
+				for name, model in SortedPairs(AllModels) do
+					if IsInFilter(name) and not IsBlacklisted(name) then
+						local icon = ModelIconLayout:Add("SpawnIcon")
+						icon:SetSize(64, 64)
+						icon:SetModel(model)
+						icon:SetTooltip(name)
+						table.insert(modelicons, icon)
+						icon.DoClick = function()
+							RunConsoleCommand("cl_playermodel", name)
+							RunConsoleCommand("cl_playerbodygroups", "0")
+							RunConsoleCommand("cl_playerskin", "0")
+							RunConsoleCommand("cl_playerflexes", "0")
+							timer.Simple(0.1, function() Menu.UpdateFromConvars() end)
+						end
+						
+						ModelList:AddLine(name, model)
+					end
+				end
 			end
+
 			
 			Menu.ModelPopulate()
 		
