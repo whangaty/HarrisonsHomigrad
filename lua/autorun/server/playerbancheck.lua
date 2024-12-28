@@ -97,7 +97,7 @@ local function CheckPlayerDetails(ply)
 
     -- Check if the player owns the game
     if steamID64 ~= ply:OwnerSteamID64() then
-        ply:Kick("[Harrison's Homigrad] You cannot join this server because you do not own Garry's Mod, and are playing via a Family Share account.\nTo become whitelisted, you can appeal at https://harrisonshomigrad.noclip.me")
+        ply:Kick("[Harrison's Homigrad] You cannot join this server because you do not own Garry's Mod, and are playing via a Family Share account.\nTo become whitelisted, you can appeal at https://discord.gg/harrisonshomigrad")
         return
     end
 
@@ -112,7 +112,7 @@ local function CheckPlayerDetails(ply)
                 local banData = data.players[1]
 
                 if banData.VACBanned or banData.NumberOfGameBans > 0 then
-                    ply:Kick("[Harrison's Homigrad] You cannot join this server due to VAC or Game Ban on your account.\nTo become whitelisted, you can appeal at https://harrisonshomigrad.noclip.me")
+                    ply:Kick("[Harrison's Homigrad] You cannot join this server due to VAC or Game Ban on your account.\nTo become whitelisted, you can appeal at https://discord.gg/harrisonshomigrad")
                 else
                     print("Player ", ply:Nick(), " (SteamID: ", steamID, ") is clean.")
                 end

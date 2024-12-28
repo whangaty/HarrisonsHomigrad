@@ -581,8 +581,8 @@ local function RemoveRag(self)
 end
 
 local CustomWeight = {
-	["models/player/police_fem.mdl"] = 50,
-	["models/player/police.mdl"] = 60,
+	["models/player/police_fem.mdl"] = 65,
+	["models/player/police.mdl"] = 65,
 	["models/player/Rusty/NatGuard/male_01.mdl"] = 90,
 	["models/player/Rusty/NatGuard/male_02.mdl"] = 90,
 	["models/player/Rusty/NatGuard/male_03.mdl"] = 90,
@@ -706,7 +706,7 @@ function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 
 		local matrix = self:GetBoneMatrix(bone)
 
-		phys:SetMass(CustomWeight[rag:GetModel()] or IdealMassPlayer[rag:GetBoneName(bone)] or 20)
+		phys:SetMass(CustomWeight[rag:GetModel()] or IdealMassPlayer[rag:GetBoneName(bone)] or 65)
 		phys:SetVelocity(vel)
 
 		if phys_bone and phys_bone == physNum then
