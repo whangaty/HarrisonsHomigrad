@@ -588,6 +588,7 @@ function Menu.Setup()
 				"combine",
 				"charple",
 				"stripped",
+				"kleiner",
 				"combineelite",
 				"combineprison",
 				"police",

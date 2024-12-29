@@ -81,7 +81,7 @@ function EasyAppearance.Menu( ply )
 
         ent:SetupBones()
         ent:SetSubMaterial( Models[ ent:GetModel() ][2], Appearance.strColthesStyle and EasyAppearance.Appearances[ sex ][ Appearance.strColthesStyle ] or "" )
-        EasyAppearance.DrawAttachment(ent,Appearance.strAttachmets)
+        --EasyAppearance.DrawAttachment(ent,Appearance.strAttachmets)
         return 
     end
 
@@ -132,11 +132,11 @@ function EasyAppearance.Menu( ply )
     for k,v in pairs( EasyAppearance.Attachmets ) do
         CombAttBox:AddChoice( k, k )
     end
-
+--[[]
     function CombAttBox:OnSelect( index, text, data )
         Appearance.strAttachmets = text
     end
-
+]]
     DPanel.ApplyButton = vgui.Create( "DButton", DPanel )
     local AplyBtn = DPanel.ApplyButton
     AplyBtn:Dock( BOTTOM )
