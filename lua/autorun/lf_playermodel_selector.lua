@@ -269,13 +269,14 @@ net.Receive("lf_playermodel_update", function( len, ply )
 	end
 end )
 
+--[[]
 hook.Add( "PlayerSpawn", "lf_playermodel_force_hook1", function( ply )
 	if GetConVar( "sv_playermodel_selector_force" ):GetBool() and tobool( ply:GetInfoNum( "cl_playermodel_selector_force", 0 ) ) then
 		--UpdatePlayerModel( ply )
 		ply.lf_playermodel_spawned = nil
 	end
-end )
-
+end )]]
+--[[]
 local function ForceSetModel( ply, mdl )
 	if GetConVar( "sv_playermodel_selector_force" ):GetBool() and Allowed( ply ) and tobool( ply:GetInfoNum( "cl_playermodel_selector_force", 0 ) ) then
 		if !ply.lf_playermodel_spawned then
@@ -289,22 +290,9 @@ local function ForceSetModel( ply, mdl )
 		if addon_legs then hook.Run( "SetModel" , ply, mdl ) end
 	end
 end
+]]
 
-local function ToggleForce()
-	if plymeta.SetModel and plymeta.SetModel ~= ForceSetModel then
-		CurrentPlySetModel = plymeta.SetModel
-	else
-		CurrentPlySetModel = SetMDL
-	end
-	
-	if GetConVar( "sv_playermodel_selector_force" ):GetBool() then
-		plymeta.SetModel = ForceSetModel
-	else
-		plymeta.SetModel = CurrentPlySetModel
-	end
-end
-cvars.AddChangeCallback( "sv_playermodel_selector_force", ToggleForce )
-
+--[[]
 hook.Add( "Initialize", "lf_playermodel_force_hook2", function( ply )
 	if file.Exists( "autorun/sh_legs.lua", "LUA" ) then addon_legs = true end
 	--if file.Exists( "autorun/tfa_vox_loader.lua", "LUA" ) then addon_vox = true end
@@ -312,13 +300,10 @@ hook.Add( "Initialize", "lf_playermodel_force_hook2", function( ply )
 	
 	local try = 0
 	
-	ToggleForce()
-	
 	timer.Create( "lf_playermodel_force_timer", 5, 0, function()
 		if plymeta.SetModel == ForceSetModel or not GetConVar( "sv_playermodel_selector_force" ):GetBool() then
 			timer.Remove( "lf_playermodel_force_timer" )
 		else
-			ToggleForce()
 			try = try + 1
 			print( "LF_PMS: Addon conflict detected. Unable to initialize enforcer to protect playermodel. [Attempt: " .. tostring( try ) .. "/10]" )
 			if try >= 10 then
@@ -326,7 +311,7 @@ hook.Add( "Initialize", "lf_playermodel_force_hook2", function( ply )
 			end
 		end
 	end )
-end )
+end )]]
 
 
 end
@@ -363,7 +348,7 @@ if file.Exists( "lf_playermodel_selector/cl_favorites.txt", "DATA" ) then
 end
 
 
-CreateClientConVar( "cl_playermodel_selector_force", "1", true, true )
+--CreateClientConVar( "cl_playermodel_selector_force", "1", true, true )
 CreateClientConVar( "cl_playermodel_selector_unlockflexes", "0", false, true )
 CreateClientConVar( "cl_playermodel_selector_bgcolor_custom", "1", true, true )
 CreateClientConVar( "cl_playermodel_selector_bgcolor_trans", "1", true, true )
