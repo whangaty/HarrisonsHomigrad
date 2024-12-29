@@ -29,7 +29,7 @@ function EasyAppearance.GetRandomAppearance()
 
     tRandomAppearance.strModel = table.Random( table.GetKeys( EasyAppearance.Models ) )
     tRandomAppearance.strColthesStyle = "Random"
-    tRandomAppearance.strAttachmets = table.Random( table.GetKeys( EasyAppearance.Attachmets ) )
+    if ply:GetInfo("hg_usecustommodel") == "false" then tRandomAppearance.strAttachmets = table.Random( table.GetKeys( EasyAppearance.Attachmets ) ) end
     
     return tRandomAppearance
 end
@@ -73,11 +73,20 @@ function EasyAppearance.SetAppearance( ply )
         tAppearance.strColthesStyle = table.Random( table.GetKeys( EasyAppearance.Appearances[sex] ) )
     end
 
-    if tAppearance.strAttachmets then
+    if tAppearance.strAttachmets and ply:GetInfo("hg_usecustommodel") == "false" then
         ply:SetNWString("EA_Attachments",tAppearance.strAttachmets)
     end
 
     ply:SetSubMaterial()
     ply:SetSubMaterial( tModelParms.intSubMat, EasyAppearance.Appearances[ sex ][ tAppearance.strColthesStyle ] )
     EasyAppearance.SendRequest( ply )
+end
+
+function EasyAppearance.SetCustomModel( ply )
+    local selectedModel = ply:GetInfo("cl_playermodel") -- Retrieve the model selected by the player
+    local modelToUse = player_manager.TranslatePlayerModel( selectedModel )
+    --local customModel = GetPlayerModelBySteamID(ply:SteamID()) -- Retrieve the model assigned via SteamID
+
+    ply:SetSubMaterial()
+    ply:SetModel(modelToUse)
 end

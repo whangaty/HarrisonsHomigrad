@@ -1,16 +1,7 @@
 -- Include the player model manager script (adjust the path as necessary)
 include("../../playermodelmanager_sv.lua")
 
--- Define allowed user groups
-local allowedGroups = {
-    sponsor = true,
-    tmod = true,
-    operator = true,
-    admin = true,
-    superadmin = true,
-    owner = true,
-    servermanager = true,
-}
+
 
 local function GetFriends(play)
     
@@ -385,20 +376,24 @@ local empty = {}
 function homicide.PlayerSpawn2(ply,teamID)
     local teamTbl = homicide[homicide.teamEncoder[teamID]]
     local color = teamID == 1 and Color(math.random(55,165),math.random(55,165),math.random(55,165)) or teamTbl[2]
-
-    local selectedModel = ply:GetInfo("cl_playermodel") -- Retrieve the model selected by the player
-    local modelToUse = player_manager.TranslatePlayerModel( selectedModel )
-    local customModel = GetPlayerModelBySteamID(ply:SteamID()) -- Retrieve the model assigned via SteamID
-
-    EasyAppearance.SetAppearance(ply) -- Force this first
-
-    --[[] Determine the model to use
-    if allowedGroups[ply:GetUserGroup()] then
-        ply:SetSubMaterial()
-        ply:SetModel(modelToUse)
+    
+    local validUserGroup = {
+        servermanager = true,
+        owner = true,
+        superadmin = true,
+        admin = true,
+        operator = true,
+        tmod = true,
+        sponsor = true
+    }
+        
+    if validUserGroup[ply:GetUserGroup()] and ply:GetInfo("hg_usecustommodel") == "true" then
+        EasyAppearance.SetCustomModel(ply)
+        print(ply:GetName().." Modle: "..tostring(ply:GetInfo("cl_playermodel")))
+        print(ply:GetUserGroup())
     else
-       return
-    end]]
+       EasyAppearance.SetAppearance(ply) -- Force this first``
+    end
     
     ply:SetPlayerColor(color:ToVector())
 
