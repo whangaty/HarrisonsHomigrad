@@ -29,7 +29,6 @@ function EasyAppearance.GetRandomAppearance()
 
     tRandomAppearance.strModel = table.Random( table.GetKeys( EasyAppearance.Models ) )
     tRandomAppearance.strColthesStyle = "Random"
-    --tRandomAppearance.strAttachmets = table.Random( table.GetKeys( EasyAppearance.Attachmets ) )
     
     return tRandomAppearance
 end
@@ -67,44 +66,13 @@ function EasyAppearance.SetAppearance( ply )
     ply:SetModel( tModelParms.strPatch )
     
     local sex = EasyAppearance.Sex[ ply:GetModelSex() ]
+
    
     if not EasyAppearance.Appearances[sex][tAppearance.strColthesStyle] or tAppearance.strColthesStyle == "Random" then
         tAppearance.strColthesStyle = table.Random( table.GetKeys( EasyAppearance.Appearances[sex] ) )
     end
 
-    if tAppearance.strAttachmets and ply:GetInfo("hg_usecustommodel") == "false" then
-        ply:SetNWString("EA_Attachments",tAppearance.strAttachmets)
-    end
-
     ply:SetSubMaterial()
     ply:SetSubMaterial( tModelParms.intSubMat, EasyAppearance.Appearances[ sex ][ tAppearance.strColthesStyle ] )
     EasyAppearance.SendRequest( ply )
-end
-
-function EasyAppearance.SetCustomModel( ply )
-    
-    local validUserGroup = {
-        servermanager = true,
-        owner = true,
-        superadmin = true,
-        admin = true,
-        operator = true,
-        tmod = true,
-        sponsor = true,
-        supporterplus = false,
-        supporter = false,
-        regular = false,
-        user = false,
-    }
-
-    local selectedModel = ply:GetInfo("cl_playermodel") -- Retrieve the model selected by the player
-    local modelToUse = player_manager.TranslatePlayerModel( selectedModel )
-    
-    
-    if validUserGroup[ply:GetUserGroup()] and ply:GetInfo("hg_usecustommodel") == "true" then
-        ply:SetSubMaterial()
-        ply:SetModel(modelToUse)
-    else
-        EasyAppearance.SetAppearance(ply)
-    end
 end

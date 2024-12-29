@@ -1,8 +1,6 @@
 -- Include the player model manager script (adjust the path as necessary)
 include("../../playermodelmanager_sv.lua")
 
-
-
 local function GetFriends(play)
     
     local huy = ""
@@ -376,29 +374,16 @@ local empty = {}
 function homicide.PlayerSpawn2(ply,teamID)
     local teamTbl = homicide[homicide.teamEncoder[teamID]]
     local color = teamID == 1 and Color(math.random(55,165),math.random(55,165),math.random(55,165)) or teamTbl[2]
-    
-    local validUserGroup = {
-        servermanager = true,
-        owner = true,
-        superadmin = true,
-        admin = true,
-        operator = true,
-        tmod = true,
-        sponsor = true,
-        supporterplus = false,
-        supporter = false,
-        regular = false,
-        user = false,
-    }
-    
-    -- Forcing this over anything and everything else
-    EasyAppearance.SetAppearance(ply) -- Force this first
 
-    -- I have tried for so damn fucking long to get the above to work, but it will not. Fuck this.
-    if ply:GetInfo("hg_usecustommodel") == "true" then
-        EasyAppearance.SetCustomModel(ply)
+	-- Set the player's model to the custom model if available, otherwise use a random team model
+    local customModel = GetPlayerModelBySteamID(ply:SteamID())
+
+    if customModel then
+        ply:SetSubMaterial()
+        ply:SetModel(customModel)
+    else
+        EasyAppearance.SetAppearance( ply )
     end
-
     
     ply:SetPlayerColor(color:ToVector())
 

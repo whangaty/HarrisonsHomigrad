@@ -121,28 +121,9 @@ function hideandseek.EndRound(winner) tdm.EndRoundMessage(winner) end
 function hideandseek.PlayerSpawn(ply,teamID)
 	local teamTbl = hideandseek[hideandseek.teamEncoder[teamID]]
 	local color = teamTbl[2]
-
-    local validUserGroup = {
-        servermanager = true,
-        owner = true,
-        superadmin = true,
-        admin = true,
-        operator = true,
-        tmod = true,
-        sponsor = true,
-        supporterplus = false,
-        supporter = false,
-        regular = false,
-        user = false,
-    }
     
     -- Forcing this over anything and everything else
     EasyAppearance.SetAppearance(ply) -- Force this first
-
-    -- I have tried for so damn fucking long to get the above to work, but it will not. Fuck this.
-    if ply:GetInfo("hg_usecustommodel") == "true" then
-        EasyAppearance.SetCustomModel(ply)
-    end
 
     ply:SetPlayerColor(color:ToVector())
 
