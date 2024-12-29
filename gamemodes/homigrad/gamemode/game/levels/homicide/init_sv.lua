@@ -207,15 +207,15 @@ function SpawnPolicePlayers()
                 ply:SetPlayerClass("police")
             end
             
-            if GetConVar("sv_announcetraitorsonpolicespawn"):GetBool() then
-                if #homicide.t > 1 then
-                    ply:ChatPrint("#chat.rounds.traitorAre")
-                    ply:ChatPrint((homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
-                else
-                    ply:ChatPrint("#chat.rounds.traitorIs")
-                    ply:ChatPrint(homicide.t[1]:Name())
-                end
+            if #homicide.t > 1 then
+                ply:ChatPrint("#chat.rounds.traitorAre")
+                ply:ChatPrint((homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
+            else
+                ply:ChatPrint("#chat.rounds.traitorIs")
+                ply:ChatPrint(homicide.t[1]:Name())
             end
+            
+            ply:ChatPrint("<clr:red>WARNING: <clr:white>Killing friendlies will result in a punishment determined by staff.")
         end)
     end)
 end
