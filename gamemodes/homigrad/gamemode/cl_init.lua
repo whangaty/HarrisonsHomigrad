@@ -59,14 +59,17 @@ CreateClientConVar("hg_usecustommodel","false",true,true,"Allows usage of custom
 
 -- For player models!!
 local validUserGroup = {
-	superadmin = true,
 	servermanager = true,
 	owner = true,
+	superadmin = true,
 	admin = true,
-	headmod = true,
-	sponsor = true,
 	operator = true,
-	tmod = true
+	tmod = true,
+	sponsor = true,
+	supporterplus = false,
+	supporter = false,
+	regular = false,
+	user = false,
 }
 
 net.Receive("round_active",function(len)
