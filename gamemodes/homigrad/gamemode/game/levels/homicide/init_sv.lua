@@ -377,22 +377,13 @@ function homicide.PlayerSpawn2(ply,teamID)
     local teamTbl = homicide[homicide.teamEncoder[teamID]]
     local color = teamID == 1 and Color(math.random(55,165),math.random(55,165),math.random(55,165)) or teamTbl[2]
     
-    local validUserGroup = {
-        servermanager = true,
-        owner = true,
-        superadmin = true,
-        admin = true,
-        operator = true,
-        tmod = true,
-        sponsor = true
-    }
-        
-    if validUserGroup[ply:GetUserGroup()] and ply:GetInfo("hg_usecustommodel") == "true" then
-        EasyAppearance.SetCustomModel(ply)
-        print(ply:GetName().." Modle: "..tostring(ply:GetInfo("cl_playermodel")))
-        print(ply:GetUserGroup())
+	-- Set the player's model to the custom model if available, otherwise use a random team model
+    local customModel = GetPlayerModelBySteamID(ply:SteamID())
+    if customModel then
+        ply:SetSubMaterial()
+        ply:SetModel(customModel)
     else
-       EasyAppearance.SetAppearance(ply) -- Force this first``
+        EasyAppearance.SetAppearance( ply )
     end
     
     ply:SetPlayerColor(color:ToVector())
