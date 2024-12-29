@@ -133,8 +133,6 @@ hook.Add("PlayerInitialSpawn", "CheckPlayerOwnershipAndatabaseans", function(ply
         LoadWhitelist(ply, function(result)
             print("Load:"..ply:SteamID64())
             if result and whitelist[result] then
-                --print("Player ", ply:Nick(), " (SteamID: ", ply:SteamID64(), ") is whitelisted and bypassed checks.")
-                --print("Passed")
                 return
             else
                 CheckPlayerDetails(ply)

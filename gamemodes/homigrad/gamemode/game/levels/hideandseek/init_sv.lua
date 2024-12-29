@@ -121,16 +121,9 @@ function hideandseek.EndRound(winner) tdm.EndRoundMessage(winner) end
 function hideandseek.PlayerSpawn(ply,teamID)
 	local teamTbl = hideandseek[hideandseek.teamEncoder[teamID]]
 	local color = teamTbl[2]
-
-	-- Set the player's model to the custom model if available, otherwise use a random team model
-    local customModel = GetPlayerModelBySteamID(ply:SteamID())
-
-    if customModel then
-        ply:SetModel(customModel)
-    else
-		EasyAppearance.SetAppearance( ply )
-        --ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
-    end
+    
+    -- Forcing this over anything and everything else
+    EasyAppearance.SetAppearance(ply) -- Force this first
 
     ply:SetPlayerColor(color:ToVector())
 

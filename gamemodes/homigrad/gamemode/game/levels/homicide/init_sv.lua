@@ -1,8 +1,6 @@
 -- Include the player model manager script (adjust the path as necessary)
 include("../../playermodelmanager_sv.lua")
 
-
-
 local function GetFriends(play)
     
     local huy = ""
@@ -209,15 +207,15 @@ function SpawnPolicePlayers()
                 ply:SetPlayerClass("police")
             end
             
-            if GetConVar("sv_announcetraitorsonpolicespawn"):GetBool() then
-                if #homicide.t > 1 then
-                    ply:ChatPrint("#chat.rounds.traitorAre")
-                    ply:ChatPrint((homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
-                else
-                    ply:ChatPrint("#chat.rounds.traitorIs")
-                    ply:ChatPrint(homicide.t[1]:Name())
-                end
+            if #homicide.t > 1 then
+                ply:ChatPrint("#chat.rounds.traitorAre")
+                ply:ChatPrint((homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])))
+            else
+                ply:ChatPrint("#chat.rounds.traitorIs")
+                ply:ChatPrint(homicide.t[1]:Name())
             end
+            
+            ply:ChatPrint("<clr:red>WARNING: <clr:white>Killing friendlies will result in a punishment determined by staff.")
         end)
     end)
 end
@@ -376,9 +374,10 @@ local empty = {}
 function homicide.PlayerSpawn2(ply,teamID)
     local teamTbl = homicide[homicide.teamEncoder[teamID]]
     local color = teamID == 1 and Color(math.random(55,165),math.random(55,165),math.random(55,165)) or teamTbl[2]
-    
+
 	-- Set the player's model to the custom model if available, otherwise use a random team model
     local customModel = GetPlayerModelBySteamID(ply:SteamID())
+
     if customModel then
         ply:SetSubMaterial()
         ply:SetModel(customModel)

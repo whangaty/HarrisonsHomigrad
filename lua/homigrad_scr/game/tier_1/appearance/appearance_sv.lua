@@ -29,7 +29,6 @@ function EasyAppearance.GetRandomAppearance()
 
     tRandomAppearance.strModel = table.Random( table.GetKeys( EasyAppearance.Models ) )
     tRandomAppearance.strColthesStyle = "Random"
-    if ply:GetInfo("hg_usecustommodel") == "false" then tRandomAppearance.strAttachmets = table.Random( table.GetKeys( EasyAppearance.Attachmets ) ) end
     
     return tRandomAppearance
 end
@@ -47,46 +46,46 @@ local function DoInvalid( ply )
 end
 
 function EasyAppearance.SetAppearance( ply )
-    EasyAppearance.SendRequest( ply )
+    if ply:GetInfo("hg_usecustommodel") == "false" then
+        EasyAppearance.SendRequest( ply )
 
-    if ply.bRandomAppearance then
-        ply.tAppearance = EasyAppearance.GetRandomAppearance()
-    end
-    local tAppearance = ply.tAppearance
-    if not tAppearance then
-        ply.tAppearance = EasyAppearance.GetRandomAppearance()
-        tAppearance = ply.tAppearance  
-    end
-    --PrintTable(tAppearance)
-    if not EasyAppearance.Models[tAppearance.strModel] then
-        tAppearance = DoInvalid( ply )
-    end
+        if ply.bRandomAppearance then
+            ply.tAppearance = EasyAppearance.GetRandomAppearance()
+        end
+        local tAppearance = ply.tAppearance
+        if not tAppearance then
+            ply.tAppearance = EasyAppearance.GetRandomAppearance()
+            tAppearance = ply.tAppearance  
+        end
+        --PrintTable(tAppearance)
+        if not EasyAppearance.Models[tAppearance.strModel] then
+            tAppearance = DoInvalid( ply )
+        end
 
-    local tModelParms = EasyAppearance.Models[tAppearance.strModel]
-    --PrintTable(tAppearance)
-    ply:SetModel( tModelParms.strPatch )
+        local tModelParms = EasyAppearance.Models[tAppearance.strModel]
+        --PrintTable(tAppearance)
+        ply:SetModel( tModelParms.strPatch )
+        
+        local sex = EasyAppearance.Sex[ ply:GetModelSex() ]
+
     
-    local sex = EasyAppearance.Sex[ ply:GetModelSex() ]
+        if not EasyAppearance.Appearances[sex][tAppearance.strColthesStyle] or tAppearance.strColthesStyle == "Random" then
+            tAppearance.strColthesStyle = table.Random( table.GetKeys( EasyAppearance.Appearances[sex] ) )
+        end
 
-   
-    if not EasyAppearance.Appearances[sex][tAppearance.strColthesStyle] or tAppearance.strColthesStyle == "Random" then
-        tAppearance.strColthesStyle = table.Random( table.GetKeys( EasyAppearance.Appearances[sex] ) )
+        ply:SetSubMaterial()
+        ply:SetSubMaterial( tModelParms.intSubMat, EasyAppearance.Appearances[ sex ][ tAppearance.strColthesStyle ] )
+        EasyAppearance.SendRequest( ply )
+    else
+        local selectedModel = ply:GetInfo("cl_playermodel") -- Retrieve the model selected by the player
+        local modelToUse = player_manager.TranslatePlayerModel( selectedModel )
+        
+        if modelToUse == "models/player/kleiner.mdl" then 
+            print("Model being utilised is invalid. Most likely set to another model we don't have on the server!")
+            return 
+        end
+
+        ply:SetSubMaterial()
+        ply:SetModel(modelToUse)
     end
-
-    if tAppearance.strAttachmets and ply:GetInfo("hg_usecustommodel") == "false" then
-        ply:SetNWString("EA_Attachments",tAppearance.strAttachmets)
-    end
-
-    ply:SetSubMaterial()
-    ply:SetSubMaterial( tModelParms.intSubMat, EasyAppearance.Appearances[ sex ][ tAppearance.strColthesStyle ] )
-    EasyAppearance.SendRequest( ply )
-end
-
-function EasyAppearance.SetCustomModel( ply )
-    local selectedModel = ply:GetInfo("cl_playermodel") -- Retrieve the model selected by the player
-    local modelToUse = player_manager.TranslatePlayerModel( selectedModel )
-    --local customModel = GetPlayerModelBySteamID(ply:SteamID()) -- Retrieve the model assigned via SteamID
-
-    ply:SetSubMaterial()
-    ply:SetModel(modelToUse)
 end

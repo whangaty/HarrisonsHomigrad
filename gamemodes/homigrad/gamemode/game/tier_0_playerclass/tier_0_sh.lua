@@ -56,6 +56,12 @@ hook.Add("Think","PlayerClass",function()
             class.Think(ply,list)
         end
     end]]--
+--[[]
+    for i,ply in player.Iterator() do
+        local selectedModel = ply:GetInfo("cl_playermodel") -- Retrieve the model selected by the player
+        print(selectedModel)
+        print(player_manager.TranslatePlayerModel( selectedModel ))
+    end]]
 end)
 
 hook.Add("PlayerFootstep","PlayerClass",function(ply,...)
