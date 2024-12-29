@@ -384,7 +384,11 @@ function homicide.PlayerSpawn2(ply,teamID)
         admin = true,
         operator = true,
         tmod = true,
-        sponsor = true
+        sponsor = true,
+        supporterplus = false,
+        supporter = false,
+        regular = false,
+        user = false,
     }
         
     if validUserGroup[ply:GetUserGroup()] and ply:GetInfo("hg_usecustommodel") == "true" then

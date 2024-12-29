@@ -403,7 +403,7 @@ local function LoadPlayerModel()
 		net.SendToServer()
 	end
 end
-concommand.Add( "playermodel_apply", LoadPlayerModel )
+--concommand.Add( "playermodel_apply", LoadPlayerModel )
 
 local function LoadFavorite( ply, cmd, args )
 	local name = tostring( args[1] )
@@ -593,6 +593,7 @@ function Menu.Setup()
 				"combineprison",
 				"police",
 				"policefem",
+				"zombie",
 				"gman",
 				"EC Male_01",
 				"EC Male_02",
