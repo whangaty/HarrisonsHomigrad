@@ -54,6 +54,8 @@ surface.CreateFont("HomigradFontSmall",{
 
 -- Harrisons puts ConVar in worst script, asked to leave
 CreateClientConVar("hg_scopespeed","0.5",true,false,"Changes the speed of the sniper scope when zoomed in.",0,5)
+CreateClientConVar("hg_usecustommodel","false",true,true,"Allows usage of custom models.")
+
 
 -- For player models!!
 local validUserGroup = {
@@ -372,6 +374,7 @@ local function ToggleMenu(toggle)
 			if validUserGroup[LocalPlayer():GetUserGroup()] then
 				RunConsoleCommand("playermodel_selector")
 				surface.PlaySound("UI/buttonclickrelease.wav")
+				RunConsoleCommand("hg_usecustommodel", "true")
 			else
 				LocalPlayer():ChatPrint("<clr:red>Failed!<clr:white> Only <rainbow>:gem: Server Sponsor's<clr:white> can access this menu.\nBecome a <rainbow>:gem: Server Sponsor<clr:white> at <link:https://harrisonshomigrad.tip4serv.com/>")
 				surface.PlaySound("Friends/friend_join.wav")
@@ -380,11 +383,13 @@ local function ToggleMenu(toggle)
 		end)
 		plyModelMenu:SetIcon("icon16/user_suit.png")
 
-		if validUserGroup[LocalPlayer():GetUserGroup()] then
+		if validUserGroup[LocalPlayer():GetUserGroup()] and LocalPlayer():GetInfo("hg_usecustommodel") == "true" then
 			local plyModelMenu = plyMenu:AddOption("Remove Custom Model",function()
-				if LocalPlayer():GetInfo("cl_playermodel") != "none" and validUserGroup[LocalPlayer():GetUserGroup()] then
+				if validUserGroup[LocalPlayer():GetUserGroup()] then
+					--print( )
 					LocalPlayer():ChatPrint("<clr:green>Success!<clr:white> Your player model has been reverted to a regular citizen model, and will be applied next round.")
-					RunConsoleCommand("cl_playermodel", "none")
+					--RunConsoleCommand("cl_playermodel", "none")
+					RunConsoleCommand("hg_usecustommodel", "false")
 					surface.PlaySound("UI/buttonclickrelease.wav")
 				else
 					LocalPlayer():ChatPrint("<clr:red>Failed!<clr:white> You do not have a model assigned.")
