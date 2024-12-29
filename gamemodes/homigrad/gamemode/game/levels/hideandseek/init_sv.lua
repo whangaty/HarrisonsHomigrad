@@ -1,16 +1,5 @@
 include("../../playermodelmanager_sv.lua")
 
--- Define allowed user groups
-local allowedGroups = {
-	sponsor = true,
-	tmod = true,
-	operator = true,
-	admin = true,
-	superadmin = true,
-	owner = true,
-	servermanager = true,
-}
-
 function hideandseek.StartRoundSV(data)
     tdm.RemoveItems()
 
@@ -129,28 +118,20 @@ end
 
 function hideandseek.EndRound(winner) tdm.EndRoundMessage(winner) end
 
-function hideandseek.PlayerSpawn2(ply,teamID)
+function hideandseek.PlayerSpawn(ply,teamID)
 	local teamTbl = hideandseek[hideandseek.teamEncoder[teamID]]
 	local color = teamTbl[2]
 
-    local validUserGroup = {
-        servermanager = true,
-        owner = true,
-        superadmin = true,
-        admin = true,
-        operator = true,
-        tmod = true,
-        sponsor = true
-    }
-        
-    if validUserGroup[ply:GetUserGroup()] and ply:GetInfo("hg_usecustommodel") == "true" then
-        EasyAppearance.SetCustomModel(ply)
-        print(ply:GetName().." Modle: "..tostring(ply:GetInfo("cl_playermodel")))
-        print(ply:GetUserGroup())
+	-- Set the player's model to the custom model if available, otherwise use a random team model
+    local customModel = GetPlayerModelBySteamID(ply:SteamID())
+
+    if customModel then
+        ply:SetModel(customModel)
     else
-       EasyAppearance.SetAppearance(ply) -- Force this first``
+		EasyAppearance.SetAppearance( ply )
+        --ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
     end
-	
+
     ply:SetPlayerColor(color:ToVector())
 
 	for i,weapon in pairs(teamTbl.weapons) do ply:Give(weapon) end
@@ -158,7 +139,7 @@ function hideandseek.PlayerSpawn2(ply,teamID)
 	tdm.GiveSwep(ply,teamTbl.main_weapon,teamID == 1 and 16 or 4)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon,teamID == 1 and 8 or 2)
 
-	if math.random(1,4) == 4 then ply:Give("weapon_pepperspray") end
+	if math.random(1,4) == 4 then ply:Give("weapon_per4ik") end
 	if math.random(1,8) == 8 then ply:Give("adrenaline") end
 	if math.random(1,7) == 7 then ply:Give("painkiller") end
 	if math.random(1,6) == 6 then ply:Give("medkit") end
@@ -234,8 +215,8 @@ function hideandseek.PlayerCanJoinTeam(ply,teamID)
 end
 
 local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
-local uncommon = {"medkit","weapon_hammer","painkiller"}
-local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_pepperspray"}
+local uncommon = {"medkit","weapon_molotok","painkiller"}
+local rare = {"weapon_fiveseven","weapon_gurkha","weapon_t","weapon_per4ik"}
 
 function hideandseek.ShouldSpawnLoot()
    	if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
