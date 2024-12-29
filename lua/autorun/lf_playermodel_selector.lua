@@ -416,7 +416,7 @@ local function LoadFavorite( ply, cmd, args )
 		print( "Favorite not found. Remember: The name is case-sensitive and should be put in quotation marks." )
 	end
 end
-concommand.Add( "playermodel_loadfav", LoadFavorite )
+--concommand.Add( "playermodel_loadfav", LoadFavorite )
 
 
 function Menu.Setup()
@@ -1603,7 +1603,7 @@ function Menu.Toggle()
 	end
 end
 
-concommand.Add( "playermodel_selector", Menu.Toggle )
+--concommand.Add( "playermodel_selector", Menu.Toggle )
 
 hook.Add( "PostGamemodeLoaded", "lf_playermodel_desktop_hook", function()
 		if GAMEMODE_NAME == "sandbox" then
