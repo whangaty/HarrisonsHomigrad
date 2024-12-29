@@ -393,11 +393,7 @@ function homicide.PlayerSpawn2(ply,teamID)
     
     -- I have tried for so damn fucking long to get the above to work, but it will not. Fuck this.
     if ply:GetInfo("hg_usecustommodel") == "true" then
-        if validUserGroup[LocalPlayer():GetUserGroup()] then
-            EasyAppearance.SetCustomModel(ply)
-            --print(ply:GetName().." Model: "..tostring(ply:GetInfo("cl_playermodel")))
-            --print(ply:GetUserGroup())
-        end
+        EasyAppearance.SetCustomModel(ply)
     else
        EasyAppearance.SetAppearance(ply) -- Force this first
     end
