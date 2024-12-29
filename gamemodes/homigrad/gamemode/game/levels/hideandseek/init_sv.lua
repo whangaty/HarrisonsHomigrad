@@ -133,18 +133,24 @@ function hideandseek.PlayerSpawn2(ply,teamID)
 	local teamTbl = hideandseek[hideandseek.teamEncoder[teamID]]
 	local color = teamTbl[2]
 
-    local selectedModel = ply:GetInfo("cl_playermodel") -- Retrieve the model selected by the player
-    local modelToUse = player_manager.TranslatePlayerModel( selectedModel )
-    local customModel = GetPlayerModelBySteamID(ply:SteamID()) -- Retrieve the model assigned via SteamID
-
-    --[[] Determine the model to use
-    if selectedModel and util.IsValidModel(modelToUse) and allowedGroups[ply:GetUserGroup()] and selectedModel != "none" then
-        ply:SetSubMaterial()
-        ply:SetModel(modelToUse)
+    local validUserGroup = {
+        servermanager = true,
+        owner = true,
+        superadmin = true,
+        admin = true,
+        operator = true,
+        tmod = true,
+        sponsor = true
+    }
+        
+    if validUserGroup[ply:GetUserGroup()] and ply:GetInfo("hg_usecustommodel") == "true" then
+        EasyAppearance.SetCustomModel(ply)
+        print(ply:GetName().." Modle: "..tostring(ply:GetInfo("cl_playermodel")))
+        print(ply:GetUserGroup())
     else
-        EasyAppearance.SetAppearance(ply) -- Fallback to the default appearance function
+       EasyAppearance.SetAppearance(ply) -- Force this first``
     end
-]]
+	
     ply:SetPlayerColor(color:ToVector())
 
 	for i,weapon in pairs(teamTbl.weapons) do ply:Give(weapon) end
