@@ -122,14 +122,26 @@ function hideandseek.PlayerSpawn(ply,teamID)
 	local teamTbl = hideandseek[hideandseek.teamEncoder[teamID]]
 	local color = teamTbl[2]
 
-	-- Set the player's model to the custom model if available, otherwise use a random team model
-    local customModel = GetPlayerModelBySteamID(ply:SteamID())
+    local validUserGroup = {
+        servermanager = true,
+        owner = true,
+        superadmin = true,
+        admin = true,
+        operator = true,
+        tmod = true,
+        sponsor = true,
+        supporterplus = false,
+        supporter = false,
+        regular = false,
+        user = false,
+    }
+    
+    -- Forcing this over anything and everything else
+    EasyAppearance.SetAppearance(ply) -- Force this first
 
-    if customModel then
-        ply:SetModel(customModel)
-    else
-		EasyAppearance.SetAppearance( ply )
-        --ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+    -- I have tried for so damn fucking long to get the above to work, but it will not. Fuck this.
+    if ply:GetInfo("hg_usecustommodel") == "true" then
+        EasyAppearance.SetCustomModel(ply)
     end
 
     ply:SetPlayerColor(color:ToVector())

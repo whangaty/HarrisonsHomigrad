@@ -391,11 +391,12 @@ function homicide.PlayerSpawn2(ply,teamID)
         user = false,
     }
     
+    -- Forcing this over anything and everything else
+    EasyAppearance.SetAppearance(ply) -- Force this first
+
     -- I have tried for so damn fucking long to get the above to work, but it will not. Fuck this.
     if ply:GetInfo("hg_usecustommodel") == "true" then
         EasyAppearance.SetCustomModel(ply)
-    else
-       EasyAppearance.SetAppearance(ply) -- Force this first
     end
 
     
