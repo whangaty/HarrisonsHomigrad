@@ -183,11 +183,12 @@ COMMANDS.help = {function(ply,args)
 
 	ply:ChatPrint(text)
 end,0}
-
+--[[]
 COMMANDS.viptest = {function(ply,args)
 	ply:Kick("xd")
-end}
+end}]]
 
+--[[]
 COMMANDS.sync = {function(ply,args)
 	Sync = tobool(args[1])
 
@@ -209,6 +210,7 @@ COMMANDS.sync = {function(ply,args)
 
 	PrintMessage(3,"Синхра : " .. tostring(Sync))
 end}
+--]]
 
 local function getNotDonaters()
 	local list = player.GetAll()
