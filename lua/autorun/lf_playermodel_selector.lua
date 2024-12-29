@@ -586,6 +586,8 @@ function Menu.Setup()
 			
 			local ModelBlacklist = {
 				"combine",
+				"charple",
+				"stripped",
 				"combineelite",
 				"combineprison",
 				"police",
