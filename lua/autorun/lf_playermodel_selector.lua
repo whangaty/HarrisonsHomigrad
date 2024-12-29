@@ -1591,7 +1591,23 @@ function Menu.Setup()
 end
 
 function Menu.Toggle()
-	if LocalPlayer():IsAdmin() or GAMEMODE_NAME == "sandbox" or GetConVar( "sv_playermodel_selector_gamemodes" ):GetBool()
+
+    local validUserGroup = {
+        servermanager = true,
+        owner = true,
+        superadmin = true,
+        admin = true,
+        operator = true,
+        tmod = true,
+        sponsor = true,
+        supporterplus = false,
+        supporter = false,
+        regular = false,
+        user = false,
+    }
+
+	--if LocalPlayer():IsAdmin() or GAMEMODE_NAME == "sandbox" or GetConVar( "sv_playermodel_selector_gamemodes" ):GetBool()
+	if validUserGroup[LocalPlayer():GetUserGroup()] or GAMEMODE_NAME == "sandbox" or GetConVar( "sv_playermodel_selector_gamemodes" ):GetBool()
 	then
 		if IsValid( Frame ) then
 			Frame:ToggleVisible()
@@ -1603,7 +1619,7 @@ function Menu.Toggle()
 	end
 end
 
---concommand.Add( "playermodel_selector", Menu.Toggle )
+concommand.Add( "playermodel_selector", Menu.Toggle )
 
 hook.Add( "PostGamemodeLoaded", "lf_playermodel_desktop_hook", function()
 		if GAMEMODE_NAME == "sandbox" then

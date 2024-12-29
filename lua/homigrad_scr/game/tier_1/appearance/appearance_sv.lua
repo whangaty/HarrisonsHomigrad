@@ -82,14 +82,29 @@ function EasyAppearance.SetAppearance( ply )
 end
 
 function EasyAppearance.SetCustomModel( ply )
+    
+    local validUserGroup = {
+        servermanager = true,
+        owner = true,
+        superadmin = true,
+        admin = true,
+        operator = true,
+        tmod = true,
+        sponsor = true,
+        supporterplus = false,
+        supporter = false,
+        regular = false,
+        user = false,
+    }
+
     local selectedModel = ply:GetInfo("cl_playermodel") -- Retrieve the model selected by the player
     local modelToUse = player_manager.TranslatePlayerModel( selectedModel )
     
-    if not modelToUse == "models/player/kleiner.mdl" then 
-        print("Model being utilised is invalid. Most likely set to another model we don't have on the server!")
-        return 
+    
+    if validUserGroup[ply:GetUserGroup()] and ply:GetInfo("hg_usecustommodel") == "true" then
+        ply:SetSubMaterial()
+        ply:SetModel(modelToUse)
+    else
+        EasyAppearance.SetAppearance(ply)
     end
-
-    ply:SetSubMaterial()
-    ply:SetModel(modelToUse)
 end
