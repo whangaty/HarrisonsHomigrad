@@ -390,8 +390,9 @@ function homicide.PlayerSpawn2(ply,teamID)
         regular = false,
         user = false,
     }
-        
-    if validUserGroup[ply:GetUserGroup()] and ply:GetInfo("hg_usecustommodel") == "true" then
+    
+    -- I have tried for so damn fucking long to get the above to work, but it will not. Fuck this.
+    if not ply:GetUserGroup() == "supporterplus" and not ply:GetUserGroup() == "supporter" not ply:GetUserGroup() == "regular" and not ply:GetUserGroup() == "user" and ply:GetInfo("hg_usecustommodel") == "true" then
         EasyAppearance.SetCustomModel(ply)
         --print(ply:GetName().." Model: "..tostring(ply:GetInfo("cl_playermodel")))
         --print(ply:GetUserGroup())
