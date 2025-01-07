@@ -40,8 +40,8 @@ tdm.teamEncoder = {
 function tdm.StartRound()
 	game.CleanUpMap(false)
 
-	team.SetColor(1,red)
-	team.SetColor(2,blue)
+	team.SetColor(1,tdm.red[2])
+	team.SetColor(2,tdm.blue[2])
 
 	if CLIENT then return end
 
