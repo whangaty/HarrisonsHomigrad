@@ -24,6 +24,7 @@ else -- CLIENT
         local frame = vgui.Create("DFrame")
         frame:SetTitle("IMPORTANT!!! PLEASE READ!!!")
         frame:SetSize(400, 250)
+        frame:ShowCloseButton(false)
         frame:Center()
         frame:MakePopup()
 
@@ -58,9 +59,18 @@ Please type 'bind g fake' into your console, which will make G the key you use t
             closeButton:SetEnabled(checked)
         end
 
-        -- Define the action for closeButton (just closes the window)
+        -- Define the action for closeButton
+	    -- Don't allow player to skip this part until he binds `FAKE` - Niik
         closeButton.DoClick = function()
-            frame:Close()
-        end
+		if input.LookupBinding("fake") then
+			if timer.Exists("FakeCheck") then timer.Remove("FakeCheck") frame:Close()
+			else frame:Close() end
+		else
+			closeButton:SetText("[ ◄ BIND G FAKE ► ]")
+			timer.Create("FakeCheck", 2, 0, function() -- resets text back.
+				closeButton:SetText("I'm ready!")
+			end)
+		end
+	end
     end)
 end
