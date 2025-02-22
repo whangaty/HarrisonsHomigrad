@@ -60,7 +60,7 @@ Please type 'bind g fake' into your console, which will make G the key you use t
         end
 
         -- Define the action for closeButton
-	    -- Don't allow player to skip this part until he binds `FAKE` - Niik
+        -- Don't allow player to skip this part until he binds `FAKE` - Niik
         closeButton.DoClick = function()
 		if input.LookupBinding("fake") then
 			if timer.Exists("FakeCheck") then timer.Remove("FakeCheck") frame:Close()
