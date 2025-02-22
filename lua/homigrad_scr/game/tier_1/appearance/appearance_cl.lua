@@ -175,6 +175,8 @@ function EasyAppearance.SaveData( tAppearanceData )
 
     file.Write( "homigrad/appearancedata.json", util.TableToJSON( tAppearanceData, true ) )
 
+    --SaveData() should call SendNet(). W/o this - Old skins/mdls are the same as the new for the host - Niik
+	EasyAppearance.SendNet(bRandom, tAppearanceData or {})
 end
 
 function EasyAppearance.GetData( bForceRandom )
