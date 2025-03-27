@@ -197,7 +197,7 @@ function hg.eyeTrace(ply, dist, ent, aim_vector)
 	
 	local aim_vector = aim_vector or ply:GetAimVector()
 
-	if not bon or not ent:GetBoneMatrix(bon) then
+	if not bon or not ent:GetBoneMatrix(bon) and SERVER then
 		local tr = {
 			start = ply:EyePos(),
 			endpos = ply:EyePos() + aim_vector * (dist or 60),
@@ -219,7 +219,7 @@ function hg.eyeTrace(ply, dist, ent, aim_vector)
 
 	local headm = ent:GetBoneMatrix(bon)
 
-	if CLIENT and ply.headmat then headm = ply.headmat end
+	if CLIENT and ply.headmat then headm = ply.headmat and SERVER end
 
 	--local att_ang = ply:GetAttachment(ply:LookupAttachment("eyes")).Ang
 	--ply.lerp_angle = LerpFT(0.1, ply.lerp_angle or Angle(0,0,0), ply:GetNWBool("TauntStopMoving", false) and att_ang or aim_vector:Angle())
