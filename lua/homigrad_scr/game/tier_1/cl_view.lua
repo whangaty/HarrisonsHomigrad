@@ -368,10 +368,11 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		angEye = lply:EyeAngles()
 		
 		vecEye = tr.StartPos or lply:EyePos()
-	else
+	elseif SERVER then
 		local matrix = ply:GetBoneMatrix(body)
 		local bodypos = matrix:GetTranslation()
 		local bodyang = matrix:GetAngles()
+		
 		--bodyang:RotateAroundAxis(bodyang:Right(),90)
 
 		--bodyang[2] = eye.Ang[2]
@@ -389,7 +390,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		local att = ragdoll:GetAttachment(ragdoll:LookupAttachment("eyes"))
 		
 		local eyeAngs = lply:EyeAngles()
-		if GetConVar("hg_bodycam"):GetInt() == 1 then
+		if GetConVar("hg_bodycam"):GetInt() == 1 and SERVER then
 			local matrix = ragdoll:GetBoneMatrix(body)
 			local bodypos = matrix:GetTranslation()
 			local bodyang = matrix:GetAngles()
@@ -612,7 +613,7 @@ hook.Add("HUDPaint","fakethings",function()
 	if not LocalPlayer():Alive() then return end
 	if not show_hands:GetBool() then return end
 
-	if IsValid(ragdoll) then
+	if IsValid(ragdoll) and SERVER then
 		local rh = ragdoll:LookupBone("ValveBiped.Bip01_R_Hand")
 		local mat = ragdoll:GetBoneMatrix(rh)
 
@@ -662,7 +663,7 @@ hook.Add("HUDPaint","fakethings",function()
 		local lh = ragdoll:LookupBone("ValveBiped.Bip01_L_Hand")
 		local mat = ragdoll:GetBoneMatrix(lh)
 
-		if mat then
+		if mat and SERVER then
 			local position = mat:GetTranslation()
 			local traceinfo = {
 				start = position,
