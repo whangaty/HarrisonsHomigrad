@@ -703,8 +703,11 @@ function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 		local phys = rag:GetPhysicsObjectNum(physNum)
 		local bone = rag:TranslatePhysBoneToBone(physNum)
 		if bone < 0 then continue end
+		if not SERVER then return end
 
-		local matrix = self:GetBoneMatrix(bone)
+		
+
+		
 
 		phys:SetMass(CustomWeight[rag:GetModel()] or IdealMassPlayer[rag:GetBoneName(bone)] or 65)
 		phys:SetVelocity(vel)
@@ -713,8 +716,11 @@ function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 			phys:ApplyForceOffset(dmginfo:GetDamageForce() * 10, dmginfo:GetDamagePosition())
 		end
 
-		phys:SetPos(matrix:GetTranslation())
-		phys:SetAngles(matrix:GetAngles())
+		if SERVER then
+			local matrix = self:GetBoneMatrix(bone)
+			phys:SetPos(matrix:GetTranslation())
+			phys:SetAngles(matrix:GetAngles())
+		end
 
 		if rag:GetBoneName(bone) == "ValveBiped.Bip01_Head1" then
 			local _,ang = LocalToWorld(vector_origin,Angle(-80,0,90),vector_origin,self:EyeAngles())
